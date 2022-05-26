@@ -1,0 +1,266 @@
+ProjectName: towards5gs
+AdminCloud: default
+LogicalCluster: orange-lc
+ClusterProvider: orange
+
+# Cluster: MEC Host 1 values
+MecHost1: meh01
+MecHost1Label: meh01-label
+MecHost1KubeConfig: ../../cfg/meh1.config
+#MecHost1IstioIngressIP: "10.254.185.50"
+#MecHost1IstioIngressPort: "32001"
+MecHost1IstioKvName: meh1-kv
+
+# Cluster: MEC Host 2 values
+MecHost2: meh02
+MecHost2Label: meh02-label
+MecHost2KubeConfig: ../../cfg/meh2.config
+#MecHost2IstioIngressIP: "10.254.185.44"
+#MecHost2IstioIngressPort: "32001"
+MecHost2IstioKvName: meh2-kv
+
+# Cluster: Free5gc Core values
+CoreCluster: core01
+CoreClusterLabel: core01-label
+CoreClusterKubeConfig: ../../cfg/core.config
+#CoreClusterIstioIngressIP: "10.254.185.44"
+#CoreClusterIstioIngressPort: "32001"
+CoreClusterIstioKvName: core-kv
+
+# Cluster: RAN values
+RanCluster: ran01
+RanClusterLabel: ran01-label
+RanClusterKubeConfig: ../../cfg/ran.config
+#RanClusterIstioIngressIP: "10.254.185.50"
+#RanClusterIstioIngressPort: "32001"
+RanClusterIstioKvName: ran-kv
+
+# Composite Apps
+CompositeApp: free5gc-ca
+CompositeAppVersion: v1
+UeransimCompositeApp: ueransim-ca
+UeransimCompositeAppVersion: v1
+
+# Composite Profile Groups
+CompositeProfile: free5gc-composite-profile
+UeransimCompositeProfile: ueransim-composite-profile
+
+# Deployment Intent Groups
+DeploymentIntent: free5gc-deployment-intent
+UeransimDeploymentIntent: ueransim-deployment-intent
+
+# Intents
+GenericPlacementIntent: towards5gs-generic-placement
+DtcIntent: dtc-intent
+DtcNrfServerIntent: nrf-server
+DtcUdmServerIntent: udm-server
+DtcMongoServerIntent: mongo-server
+DtcNssfServerIntent: nssf-server
+DtcAusfServerIntent: ausf-server
+DtcPcfServerIntent: pcf-server
+DtcSmfServerIntent: smf-server
+
+# NF: AMF values
+AMFAppName: free5gc-amf
+AMFAppFile: ../../pkg/apps/apps-submariner/free5gc-amf-0.1.1.tgz
+ProfileAMFAppName: amf-profile
+ProfileAMFAppFile: ../../pkg/profiles/profiles-submariner/amf-profile.tar.gz
+AMFAppPlacementIntent: amf-placement-intent
+
+# NF: AUSF values
+AUSFAppName: free5gc-ausf
+AUSFAppFile: ../../pkg/apps/apps-submariner/free5gc-ausf-0.1.1.tgz
+ProfileAUSFAppName: ausf-profile
+ProfileAUSFAppFile: ../../pkg/profiles/profiles-submariner/ausf-profile.tar.gz
+AUSFAppPlacementIntent: ausf-placement-intent
+
+# NF: NRF values
+NRFAppName: free5gc-nrf
+NRFAppFile: ../../pkg/apps/apps-submariner/free5gc-nrf-0.1.1.tgz
+ProfileNRFAppName: nrf-profile
+ProfileNRFAppFile: ../../pkg/profiles/profiles-submariner/nrf-profile.tar.gz
+NRFAppPlacementIntent: nrf-placement-intent
+
+# NF: NSSF values
+NSSFAppName: free5gc-nssf
+NSSFAppFile: ../../pkg/apps/apps-submariner/free5gc-nssf-0.1.1.tgz
+ProfileNSSFAppName: nssf-profile
+ProfileNSSFAppFile: ../../pkg/profiles/profiles-submariner/nssf-profile.tar.gz
+NSSFAppPlacementIntent: nssf-placement-intent
+
+# NF: PCF values
+PCFAppName: free5gc-pcf
+PCFAppFile: ../../pkg/apps/apps-submariner/free5gc-pcf-0.1.1.tgz
+ProfilePCFAppName: pcf-profile
+ProfilePCFAppFile: ../../pkg/profiles/profiles-submariner/pcf-profile.tar.gz
+PCFAppPlacementIntent: pcf-placement-intent
+
+# NF: SMF values
+SMFAppName: free5gc-smf
+SMFAppFile: ../../pkg/apps/apps-submariner/free5gc-smf-0.1.1.tgz
+ProfileSMFAppName: smf-profile
+ProfileSMFAppFile: ../../pkg/profiles/profiles-submariner/smf-profile.tar.gz
+SMFAppPlacementIntent: smf-placement-intent
+
+# NF: UDM values
+UDMAppName: free5gc-udm
+UDMAppFile: ../../pkg/apps/apps-submariner/free5gc-udm-0.1.1.tgz
+ProfileUDMAppName: udm-profile
+ProfileUDMAppFile: ../../pkg/profiles/profiles-submariner/udm-profile.tar.gz
+UDMAppPlacementIntent: udm-placement-intent
+
+# NF: UDR values
+UDRAppName: free5gc-udr
+UDRAppFile: ../../pkg/apps/apps-submariner/free5gc-udr-0.1.1.tgz
+ProfileUDRAppName: udr-profile
+ProfileUDRAppFile: ../../pkg/profiles/profiles-submariner/udr-profile.tar.gz
+UDRAppPlacementIntent: udr-placement-intent
+
+# NF: UPF-1 values
+UPF1AppName: free5gc-upf-1
+UPF1AppFile: ../../pkg/apps/apps-submariner/free5gc-upf-1-0.1.1.tgz
+ProfileUPF1AppName: upf-1-profile
+ProfileUPF1AppFile: ../../pkg/profiles/profiles-submariner/upf-1-profile.tar.gz
+UPF1AppPlacementIntent: upf-1-placement-intent
+
+# NF: UPF-2 values
+UPF2AppName: free5gc-upf-2
+UPF2AppFile: ../../pkg/apps/apps-submariner/free5gc-upf-2-0.1.1.tgz
+ProfileUPF2AppName: upf-2-profile
+ProfileUPF2AppFile: ../../pkg/profiles/profiles-submariner/upf-2-profile.tar.gz
+UPF2AppPlacementIntent: upf-2-placement-intent
+
+# NF: UPF-B values
+UPFBAppName: free5gc-upf-b
+UPFBAppFile: ../../pkg/apps/apps-submariner/free5gc-upf-b-0.1.1.tgz
+ProfileUPFBAppName: upf-b-profile
+ProfileUPFBAppFile: ../../pkg/profiles/profiles-submariner/upf-b-profile.tar.gz
+UPFBAppPlacementIntent: upf-b-placement-intent
+
+# NF: WEBUI values
+WEBUIAppName: free5gc-webui
+WEBUIAppFile: ../../pkg/apps/apps-submariner/free5gc-webui-0.1.1.tgz
+ProfileWEBUIAppName: webui-profile
+ProfileWEBUIAppFile: ../../pkg/profiles/profiles-submariner/webui-profile.tar.gz
+WEBUIAppPlacementIntent: webui-placement-intent
+
+# NF: UERANSIM-UE values
+UERANSIMue1AppName: ueransim-ue01
+UERANSIMue1AppFile: ../../pkg/apps/apps-submariner/ueransim-ue01-2.0.12.tgz
+ProfileUERANSIMue1AppName: ueransim-ue01-profile
+ProfileUERANSIMue1AppFile: ../../pkg/profiles/profiles-submariner/ueransim-ue-profile.tar.gz
+UERANSIMue1AppPlacementIntent: ueransim-ue01-placement-intent
+
+# NF: UERANSIM-GNB-01 values
+UERANSIMgnb1AppName: ueransim-gnb01
+UERANSIMgnb1AppFile: ../../pkg/apps/apps-submariner/ueransim-gnb01-2.0.12.tgz
+ProfileUERANSIMgnb1AppName: ueransim-gnb-gnb01-profile
+ProfileUERANSIMgnb1AppFile: ../../pkg/profiles/profiles-submariner/ueransim-gnb01-profile.tar.gz
+UERANSIMgnb1AppPlacementIntent: ueransim-gnb01-placement-intent
+
+# NF: UERANSIM-GNB-02 values
+UERANSIMgnb2AppName: ueransim-gnb02
+UERANSIMgnb2AppFile: ../../pkg/apps/apps-submariner/ueransim-gnb02-2.0.12.tgz
+ProfileUERANSIMgnb2AppName: ueransim-gnb-gnb02-profile
+ProfileUERANSIMgnb2AppFile: ../../pkg/profiles/profiles-submariner/ueransim-gnb02-profile.tar.gz
+UERANSIMgnb2AppPlacementIntent: ueransim-gnb02-placement-intent
+
+# EMCO Config
+# HostIP: 10.254.185.70
+# GacPort:        30493
+# RsyncPort:      30441
+# DtcPort:        30483
+# NpsPort:        30485
+# OvnPort:        30473
+# SdsPort:        30486
+# SfcPort:        30456
+# SfcClientPort:  30458
+# HpaplcPort:     30459
+# HpaacPort:      30443
+# ClmPort:        30461
+# DcmPort:        30477
+# ItsPort:        30487
+
+# EMCO Config
+HostIP: 10.254.185.70
+GacPort:        30420
+RsyncPort:      30431
+DtcPort:        30418
+NpsPort:        30438
+OvnPort:        30451
+SdsPort:        30486
+SfcPort:        30456
+SfcClientPort:  30458
+HpaplcPort:     30491
+HpaacPort:      30442
+ClmPort:        30461
+DcmPort:        30477
+
+
+# Temporal Config
+WfIntentName: dig1-workflow-intent
+WfClientEndpointName: 10.254.185.48
+WfClientEndpointPort: 32321
+WfClientName: relocate_workflowclient
+WfID: relocate-upf-1
+WfTaskQueue: RELOCATE_TASK_Q
+WfEmcoClm: http://10.254.185.70:30461
+WfEmcoOrch: http://10.254.185.70:30415
+WfEmcoOrchStatus: 10.254.185.70:30416
+
+CoreServices:
+  amf:
+    name: amf-namf
+    label: nf=amf
+    port: 80
+    type: ClusterIP
+  ausf:
+    name: ausf-nausf
+    label: nf=ausf
+    port: 80
+    type: ClusterIP
+  nrf:
+    name: nrf-nnrf
+    label: nf=nrf
+    port: 8000
+    type: ClusterIP
+  nssf:
+    name: nssf-nnssf
+    label: nf=nssf
+    port: 80
+    type: ClusterIP
+  pcf:
+    name: pcf-npcf
+    label: nf=pcf
+    port: 80
+    type: ClusterIP
+  smf:
+    name: smf-nsmf
+    label: nf=smf
+    port: 80
+    type: ClusterIP
+  udm:
+    name: udm-nudm
+    label: nf=udm
+    port: 80
+    type: ClusterIP
+  udr:
+    name: udr-nudr
+    label: nf=udr
+    port: 80
+    type: ClusterIP
+  webui:
+    name: webui-service
+    label: nf=webui
+    port: 5000
+    nodePort: 30500
+    type: NodePort
+  gnb:
+    name: gnb-service
+    port: 4997
+    type: ClusterIP
+  mongo:
+    name: mongodb
+    label: name=mongodb
+    port: 27017
+    type: ClusterIP

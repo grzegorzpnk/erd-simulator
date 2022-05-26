@@ -1,0 +1,240 @@
+---
+# create rsync controller
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+   name: rsync
+spec:
+  host: {{.HostIP}}
+  port: {{.RsyncPort}}
+
+---
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata:
+  name: its
+spec:
+  host: {{.HostIP}}
+  port: {{.ItsPort}}
+  priority: 1
+
+---
+# Create dtc controller
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+   name: dtc
+spec:
+  host: {{.HostIP}}
+  port: {{.DtcPort}}
+  type: "action"
+  priority: 1
+
+---
+# Create gac controller
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+   name: gac
+spec:
+  host:  {{.HostIP}}
+  port: {{.GacPort}}
+  type: "action"
+  priority: 1
+
+---
+version: emco/v2
+resourceContext:
+  anchor: dtc-controllers
+metadata :
+   name: nps
+spec:
+  host:  {{.HostIP}}
+  port: {{.NpsPort}}
+  type: "action"
+  priority: 1
+
+---
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+  name: ovnaction
+spec:
+  host: {{.HostIP}}
+  port: {{.OvnPort}}
+  type: "action"
+  priority: 1
+
+---
+version: emco/v2
+resourceContext:
+  anchor: dtc-controllers
+metadata :
+  name: sds
+spec:
+  host: {{.HostIP}}
+  port: {{.SdsPort}}
+  type: "action"
+  priority: 2
+
+---
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+  name: sfc
+spec:
+  host: {{.HostIP}}
+  port: {{.SfcPort}}
+  type: "action"
+  priority: 2
+
+---
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+  name: sfcclient
+spec:
+  host: {{.HostIP}}
+  port: {{.SfcClientPort}}
+  type: "action"
+  priority: 2
+
+---
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata:
+  name: hpaplacement
+spec:
+  host: {{.HostIP}}
+  port: {{.HpaplcPort}}
+  type: "placement"
+  priority: 1
+
+---
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata:
+  name: hpaaction
+spec:
+  host: {{.HostIP}}
+  port: {{.HpaacPort}}
+  type: "action"
+  priority: 1
+
+---
+version: emco/v2
+resourceContext:
+  anchor: clm-controllers
+metadata:
+  name: hpaplacement
+spec:
+  host: {{.HostIP}}
+  port: {{.HpaplcPort}}
+  priority: 1
+
+
+---
+# create provider
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers
+metadata :
+   name: {{.ClusterProvider}}
+
+---
+# create cluster
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{.ClusterProvider}}/clusters
+metadata :
+   name: {{.EdgeCluster}}
+file:
+  {{.EdgeKubeConfig}}
+
+---
+#label cluster
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{.ClusterProvider}}/clusters/{{.EdgeCluster}}/labels
+clusterLabel: {{.EdgeClusterLabel}}
+
+---
+# create cluster
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{.ClusterProvider}}/clusters
+metadata :
+   name: {{.Free5gcCluster}}
+file:
+  {{.Free5gcKubeConfig}}
+
+---
+#label cluster
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{.ClusterProvider}}/clusters/{{.Free5gcCluster}}/labels
+clusterLabel: {{.Free5gcClusterLabel}}
+
+---
+# create project
+version: emco/v2
+resourceContext:
+  anchor: projects
+metadata :
+  name: {{.ProjectName}}
+
+---
+# create admin logical cloud
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/logical-clouds
+metadata:
+  name: {{.AdminCloud}}
+spec:
+  level: "0"
+
+---
+# add reference - "Edge cluster"
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
+metadata:
+  name: {{.EdgeClusterLabel}}
+spec:
+  clusterProvider: {{.ClusterProvider}}
+  cluster: {{.EdgeCluster}}
+  loadbalancerIp: "0.0.0.0"
+
+#---
+## add reference - "Cloud cluster"
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
+#metadata:
+#  name: {{.CloudClusterLabel}}
+#spec:
+#  clusterProvider: {{.ClusterProvider}}
+#  cluster: {{.CloudCluster}}
+#  loadbalancerIp: "0.0.0.0"
+
+---
+# add reference - "Controller cluster"
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
+metadata:
+  name: {{.Free5gcClusterLabel}}
+spec:
+  clusterProvider: {{.ClusterProvider}}
+  cluster: {{.Free5gcCluster}}
+  loadbalancerIp: "0.0.0.0"
+

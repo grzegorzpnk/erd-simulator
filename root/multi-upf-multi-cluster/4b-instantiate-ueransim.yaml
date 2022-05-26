@@ -1,0 +1,5 @@
+---
+# Instantiate ueransim
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/instantiate
