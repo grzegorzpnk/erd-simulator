@@ -3,7 +3,13 @@ Towards5gs DEMO - multicluster deployment
 
 This demo allows to deploy free5gc CNF's and test connectivity with UERANSIM in multi-cluster scenario.
 
+## Scenarios
+
+* Multus based deployment       -> emco-manifests/multus-mu-mc
+* Submariner based deployment   -> emco-manifests/submariner-mu-mc
+
 ## Requirements:
+
  * Make sure that your environment meets configuration described in section [Clusters Configuration](#clusters-configuration)
  * Make sure that all of the clusters are in the same subnet.
     * For now we use Multus with MACVLAN CNI - in that case we have to make sure that all `worker nodes` can directly communicate with each other, because SMF <-> UPF and AMF <-> gNB communication is assured via virtual MACVLAN networks. This virtual networks (virtual ports - which can be named slave ports) send traffic via master ports (master port is "physical" port on the VM - in our example ens3 is a master port)
@@ -12,65 +18,14 @@ This demo allows to deploy free5gc CNF's and test connectivity with UERANSIM in 
 
 ## Notes
 
-* EMCO manifests are created and working properly
 * Configuration should be applied via `profile` files
 * Before deploying gNB and UE network functions, we should register UE via webui service
 * All k8s clusters must be on the same network for the demo to work properly
-* By default we assume that all control plane CNF's are deployed on one cluster. UPF, gNB and UE are deployed on the second cluster
-* Provided manifests allow you to add a third cluster by editing the `values.yaml` file and configuring proper clusters in the `3-deployment.yaml` file
-* Communication between AMF <-> gNB is allowed via NGAP NodePort. This endopoints can communicatie even if k8s clusters are in the different subnets. In present Towards5gs implementation communication between UPF <-> SMF are restricted to single network.
 
 ## Scripts
 
-*All scripts should be called inside `emco/exemples/towards5gc-demo/root` directory*
+```TODO```
 
-* `automate-testing.sh` - run migration test scenario 20 times. Append results to `result.log` file.
-
-```
-./automate-testing.sh $kube-context1 $kube-context2 $kube-context3
-```
-
-* `test-timing.sh` - run migration test scenario once. Append results to `result.log` file.
-
-```
-./test-timing.sh $kube-context1 $kube-context2 $kube-context3
-```
-
-* `clear-up.sh` - delete all deployed resources
-
-```
-./clear-up.sh
-```
-
-* `free5gc-deploy.sh` - deploy all emco resources but instantiate only free5gc cnf's
-
-```
-./free5gc-deploy.sh
-```
-
-* `ueransim-deploy.sh` - if ueransim resources are already deployed, instantiate ueransim cnf's
-
-```
-./ueransim-deploy.sh
-```
-
-* `dig-update.sh` - update deployment intent group
-
-```
-./dig-update.sh
-```
-
-* `first-pi-update.sh` - update placement intent that UPF should be created in the new location (don't delete existing instance)
-
-```
-./first-pi-update.sh
-```
-
-* `second-pi-update.sh` - update placement intent that old instance of UPF should be deleted
-
-```
-./second-pi-update.sh
-```
 
 ## Clusters configuration
 
@@ -84,6 +39,7 @@ To provide connectivity between all CNF's we have to perform additional configur
 `Note1:  `*There shouldn't be any problems with Linux kernel version 5.0.0-x. Requirements for specific kernel are due to some changes in kernel and compatibility with gtp5g module. If you're able to successfully install gtp5g module, then everything should be alright*
 
 `Note2: `*Kubernetes should support SCTP . This is only requirement on K8s version that we are aware of*
+
 
 ### Prepare virtual machines
 
