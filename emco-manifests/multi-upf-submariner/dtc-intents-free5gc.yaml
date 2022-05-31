@@ -1,0 +1,484 @@
+---
+# add the traffic group intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/{{.CompositeAppVersion}}/deployment-intent-groups/{{.DeploymentIntent}}/traffic-group-intents
+metadata:
+  name: {{.DtcIntent}}
+
+---
+# UPF-1: add the server intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+metadata:
+  name: upf1-server
+spec:
+  app: {{ .UPF1AppName }}
+  appLabel: nf=upf1
+  serviceName: upf1-service
+  port: 8805
+  protocol: UDP
+  serviceMesh: istio
+
+---
+# UPF1 <-> SMF: add the client intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/upf1-server/clients
+metadata:
+  name: client1
+spec:
+  app: {{ .SMFAppName }}
+  appLabel: {{ .CoreServices.smf.label }}
+  serviceName: {{ .CoreServices.smf.name }}
+  namespaces: []
+  cidrs: []
+
+#---
+## UPF-2: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: upf2-server
+#spec:
+#  app: {{ .UPF2AppName }}
+#  appLabel: nf=upf2
+#  serviceName: upf2-service
+#  port: 8805
+#  protocol: UDP
+#  serviceMesh: istio
+#
+#---
+## UPF-2 <-> SMF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/upf2-server/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .SMFAppName }}
+#  appLabel: {{ .CoreServices.smf.label }}
+#  serviceName: {{ .CoreServices.smf.name }}
+#  namespaces: []
+#  cidrs: []
+
+---
+# UPF-B: add the server intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+metadata:
+  name: upfb-server
+spec:
+  app: {{ .UPFBAppName }}
+  appLabel: nf=upfb
+  serviceName: upfb-service
+  port: 8805
+  protocol: UDP
+  serviceMesh: istio
+
+---
+# UPF1 <-> SMF: add the client intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/upfb-server/clients
+metadata:
+  name: client1
+spec:
+  app: {{ .SMFAppName }}
+  appLabel: {{ .CoreServices.smf.label }}
+  serviceName: {{ .CoreServices.smf.name }}
+  namespaces: []
+  cidrs: []
+
+
+
+
+#---
+## NRF: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcNrfServerIntent }}
+#spec:
+#  app: {{ .NRFAppName }}
+#  appLabel: {{ .CoreServices.nrf.label }}
+#  serviceName: {{ .CoreServices.nrf.name }}
+#  port: {{ .CoreServices.nrf.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## AMF <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .AMFAppName }}
+#  appLabel: {{ .CoreServices.amf.label }}
+#  serviceName: {{ .CoreServices.amf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#---
+## AUSF <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client2
+#spec:
+#  app: {{ .AUSFAppName }}
+#  appLabel: {{ .CoreServices.ausf.label }}
+#  serviceName: {{ .CoreServices.ausf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#---
+## NSSF <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client3
+#spec:
+#  app: {{ .NSSFAppName }}
+#  appLabel: {{ .CoreServices.nssf.label }}
+#  serviceName: {{ .CoreServices.nssf.name }}
+#  namespaces: []
+# cidrs: []
+#
+#---
+## PCF <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client4
+#spec:
+#  app: {{ .PCFAppName }}
+#  appLabel: {{ .CoreServices.pcf.label }}
+#  serviceName: {{ .CoreServices.pcf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#---
+## SMF <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client5
+#spec:
+#  app: {{ .SMFAppName }}
+#  appLabel: {{ .CoreServices.smf.label }}
+#  serviceName: {{ .CoreServices.smf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#---
+## UDM <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client6
+#spec:
+#  app: {{ .UDMAppName }}
+#  appLabel: {{ .CoreServices.udm.label }}
+#  serviceName: {{ .CoreServices.udm.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#---
+## UDR <-> NRF: add the client intent
+#version: emco/v2
+#resourceContext:
+# anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNrfServerIntent }}/clients
+#metadata:
+#  name: client7
+#spec:
+#  app: {{ .UDRAppName }}
+#  appLabel: {{ .CoreServices.udr.label }}
+#  serviceName: {{ .CoreServices.udr.name }}
+#  namespaces: []
+#  cidrs: []
+# 
+## UDM needs to be exposed for AUSF
+#---
+## UDM: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcUdmServerIntent }}
+#spec:
+#  app: {{ .UDMAppName }}
+#  appLabel: {{ .CoreServices.udm.label }}
+#  serviceName: {{ .CoreServices.udm.name }}
+#  port: {{ .CoreServices.udm.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+# AUSF <-> UDM: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcUdmServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .AUSFAppName }}
+#  appLabel: {{ .CoreServices.ausf.label }}
+#  serviceName: {{ .CoreServices.ausf.name }}
+#  namespaces: []
+# cidrs: []
+
+#---
+# AMF <-> UDM: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcUdmServerIntent }}/clients
+#metadata:
+#  name: client2
+#spec:
+#  app: {{ .AMFAppName }}
+#  appLabel: {{ .CoreServices.amf.label }}
+#  serviceName: {{ .CoreServices.amf.name }}
+#  namespaces: []
+#  cidrs: []              
+
+## Expose MongoDB for services
+#---
+## MONGODB: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcMongoServerIntent }}
+#spec:
+#  app: {{ .NRFAppName }}
+#  appLabel: {{ .CoreServices.mongo.label }}
+#  serviceName: {{ .CoreServices.mongo.name }}
+#  port: {{ .CoreServices.mongo.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## WEBUI <-> MONGO: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcMongoServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .WEBUIAppName }}
+#  appLabel: {{ .CoreServices.webui.label }}
+#  serviceName: {{ .CoreServices.webui.name }}
+# namespaces: []
+#  cidrs: []
+#
+#---
+## NRF <-> MONGO: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcMongoServerIntent }}/clients
+#metadata:
+#  name: client2
+#spec:
+#  app: {{ .NRFAppName }}
+#  appLabel: {{ .CoreServices.nrf.label }}
+#  serviceName: {{ .CoreServices.nrf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#---
+## NSSF <-> MONGO: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcMongoServerIntent }}/clients
+#metadata:
+#  name: client3
+#spec:
+#  app: {{ .NSSFAppName }}
+#  appLabel: {{ .CoreServices.nssf.label }}
+#  serviceName: {{ .CoreServices.nssf.name }}
+#  namespaces: []
+#  cidrs: []
+
+#---
+## UDR <-> MONGO: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcMongoServerIntent }}/clients
+#metadata:
+#  name: client4
+#spec:
+#  app: {{ .UDRAppName }}
+#  appLabel: {{ .CoreServices.udr.label }}
+#  serviceName: {{ .CoreServices.udr.name }}
+#  namespaces: []
+#  cidrs: []
+#
+#
+## NSSF needs to be exposed for AMF (more nf?)
+#---
+## NSSF: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcNssfServerIntent }}
+#spec:
+#  app: {{ .NSSFAppName }}
+#  appLabel: {{ .CoreServices.nssf.label }}
+#  serviceName: {{ .CoreServices.nssf.name }}
+#  port: {{ .CoreServices.nssf.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## NSSF <-> AMF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcNssfServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .AMFAppName }}
+#  appLabel: {{ .CoreServices.amf.label }}
+#  serviceName: {{ .CoreServices.amf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+## SMF needs to be exposed to AMF
+#---
+## SMF: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcSmfServerIntent }}
+#spec:
+#  app: {{ .SMFAppName }}
+#  appLabel: {{ .CoreServices.smf.label }}
+#  serviceName: {{ .CoreServices.smf.name }}
+#  port: {{ .CoreServices.smf.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## SMF <-> AMF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcSmfServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .AMFAppName }}
+#  appLabel: {{ .CoreServices.amf.label }}
+#  serviceName: {{ .CoreServices.amf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+## Expose UDM for SMF
+#---
+## UDM: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcUdmServerIntent }}
+#spec:
+#  app: {{ .UDMAppName }}
+#  appLabel: {{ .CoreServices.udm.label }}
+#  serviceName: {{ .CoreServices.udm.name }}
+#  port: {{ .CoreServices.udm.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## UDM <-> SMF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcUdmServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .SMFAppName }}
+#  appLabel: {{ .CoreServices.smf.label }}
+#  serviceName: {{ .CoreServices.smf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+## Expose PCF for SMF
+#---
+## PCF: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcPcfServerIntent }}
+#spec:
+#  app: {{ .PCFAppName }}
+#  appLabel: {{ .CoreServices.pcf.label }}
+#  serviceName: {{ .CoreServices.pcf.name }}
+#  port: {{ .CoreServices.pcf.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## PCF <-> SMF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcPcfServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .SMFAppName }}
+#  appLabel: {{ .CoreServices.smf.label }}
+#  serviceName: {{ .CoreServices.smf.name }}
+#  namespaces: []
+#  cidrs: []
+#
+## Expose AUSF for SMF
+#---
+## PCF: add the server intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents
+#metadata:
+#  name: {{ .DtcAusfServerIntent }}
+#spec:
+#  app: {{ .AUSFAppName }}
+#  appLabel: {{ .CoreServices.ausf.label }}
+#  serviceName: {{ .CoreServices.ausf.name }}
+#  port: {{ .CoreServices.ausf.port }}
+#  protocol: TCP
+#  serviceMesh: istio
+#
+#---
+## PCF <-> SMF: add the client intent
+#version: emco/v2
+#resourceContext:
+#  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .CompositeApp }}/{{ .CompositeAppVersion }}/deployment-intent-groups/{{ .DeploymentIntent }}/traffic-group-intents/{{ .DtcIntent }}/inbound-intents/{{ .DtcAusfServerIntent }}/clients
+#metadata:
+#  name: client1
+#spec:
+#  app: {{ .SMFAppName }}
+#  appLabel: {{ .CoreServices.smf.label }}
+#  serviceName: {{ .CoreServices.smf.name }}
+#  namespaces: []
+#  cidrs: []
+
+---
+# approve free5gc deployment intent group
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/approve
+

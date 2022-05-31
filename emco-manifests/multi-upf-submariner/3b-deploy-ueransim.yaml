@@ -1,0 +1,202 @@
+---
+# create composite app entry for ueransim
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps
+metadata :
+  name: {{.UeransimCompositeApp}}
+  description: "ueransim composite app entry"
+spec:
+  compositeAppVersion: v1
+
+---
+# add "UERANSIM-GNB-01" App to the free5gc composite app
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/apps
+metadata :
+  name: {{.UERANSIMgnb1AppName}}
+  description: "ueransim consists of gnb and ue cnf's"
+file:
+  {{.UERANSIMgnb1AppFile}}
+
+---
+# add "UERANSIM-GNB-02" App to the free5gc composite app
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/apps
+metadata :
+  name: {{.UERANSIMgnb2AppName}}
+  description: "ueransim consists of gnb-2 and ue cnf's"
+file:
+  {{.UERANSIMgnb2AppFile}}
+
+---
+# add "UERANSIM-UE" App to the free5gc composite app
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/apps
+metadata :
+  name: {{.UERANSIMue1AppName}}
+  description: "ueransim consists of gnb and ue cnf's"
+file:
+  {{.UERANSIMue1AppFile}}
+
+---
+# create composite profile entry for ueransim
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/composite-profiles
+metadata :
+  name: {{.UeransimCompositeProfile}}
+  description: "profile entry for ueransim composite app"
+
+---
+# add "UERANSIM-GNB" app profiles to the composite profile
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/composite-profiles/{{.UeransimCompositeProfile}}/profiles
+metadata :
+  name: {{.ProfileUERANSIMgnb1AppName}}
+  description: "profile for ueransim application"
+spec:
+  app: {{.UERANSIMgnb1AppName}}
+file:
+  {{.ProfileUERANSIMgnb1AppFile}}
+
+---
+# add "UERANSIM-GNB" app profiles to the composite profile
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/composite-profiles/{{.UeransimCompositeProfile}}/profiles
+metadata :
+  name: {{.ProfileUERANSIMgnb2AppName}}
+  description: "profile for ueransim application"
+spec:
+  app: {{.UERANSIMgnb2AppName}}
+file:
+  {{.ProfileUERANSIMgnb2AppFile}}
+
+---
+# add "UERANSIM-UE" app profiles to the composite profile
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/composite-profiles/{{.UeransimCompositeProfile}}/profiles
+metadata :
+  name: {{.ProfileUERANSIMue1AppName}}
+  description: "profile for ueransim application"
+spec:
+  app: {{.UERANSIMue1AppName}}
+file:
+  {{.ProfileUERANSIMue1AppFile}}
+
+---
+# create deployment intent group for ueransim
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups
+metadata:
+  name: {{.UeransimDeploymentIntent}}
+  description: "Ueransim deployment intent group"
+spec:
+  CompositeProfile: {{.UeransimCompositeProfile}}
+  version: r1
+  logicalCloud: {{.AdminCloud}}
+  overrideValues: []
+
+---
+# create the intent in deployment intent group - ueransim
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/intents
+metadata:
+  name: {{.UeransimDeploymentIntent}}
+  description: "Ueransim deployment intent"
+spec:
+  intent:
+    genericPlacementIntent: {{.GenericPlacementIntent}}
+
+---
+# create generic placement intent - ueransim
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/generic-placement-intents
+metadata:
+  name: {{.GenericPlacementIntent}}
+  description: "ueransim generic placement intent"
+
+---
+# add "UERANSIM-GNB" app placement intent to the generic placement intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
+metadata:
+  name: {{.UERANSIMgnb1AppPlacementIntent}}
+  description: "ueransim placement intent"
+spec:
+  app: {{.UERANSIMgnb1AppName}}
+  intent:
+    allOf:
+    - clusterProvider: {{.ClusterProvider}}
+      clusterLabel: {{.RanClusterLabel}}
+
+---
+# add "UERANSIM-GNB" app placement intent to the generic placement intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
+metadata:
+  name: {{.UERANSIMgnb2AppPlacementIntent}}
+  description: "ueransim placement intent"
+spec:
+  app: {{.UERANSIMgnb2AppName}}
+  intent:
+    allOf:
+    - clusterProvider: {{.ClusterProvider}}
+      clusterLabel: {{.RanClusterLabel}}
+
+---
+# add "UERANSIM-UE" app placement intent to the generic placement intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
+metadata:
+  name: {{.UERANSIMue1AppPlacementIntent}}
+  description: "ueransim placement intent"
+spec:
+  app: {{.UERANSIMue1AppName}}
+  intent:
+    allOf:
+    - clusterProvider: {{.ClusterProvider}}
+      clusterLabel: {{.RanClusterLabel}}
+
+---
+# Test App dependency
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .UeransimCompositeApp }}/v1/apps/{{ .UERANSIMgnb1AppName }}/dependency
+metadata:
+  name: {{ .UERANSIMgnb2AppName }}
+spec:
+  app: {{ .UERANSIMgnb2AppName }}
+  opStatus: Ready
+  wait: 10
+
+
+---
+# Test App dependency
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ .ProjectName }}/composite-apps/{{ .UeransimCompositeApp }}/v1/apps/{{ .UERANSIMue1AppName }}/dependency
+metadata:
+  name: {{ .UERANSIMgnb1AppName }}
+spec:
+  app: {{ .UERANSIMgnb1AppName }}
+  opStatus: Ready
+  wait: 10
+
+---
+# approve ueransim deployment intent group
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.UeransimCompositeApp}}/v1/deployment-intent-groups/{{.UeransimDeploymentIntent}}/approve
