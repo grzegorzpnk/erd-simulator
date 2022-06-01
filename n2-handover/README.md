@@ -1,9 +1,12 @@
 ## INFO
 
 UERANSIM can be found [here](https://github.com/aligungr/UERANSIM)
+
 N2-HANDOVER implementation can be found [here](https://github.com/kczaplin/n2-handover)
 
 *Please note that this n2-handover implementation has a lot of hardcoded values.*
+
+---
 
 <img src="https://img.shields.io/badge/UERANSIM-v3.2.6-blue" />
 <img src="https://img.shields.io/badge/3GPP-R15-orange" />
