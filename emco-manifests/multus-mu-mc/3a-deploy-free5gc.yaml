@@ -2,7 +2,7 @@
 {{ if eq $deployment.CaName "free5gc-ca-multus-erd" }}
 
 ---
-# create composite app entry for free5gc
+# create composite app entry
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps
@@ -28,7 +28,7 @@ file:
 {{- end }}
 
 ---
-# create composite profile entry for free5gc
+# create composite profile entry
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/composite-profiles
@@ -54,7 +54,7 @@ file:
 {{- end }}
 
 ---
-# create deployment intent group for free5gc
+# create deployment intent group
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups
@@ -68,7 +68,7 @@ spec:
   overrideValues: []
 
 ---
-# create the intent in deployment intent group - free5gc
+# create the intent in deployment intent group
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/intents
@@ -80,7 +80,7 @@ spec:
     genericPlacementIntent: {{ $deployment.GpiName }}
 
 ---
-# create generic placement intent - free5gc
+# create generic placement intent
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/generic-placement-intents
@@ -91,13 +91,13 @@ metadata :
 {{- range $j, $app := $deployment.Apps }}
 
 ---
-# add "AMF" app placement intent to the generic placement intent
+# add app placement intent to the generic placement intent
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/generic-placement-intents/{{ $deployment.GpiName }}/app-intents
 metadata:
   name: {{ $app.Name }}-placement-intent
-  description: "free5gc amf placement intent"
+  description: {{ $app.Name }} placement intent
 spec:
   app: {{ $app.Name }}
   intent:
@@ -111,8 +111,24 @@ spec:
 
 {{- end }}
 
+{{- range $i, $dependency := $deployment.AppDependency }}
+
 ---
-# approve free5gc deployment intent group
+# Test App dependency
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/apps/{{ $dependency.TargetApp }}/dependency
+metadata:
+  name: {{ $dependency.TargetApp }}-dependency
+spec:
+  app: {{ $dependency.SourceApp }}
+  opStatus: Ready
+  wait: {{ $dependency.Wait }}
+
+{{- end }}
+
+---
+# approve deployment intent group
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/approve

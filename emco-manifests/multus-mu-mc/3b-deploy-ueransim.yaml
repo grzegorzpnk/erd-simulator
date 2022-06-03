@@ -2,7 +2,7 @@
 {{ if eq $deployment.CaName "ueransim-ca-multus-erd" }}
 
 ---
-# create composite app entry for ueransim
+# create composite app entry
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps
@@ -28,7 +28,7 @@ file:
 {{- end }}
 
 ---
-# create composite profile entry for ueransim
+# create composite profile entry
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/composite-profiles
@@ -54,7 +54,7 @@ file:
 {{- end }}
 
 ---
-# create deployment intent group for ueransim
+# create deployment intent group
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups
@@ -68,7 +68,7 @@ spec:
   overrideValues: []
 
 ---
-# create the intent in deployment intent group - ueransim
+# create the intent in deployment intent group
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/intents
@@ -80,7 +80,7 @@ spec:
     genericPlacementIntent: {{ $deployment.GpiName }}
 
 ---
-# create generic placement intent - ueransim
+# create generic placement intent
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/generic-placement-intents
@@ -91,13 +91,13 @@ metadata :
 {{- range $j, $app := $deployment.Apps }}
 
 ---
-# add "AMF" app placement intent to the generic placement intent
+# add app placement intent to the generic placement intent
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/generic-placement-intents/{{ $deployment.GpiName }}/app-intents
 metadata:
   name: {{ $app.Name }}-placement-intent
-  description: "ueransim amf placement intent"
+  description: {{ $app.Name }} placement intent
 spec:
   app: {{ $app.Name }}
   intent:
@@ -119,7 +119,7 @@ version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/apps/{{ $dependency.TargetApp }}/dependency
 metadata:
-  name: {{ $dependency.SourceApp }}
+  name: {{ $dependency.TargetApp }}-dependency
 spec:
   app: {{ $dependency.SourceApp }}
   opStatus: Ready
@@ -128,7 +128,7 @@ spec:
 {{- end }}
 
 ---
-# approve ueransim deployment intent group
+# approve deployment intent group
 version: emco/v2
 resourceContext:
   anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/approve
