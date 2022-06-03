@@ -1,154 +1,40 @@
 ---
-# create rsync controller
+# create project
+version: emco/v2
+resourceContext:
+  anchor: projects
+metadata :
+  name: {{ .ProjectName }}
+  
+---
+#creating rsync controller
 version: emco/v2
 resourceContext:
   anchor: controllers
 metadata :
    name: rsync
 spec:
-  host: {{.HostIP}}
+  host:  {{.HostIP}}
   port: {{.RsyncPort}}
 
----
-# Create its controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata:
-  name: its
-spec:
-  host: {{.HostIP}}
-  port: {{.ItsPort}}
-  priority: 1
+{{- range $index, $ctrl := .Controllers }}
 
 ---
-# Create dtc controller
+# create controller entities
 version: emco/v2
 resourceContext:
-  anchor: controllers
+  anchor: {{ $ctrl.Anchor }}
 metadata :
-   name: dtc
+   name: {{ $ctrl.Name }}
 spec:
-  host: {{.HostIP}}
-  port: {{.DtcPort}}
-  type: "action"
-  priority: 1
+  host: {{ .HostIP }}
+  port: {{ $ctrl.Port }}
+  type: {{ $ctrl.Type }}
+  priority: {{ $ctrl.Priority }}
 
----
-# Create gac controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata :
-   name: gac
-spec:
-  host:  {{.HostIP}}
-  port: {{.GacPort}}
-  type: "action"
-  priority: 1
+{{- end }}
 
----
-# Create nps controller
-version: emco/v2
-resourceContext:
-  anchor: dtc-controllers
-metadata :
-   name: nps
-spec:
-  host:  {{.HostIP}}
-  port: {{.NpsPort}}
-  type: "action"
-  priority: 1
-
----
-# Create ovn controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata :
-  name: ovnaction
-spec:
-  host: {{.HostIP}}
-  port: {{.OvnPort}}
-  type: "action"
-  priority: 1
-
----
-# Create sds controller
-version: emco/v2
-resourceContext:
-  anchor: dtc-controllers
-metadata :
-  name: sds
-spec:
-  host: {{.HostIP}}
-  port: {{.SdsPort}}
-  type: "action"
-  priority: 2
-
----
-# Create sfc controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata :
-  name: sfc
-spec:
-  host: {{.HostIP}}
-  port: {{.SfcPort}}
-  type: "action"
-  priority: 2
-
----
-# Create sfcclient controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata :
-  name: sfcclient
-spec:
-  host: {{.HostIP}}
-  port: {{.SfcClientPort}}
-  type: "action"
-  priority: 2
-
----
-# Create hpaplacement controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata:
-  name: hpaplacement
-spec:
-  host: {{.HostIP}}
-  port: {{.HpaplcPort}}
-  type: "placement"
-  priority: 1
-
----
-# Create hpaaction controller
-version: emco/v2
-resourceContext:
-  anchor: controllers
-metadata:
-  name: hpaaction
-spec:
-  host: {{.HostIP}}
-  port: {{.HpaacPort}}
-  type: "action"
-  priority: 1
-
----
-# Create hpa clm controller
-version: emco/v2
-resourceContext:
-  anchor: clm-controllers
-metadata:
-  name: hpaplacement
-spec:
-  host: {{.HostIP}}
-  port: {{.HpaplcPort}}
-  priority: 1
+{{- range $i, $provider := .Providers }}
 
 ---
 # create provider
@@ -156,83 +42,29 @@ version: emco/v2
 resourceContext:
   anchor: cluster-providers
 metadata :
-   name: {{.ClusterProvider}}
+   name: {{ $provider.Name }}
+
+{{- range $j, $cluster := $provider.Clusters }}
 
 ---
-# create cluster -> MEC Host 1
+# create clusters
 version: emco/v2
 resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters
+  anchor: cluster-providers/{{ $provider.Name }}/clusters
 metadata :
-   name: {{.MecHost1}}
+   name: {{ $cluster.Name }}
 file:
-  {{.MecHost1KubeConfig}}
+  {{ $cluster.KubeConfig }}
 
 ---
-#label cluster  -> MEC Host 1
+#label clusters
 version: emco/v2
 resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters/{{.MecHost1}}/labels
-clusterLabel: {{.MecHost1Label}}
+  anchor: cluster-providers/{{ $provider.Name }}/clusters/{{ $cluster.Name }}/labels
+clusterLabel: {{ $cluster.Label }}
 
----
-# create cluster -> MEC Host 2
-version: emco/v2
-resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters
-metadata :
-  name: {{.MecHost2}}
-file:
-  {{.MecHost2KubeConfig}}
-
----
-# label cluster  -> MEC Host 2
-version: emco/v2
-resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters/{{.MecHost2}}/labels
-clusterLabel: {{.MecHost2Label}}
-
----
-# create cluster -> free5gc core
-version: emco/v2
-resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters
-metadata :
-   name: {{.CoreCluster}}
-file:
-  {{.CoreClusterKubeConfig}}
-
----
-# label cluster -> free5gc core
-version: emco/v2
-resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters/{{.CoreCluster}}/labels
-clusterLabel: {{.CoreClusterLabel}}
-
----
-# create cluster -> ran simulator
-version: emco/v2
-resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters
-metadata :
-  name: {{.RanCluster}}
-file:
-  {{.RanClusterKubeConfig}}
-
----
-# label cluster -> free5gc core
-version: emco/v2
-resourceContext:
-  anchor: cluster-providers/{{.ClusterProvider}}/clusters/{{.RanCluster}}/labels
-clusterLabel: {{.RanClusterLabel}}
-
----
-# create project
-version: emco/v2
-resourceContext:
-  anchor: projects
-metadata :
-  name: {{.ProjectName}}
+{{- end }}
+{{- end }}
 
 ---
 # create admin logical cloud
@@ -240,54 +72,24 @@ version: emco/v2
 resourceContext:
   anchor: projects/{{.ProjectName}}/logical-clouds
 metadata:
-  name: {{.AdminCloud}}
+  name: {{ .AdminCloud }}
 spec:
   level: "0"
+
+{{- range $i, $provider := .Providers  }}
+{{- range $j, $cluster := $provider.Clusters }}
 
 ---
 # add reference - "MEC Host 1 cluster"
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
+  anchor: projects/{{ $.ProjectName }}/logical-clouds/{{ $.AdminCloud }}/cluster-references
 metadata:
-  name: {{.MecHost1Label}}
+  name: {{ $cluster.Reference }}
 spec:
-  clusterProvider: {{.ClusterProvider}}
-  cluster: {{.MecHost1}}
+  clusterProvider: {{ $provider.Name }}
+  cluster: {{ $cluster.Name }}
   loadbalancerIp: "0.0.0.0"
 
----
-# add reference - "MEC Host 2 cluster"
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
-metadata:
-  name: {{.MecHost2Label}}
-spec:
-  clusterProvider: {{.ClusterProvider}}
-  cluster: {{.MecHost2}}
-  loadbalancerIp: "0.0.0.0"
-
----
-# add reference - "free5gc core cluster"
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
-metadata:
-  name: {{.CoreClusterLabel}}
-spec:
-  clusterProvider: {{.ClusterProvider}}
-  cluster: {{.CoreCluster}}
-  loadbalancerIp: "0.0.0.0"
-
----
-# add reference - "ran cluster"
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/cluster-references
-metadata:
-  name: {{.RanClusterLabel}}
-spec:
-  clusterProvider: {{.ClusterProvider}}
-  cluster: {{.RanCluster}}
-  loadbalancerIp: "0.0.0.0"
+{{- end }}
+{{- end }}
