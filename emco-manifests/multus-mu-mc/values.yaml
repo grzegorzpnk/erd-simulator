@@ -2,7 +2,7 @@ HostIP: 10.254.185.42
 RsyncPort: 30431
 
 ProjectName: multus-erd
-AdminCloud: multus-erd-cloudt
+AdminCloud: multus-erd-cloud
 
 Controllers:
   - Name: its
@@ -157,11 +157,26 @@ Deployments:
           - Provider: multus-erd-orange
             Clusters: 
               - ran01
+                #- Name: ueransim-gnb03
+                #AppFile: ../../pkg/apps/multus-apps/ueransim-gnb03-2.0.12.tgz
+                #ProfileFile: ../../pkg/profiles/multus-profiles/ueransim-gnb03-profile.tar.gz
+                #PlacementClusters:
+                #- Provider: multus-erd-orange
+                #Clusters:
+                #- ran01
+                #- Name: ueransim-gnb04
+                #AppFile: ../../pkg/apps/multus-apps/ueransim-gnb04-2.0.12.tgz
+                #ProfileFile: ../../pkg/profiles/multus-profiles/ueransim-gnb04-profile.tar.gz
+                #PlacementClusters:
+                #- Provider: multus-erd-orange
+                #Clusters:
+                #- ran01
+
     AppDependency:
-      - SourceApp: ueransim-gnb02
-        TargetApp: ueransim-gnb01
-        Wait: 5
       - SourceApp: ueransim-gnb01
+        TargetApp: ueransim-gnb02
+        Wait: 1
+      - SourceApp: ueransim-gnb02
         TargetApp: ueransim-ue01
-        Wait: 5
+        Wait: 10
 

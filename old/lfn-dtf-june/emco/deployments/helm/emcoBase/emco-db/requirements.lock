@@ -1,0 +1,12 @@
+dependencies:
+- name: common
+  repository: file://../common
+  version: 0.1.0
+- name: mongo
+  repository: file://../mongo
+  version: 4.0.8
+- name: etcd
+  repository: file://../etcd
+  version: 5.6.2
+digest: sha256:2af4be98fe852e3b0fb1d93f041ecc1b85ed1f84c843bea216cac1d3ed530578
+generated: "2022-03-29T08:18:26.665459162Z"
