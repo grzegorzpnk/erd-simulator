@@ -1,0 +1,26 @@
+
+slice_ns="slice-a"
+
+upfNet=provider
+upfNetName=gtpunetwork
+upfN3IP=172.16.34.3
+GnodeBIP=172.16.34.2 #192.168.20.151
+
+ueSubNet=172.16.1.0/24
+nssf_sst0="1"
+nssf_sd0="010203"
+nssf_cidr0="172.16.1.0/24"
+nssf_sst1="1"
+nssf_sd1="112233"
+nssf_cidr1="172.16.3.0/24"
+
+n4NodePort="32705"
+udmServicePort="32503"
+udrServicePort="32504"
+smfServicePort="32505"
+pcfServicePort="32507"
+ausfServicePort="32508"
+NRFPort="32510"
+
+
+

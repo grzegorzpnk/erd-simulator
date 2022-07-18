@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: f5gc-amf
+  name: f5gc-amf
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: f5gc-amf
+    port: {{ .Values.service.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.port }}
+{{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.service.nodePort }}
+{{- end }}
+  selector:
+    app: f5gc-amf
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: f5gc-amf-ngap
+  labels:
+    app: f5gc-amf
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: f5gc-amf-n2
+    port: 38412
+{{- if eq .Values.service.type "NodePort" }}
+    nodePort: 31412
+{{- end }}
+    protocol: SCTP
+  selector:
+    app: f5gc-amf

@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2021 Intel Corporation
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Values.namespace }}/sdewan-serving-cert
+  name: sdewan-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: sdewan-webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-sdewan-bucket-permission
+  failurePolicy: Fail
+  name: validate-sdewan-bucket.akraino.org
+  rules:
+  - apiGroups:
+    - batch.sdewan.akraino.org
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - mwan3policies
+    - mwan3rules
+    - firewallzones
+    - firewallforwardings
+    - firewallrules
+    - firewallsnats
+    - firewalldnats
+    - cnfnats
+    - cnfroutes
+    - cnfrouterules
+    - cnfservices
+    - cnflocalservices
+    - cnfstatuses
+    - sdewanapplication
+    - ipsecproposals
+    - ipsechosts
+    - ipsecsites
+    - networkfirewallrules
+    - cnfhubsites
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: sdewan-webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-label
+  failurePolicy: Fail
+  name: validate-label.akraino.org
+  rules:
+  - apiGroups:
+    - apps
+    - batch.sdewan.akraino.org
+    apiVersions:
+    - v1
+    operations:
+    - UPDATE
+    resources:
+    - mwan3policies
+    - mwan3rules
+    - firewallzones
+    - firewallforwardings
+    - firewallrules
+    - firewallsnats
+    - firewalldnats
+    - cnfnats
+    - cnfservices
+    - cnfroutes
+    - cnfrouterules
+    - cnflocalservices
+    - cnfstatuses
+    - sdewanapplication
+    - ipsecproposals
+    - ipsechosts
+    - ipsecsites
+    - cnfhubsites
+    - networkfirewallrules
+  sideEffects: None

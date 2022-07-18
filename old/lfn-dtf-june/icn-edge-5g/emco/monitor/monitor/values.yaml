@@ -1,0 +1,10 @@
+registryPrefix: localhost:5000/
+tag: v22.03
+
+workingDir: /opt/emco/monitor
+git:
+  enabled: false
+
+noProxyHosts: 
+httpProxy: 
+httpsProxy: 
