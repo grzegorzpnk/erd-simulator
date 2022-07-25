@@ -260,7 +260,7 @@ void NgapTask::handleN2Handover(int ueId, int amf_ue_ngap_id, long ran_ue_ngap_i
 void NgapTask::sendNgHandoverRequired(int ueId, int amf_ue_ngap_id, long ran_ue_ngap_id, HandoverType handover_type, 
                                 NgapCause cause, int global_ran_node_id, int targetCellId) // pmq
 {
-    m_logger->debug("Sending NG Handover Required for UE[%d], AMF_UE_NGAP_ID[%d], RAN_UE_NGAP_ID[%d]", ueId, amf_ue_ngap_id, ran_ue_ngap_id);
+    m_logger->debug("Sending NG Handover Required for UE[%d], AMF_UE_NGAP_ID[%d], RAN_UE_NGAP_ID[%d] and TARGET_CELL_ID[%d]", ueId, amf_ue_ngap_id, ran_ue_ngap_id, targetCellId);
     
 
     auto *ieHandoverType = asn::New<ASN_NGAP_HandoverRequiredIEs>();
@@ -279,7 +279,7 @@ void NgapTask::sendNgHandoverRequired(int ueId, int amf_ue_ngap_id, long ran_ue_
     auto *globalGnbId = asn::New<ASN_NGAP_GlobalGNB_ID>();
     asn::SetOctetString3(globalGnbId->pLMNIdentity, ngap_utils::PlmnToOctet3(m_base->config->plmn));
     globalGnbId->gNB_ID.present = ASN_NGAP_GNB_ID_PR_gNB_ID;
-    asn::SetBitString(globalGnbId->gNB_ID.choice.gNB_ID, octet4{targetCellId}, //hardcoded, based on gNB config
+    asn::SetBitString(globalGnbId->gNB_ID.choice.gNB_ID, octet4{targetCellId}, // Its not always ok. octet4 is no directly mapping with int values
                       static_cast<size_t>(m_base->config->gnbIdLength));
 
     auto *targetRANNodeID = asn::New<ASN_NGAP_TargetRANNodeID>();

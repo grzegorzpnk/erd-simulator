@@ -176,6 +176,15 @@ void UeRrcTask::establishRrcToNewCell(int cellId) // pmq
     // auto selectedId = 1; //hardcoded, second one on list
     //  auto &selectedCell = m_cellDesc[selectedId];
     // use cellId -> m_cellDesc suppose to be a map
+
+    if (cellId == 1) {
+        cellId = 2;
+    } else if (cellId == 2) {
+        cellId = 1;
+    } else {
+        m_logger->err("Cell Id not supported! For now allow only 2 cells.");
+    }
+
     auto &selectedCell = m_cellDesc[cellId]; // pmq
 
     // newCell.cellId = selectedId; 

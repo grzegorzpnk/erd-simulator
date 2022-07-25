@@ -175,6 +175,8 @@ void GnbCmdHandler::handleCmdImpl(NmGnbCliCommand &msg)
 
         if (m_base->ngapTask->m_ueCtx.count(msg.cmd->ueId) == 0)
             sendError(msg.address, "UE not found with given ID");
+        else if (msg.cmd->targetCellId <= 0)
+            sendError(msg.address, "Incorrect target Cell ID!");
         else
         {
             auto ue = m_base->ngapTask->m_ueCtx[msg.cmd->ueId];
