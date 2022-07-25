@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: innot-cm
+  labels:
+    app: {{ include "innot.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: |
+    {
+      "amf-endpoint": "{{ .Values.innot.config.amfEndpoint }}",
+      "plugin-dir": "cwd",
+      "service-port": "{{ .Values.innot.config.servicePort }}"
+    }

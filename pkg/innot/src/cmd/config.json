@@ -1,0 +1,5 @@
+{
+  "amf-endpoint": "http://10.254.185.44:31845/namf-evts/v1/subscriptions",
+  "plugin-dir":"cwd",
+  "service-port":"8181"
+}
