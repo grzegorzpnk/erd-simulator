@@ -1,0 +1,12 @@
+dependencies:
+- name: emco-db
+  repository: file://../emco-db
+  version: 0.1.0
+- name: emco-tools
+  repository: file://../emco-tools
+  version: 0.1.0
+- name: emco-services
+  repository: file://../emco-services
+  version: 0.1.0
+digest: sha256:93b76d5766a9945cbbce70de32fe59b906f8af0a50e4499cce75b7bcdd8db38b
+generated: "2022-03-29T08:18:27.545680272Z"

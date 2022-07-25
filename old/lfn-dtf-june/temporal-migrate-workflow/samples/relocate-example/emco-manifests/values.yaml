@@ -1,0 +1,45 @@
+# General
+ProjectName: img-server
+AdminCloud: default
+CompositeApp: composite-app
+CompositeProfile: composite-app-profile
+DeploymentIntent: dig1
+GenericPlacementIntent: dig1-placement-intent
+
+# Provider1, Cluster1
+ClusterProvider1: provider1
+Cluster1Name: cluster1
+Cluster1Label: edge-cluster1
+Cluster1KubeConfig: ../cfg/cluster1.config
+
+# Provider2, Cluster2
+ClusterProvider2: provider2
+Cluster2Name: cluster2
+Cluster2Label: edge-cluster2
+Cluster2KubeConfig: ../cfg/cluster2.config
+
+#  App
+AppName: imgserver
+AppFile: ../apps/imgserver-0.1.0.tgz
+ProfileAppName: imgserver-profile
+ProfileAppFile: ../apps/imgserver_profile.tar.gz
+AppPlacementIntent: imgserver-placement-intent
+
+# Workflow Intent
+WfIntentName1: dig1-workflow-intent-1
+WfIntentName2: dig1-workflow-intent-2
+WfClientEndpointName: 10.254.185.48
+WfClientEndpointPort: 32321
+WfClientName: relocate_workflowclient
+WfID: relocate-imgserver
+WfTaskQueue: RELOCATE_TASK_Q
+WfEmcoClm: http://10.254.185.42:30461
+WfEmcoOrch: http://10.254.185.42:30415
+WfEmcoOrchStatus: 10.254.185.42:30416
+
+# Temporal server
+TemporalServerIP: temporaltest-frontend-headless.temporal-server.svc.cluster.local
+TemporalServerPort: 7233
+
+# EMCO Controllers
+RsyncPort: 9031

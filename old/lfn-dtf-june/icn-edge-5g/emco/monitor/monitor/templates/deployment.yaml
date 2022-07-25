@@ -1,0 +1,77 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2020 Intel Corporation
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-monitor
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitor
+  template:
+    metadata:
+      labels:
+        app: monitor
+    spec:
+      serviceAccountName: monitor
+      containers:
+        - name: monitor
+          # Replace this with the built image name
+          #image: emcov2/monitor:latest
+          image: {{ .Values.registryPrefix }}emco-monitor:{{ .Values.tag }}
+          command:
+          - /opt/emco/monitor/monitor
+          imagePullPolicy: Always
+          volumeMounts:
+          - name: config-volume
+            mountPath: {{ .Values.workingDir }}/gvk.conf
+            subPath: gvk.conf
+          env:
+            - name: NO_PROXY
+              value: {{ .Values.noProxyHosts }}
+            - name: no_proxy
+              value: {{ .Values.noProxyHosts }}
+            - name: http_proxy
+              value: {{ .Values.httpProxy }}
+            - name: https_proxy
+              value: {{ .Values.httpsProxy }}
+            - name: HTTP_PROXY
+              value: {{ .Values.httpProxy }}
+            - name: HTTPS_PROXY
+              value: {{ .Values.httpsProxy }}
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "monitor"
+             {{- if eq (.Values.git.enabled) true }}
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-git-monitor
+                  key: username
+            - name: GIT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-git-monitor
+                  key: token
+            - name: GIT_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-git-monitor
+                  key: repo
+            - name: GIT_CLUSTERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-git-monitor
+                  key: clustername
+              {{- end }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ .Release.Name }}-monitor-list

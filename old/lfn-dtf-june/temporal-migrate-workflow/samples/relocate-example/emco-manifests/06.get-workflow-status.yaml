@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2022 Intel Corporation
+
+#create the workflow intent
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/temporal-workflow-intents/{{.WfIntentName1}}/status?workflowID={{.WfID}}&runDescribeWfExec=true&waitForResult=false&getWfHistory=false&temporalServer="temporal-server-frontend.temporal-server.svc.cluster.local:7233"&queryType=current-state
+

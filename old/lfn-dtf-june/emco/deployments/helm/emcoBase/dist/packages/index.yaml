@@ -1,0 +1,406 @@
+apiVersion: v1
+entries:
+  clm:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.592414345Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Cluster Management
+    digest: 9ca0e4462df947fea002771ca46fc9e8c117384ebb899ac3d1d82b5ba33d57c4
+    name: clm
+    urls:
+    - clm-0.1.0.tgz
+    version: 0.1.0
+  common:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.593434103Z"
+    description: Common templates for inclusion in other charts
+    digest: 7d2426628c79a2e4921f52b12d143d426943ef22cea1c3ccfaa91c1ae9086349
+    name: common
+    urls:
+    - common-0.1.0.tgz
+    version: 0.1.0
+  dcm:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.59477188Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Distributed Cloud Manager
+    digest: 5267d2eb34857b255fca6da204a2da42511ece37d9efa618a7a25dfa88348e12
+    name: dcm
+    urls:
+    - dcm-0.1.0.tgz
+    version: 0.1.0
+  dtc:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.596227146Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Distributed Traffic Controller
+    digest: dce5c8991da64bc1aa7685b7666b29154765f398a5da873fb5be3cc67b910f93
+    name: dtc
+    urls:
+    - dtc-0.1.0.tgz
+    version: 0.1.0
+  emco:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.626176356Z"
+    dependencies:
+    - name: emco-db
+      repository: file://../emco-db
+      version: ~0.x-0
+    - name: emco-tools
+      repository: file://../emco-tools
+      version: ~0.x-0
+    - name: emco-services
+      repository: file://../emco-services
+      version: ~0.x-0
+    description: Multicluster Edge Orchestrator
+    digest: 87fe820a271faa28444c3c5ccf52e8f1b173f57656a1012e6deba29a8ae52f8e
+    name: emco
+    urls:
+    - emco-0.1.0.tgz
+    version: 0.1.0
+  emco-db:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.632480774Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    - name: mongo
+      repository: file://../mongo
+      version: ~4.x-0
+    - name: etcd
+      repository: file://../etcd
+      version: ~5.x-0
+    description: Multicluster Edge Orchestrator Databases Package
+    digest: a8b130c2636fce62d0a96ac360131d96d7c651683cbf0a35c93082c9aaa80af1
+    name: emco-db
+    urls:
+    - emco-db-0.1.0.tgz
+    version: 0.1.0
+  emco-services:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.651325359Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    - name: orchestrator
+      repository: file://../orchestrator
+      version: ~0.x-0
+    - name: ncm
+      repository: file://../ncm
+      version: ~0.x-0
+    - name: rsync
+      repository: file://../rsync
+      version: ~0.x-0
+    - name: clm
+      repository: file://../clm
+      version: ~0.x-0
+    - name: ovnaction
+      repository: file://../ovnaction
+      version: ~0.x-0
+    - name: dcm
+      repository: file://../dcm
+      version: ~0.x-0
+    - name: dtc
+      repository: file://../dtc
+      version: ~0.x-0
+    - name: nps
+      repository: file://../nps
+      version: ~0.x-0
+    - name: sds
+      repository: file://../sds
+      version: ~0.x-0
+    - name: its
+      repository: file://../its
+      version: ~0.x-0
+    - name: gac
+      repository: file://../gac
+      version: ~0.x-0
+    - name: sfc
+      repository: file://../sfc
+      version: ~0.x-0
+    - name: sfcclient
+      repository: file://../sfcclient
+      version: ~0.x-0
+    - name: hpa-ac
+      repository: file://../hpa-ac
+      version: ~0.x-0
+    - name: hpa-plc
+      repository: file://../hpa-plc
+      version: ~0.x-0
+    - name: workflowmgr
+      repository: file://../workflowmgr
+      version: ~0.x-0
+    description: Multicluster Edge Orchestrator Services Package
+    digest: 3fd6692409914b250a6ea530623966eda347190ed25bc095b04f95b102586939
+    name: emco-services
+    urls:
+    - emco-services-0.1.0.tgz
+    version: 0.1.0
+  emco-tools:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.654274123Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    - name: fluentd
+      repository: file://../fluentd
+      version: ~1.x-0
+    description: Multicluster Edge Orchestrator Tools Package
+    digest: 11bb45a681192c6e99f8d9afa4fd4b60e4d983ee39fc5df76ae49abae93d7c87
+    name: emco-tools
+    urls:
+    - emco-tools-0.1.0.tgz
+    version: 0.1.0
+  etcd:
+  - annotations:
+      category: Database
+    apiVersion: v1
+    appVersion: 3.4.14
+    created: "2022-07-18T13:24:18.657104327Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: etcd is a distributed key value store that provides a reliable way
+      to store data across a cluster of machines
+    digest: 3b5383b2bedbbd861f31ff87bc294e76d12b24aabd3a757acf0bcd18429e5158
+    home: https://github.com/bitnami/charts/tree/master/bitnami/etcd
+    icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-220x234.png
+    keywords:
+    - etcd
+    - cluster
+    - database
+    - cache
+    - key-value
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    name: etcd
+    sources:
+    - https://github.com/bitnami/bitnami-docker-etcd
+    - https://coreos.com/etcd/
+    urls:
+    - etcd-5.6.2.tgz
+    version: 5.6.2
+  fluentd:
+  - apiVersion: v1
+    appVersion: 1.10.2
+    created: "2022-07-18T13:24:18.658892976Z"
+    description: Fluentd is an open source data collector for unified logging layer
+    digest: cc30968386d3766dbdce74514a0ec5614a567fbf180d58df36597457c84a74b8
+    home: https://www.fluentd.org/
+    icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-110x117.png
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    - data
+    - collector
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    name: fluentd
+    sources:
+    - https://github.com/bitnami/bitnami-docker-fluentd
+    urls:
+    - fluentd-1.0.3.tgz
+    version: 1.0.3
+  gac:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.659872068Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Generic Action Controller
+    digest: 8e6da899589d62bc209bcfb0210a2cbdf5b5d040ace3aee97d48c11380bc1aac
+    name: gac
+    urls:
+    - gac-0.1.0.tgz
+    version: 0.1.0
+  hpa-ac:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-07-18T13:24:18.660797188Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: A Helm chart for HPA action controller
+    digest: 59a432e9f84872718870b79e0ebd95c3964eb24d0c363796ada6986150683ecb
+    name: hpa-ac
+    type: application
+    urls:
+    - hpa-ac-0.1.0.tgz
+    version: 0.1.0
+  hpa-plc:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-07-18T13:24:18.661733642Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: A Helm chart for HPA placement controller
+    digest: fb27dffce725a15fdf87fd835e56c28dd0555299bb68555f34237752462d2bc0
+    name: hpa-plc
+    type: application
+    urls:
+    - hpa-plc-0.1.0.tgz
+    version: 0.1.0
+  its:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.66263432Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Istio Traffic Subcontroller
+    digest: ac7604c50eb373b0252d78face24f378d74939d8f9fd170eca17f1a836ec82d8
+    name: its
+    urls:
+    - its-0.1.0.tgz
+    version: 0.1.0
+  mongo:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.663787209Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: MongoDB Server
+    digest: 63495f8b3351ff249155a4414db9dcddba4bf5d54d979ca4dcc932a424fe7e0d
+    name: mongo
+    urls:
+    - mongo-4.0.8.tgz
+    version: 4.0.8
+  ncm:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.669102949Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Network Configuration Manager
+    digest: 6615b69c29a92a68d4754db2af65752fe51628a236bba6e25e84612a5f009b6b
+    name: ncm
+    urls:
+    - ncm-0.1.0.tgz
+    version: 0.1.0
+  nps:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.671213901Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Network Policy Subcontroller
+    digest: 56b5b2f8d7c8ae4fb5e2308e11dc3f54ee861f52604f4e90e2f55b6d32c3e05e
+    name: nps
+    urls:
+    - nps-0.1.0.tgz
+    version: 0.1.0
+  orchestrator:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.672532706Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Orchestrator
+    digest: 7e7ec8fff5cf8ecaebeeb744b9411e41e0de05981ec080d397524f21da0db62e
+    name: orchestrator
+    urls:
+    - orchestrator-0.1.0.tgz
+    version: 0.1.0
+  ovnaction:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.673462412Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Ovn Action Controller
+    digest: 367aea05b6e4fd3f8acde04866983bdec0fbd658c55f53c7ed3c27edf47e2f3d
+    name: ovnaction
+    urls:
+    - ovnaction-0.1.0.tgz
+    version: 0.1.0
+  rsync:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.67433149Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Resource Synchronizer
+    digest: 76581fa00a39d533a98cf2738da3d70dd496f647c92c3bcbf0b21330c0a0f254
+    name: rsync
+    urls:
+    - rsync-0.1.0.tgz
+    version: 0.1.0
+  sds:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.675247488Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Service Discovery Subcontroller
+    digest: 1cb1747b8882525135544cef929494f1a363dffc0f4d9b61767b26f748a7e1a8
+    name: sds
+    urls:
+    - sds-0.1.0.tgz
+    version: 0.1.0
+  sfc:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.676138782Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Service Function Chain Controller
+    digest: 94bb038f83a87a251c9682f3adb8a802cb91c0b8219064d28f97263b0b0e0aba
+    name: sfc
+    urls:
+    - sfc-0.1.0.tgz
+    version: 0.1.0
+  sfcclient:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.677023767Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Service Function Chain Client Controller
+    digest: 832634b3910343ce4c273c7a4638ef82994512e7f65a6c2539f617e045c91f82
+    name: sfcclient
+    urls:
+    - sfcclient-0.1.0.tgz
+    version: 0.1.0
+  workflowmgr:
+  - apiVersion: v1
+    created: "2022-07-18T13:24:18.677919888Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: ~0.x-0
+    description: Workflow Manager
+    digest: c461a145dc2eef296db5fe8e90b8367c14b567db8bf6c8137e1422ee03c6cced
+    name: workflowmgr
+    urls:
+    - workflowmgr-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-07-18T13:24:18.587875622Z"

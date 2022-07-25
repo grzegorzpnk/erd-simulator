@@ -1,0 +1,9 @@
+dependencies:
+- name: common
+  repository: file://../common
+  version: 0.1.0
+- name: fluentd
+  repository: file://../fluentd
+  version: 1.0.3
+digest: sha256:221180ee1dd2a1759f439304752c484fec82fb33378b9e5b3adb62aae882246c
+generated: "2022-03-29T08:18:26.914346842Z"

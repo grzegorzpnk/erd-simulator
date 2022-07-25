@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2022 Intel Corporation
+
+repository: pmatysiaq/
+image: emco-monitor
+emcoTag: "29.03.22" # can be overridden with $ helm install --set emcoTag=22.03 emco-monitor (...)
+
+workingDir: /opt/emco/monitor
+git:
+  enabled: false
+
+noProxyHosts: ""
+httpProxy: ""
+httpsProxy: ""

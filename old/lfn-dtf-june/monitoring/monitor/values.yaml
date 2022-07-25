@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2020 Intel Corporation
+registryPrefix: pmatysiaq/
+tag: 29.03.22
+
+workingDir: /opt/emco/monitor
+git:
+  enabled: false
+
+noProxyHosts: ""
+httpProxy: ""
+httpsProxy: ""

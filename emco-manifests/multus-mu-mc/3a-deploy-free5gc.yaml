@@ -1,531 +1,137 @@
+{{- range $i, $deployment := .Deployments }}
+{{ if eq $deployment.CaName "free5gc-ca-multus-erd" }}
+
 ---
-# create composite app entry for free5gc
+# create composite app entry
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps
+  anchor: projects/{{ $.ProjectName }}/composite-apps
 metadata :
-  name: {{.CompositeApp}}
+  name: {{ $deployment.CaName }}
   description: "free5gc composite app entry"
 spec:
   compositeAppVersion: v1
 
+{{- range $j, $app := $deployment.Apps }}
+
 ---
-# add "AMF" App to the free5gc composite app
+# add App to the composite app
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/apps
 metadata :
-  name: {{.AMFAppName}}
-  description: "amf application is part of free5gc"
+  name: {{ $app.Name }}
+  description: {{ $app.Name }} application is part of free5gc
 file:
-  {{.AMFAppFile}}
+  {{ $app.AppFile }}
+
+{{- end }}
 
 ---
-# add "AUSF" App to the free5gc composite app
+# create composite profile entry
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/composite-profiles
 metadata :
-  name: {{.AUSFAppName}}
-  description: "ausf application is part of free5gc"
-file:
-  {{.AUSFAppFile}}
+  name: {{ $deployment.ProfileName }}
+  description: profile entry for {{ $deployment.CaName }} composite app
+
+{{- range $j, $app := $deployment.Apps }}
 
 ---
-# add "NRF" App to the free5gc composite app
+# add App profiles to the composite profile
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/composite-profiles/{{ $deployment.ProfileName }}/profiles
 metadata :
-  name: {{.NRFAppName}}
-  description: "nrf application is part of free5gc"
-file:
-  {{.NRFAppFile}}
-
----
-# add "NSSF" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.NSSFAppName}}
-  description: "nssf application is part of free5gc"
-file:
-  {{.NSSFAppFile}}
-
----
-# add "PCF" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.PCFAppName}}
-  description: "pcf application is part of free5gc"
-file:
-  {{.PCFAppFile}}
-
----
-# add "SMF" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.SMFAppName}}
-  description: "smf application is part of free5gc"
-file:
-  {{.SMFAppFile}}
-
----
-# add "UDM" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.UDMAppName}}
-  description: "udm application is part of free5gc"
-file:
-  {{.UDMAppFile}}
-
----
-# add "UDR" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.UDRAppName}}
-  description: "udr application is part of free5gc"
-file:
-  {{.UDRAppFile}}
-
----
-# add "UPF-1" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.UPF1AppName}}
-  description: "upf-1 application is part of free5gc"
-file:
-  {{.UPF1AppFile}}
-
----
-# add "UPF-2" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.UPF2AppName}}
-  description: "upf-2 application is part of free5gc"
-file:
-  {{.UPF2AppFile}}
-
----
-# add "UPF-B" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.UPFBAppName}}
-  description: "upf-b application is part of free5gc"
-file:
-  {{.UPFBAppFile}}
-
----
-# add "WEBUI" App to the free5gc composite app
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/apps
-metadata :
-  name: {{.WEBUIAppName}}
-  description: "webui application is part of free5gc"
-file:
-  {{.WEBUIAppFile}}
-
----
-# create composite profile entry for free5gc
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles
-metadata :
-  name: {{.CompositeProfile}}
-  description: "profile entry for free5gc composite app"
-
-
----
-# add "AMF" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileAMFAppName}}
-  description: "profile for amf application"
+  name: {{ $app.Name }}-profile
+  description: profile for {{ $app.Name }} application
 spec:
-  app: {{.AMFAppName}}
+  app: {{ $app.Name }}
 file:
-  {{.ProfileAMFAppFile}}
+  {{ $app.ProfileFile }}
+
+{{- end }}
 
 ---
-# add "AUSF" app profiles to the composite profile
+# create deployment intent group
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups
 metadata :
-  name: {{.ProfileAUSFAppName}}
-  description: "profile for ausf application"
+  name: {{ $deployment.DigName }}
+  description: {{ $deployment.DigName }} deployment intent group
 spec:
-  app: {{.AUSFAppName}}
-file:
-  {{.ProfileAUSFAppFile}}
-
----
-# add "NRF" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileNRFAppName}}
-  description: "profile for nrf application"
-spec:
-  app: {{.NRFAppName}}
-file:
-  {{.ProfileNRFAppFile}}
-
----
-# add "NSSF" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileNSSFAppName}}
-  description: "profile for nssf application"
-spec:
-  app: {{.NSSFAppName}}
-file:
-  {{.ProfileNSSFAppFile}}
-
----
-# add "PCF" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfilePCFAppName}}
-  description: "profile for PCF application"
-spec:
-  app: {{.PCFAppName}}
-file:
-  {{.ProfilePCFAppFile}}
-
----
-# add "SMF" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileSMFAppName}}
-  description: "profile for smf application"
-spec:
-  app: {{.SMFAppName}}
-file:
-  {{.ProfileSMFAppFile}}
-
----
-# add "UDM" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileUDMAppName}}
-  description: "profile for udm application"
-spec:
-  app: {{.UDMAppName}}
-file:
-  {{.ProfileUDMAppFile}}
-
----
-# add "UDR" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileUDRAppName}}
-  description: "profile for udr application"
-spec:
-  app: {{.UDRAppName}}
-file:
-  {{.ProfileUDRAppFile}}
-
----
-# add "UPF-1" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileUPF1AppName}}
-  description: "profile for upf-1 application"
-spec:
-  app: {{.UPF1AppName}}
-file:
-  {{.ProfileUPF1AppFile}}
-
----
-# add "UPF-2" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileUPF2AppName}}
-  description: "profile for upf-2 application"
-spec:
-  app: {{.UPF2AppName}}
-file:
-  {{.ProfileUPF2AppFile}}
-
----
-# add "UPF-B" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileUPFBAppName}}
-  description: "profile for upf-b application"
-spec:
-  app: {{.UPFBAppName}}
-file:
-  {{.ProfileUPFBAppFile}}
-
----
-# add "WEBUI" app profiles to the composite profile
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/composite-profiles/{{.CompositeProfile}}/profiles
-metadata :
-  name: {{.ProfileWEBUIAppName}}
-  description: "profile for webui application"
-spec:
-  app: {{.WEBUIAppName}}
-file:
-  {{.ProfileWEBUIAppFile}}
-
----
-# create deployment intent group for free5gc
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups
-metadata :
-  name: {{.DeploymentIntent}}
-  description: "free5gc deployment intent group"
-spec:
-  compositeProfile: {{.CompositeProfile}}
+  compositeProfile: {{ $deployment.ProfileName }}
   version: r1
-  logicalCloud: {{.AdminCloud}}
+  logicalCloud: {{ $.AdminCloud }}
   overrideValues: []
 
-
 ---
-# create the intent in deployment intent group - free5gc
+# create the intent in deployment intent group
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/intents
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/intents
 metadata :
-  name: {{.DeploymentIntent}}
-  description: "free5gc deployment intent"
+  name: {{ $deployment.DigName }}
+  description: "deployment intent"
 spec:
   intent:
-    genericPlacementIntent: {{.GenericPlacementIntent}}
-
+    genericPlacementIntent: {{ $deployment.GpiName }}
 
 ---
-# create generic placement intent - free5gc
+# create generic placement intent
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/generic-placement-intents
 metadata :
-  name: {{.GenericPlacementIntent}}
-  description: "free5gc generic placement intent"
+  name: {{ $deployment.GpiName }}
+  description: "generic placement intent"
+
+{{- range $j, $app := $deployment.Apps }}
 
 ---
-# add "AMF" app placement intent to the generic placement intent
+# add app placement intent to the generic placement intent
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/generic-placement-intents/{{ $deployment.GpiName }}/app-intents
 metadata:
-  name: {{.AMFAppPlacementIntent}}
-  description: "free5gc amf placement intent"
+  name: {{ $app.Name }}-placement-intent
+  description: {{ $app.Name }} placement intent
 spec:
-  app: {{.AMFAppName}}
+  app: {{ $app.Name }}
   intent:
     allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
+    {{- range $m, $plc := $app.PlacementClusters }}
+    {{- range $n, $cluster := $plc.Clusters }}
+    - clusterProvider: {{ $plc.Provider }}
+      cluster: {{ $cluster }}
+    {{- end }}
+    {{- end }}
+
+{{- end }}
+
+{{- range $i, $dependency := $deployment.AppDependency }}
 
 ---
-# add "AUSF" app placement intent to the generic placement intent
+# Test App dependency
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/apps/{{ $dependency.TargetApp }}/dependency
 metadata:
-  name: {{.AUSFAppPlacementIntent}}
-  description: "free5gc ausf placement intent"
+  name: {{ $dependency.TargetApp }}-dependency
 spec:
-  app: {{.AUSFAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
+  app: {{ $dependency.SourceApp }}
+  opStatus: Ready
+  wait: {{ $dependency.Wait }}
+
+{{- end }}
 
 ---
-# add "NRF" app placement intent to the generic placement intent
+# approve deployment intent group
 version: emco/v2
 resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.NRFAppPlacementIntent}}
-  description: "free5gc nrf placement intent"
-spec:
-  app: {{.NRFAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/approve
 
----
-# add "NSSF" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.NSSFAppPlacementIntent}}
-  description: "free5gc nssf placement intent"
-spec:
-  app: {{.NSSFAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
-
----
-# add "PCF" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.PCFAppPlacementIntent}}
-  description: "free5gc pcf placement intent"
-spec:
-  app: {{.PCFAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
-
----
-# add "SMF" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.SMFAppPlacementIntent}}
-  description: "free5gc smf placement intent"
-spec:
-  app: {{.SMFAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
-
----
-# add "UDM" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.UDMAppPlacementIntent}}
-  description: "free5gc udm placement intent"
-spec:
-  app: {{.UDMAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
-
----
-# add "UDR" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.UDRAppPlacementIntent}}
-  description: "free5gc udr placement intent"
-spec:
-  app: {{.UDRAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
-
----
-# add "UPF-1" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.UPF1AppPlacementIntent}}
-  description: "free5gc upf-1 placement intent"
-spec:
-  app: {{.UPF1AppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.MecHost1Label}}
-
----
-# add "UPF-2" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.UPF2AppPlacementIntent}}
-  description: "free5gc upf-2 placement intent"
-spec:
-  app: {{.UPF2AppName}}
-  intent:
-    allOf:
-      - clusterProvider: {{.ClusterProvider}}
-        clusterLabel: {{.MecHost2Label}}
-
----
-# add "UPF-B" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.UPFBAppPlacementIntent}}
-  description: "free5gc upf-b placement intent"
-spec:
-  app: {{.UPFBAppName}}
-  intent:
-    allOf:
-      - clusterProvider: {{.ClusterProvider}}
-        clusterLabel: {{.RanClusterLabel}}
-
----
-# add "WEBUI" app placement intent to the generic placement intent
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/generic-placement-intents/{{.GenericPlacementIntent}}/app-intents
-metadata:
-  name: {{.WEBUIAppPlacementIntent}}
-  description: "free5gc webui placement intent"
-spec:
-  app: {{.WEBUIAppName}}
-  intent:
-    allOf:
-    - clusterProvider: {{.ClusterProvider}}
-      clusterLabel: {{.CoreClusterLabel}}
-
----
-# approve free5gc deployment intent group
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/composite-apps/{{.CompositeApp}}/v1/deployment-intent-groups/{{.DeploymentIntent}}/approve
+{{- end }}
+{{- end }}

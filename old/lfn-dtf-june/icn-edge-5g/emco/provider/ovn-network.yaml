@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2020 Intel Corporation
+
+{{- range $index, $ovn := .ovn }}
+---
+#Add kv cluster
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{ $ovn.provider }}/clusters/{{ $ovn.cluster }}/kv-pairs
+metadata:
+  name: {{ $ovn.cluster }}-key
+spec:
+  kv:
+    - CNI-Networking-Nodus-CNI-For-all-interfaces: "{{ $ovn.nodusPrimary }}"
+
+{{- range $nindex, $net := $ovn.network }}
+---
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{ $ovn.provider }}/clusters/{{ $ovn.cluster }}/provider-networks
+metadata:
+  name: {{ $net.name }}
+spec:
+  cniType: ovn4nfv
+  ipv4Subnets:
+  - subnet: {{ $net.ipv4.subnet }}
+    name: {{ $net.ipv4.name }}
+    gateway: {{ $net.ipv4.gateway }}
+    excludeIps: {{ $net.ipv4.exclude }}
+  providerNetType: {{ $net.type }}
+  vlan:
+    vlanId: "{{ $net.vlan.id }}"
+    providerInterfaceName: {{ $net.vlan.interface }}
+    logicalInterfaceName: {{ $net.vlan.interface }}.{{ $net.vlan.id }}
+    vlanNodeSelector: {{ $net.vlan.selector }}
+    nodeLabelList:
+{{- range $lindex, $label := $net.vlan.nodeLabel }}
+    - {{ $label.key }}={{ $label.value }}
+{{- end }}
+{{- end }}
+
+---
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{ $ovn.provider }}/clusters/{{ $ovn.cluster }}/apply 
+
+{{- end }}
+
