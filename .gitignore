@@ -1,10 +1,12 @@
-.idea
+.idea/
 
-./pkg/innot/bin
-./pkg/innot/.idea
+./pkg/innot/bin/
+./pkg/innot/.idea/
 
-./pkg/ueransim-ho/.idea
-./pkg/ueransim-ho/build
-./pkg/ueransim-ho/cmake-build-release
+./pkg/ueransim-ho/.idea/
+./pkg/ueransim-ho/.history/
+./pkg/ueransim-ho/.vscode/
+./pkg/ueransim-ho/build/
+./pkg/ueransim-ho/cmake-build-release/
 
 

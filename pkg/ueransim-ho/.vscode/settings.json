@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "condition_variable": "cpp",
-        "cstddef": "cpp",
-        "limits": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
-}
