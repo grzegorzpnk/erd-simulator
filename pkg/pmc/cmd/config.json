@@ -1,0 +1,6 @@
+{
+  "host-ip": "http://10.254.185.42:9009/prometheus",
+  "timeout": 20,
+  "plugin-dir":"cwd",
+  "service-port":"8282"
+}
