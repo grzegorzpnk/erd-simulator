@@ -1,0 +1,10 @@
+.idea
+
+./pkg/innot/bin
+./pkg/innot/.idea
+
+./pkg/ueransim-ho/.idea
+./pkg/ueransim-ho/build
+./pkg/ueransim-ho/cmake-build-release
+
+
