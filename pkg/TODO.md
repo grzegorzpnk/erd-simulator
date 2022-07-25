@@ -1,17 +1,16 @@
 Implement:
 
-- [] ERC
+- [ ] ERC
   - ...
-  - ..
-- [] Innot
+- [ ] Innot
   - ...
-- [] LCM-Workflow
+- [ ] LCM-Workflow
   - ...
-- [] NMT
+- [ ] NMT
   - ...
-- [] PMC
+- [ ] PMC
   - ...
-- [] Relocate-Workflow
+- [ ] Relocate-Workflow
   - ...
-- [] ueransim-ho
+- [ ] ueransim-ho
   - ...
