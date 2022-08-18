@@ -18,6 +18,12 @@ type Configuration struct {
 	Timeout     time.Duration `json:"timeout"`
 	PluginDir   string        `json:"plugin-dir"`
 	ServicePort string        `json:"service-port"`
+	Clusters    []ClusterSet  `json:"clusters"`
+}
+
+type ClusterSet struct {
+	Provider string   `json:"clusters-provider"`
+	Clusters []string `json:"clusters"`
 }
 
 // Config is the structure that stores the configuration

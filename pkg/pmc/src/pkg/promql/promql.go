@@ -55,54 +55,72 @@ func (pql *PromQL) Query(q string) (model.Vector, error) {
 	}
 }
 
-//// Query queries PromQL using Prometheus api and returns value
-//func (pql *PromQL) Targets() (model.Vector, error) {
-//	ctx, cancel := context.WithTimeout(context.Background(), pql.Timeout)
-//	defer cancel()
-//
-//	targets, err := pql.Client.Targets(ctx)
-//	if err != nil {
-//		log.Errorf("Error while getting Targets. Err: %v", err)
-//		return model.Vector{}, err
-//	}
-//	fmt.Println(targets)
-//	return model.Vector{}, nil
-//	//if value, ok := result.(model.Vector); ok {
-//	//	return value, nil
-//	//} else {
-//	//	err = errors.New("error converting model.Value to model.Vector")
-//	//	return model.Vector{}, err
-//	//}
-//}
-
-// GetValidNodes is just for testing purposes. It returns all matching targetNodes info.
-// TODO the question is how to make a mapping between cluster and instance while fetching targets.
-func (pql *PromQL) GetValidNodes() {
-	job := "node-exporter"
-
-	nodesQuery := fmt.Sprintf("node_uname_info{job=\"%s\"}", job)
-	nodes, _ := pql.Query(nodesQuery)
-
-	fmt.Printf("Nodes: %s\n", nodes)
-}
-
-func (pql *PromQL) GetCpuUtilisationNatively(targetNodes string) (float64, float64) {
-	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"\",resource=\"cpu\",node=~\"(%s)\"})", targetNodes)
-	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"\",resource=\"cpu\",node=~\"(%s)\"})", targetNodes)
-	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{node=~\"(%s)\",cluster=~\"\",resource=\"cpu\"})", targetNodes)
+// GetCpuRequestsLimits returns percentage of utilized CPU requests and CPU limits at cluster targetCluster
+// Query is based on `kube-state-metrics` data-source. Skips nodes with master in the hostname
+func (pql *PromQL) GetCpuRequestsLimits(targetCluster string) (float64, float64, error) {
+	//log.Infof("Getting CPU (requests, limits) for cluster %s", targetCluster)
+	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
+	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
+	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
 
 	var lim, req, alloc float64
 
-	val, _ := pql.Query(limits)
+	val, err := pql.Query(limits)
+	if err != nil {
+		log.Errorf("[PromQL] Error: %v", err)
+		return -1, -1, err
+	}
 	lim, _ = strconv.ParseFloat(val[0].Value.String(), 64)
 
 	val, _ = pql.Query(requests)
+	if err != nil {
+		log.Errorf("[PromQL] Error: %v", err)
+		return -1, -1, err
+	}
 	req, _ = strconv.ParseFloat(val[0].Value.String(), 64)
 
 	val, _ = pql.Query(allocatable)
+	if err != nil {
+		log.Errorf("[PromQL] Error: %v", err)
+		return -1, -1, err
+	}
 	alloc, _ = strconv.ParseFloat(val[0].Value.String(), 64)
 
-	return 100 * (req / alloc), 100 * (lim / alloc)
+	return 100 * (req / alloc), 100 * (lim / alloc), nil
+}
+
+// GetMemoryRequestsLimits returns percentage of utilized CPU requests and CPU limits at cluster targetCluster
+// Query is based on `kube-state-metrics` data-source. Skips nodes with master in the hostname
+func (pql *PromQL) GetMemoryRequestsLimits(targetCluster string) (float64, float64, error) {
+	//log.Infof("Getting MEMORY (requests, limits) for cluster %s", targetCluster)
+	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
+	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
+	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
+
+	var lim, req, alloc float64
+
+	val, err := pql.Query(limits)
+	if err != nil {
+		log.Errorf("[PromQL] Could not get cluster limits. Reason: %v", err)
+		return -1, -1, err
+	}
+	lim, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+
+	val, err = pql.Query(requests)
+	if err != nil {
+		log.Errorf("[PromQL] Could not get cluster requests. Reason: %v", err)
+		return -1, -1, err
+	}
+	req, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+
+	val, err = pql.Query(allocatable)
+	if err != nil {
+		log.Errorf("[PromQL] Could not get cluster allocatable. Reason: %v", err)
+		return -1, -1, err
+	}
+	alloc, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+
+	return 100 * (req / alloc), 100 * (lim / alloc), nil
 }
 
 // GetCpuUtilisation returns cpu utilisation on targetNode, as a percentage of used resources.

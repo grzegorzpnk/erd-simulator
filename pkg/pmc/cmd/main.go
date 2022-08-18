@@ -1,11 +1,10 @@
 package main
 
-// Test PromQL
 import (
 	"10.254.188.33/matyspi5/pmc/api"
 	"10.254.188.33/matyspi5/pmc/config"
 	log "10.254.188.33/matyspi5/pmc/src/logger"
-	"10.254.188.33/matyspi5/pmc/src/pkg/mapping"
+	"10.254.188.33/matyspi5/pmc/src/pkg/observability"
 	"10.254.188.33/matyspi5/pmc/src/pkg/promql"
 	"fmt"
 	"github.com/gorilla/handlers"
@@ -20,14 +19,7 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	httpRouter := api.NewRouter()
-	loggedRouter := handlers.LoggingHandler(os.Stdout, httpRouter)
 	log.Info("[SERVER] Starting PMC server")
-
-	httpServer := &http.Server{
-		Handler: loggedRouter,
-		Addr:    ":" + config.GetConfiguration().ServicePort,
-	}
 
 	cApi := promql.PromQL{
 		Host:    config.GetConfiguration().Host,
@@ -43,12 +35,24 @@ func main() {
 	}
 	cApi.Client = client
 
-	var nodes mapping.NodesInfo
+	var nodes observability.NodesInfo
 	nodes.InitializeNodesInfo(cApi)
 
-	// Testing...
-	cpu1, cpu2 := cApi.GetCpuUtilisationNatively("meh3-worker")
-	fmt.Printf("%.2f : %.2f\n", cpu1, cpu2)
+	var clusters observability.ClustersInfo
+	clusters.InitializeClustersInfo(cApi)
+
+	//// Testing...
+	//fmt.Println("Testing...")
+	//cpu1, cpu2 := cApi.GetCpuUtilisationNatively("meh3-worker")
+	//fmt.Printf("%.2f : %.2f\n", cpu1, cpu2)
+
+	httpRouter := api.NewRouter(&clusters)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, httpRouter)
+
+	httpServer := &http.Server{
+		Handler: loggedRouter,
+		Addr:    ":" + config.GetConfiguration().ServicePort,
+	}
 
 	connectionsClose := make(chan struct{})
 	go func() {
