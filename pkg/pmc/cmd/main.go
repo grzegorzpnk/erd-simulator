@@ -41,11 +41,6 @@ func main() {
 	var clusters observability.ClustersInfo
 	clusters.InitializeClustersInfo(cApi)
 
-	//// Testing...
-	//fmt.Println("Testing...")
-	//cpu1, cpu2 := cApi.GetCpuUtilisationNatively("meh3-worker")
-	//fmt.Printf("%.2f : %.2f\n", cpu1, cpu2)
-
 	httpRouter := api.NewRouter(&clusters)
 	loggedRouter := handlers.LoggingHandler(os.Stdout, httpRouter)
 
@@ -55,6 +50,7 @@ func main() {
 	}
 
 	connectionsClose := make(chan struct{})
+
 	go func() {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, os.Interrupt)
