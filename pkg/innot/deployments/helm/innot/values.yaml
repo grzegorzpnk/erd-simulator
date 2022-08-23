@@ -5,15 +5,12 @@ image:
   pullPolicy: Always
   tag: "latest"
 
-innot:
-  workingDir: "/innot"
-  command: "./innot"
-  config:
-    amfEndpoint: "http://amf-namf:80/namf-evts/v1/subscriptions"
-    servicePort: 8080
+workingDir: "/innot"
+command: "./innot"
+config:
+  amfEndpoint: "http://amf-namf:80/namf-evts/v1/subscriptions"
+  servicePort: 8181
 
-
-# -------------------------
 podAnnotations: {}
 podSecurityContext: {}
 securityContext: {}

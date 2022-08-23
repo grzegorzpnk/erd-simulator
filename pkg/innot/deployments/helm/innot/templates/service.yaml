@@ -8,7 +8,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.innot.config.servicePort }}
+      targetPort: {{ .Values.config.servicePort }}
       nodePort: 32137
   selector:
     {{- include "innot.selectorLabels" . | nindent 4 }}

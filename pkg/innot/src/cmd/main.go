@@ -1,8 +1,8 @@
 package main
 
 import (
-	"10.254.188.33/matyspi5/innot/config"
 	"10.254.188.33/matyspi5/innot/src/api"
+	"10.254.188.33/matyspi5/innot/src/config"
 	log "10.254.188.33/matyspi5/innot/src/logger"
 	ddb "10.254.188.33/matyspi5/innot/src/pkg/db"
 	"fmt"

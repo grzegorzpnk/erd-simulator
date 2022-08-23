@@ -70,21 +70,45 @@ func (pql *PromQL) GetCpuRequestsLimits(targetCluster string) (float64, float64,
 		log.Errorf("[PromQL] Error: %v", err)
 		return -1, -1, err
 	}
-	lim, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+	if len(val) > 0 {
+		lim, err = strconv.ParseFloat(val[0].Value.String(), 64)
+		if err != nil {
+			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+			return -1, -1, err
+		}
+	} else {
+		log.Errorf("Error while fetching CPU limits: %v", err)
+	}
 
-	val, _ = pql.Query(requests)
+	val, err = pql.Query(requests)
 	if err != nil {
 		log.Errorf("[PromQL] Error: %v", err)
 		return -1, -1, err
 	}
-	req, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+	if len(val) > 0 {
+		req, err = strconv.ParseFloat(val[0].Value.String(), 64)
+		if err != nil {
+			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+			return -1, -1, err
+		}
+	} else {
+		log.Errorf("Error while fetching CPU requests: %v", err)
+	}
 
-	val, _ = pql.Query(allocatable)
+	val, err = pql.Query(allocatable)
 	if err != nil {
 		log.Errorf("[PromQL] Error: %v", err)
 		return -1, -1, err
 	}
-	alloc, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+	if len(val) > 0 {
+		alloc, err = strconv.ParseFloat(val[0].Value.String(), 64)
+		if err != nil {
+			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+			return -1, -1, err
+		}
+	} else {
+		log.Errorf("Error while fetching CPU allocatable: %v", err)
+	}
 
 	return 100 * (req / alloc), 100 * (lim / alloc), nil
 }
@@ -101,24 +125,48 @@ func (pql *PromQL) GetMemoryRequestsLimits(targetCluster string) (float64, float
 
 	val, err := pql.Query(limits)
 	if err != nil {
-		log.Errorf("[PromQL] Could not get cluster limits. Reason: %v", err)
+		log.Errorf("[PromQL] Error: %v", err)
 		return -1, -1, err
 	}
-	lim, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+	if len(val) > 0 {
+		lim, err = strconv.ParseFloat(val[0].Value.String(), 64)
+		if err != nil {
+			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+			return -1, -1, err
+		}
+	} else {
+		log.Errorf("Error while fetching MEMORY limits: %v", err)
+	}
 
 	val, err = pql.Query(requests)
 	if err != nil {
-		log.Errorf("[PromQL] Could not get cluster requests. Reason: %v", err)
+		log.Errorf("[PromQL] Error: %v", err)
 		return -1, -1, err
 	}
-	req, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+	if len(val) > 0 {
+		req, err = strconv.ParseFloat(val[0].Value.String(), 64)
+		if err != nil {
+			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+			return -1, -1, err
+		}
+	} else {
+		log.Errorf("Error while fetching MEMORY requests: %v", err)
+	}
 
 	val, err = pql.Query(allocatable)
 	if err != nil {
-		log.Errorf("[PromQL] Could not get cluster allocatable. Reason: %v", err)
+		log.Errorf("[PromQL] Error: %v", err)
 		return -1, -1, err
 	}
-	alloc, _ = strconv.ParseFloat(val[0].Value.String(), 64)
+	if len(val) > 0 {
+		alloc, err = strconv.ParseFloat(val[0].Value.String(), 64)
+		if err != nil {
+			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+			return -1, -1, err
+		}
+	} else {
+		log.Errorf("Error while fetching MEMORY allocatable: %v", err)
+	}
 
 	return 100 * (req / alloc), 100 * (lim / alloc), nil
 }

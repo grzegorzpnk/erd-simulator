@@ -1,7 +1,7 @@
 package observability
 
 import (
-	"10.254.188.33/matyspi5/pmc/config"
+	"10.254.188.33/matyspi5/pmc/src/config"
 	log "10.254.188.33/matyspi5/pmc/src/logger"
 	"10.254.188.33/matyspi5/pmc/src/pkg/promql"
 	"time"
@@ -75,17 +75,19 @@ func (ci *ClustersInfo) InitializeClustersInfo(client promql.PromQL) {
 	log.Info("[KSM] Initializing ClustersInfo...")
 	ci.client = client
 
-	CLUSTER_SETS := config.GetConfiguration().Clusters
+	ClusterSets := config.GetConfiguration().Clusters
 
-	for _, clusterSet := range CLUSTER_SETS {
+	for _, clusterSet := range ClusterSets {
 		for _, cluster := range clusterSet.Clusters {
 			cpuReq, cpuLim, err := ci.client.GetCpuRequestsLimits(cluster)
 			if err != nil {
-
+				log.Errorf("Skipping. Error: %v", err)
+				continue
 			}
 			ramReq, ramLim, err := ci.client.GetMemoryRequestsLimits(cluster)
 			if err != nil {
-
+				log.Errorf("Skipping. Error: %v", err)
+				continue
 			}
 
 			cl := NewCluster(clusterSet.Provider, cluster, cpuReq, cpuLim, ramReq, ramLim)
@@ -98,7 +100,7 @@ func (ci *ClustersInfo) InitializeClustersInfo(client promql.PromQL) {
 
 // updateClustersInfo fetches current cpu/memory request/limits utilization and updates ClusterInfo
 func (ci *ClustersInfo) updateClustersInfo() {
-	log.Info("[KSM] Updating ClustersInfo...")
+	//log.Info("[KSM] Updating ClustersInfo...")
 	ci.client.Time = time.Now()
 
 	for id, cluster := range ci.clusters {
@@ -125,7 +127,7 @@ func (ci *ClustersInfo) updateClustersInfo() {
 
 func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) float64 {
 	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == clusterProvider {
+		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
 			return cluster.GetCpuReq()
 		}
 	}
@@ -134,7 +136,7 @@ func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) fl
 
 func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) float64 {
 	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == clusterProvider {
+		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
 			return cluster.GetCpuLim()
 		}
 	}
@@ -143,7 +145,7 @@ func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) fl
 
 func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) float64 {
 	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == clusterProvider {
+		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
 			return cluster.GetMemReq()
 		}
 	}
@@ -152,7 +154,7 @@ func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) fl
 
 func (ci *ClustersInfo) GetClusterMemLim(clusterProvider, clusterName string) float64 {
 	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == clusterProvider {
+		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
 			return cluster.GetMemLim()
 		}
 	}

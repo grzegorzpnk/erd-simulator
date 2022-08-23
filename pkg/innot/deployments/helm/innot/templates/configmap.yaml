@@ -10,7 +10,7 @@ metadata:
 data:
   config.json: |
     {
-      "amf-endpoint": "{{ .Values.innot.config.amfEndpoint }}",
+      "amf-endpoint": "{{ .Values.config.amfEndpoint }}",
       "plugin-dir": "cwd",
-      "service-port": "{{ .Values.innot.config.servicePort }}"
+      "service-port": "{{ .Values.config.servicePort }}"
     }

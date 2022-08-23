@@ -64,10 +64,6 @@ type NodesInfo struct {
 	nodes  []Node
 }
 
-func (ni *NodesInfo) String() {
-
-}
-
 func (ni *NodesInfo) InitializeNodesInfo(client promql.PromQL) {
 	log.Info("[NODE-EXPORTER] Initializing NodesInfo...")
 	ni.client = client
@@ -92,7 +88,7 @@ func (ni *NodesInfo) InitializeNodesInfo(client promql.PromQL) {
 }
 
 func (ni *NodesInfo) updateNodesInfo() {
-	log.Info("[NODE-EXPORTER] Updating NodesInfo...")
+	//log.Info("[NODE-EXPORTER] Updating NodesInfo...")
 	ni.client.Time = time.Now()
 
 	for id, node := range ni.nodes {
@@ -108,11 +104,6 @@ func (ni *NodesInfo) updateNodesInfo() {
 
 		cpuFloat, _ := strconv.ParseFloat(cpu, 64)
 		ramFloat, _ := strconv.ParseFloat(ram, 64)
-
-		//if node.InternalName == "10.61.1.121:9100" {
-		//	cpu1, cpu2 := ni.client.GetCpuUtilisationNatively("meh3-worker")
-		//	fmt.Printf("CPU req: %.2f, CPU lim: %.2f, CPU node: %.2f\n", cpu1, cpu2, cpuFloat)
-		//}
 
 		ni.nodes[id].SetCpuUtil(cpuFloat)
 		ni.nodes[id].SetRamUtil(ramFloat)

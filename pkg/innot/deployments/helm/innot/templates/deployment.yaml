@@ -28,9 +28,9 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          command: [{{ .Values.innot.command}}]
+          command: [{{ .Values.command}}]
           volumeMounts:
-            - mountPath: {{ .Values.innot.workingDir }}/config.json
+            - mountPath: {{ .Values.workingDir }}/config.json
               name: config
               subPath: config.json
           resources:
