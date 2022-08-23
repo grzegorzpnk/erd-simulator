@@ -4,6 +4,7 @@ import (
 	"10.254.188.33/matyspi5/pmc/src/config"
 	log "10.254.188.33/matyspi5/pmc/src/logger"
 	"10.254.188.33/matyspi5/pmc/src/pkg/promql"
+	"math"
 	"time"
 )
 
@@ -113,10 +114,10 @@ func (ci *ClustersInfo) updateClustersInfo() {
 			log.Errorf("[KSM] Could not updateClustersInfo. Reason: %v", err)
 		}
 
-		ci.clusters[id].SetCpuReq(cpuReq)
-		ci.clusters[id].SetCpuLim(cpuLim)
-		ci.clusters[id].SetMemReq(memReq)
-		ci.clusters[id].SetMemLim(memLim)
+		ci.clusters[id].SetCpuReq(math.Round(cpuReq*100) / 100)
+		ci.clusters[id].SetCpuLim(math.Round(cpuLim*100) / 100)
+		ci.clusters[id].SetMemReq(math.Round(memReq*100) / 100)
+		ci.clusters[id].SetMemLim(math.Round(memLim*100) / 100)
 	}
 
 	//log.Infof("[KSM] Current state: %v", ci.clusters)

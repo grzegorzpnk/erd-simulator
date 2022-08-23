@@ -18,6 +18,7 @@ type Configuration struct {
 	Timeout     time.Duration `json:"timeout"`
 	PluginDir   string        `json:"plugin-dir"`
 	ServicePort string        `json:"service-port"`
+	Cells       []string      `json:"cells"`
 	Clusters    []ClusterSet  `json:"clusters"`
 }
 
@@ -64,6 +65,8 @@ func defaultConfiguration() *Configuration {
 		Timeout:     20 * time.Second,
 		PluginDir:   cwd,
 		ServicePort: "8080",
+		Cells:       []string{},
+		Clusters:    []ClusterSet{},
 	}
 }
 

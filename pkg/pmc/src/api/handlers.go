@@ -2,7 +2,9 @@ package api
 
 import (
 	log "10.254.188.33/matyspi5/pmc/src/logger"
+	"10.254.188.33/matyspi5/pmc/src/pkg/latency"
 	"10.254.188.33/matyspi5/pmc/src/pkg/observability"
+	"fmt"
 
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -10,11 +12,13 @@ import (
 )
 
 type apiHandler struct {
-	client observability.ClustersInfo
+	obsClient observability.ClustersInfo
+	ltcClient latency.MockClient
 }
 
-func (h *apiHandler) SetKsmClient(client observability.ClustersInfo) {
-	h.client = client
+func (h *apiHandler) SetClients(ksmClient observability.ClustersInfo, ltcClient latency.MockClient) {
+	h.obsClient = ksmClient
+	h.ltcClient = ltcClient
 }
 
 func (h *apiHandler) getCpuReqHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +26,7 @@ func (h *apiHandler) getCpuReqHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.client.GetClusterCpuReq(provider, cluster)
+	value := h.obsClient.GetClusterCpuReq(provider, cluster)
 
 	if value > 0 {
 		sendResponse(w, value, http.StatusOK)
@@ -37,7 +41,7 @@ func (h *apiHandler) getCpuLimHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.client.GetClusterCpuLim(provider, cluster)
+	value := h.obsClient.GetClusterCpuLim(provider, cluster)
 
 	if value > 0 {
 		sendResponse(w, value, http.StatusOK)
@@ -51,7 +55,7 @@ func (h *apiHandler) getMemReqHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.client.GetClusterMemReq(provider, cluster)
+	value := h.obsClient.GetClusterMemReq(provider, cluster)
 
 	if value > 0 {
 		sendResponse(w, value, http.StatusOK)
@@ -65,12 +69,29 @@ func (h *apiHandler) getMemLimHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.client.GetClusterMemLim(provider, cluster)
+	value := h.obsClient.GetClusterMemLim(provider, cluster)
 
 	if value > 0 {
 		sendResponse(w, value, http.StatusOK)
 	} else {
 		sendResponse(w, value, http.StatusNoContent)
+	}
+}
+
+func (h *apiHandler) getLatencyHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cell := vars["cell-id"]
+	meh := vars["meh-id"]
+
+	value, err := h.ltcClient.GetMockedLatencyMs(cell, meh)
+	if err != nil {
+		fmt.Errorf("[API] Error: %v", err)
+	}
+
+	if value > 0 {
+		sendResponse(w, value, http.StatusOK)
+	} else {
+		sendResponse(w, value, http.StatusInternalServerError)
 	}
 }
 

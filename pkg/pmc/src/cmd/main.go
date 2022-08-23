@@ -4,6 +4,7 @@ import (
 	"10.254.188.33/matyspi5/pmc/src/api"
 	"10.254.188.33/matyspi5/pmc/src/config"
 	log "10.254.188.33/matyspi5/pmc/src/logger"
+	"10.254.188.33/matyspi5/pmc/src/pkg/latency"
 	"10.254.188.33/matyspi5/pmc/src/pkg/observability"
 	"10.254.188.33/matyspi5/pmc/src/pkg/promql"
 	"fmt"
@@ -41,7 +42,10 @@ func main() {
 	var clusters observability.ClustersInfo
 	clusters.InitializeClustersInfo(cApi)
 
-	httpRouter := api.NewRouter(&clusters)
+	var latency latency.MockClient
+	latency.InitializeLatencyMock()
+
+	httpRouter := api.NewRouter(&clusters, &latency)
 	loggedRouter := handlers.LoggingHandler(os.Stdout, httpRouter)
 
 	httpServer := &http.Server{
