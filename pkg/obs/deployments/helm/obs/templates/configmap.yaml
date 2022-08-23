@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: obs-cm
+  labels:
+    app: {{ include "obs.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: |
+    {
+      "host-ip": "{{ .Values.config.mimirEndpoint }}",
+      "timeout": 20,
+      "plugin-dir":"cwd",
+      "service-port":"{{ .Values.config.servicePort }}",
+      "cells": 
+      [
+        {{- range $i, $cell := $.Values.config.cells }}
+          {{- if lt (add1 $i) (len $.Values.config.cells) }}
+          "{{$cell}}",
+          {{- end }}
+          {{- if eq (add1 $i) (len $.Values.config.cells) }}
+          "{{$cell}}"
+          {{- end }}
+        {{- end }}
+      ],
+      "clusters":
+      [
+        {{- range $j, $cluster := $.Values.config.clusters }}
+          {{- if lt (add1 $j) (len $.Values.config.clusters) }}
+          {
+            "clusters-provider":"{{ $cluster.provider }}",
+            "clusters":
+            [
+              {{- range $i, $c := $cluster.clusters }}
+                {{- if lt (add1 $i) (len $cluster.clusters) }}
+                "{{$c}}",
+                {{- end }}
+                {{- if eq (add1 $i) (len $cluster.clusters) }}
+                "{{$c}}"
+                {{- end }}
+              {{- end }}
+            ]
+          },
+          {{- end }}
+          {{- if eq (add1 $j) (len $.Values.config.clusters) }}
+          {
+            "clusters-provider":"{{ $cluster.provider }}",
+            "clusters":
+            [
+              {{- range $i, $c := $cluster.clusters }}
+                {{- if lt (add1 $i) (len $cluster.clusters) }}
+                "{{$c}}",
+                {{- end }}
+                {{- if eq (add1 $i) (len $cluster.clusters) }}
+                "{{$c}}"
+                {{- end }}
+              {{- end }}
+            ]
+          }
+          {{- end }}
+        {{- end }}
+      ]
+    }
