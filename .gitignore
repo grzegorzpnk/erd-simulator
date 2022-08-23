@@ -5,6 +5,9 @@
 /pkg/innot/bin/
 /pkg/innot/.idea/
 
+/pkg/pmc/bin/
+/pkg/pmc/.idea/
+
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/
 /pkg/ueransim-ho/.vscode/
