@@ -14,44 +14,44 @@ we should rely on K8s level parameters, rather than Node level resource utilizat
 ### Observability Endpoints
 
 ```yaml
-SAMPLE URL: http://localhost:8282/v1/obs/ksm/provider/edge-provider/cluster/meh01/get-mem-req
+SAMPLE URL: http://localhost:8282/v1/obs/ksm/provider/edge-provider/cluster/meh01/memory-requests
 ```
 
 
 ```go
 // Get provider+cluster CPU Requsts utilization (in percentage)
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/get-cpu-req
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu-requests
 ```
 
 ```go
 // Get provider+cluster CPU Limits utilization (in percentage)
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/get-cpu-lim
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu-limits
 ```
 
 ```go
 // Get provider+cluster MEMORY Requsts utilization (in percentage)
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/get-mem-req
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory-requests
 ```
 
 ```go
 // Get provider+cluster Memory Limits utilization (in percentage)
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/get-mem-lim
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory-limits
 ```
 
 ### Latency Endpoints
 
 ```yaml
-SAMPLE URL: http://localhost:8282/v1/obs/ltc/cell/1/meh/edge-provider+meh01/get-latency-ms
+SAMPLE URL: http://localhost:8282/v1/obs/ltc/cell/1/meh/edge-provider+meh01/latency-ms
 ```
 
 
 ```go
 // Get (mocked) latency between Cell: cell-id AND MEC Host: meh-id
 
-localhost:8282/v1/obs/ltc/cell/{cell-id}/meh/{meh-id}/get-latency-ms
+localhost:8282/v1/obs/ltc/cell/{cell-id}/meh/{meh-id}/latency-ms
 ```
 

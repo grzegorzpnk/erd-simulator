@@ -108,11 +108,11 @@ func (ci *ClustersInfo) updateClustersInfo() {
 	for id, cluster := range ci.clusters {
 		cpuReq, cpuLim, err := ci.client.GetCpuRequestsLimits(cluster.Name)
 		if err != nil {
-			log.Errorf("[KSM] Could not updateClustersInfo. Reason: %v", err)
+			log.Errorf("[KSM] error: could not updateClustersInfo. reason: %v", err)
 		}
 		memReq, memLim, err := ci.client.GetMemoryRequestsLimits(cluster.Name)
 		if err != nil {
-			log.Errorf("[KSM] Could not updateClustersInfo. Reason: %v", err)
+			log.Errorf("[KSM] error: could not updateClustersInfo. reason: %v", err)
 		}
 
 		ci.clusters[id].SetCpuReq(math.Round(cpuReq*100) / 100)
@@ -128,7 +128,8 @@ func (ci *ClustersInfo) updateClustersInfo() {
 func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster cpu requests. Reason: %v", err)
+		err = fmt.Errorf("can't get cluster cpu requests. reason: %v", err)
+		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
 	return cluster.GetMemReq(), nil
@@ -137,7 +138,8 @@ func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) (f
 func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster cpu limits. Reason: %v", err)
+		err = fmt.Errorf("can't get cluster cpu limits. reason: %v", err)
+		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
 	return cluster.GetCpuLim(), nil
@@ -146,7 +148,8 @@ func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) (f
 func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster memory requests. Reason: %v", err)
+		err = fmt.Errorf("can't get cluster memory requests. reason: %v", err)
+		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
 	return cluster.GetMemReq(), nil
@@ -155,7 +158,8 @@ func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) (f
 func (ci *ClustersInfo) GetClusterMemLim(clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster memory limits. Reason: %v", err)
+		err = fmt.Errorf("can't get cluster memory limits. reason: %v", err)
+		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
 	return cluster.GetMemLim(), nil
