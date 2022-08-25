@@ -1,7 +1,7 @@
 package promql
 
 import (
-	log "10.254.188.33/matyspi5/obs/src/logger"
+	log "10.254.188.33/matyspi5/erd/pkg/obs/src/logger"
 	"context"
 	"errors"
 	"fmt"

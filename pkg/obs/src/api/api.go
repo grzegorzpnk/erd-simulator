@@ -1,8 +1,8 @@
 package api
 
 import (
-	"10.254.188.33/matyspi5/obs/src/pkg/latency"
-	"10.254.188.33/matyspi5/obs/src/pkg/observability"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/latency"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/observability"
 
 	"github.com/gorilla/mux"
 )

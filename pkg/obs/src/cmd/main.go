@@ -1,12 +1,12 @@
 package main
 
 import (
-	"10.254.188.33/matyspi5/obs/src/api"
-	"10.254.188.33/matyspi5/obs/src/config"
-	log "10.254.188.33/matyspi5/obs/src/logger"
-	"10.254.188.33/matyspi5/obs/src/pkg/latency"
-	"10.254.188.33/matyspi5/obs/src/pkg/observability"
-	"10.254.188.33/matyspi5/obs/src/pkg/promql"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/api"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/config"
+	log "10.254.188.33/matyspi5/erd/pkg/obs/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/latency"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/observability"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/promql"
 	"fmt"
 	"github.com/gorilla/handlers"
 	"golang.org/x/net/context"

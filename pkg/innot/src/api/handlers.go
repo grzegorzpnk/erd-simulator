@@ -1,10 +1,10 @@
 package api
 
 import (
-	log "10.254.188.33/matyspi5/innot/src/logger"
-	"10.254.188.33/matyspi5/innot/src/pkg/db"
-	"10.254.188.33/matyspi5/innot/src/pkg/subscription"
-	"10.254.188.33/matyspi5/innot/src/pkg/types"
+	log "10.254.188.33/matyspi5/erd/pkg/innot/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/db"
+	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/subscription"
+	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/types"
 	"encoding/json"
 	"net/http"
 )

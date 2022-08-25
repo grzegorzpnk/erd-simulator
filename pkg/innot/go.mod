@@ -1,4 +1,4 @@
-module 10.254.188.33/matyspi5/innot
+module "10.254.188.33/matyspi5/erd/pkg/innot"
 
 go 1.18
 
@@ -15,7 +15,6 @@ require (
 
 require (
 	github.com/felixge/httpsnoop v1.0.3 // indirect
-	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect

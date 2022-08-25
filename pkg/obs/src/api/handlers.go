@@ -1,9 +1,9 @@
 package api
 
 import (
-	log "10.254.188.33/matyspi5/obs/src/logger"
-	"10.254.188.33/matyspi5/obs/src/pkg/latency"
-	"10.254.188.33/matyspi5/obs/src/pkg/observability"
+	log "10.254.188.33/matyspi5/erd/pkg/obs/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/latency"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/observability"
 	"fmt"
 
 	"encoding/json"

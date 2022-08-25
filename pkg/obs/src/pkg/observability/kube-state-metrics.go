@@ -1,9 +1,9 @@
 package observability
 
 import (
-	"10.254.188.33/matyspi5/obs/src/config"
-	log "10.254.188.33/matyspi5/obs/src/logger"
-	"10.254.188.33/matyspi5/obs/src/pkg/promql"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/config"
+	log "10.254.188.33/matyspi5/erd/pkg/obs/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/promql"
 	"errors"
 	"fmt"
 	"math"

@@ -1,4 +1,4 @@
-module 10.254.188.33/matyspi5/obs
+module "10.254.188.33/matyspi5/erd/pkg/obs"
 
 go 1.18
 
@@ -9,6 +9,7 @@ require (
 	github.com/prometheus/client_golang v1.12.2
 	github.com/prometheus/common v0.35.0
 	github.com/sirupsen/logrus v1.8.1
+	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2
 )
 
 require (
@@ -18,7 +19,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
-	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	google.golang.org/appengine v1.6.7 // indirect

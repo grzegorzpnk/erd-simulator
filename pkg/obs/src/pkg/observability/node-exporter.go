@@ -4,8 +4,8 @@
 package observability
 
 import (
-	log "10.254.188.33/matyspi5/obs/src/logger"
-	"10.254.188.33/matyspi5/obs/src/pkg/promql"
+	log "10.254.188.33/matyspi5/erd/pkg/obs/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/promql"
 
 	"strconv"
 	"time"
