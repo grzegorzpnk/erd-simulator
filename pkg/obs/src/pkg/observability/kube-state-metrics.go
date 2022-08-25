@@ -4,6 +4,8 @@ import (
 	"10.254.188.33/matyspi5/obs/src/config"
 	log "10.254.188.33/matyspi5/obs/src/logger"
 	"10.254.188.33/matyspi5/obs/src/pkg/promql"
+	"errors"
+	"fmt"
 	"math"
 	"time"
 )
@@ -101,7 +103,6 @@ func (ci *ClustersInfo) InitializeClustersInfo(client promql.PromQL) {
 
 // updateClustersInfo fetches current cpu/memory request/limits utilization and updates ClusterInfo
 func (ci *ClustersInfo) updateClustersInfo() {
-	//log.Info("[KSM] Updating ClustersInfo...")
 	ci.client.Time = time.Now()
 
 	for id, cluster := range ci.clusters {
@@ -120,44 +121,52 @@ func (ci *ClustersInfo) updateClustersInfo() {
 		ci.clusters[id].SetMemLim(math.Round(memLim*100) / 100)
 	}
 
-	//log.Infof("[KSM] Current state: %v", ci.clusters)
 	time.Sleep(5 * time.Second)
-
 	ci.updateClustersInfo()
 }
 
-func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) float64 {
-	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
-			return cluster.GetCpuReq()
-		}
+func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) (float64, error) {
+	cluster, err := ci.GetCluster(clusterProvider, clusterName)
+	if err != nil {
+		err = fmt.Errorf("can't get cluster cpu requests. Reason: %v", err)
+		return -1, err
 	}
-	return -1
+	return cluster.GetMemReq(), nil
 }
 
-func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) float64 {
-	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
-			return cluster.GetCpuLim()
-		}
+func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) (float64, error) {
+	cluster, err := ci.GetCluster(clusterProvider, clusterName)
+	if err != nil {
+		err = fmt.Errorf("can't get cluster cpu limits. Reason: %v", err)
+		return -1, err
 	}
-	return -1
+	return cluster.GetCpuLim(), nil
 }
 
-func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) float64 {
-	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
-			return cluster.GetMemReq()
-		}
+func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) (float64, error) {
+	cluster, err := ci.GetCluster(clusterProvider, clusterName)
+	if err != nil {
+		err = fmt.Errorf("can't get cluster memory requests. Reason: %v", err)
+		return -1, err
 	}
-	return -1
+	return cluster.GetMemReq(), nil
 }
 
-func (ci *ClustersInfo) GetClusterMemLim(clusterProvider, clusterName string) float64 {
+func (ci *ClustersInfo) GetClusterMemLim(clusterProvider, clusterName string) (float64, error) {
+	cluster, err := ci.GetCluster(clusterProvider, clusterName)
+	if err != nil {
+		err = fmt.Errorf("can't get cluster memory limits. Reason: %v", err)
+		return -1, err
+	}
+	return cluster.GetMemLim(), nil
+}
+
+func (ci *ClustersInfo) GetCluster(clusterProvider, clusterName string) (Cluster, error) {
 	for _, cluster := range ci.clusters {
-		if clusterName == cluster.Name && clusterProvider == cluster.Provider {
-			return cluster.GetMemLim()
+		if cluster.Provider == clusterProvider && cluster.Name == clusterName {
+			return cluster, nil
 		}
 	}
-	return -1
+	err := errors.New(fmt.Sprintf("cluster %v+%v doesn't exist", clusterProvider, clusterName))
+	return Cluster{}, err
 }

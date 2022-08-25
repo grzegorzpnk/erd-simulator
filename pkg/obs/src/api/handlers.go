@@ -26,12 +26,15 @@ func (h *apiHandler) getCpuReqHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.obsClient.GetClusterCpuReq(provider, cluster)
+	value, err := h.obsClient.GetClusterCpuReq(provider, cluster)
+	if err != nil {
+		fmt.Errorf("[API] Error: %v", err)
+	}
 
-	if value > 0 {
+	if value != -1 {
 		sendResponse(w, value, http.StatusOK)
 	} else {
-		sendResponse(w, value, http.StatusNoContent)
+		sendResponse(w, err.Error(), http.StatusNoContent)
 	}
 
 }
@@ -41,12 +44,15 @@ func (h *apiHandler) getCpuLimHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.obsClient.GetClusterCpuLim(provider, cluster)
+	value, err := h.obsClient.GetClusterCpuLim(provider, cluster)
+	if err != nil {
+		fmt.Errorf("[API] Error: %v", err)
+	}
 
-	if value > 0 {
+	if value != -1 {
 		sendResponse(w, value, http.StatusOK)
 	} else {
-		sendResponse(w, value, http.StatusNoContent)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -55,12 +61,15 @@ func (h *apiHandler) getMemReqHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.obsClient.GetClusterMemReq(provider, cluster)
+	value, err := h.obsClient.GetClusterMemReq(provider, cluster)
+	if err != nil {
+		fmt.Errorf("[API] Error: %v", err)
+	}
 
-	if value > 0 {
+	if value != -1 {
 		sendResponse(w, value, http.StatusOK)
 	} else {
-		sendResponse(w, value, http.StatusNoContent)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -69,12 +78,15 @@ func (h *apiHandler) getMemLimHandler(w http.ResponseWriter, r *http.Request) {
 	provider := vars["provider"]
 	cluster := vars["cluster"]
 
-	value := h.obsClient.GetClusterMemLim(provider, cluster)
+	value, err := h.obsClient.GetClusterMemLim(provider, cluster)
+	if err != nil {
+		fmt.Errorf("[API] Error: %v", err)
+	}
 
-	if value > 0 {
+	if value != -1 {
 		sendResponse(w, value, http.StatusOK)
 	} else {
-		sendResponse(w, value, http.StatusNoContent)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -88,10 +100,10 @@ func (h *apiHandler) getLatencyHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Errorf("[API] Error: %v", err)
 	}
 
-	if value > 0 {
+	if value != -1 {
 		sendResponse(w, value, http.StatusOK)
 	} else {
-		sendResponse(w, value, http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
