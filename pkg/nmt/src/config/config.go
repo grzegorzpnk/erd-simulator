@@ -4,28 +4,24 @@ package config
 
 import (
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
+	"fmt"
 	"os"
 	"reflect"
 	"strings"
-	"time"
 )
 
 // Configuration loads up all the values that are used to configure
 // backend implementations
 type Configuration struct {
-	Host        string        `json:"host-ip"`
-	Timeout     time.Duration `json:"timeout"`
-	PluginDir   string        `json:"plugin-dir"`
-	ServicePort string        `json:"service-port"`
-	Cells       []string      `json:"cells"`
-	Clusters    []ClusterSet  `json:"clusters"`
+	ObsIp       string `json:"obs-ip"`
+	ObsPort     string `json:"obs-port"`
+	ServicePort string `json:"service-port"`
 }
 
-type ClusterSet struct {
-	Provider string   `json:"clusters-provider"`
-	Clusters []string `json:"clusters"`
-}
+//type ClusterSet struct {
+//	Provider string   `json:"clusters-provider"`
+//	Clusters []string `json:"clusters"`
+//}
 
 // Config is the structure that stores the configuration
 var gConfig *Configuration
@@ -54,20 +50,32 @@ func readConfigFile(file string) (*Configuration, error) {
 }
 
 func defaultConfiguration() *Configuration {
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Error("Error getting cwd. Using .\n")
-		cwd = "."
-	}
 
 	return &Configuration{
-		Host:        "http://localhost:9009/prometheus",
-		Timeout:     20 * time.Second,
-		PluginDir:   cwd,
+		ObsIp:       "http://localhost:9009/prometheus",
+		ObsPort:     "1234",
 		ServicePort: "8080",
-		Cells:       []string{},
-		Clusters:    []ClusterSet{},
 	}
+}
+
+// GetConfiguration returns the configuration for the app.
+// It will try to load it if it is not already loaded.
+func GetConfiguration() *Configuration {
+	if gConfig == nil {
+		conf, err := readConfigFile("config.json")
+		if err != nil {
+			fmt.Println("Error loading config file: \n", err)
+			fmt.Println("Using defaults...\n")
+		}
+		gConfig = conf
+
+		if !isValidConfig(gConfig) {
+			fmt.Println("Bad data in config. Exiting.")
+			return nil
+		}
+	}
+
+	return gConfig
 }
 
 func isValidConfig(cfg *Configuration) bool {
@@ -82,31 +90,11 @@ func isValidConfig(cfg *Configuration) bool {
 		if strings.Contains(varName, "Time") {
 			intValue, ok := varValue.(int)
 			if ok && intValue <= 0 {
-				log.Errorf("%s must be positive, not %d.\n",
+				fmt.Println("%s must be positive, not %d.\n",
 					varName, intValue)
 				valid = false
 			}
 		}
 	}
 	return valid
-}
-
-// GetConfiguration returns the configuration for the app.
-// It will try to load it if it is not already loaded.
-func GetConfiguration() *Configuration {
-	if gConfig == nil {
-		conf, err := readConfigFile("config.json")
-		if err != nil {
-			log.Errorf("Error loading config file: \n", err)
-			log.Infof("Using defaults...\n")
-		}
-		gConfig = conf
-
-		if !isValidConfig(gConfig) {
-			log.Fatalln("Bad data in config. Exiting.")
-			return nil
-		}
-	}
-
-	return gConfig
 }
