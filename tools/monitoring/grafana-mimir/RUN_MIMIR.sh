@@ -1,1 +1,1 @@
-sudo docker run --rm --name mimir --publish 9009:9009 --volume /home/pmq/workshop/orange/erd/tools/monitoring/grafana-mimir/demo.yaml:/etc/mimir/demo.yaml grafana/mimir:latest --config.file=/etc/mimir/demo.yaml
+sudo docker run --rm --name mimir --publish 9009:9009 --volume /home/ubuntu/workshop/erd/tools/monitoring/grafana-mimir/demo.yaml:/etc/mimir/demo.yaml grafana/mimir:latest --config.file=/etc/mimir/demo.yaml &
