@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"nmt/src/api"
+	"nmt/src/config"
 	"nmt/src/package/topology"
 )
 
@@ -15,7 +16,13 @@ func main() {
 	initializingGraph()
 
 	httpRouter := api.NewRouter(graph)
-	log.Fatal(http.ListenAndServe("localhost:8080", httpRouter))
+
+	httpServer := &http.Server{
+		Handler: httpRouter,
+		Addr:    ":" + config.GetConfiguration().ServicePort,
+	}
+
+	log.Fatal(httpServer.ListenAndServe())
 
 }
 
