@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"nmt/src/config"
+	"strconv"
 	"time"
 )
 
@@ -17,15 +18,15 @@ type ClusterMetrics struct {
 type NetworkMetrics struct {
 
 	//ms
-	Latency    float32 `json:"latency"`
+	Latency    float64 `json:"latency"`
 	PacketDrop int     `json:"packetDrop"`
 }
 
 func (cm *ClusterMetrics) UpdateClusterMetrics(clusterMetrics ClusterMetrics) {
 
-	/*cm.CpuUsage = clusterMetrics.CpuUsage
+	cm.CpuUsage = clusterMetrics.CpuUsage
 	cm.RamUsage = clusterMetrics.RamUsage
-	cm.MemoryUsage = clusterMetrics.MemoryUsage*/
+	cm.MemoryUsage = clusterMetrics.MemoryUsage
 }
 
 func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
@@ -33,75 +34,141 @@ func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
 	nm.Latency = networkMetrics.Latency
 }
 
-func (graph *Graph) TopologyMetricsUpdate() {
+//currently this function is hardcoded, please make a common topology to make it work
+func TopologyMetricsUpdate(g *Graph) {
 
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
 
 	for {
+		//update cluster metrics
+		/*		//for i, v := range g.Vertices {
+				//todo: hardcoded to test please change for generic
+				cm, err := getClusterMetricsNotification("02", endpoint)
+				if err != nil {
+					fmt.Errorf(err.Error())
+				}
+				g.Vertices[2].VertexMetrics.UpdateClusterMetrics(cm)
 
-		for i, v := range graph.Vertices {
+				//}*/
 
-			cm, err := getClusterMetricsNotification(v.Id, endpoint)
-			if err != nil {
-				fmt.Errorf(err.Error())
+		// update metrics for MEC Clusters
+		for i, v := range g.Vertices {
+			if v.Type == "MEC" {
+				cm, err := getClusterMetricsNotification(strconv.Itoa(v.Id), endpoint)
+				if err != nil {
+					fmt.Errorf(err.Error())
+				}
+				g.Vertices[i].VertexMetrics.UpdateClusterMetrics(cm)
 			}
-			graph.Vertices[i].VertexMetrics.UpdateClusterMetrics(cm)
-
 		}
-		time.Sleep(1 * time.Second)
+
+		//Update metrics for each EDGE
+		for j, k := range g.Edges {
+			nm := getNetworkMetricsNotification(endpoint, k)
+
+			g.Edges[j].EdgeMetrics.UpdateNetworkMetrics(nm)
+		}
 	}
 
+	time.Sleep(1 * time.Second)
 }
 
-func getClusterMetricsNotification(id int, endpoint string) (ClusterMetrics, error) {
+//this function takes clusterID and requests to receive latest info about Cluster Metrics at the end it returns ClusterMetrics object
+func getClusterMetricsNotification(clusterId, endpoint string) (ClusterMetrics, error) {
 
 	var cm ClusterMetrics
+
+	clusterCPUURL := buildCpuUrl(clusterId, endpoint)
+	clusterMemoryURL := buildMemoryUrl(clusterId, endpoint)
+
+	//get current CPU
+	CPUresp, err := http.Get(clusterCPUURL)
+	if err != nil {
+		panic(err)
+	}
+	defer CPUresp.Body.Close()
+
+	fmt.Println("CPU Response status:", CPUresp.Status)
+
+	CPUscanner := bufio.NewScanner(CPUresp.Body)
+	cm.CpuUsage, _ = strconv.Atoi(CPUscanner.Text())
+
+	//get current Memory
+	MemoryResp, err := http.Get(clusterMemoryURL)
+	if err != nil {
+		panic(err)
+	}
+	defer MemoryResp.Body.Close()
+
+	fmt.Println("Memory Response status:", MemoryResp.Status)
+
+	MemoryScanner := bufio.NewScanner(MemoryResp.Body)
+	cm.MemoryUsage, _ = strconv.Atoi(MemoryScanner.Text())
+
+	return cm, nil
+}
+
+// np. http://10.254.185.50:32138/v1/obs/ltc/cell/1/meh/edge-provider+meh01/latency-ms
+func getNetworkMetricsNotification(endpoint string, edge *Edge) NetworkMetrics {
+	var nm NetworkMetrics
+
+	//if Vertex[edge.Source].Type == "CELL"
+	cellID := strconv.Itoa(edge.Source)
+	mecID := strconv.Itoa(edge.Target)
+	//else
+	//mecID := edge.Source
+	//cellID := edge.target
+	latencyURL := buildLatencyURL(endpoint, cellID, mecID)
+
+	//get current latency
+	latencyResp, err := http.Get(latencyURL)
+	if err != nil {
+		panic(err)
+	}
+	defer latencyResp.Body.Close()
+
+	fmt.Println("Latency Response status:", latencyResp.Status)
+
+	CPUscanner := bufio.NewScanner(latencyResp.Body)
+	nm.Latency, _ = strconv.ParseFloat(CPUscanner.Text(), 20)
+
+	return nm
+}
+
+func buildLatencyURL(endpoint, cellID, MECID string) string {
+
+	var latencyURL string
+	/*baseURL := endpoint + "v1/obs/ksm/provider/edge-provider/"
+	providerURL := baseURL + "orange/"
+	baseClusterURL := providerURL + "cluster/meh"
+	clusterURL := baseClusterURL + id + "/"
+	clusterCPUURL := clusterURL + "cpu-requests"
+	fmt.Println("cpu url: ", clusterCPUURL)*/
+
+	return latencyURL
+}
+
+func buildCpuUrl(id, endpoint string) string {
 
 	baseURL := endpoint + "v1/obs/ksm/provider/edge-provider/"
 	providerURL := baseURL + "orange/"
 	baseClusterURL := providerURL + "cluster/meh"
-	clusterURL := baseClusterURL + string(id) + "/"
+	clusterURL := baseClusterURL + id + "/"
 	clusterCPUURL := clusterURL + "cpu-requests"
-	fmt.Println(clusterCPUURL)
+	fmt.Println("cpu url: ", clusterCPUURL)
 
-	resp, err := http.Get(clusterCPUURL)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
+	return clusterCPUURL
+}
 
-	fmt.Println("Response status:", resp.Status)
+//np. http://10.254.185.50:32138/v1/obs/ksm/provider/edge-provider/cluster/meh02/memory-requests
+func buildMemoryUrl(id, endpoint string) string {
 
-	scanner := bufio.NewScanner(resp.Body)
-	for i := 0; scanner.Scan() && i < 5; i++ {
-		fmt.Println(scanner.Text())
-	}
+	baseURL := endpoint + "v1/obs/ksm/provider/edge-provider/"
+	providerURL := baseURL + "orange/"
+	baseClusterURL := providerURL + "cluster/meh"
+	clusterURL := baseClusterURL + id + "/"
+	clusterMemoryURL := clusterURL + "memory-requests"
+	fmt.Println("memory url: ", clusterMemoryURL)
 
-	if err := scanner.Err(); err != nil {
-		panic(err)
-	}
-
-	/*//func getNotification(sub db.Subscriber, amfEndpoint string) (types.AmfCreatedEventSubscription, error) {
-		var respBody types.AmfCreatedEventSubscription
-		reqBody, err := json.Marshal(sub.BodyRequest)
-
-		resp, err := http.Post(amfEndpoint, "text/plain", bytes.NewBuffer(reqBody))
-		if err != nil {
-			err = errors.Wrap(err, fmt.Sprintf("Could not get notification for: EventType: %s, AMF endpoint: %s",
-				sub.AmfEventType, sub.Endpoint))
-			return types.AmfCreatedEventSubscription{}, err
-		}
-
-		body, err := ioutil.ReadAll(resp.Body)
-
-		err = json.Unmarshal(body, &respBody)
-		if err != nil {
-			err = errors.Wrap(err, "Failed to unmarshal body")
-			log.Errorf("[SUBSCRIPTION][ID=%v] Error: %v", err)
-			return types.AmfCreatedEventSubscription{}, err
-		}
-		return respBody, nil
-	}*/
-
-	return cm, nil
+	return clusterMemoryURL
 }

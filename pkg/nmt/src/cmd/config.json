@@ -2,6 +2,6 @@
   "obs-ip": "http://10.254.185.42",
   "obs-port": "1234",
   "service-port":"8282",
-  "clusterControllerEndpoint" : "http://10.254.185.50:32138/v1/obs/ksm/provider/edge-provider/cluster/meh01/cpu-requests",
+  "cluster-controller-endpoint" : "http://10.254.185.50:32138/"
 
 }
