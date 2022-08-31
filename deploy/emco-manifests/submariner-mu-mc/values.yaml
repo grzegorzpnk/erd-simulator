@@ -184,7 +184,7 @@ DcmPort:        30477
 WfIntentName: dig1-workflow-intent
 WfClientEndpointName: 10.254.185.48
 WfClientEndpointPort: 32321
-WfClientName: relocate_workflowclient
+WfClientName: lcm_workflowclient
 WfID: relocate-upf-1
 WfTaskQueue: RELOCATE_TASK_Q
 WfEmcoClm: http://10.254.185.42:30461

@@ -22,7 +22,7 @@ var DummyDB *subscriptionDb
 type Subscriber struct {
 	Endpoint     types.ClientListenerUri
 	AmfEventType types.AmfEventType
-	BodyRequest  types.AmfCreatedEventSubscription
+	BodyRequest  types.AmfEventSubscription
 }
 
 // subscriptionDb is a struct which represents subscription database

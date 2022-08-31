@@ -132,7 +132,7 @@ func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) (f
 		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
-	return cluster.GetMemReq(), nil
+	return cluster.GetCpuReq(), nil
 }
 
 func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) (float64, error) {

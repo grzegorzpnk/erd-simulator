@@ -42,7 +42,7 @@ func ServeSubscription(id db.SubscriptionId) {
 	}
 
 	for {
-		respBody, err = getNotification(sub, amfEndpoint)
+		respBody, err = getNotification(sub, amfEndpoint, id)
 
 		if err != nil {
 			err = cancelSubscription(id, err)
@@ -115,11 +115,16 @@ func ServeSubscription(id db.SubscriptionId) {
 }
 
 //getNotification requests notification from AMF and returns the response body
-func getNotification(sub db.Subscriber, amfEndpoint string) (types.AmfCreatedEventSubscription, error) {
+func getNotification(sub db.Subscriber, amfEndpoint string, id db.SubscriptionId) (types.AmfCreatedEventSubscription, error) {
 	var respBody types.AmfCreatedEventSubscription
-	reqBody, err := json.Marshal(sub.BodyRequest)
 
-	resp, err := http.Post(amfEndpoint, "text/plain", bytes.NewBuffer(reqBody))
+	subBody := types.AmfCreateEventSubscription{
+		Subscription:      sub.BodyRequest,
+		SupportedFeatures: nil,
+	}
+	reqBody, err := json.Marshal(subBody)
+
+	resp, err := http.Post(amfEndpoint, "application/json", bytes.NewBuffer(reqBody))
 	if err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("Could not get notification for: EventType: %s, AMF endpoint: %s",
 			sub.AmfEventType, sub.Endpoint))
@@ -131,7 +136,7 @@ func getNotification(sub db.Subscriber, amfEndpoint string) (types.AmfCreatedEve
 	err = json.Unmarshal(body, &respBody)
 	if err != nil {
 		err = errors.Wrap(err, "Failed to unmarshal body")
-		log.Errorf("[SUBSCRIPTION][ID=%v] Error: %v", err)
+		log.Errorf("[SUBSCRIPTION][ID=%v] Error: %v", id, err)
 		return types.AmfCreatedEventSubscription{}, err
 	}
 	return respBody, nil

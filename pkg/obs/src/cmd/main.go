@@ -36,8 +36,8 @@ func main() {
 	}
 	cApi.Client = client
 
-	//var nodes observability.NodesInfo
-	//nodes.InitializeNodesInfo(cApi)
+	var nodes observability.NodesInfo
+	nodes.InitializeNodesInfo(cApi)
 
 	var clusters observability.ClustersInfo
 	clusters.InitializeClustersInfo(cApi)

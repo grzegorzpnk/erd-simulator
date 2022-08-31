@@ -13,18 +13,20 @@ type apiHandler string
 
 // subscribeHandler is a function which is called to handle new subscription
 func (h apiHandler) subscribeHandler(w http.ResponseWriter, r *http.Request) {
-	var body types.AmfCreatedEventSubscription
+	var body types.AmfEventSubscription
 	var eventType types.AmfEventType
 	var endpoint string
 	var subId db.SubscriptionId
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 
+	log.Infof("GOT BODY: %v", body)
+
 	// For now allow subscription for single EventType per request
-	eventTypes := *body.Subscription.EventList
+	eventTypes := *body.EventList
 	eventType = eventTypes[0].Type
 
-	endpoint = body.Subscription.EventNotifyUri
+	endpoint = body.EventNotifyUri
 
 	sub := db.Subscriber{
 		Endpoint:     types.ClientListenerUri(endpoint),

@@ -22,7 +22,7 @@ const (
 
 var NODE_EXPORTER_CLUSTER_MAP = map[string]string{
 	PROVIDER + "+" + CLUSTER1: "10.21.1.116:9100",
-	PROVIDER + "+" + CLUSTER2: "10.31.1.129:9100",
+	PROVIDER + "+" + CLUSTER2: "10.31.1.208:9100",
 	PROVIDER + "+" + CLUSTER3: "10.41.1.168:9100",
 	PROVIDER + "+" + CLUSTER4: "10.61.1.121:9100",
 }
@@ -109,7 +109,7 @@ func (ni *NodesInfo) updateNodesInfo() {
 		ni.nodes[id].SetRamUtil(ramFloat)
 	}
 
-	//log.Infof("[NODE-EXPORTER] Current state: %v", ni.nodes)
+	log.Infof("[NODE-EXPORTER] Current state: %v", ni.nodes)
 	time.Sleep(5 * time.Second)
 
 	ni.updateNodesInfo()
