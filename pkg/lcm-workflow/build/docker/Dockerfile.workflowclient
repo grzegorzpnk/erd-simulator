@@ -1,0 +1,12 @@
+FROM nicolaka/netshoot
+
+WORKDIR /opt/emco
+
+COPY ./lcm_workflowclient .
+COPY ./http_server .
+
+EXPOSE 9090
+
+USER root
+
+ENTRYPOINT ["./http_server"]

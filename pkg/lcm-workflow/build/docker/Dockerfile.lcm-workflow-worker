@@ -1,0 +1,11 @@
+FROM nicolaka/netshoot
+
+WORKDIR /opt/emco/lcm-workflow
+
+COPY ./lcm-workflow-worker .
+
+USER root
+
+ENTRYPOINT ["env", "sh", "-c", "./lcm-workflow-worker & while true ;do wait ;done"]
+
+
