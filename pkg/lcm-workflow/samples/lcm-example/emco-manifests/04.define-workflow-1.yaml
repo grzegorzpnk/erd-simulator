@@ -32,4 +32,5 @@ spec:
           compositeApp: {{.CompositeApp}}
           compositeAppVersion: v1
           deploymentIntentGroup: {{.DeploymentIntent}}
-          targetAppName: {{.CollectdAppName}}
+          targetAppName: {{.AppName}}
+          innotUrl: {{ .InnotUrl }}

@@ -6,6 +6,7 @@ package lcm
 import (
 	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -14,8 +15,7 @@ import (
 	"os"
 )
 
-var NEXT_PORT = 8585
-var waitNotification chan int = make(chan int)
+var waitNotification = make(chan types.CellId)
 
 func SubCellChangedNotification(ctx context.Context, migParam MigParam) (*MigParam, error) {
 
@@ -25,20 +25,10 @@ func SubCellChangedNotification(ctx context.Context, migParam MigParam) (*MigPar
 	log.Printf("\nSubCellChangedNotification: listener endpoint = %s\n", migParam.NotifyUrl)
 
 	// TODO: un-hardcore innot url
-	innotUrl := "http://10.254.185.44:32137/v1/intermediate-notifier/subscribe"
+	innotUrl := migParam.GetInnotUrl()
 
 	log.Printf("\nSubCellChangedNotification: innotUrl = %s\n", innotUrl)
-	//if migParam.Listener == reflect.Zero(reflect.TypeOf(new(net.Listener))).Interface() {
-	//	log.Printf("SubCellChangedNorification: 	Creating new listener...")
-	//	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", strconv.Itoa(NEXT_PORT)))
-	//	if err != nil {
-	//		log.Fatalf("error: %v\n", err)
-	//	}
-	//	log.Printf("SubCellChangedNotification: Created listener on port: %v\n", listener.Addr().(*net.TCPAddr).Port)
-	//	migParam.Listener = &listener
-	//}
 
-	//host := fmt.Sprintf("http://10.254.185.50:%v", listener.Addr().(*net.TCPAddr).Port)
 	host := fmt.Sprintf("http://10.254.185.48:%v", os.Getenv("NOTIFICATION_NODE_PORT"))
 
 	data := generateSubscriptionBody()
@@ -62,31 +52,35 @@ func GetCellChangedNotification(ctx context.Context, migParam MigParam) (*MigPar
 	router := mux.NewRouter()
 	router.HandleFunc(migParam.NotifyUrl, serveNotification).Methods("POST")
 
-	fmt.Printf("SubCellChangedNotification: Creating server\n")
 	httpServer := &http.Server{
 		Handler: router,
 		Addr:    ":8585",
 	}
 
-	log.Printf("SubCellChangedNotification: registered handler\n")
-
 	go func() {
-		fmt.Printf("SubCellChangedNotification: Running new goroutine to handle server shutdown\n")
-		<-waitNotification
-		fmt.Printf("SubCellChangedNotification: Got notification on channel... HTTP server shutdown\n.")
+		migParam.NewCellId = <-waitNotification
+
+		fmt.Printf("SubCellChangedNotification: Got notification. New CELL_ID: %v\n.", migParam.NewCellId)
 		_ = httpServer.Shutdown(context.Background())
 	}()
 
-	fmt.Println("SubCellChangedNotification: Listening..")
+	fmt.Println("SubCellChangedNotification: Listening for notification..")
 	_ = httpServer.ListenAndServe()
 
-	fmt.Printf("SubCellChangedNotification: activity ended.\n")
 	return &migParam, nil
 }
 
 func serveNotification(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Got notification: %v.", r.Body)
-	waitNotification <- 1
+	var info types.CellChangedInfo
+	err := json.NewDecoder(r.Body).Decode(&info)
+	if err != nil {
+		fmt.Errorf("error while decoding: %v\n", err)
+	}
+
+	log.Printf("Notification reason: %v, cell id: %v", info.Reason, info.Cell)
+
+	waitNotification <- info.Cell
+
 }
 
 func generateSubscriptionBody() types.AmfEventSubscription {
@@ -120,7 +114,7 @@ func generateSubscriptionBody() types.AmfEventSubscription {
 	body := types.AmfEventSubscription{
 		AnyUE:                         &boole,
 		EventList:                     &[]types.AmfEvent{amfEvent},
-		EventNotifyUri:                "http://localhost/workflow-listener/cell-changed/LEoF2qn1jk/notify",
+		EventNotifyUri:                "http://localhost/workflow-listener/cell-changed/ABCDEFGHIJ/notify",
 		Gpsi:                          nil,
 		GroupId:                       nil,
 		NfId:                          uuid.UUID{},

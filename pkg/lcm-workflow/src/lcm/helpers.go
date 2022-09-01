@@ -88,33 +88,36 @@ type MigParam struct {
 	InParams map[string]string
 	// map indexed by generic placement intent name
 	AppsNameDetails map[string][]AppNameDetails
-	InnotUrl        string
 	NotifyUrl       string
-	Router          *http.Server
+	NewCellId       types.CellId
+}
+
+func (mp *MigParam) GetInnotUrl() string {
+	return mp.InParams["innotUrl"]
 }
 
 // GetOrchestratorGrpcEndpoint gRPC endpoint for Orchestrator
-func GetOrchestratorGrpcEndpoint(mp MigParam) string {
+func (mp *MigParam) GetOrchestratorGrpcEndpoint() string {
 	return mp.InParams["emcoOrchStatusEndpoint"]
 }
 
 // GetClmEndpoint is endpoint for cluster manager microservice
-func GetClmEndpoint(mp MigParam) string {
+func (mp *MigParam) GetClmEndpoint() string {
 	return mp.InParams["emcoClmEndpoint"]
 }
 
-func buildDigURL(params map[string]string) string {
-	url := params["emcoOrchEndpoint"]
-	url += "/v2/projects/" + params["project"]
-	url += "/composite-apps/" + params["compositeApp"]
-	url += "/" + params["compositeAppVersion"]
-	url += "/deployment-intent-groups/" + params["deploymentIntentGroup"]
+func (mp *MigParam) buildDigURL() string {
+	url := mp.InParams["emcoOrchEndpoint"]
+	url += "/v2/projects/" + mp.InParams["project"]
+	url += "/composite-apps/" + mp.InParams["compositeApp"]
+	url += "/" + mp.InParams["compositeAppVersion"]
+	url += "/deployment-intent-groups/" + mp.InParams["deploymentIntentGroup"]
 
 	return url
 }
 
-func buildGenericPlacementIntentsURL(params map[string]string) string {
-	url := buildDigURL(params)
+func (mp *MigParam) buildGenericPlacementIntentsURL() string {
+	url := mp.buildDigURL()
 	url += "/generic-placement-intents"
 
 	return url
@@ -149,10 +152,6 @@ func getHttpRespBody(url string) ([]byte, error) {
 	}
 
 	return b, nil
-}
-
-type testStruct struct {
-	value string
 }
 
 type SubMsg struct {

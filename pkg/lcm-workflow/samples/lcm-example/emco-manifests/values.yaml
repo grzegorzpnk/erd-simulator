@@ -19,11 +19,11 @@ Cluster2Label: edge-cluster2
 Cluster2KubeConfig: ../cfg/cluster2.config
 
 # Collectd App
-CollectdAppName: collectd
-CollectdAppFile: ../apps/collectd.tar.gz
-ProfileCollectdAppName: collectd-profile
-ProfileCollectdAppFile: ../apps/collectd_profile.tar.gz
-CollectdAppPlacementIntent: collectd-placement-intent
+AppName: collectd
+AppFile: ../apps/collectd.tar.gz
+ProfileAppName: collectd-profile
+ProfileAppFile: ../apps/collectd_profile.tar.gz
+AppPlacementIntent: collectd-placement-intent
 
 # Workflow Intent
 WfIntentName: dig1-workflow-intent
@@ -36,9 +36,9 @@ WfEmcoClm: http://10.254.185.42:30461
 WfEmcoOrch: http://10.254.185.42:30415
 WfEmcoOrchStatus: 10.254.185.42:30416
 
+# Intermediate Notifier info
+InnotUrl: "http://10.254.185.44:32137/v1/intermediate-notifier/subscribe"
+
 # Temporal server
 TemporalServerIP: 10.254.185.48
 TemporalServerPort: 32155
-
-# EMCO Controllers
-RsyncPort: 9031
