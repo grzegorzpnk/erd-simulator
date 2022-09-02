@@ -17,6 +17,7 @@ type Configuration struct {
 	ObsPort                   string `json:"obs-port"`
 	ServicePort               string `json:"service-port"`
 	ClusterControllerEndpoint string `json:"cluster-controller-endpoint"`
+	EdgeProvider              string `json:"edge-provider"`
 }
 
 //type ClusterSet struct {
@@ -57,6 +58,7 @@ func defaultConfiguration() *Configuration {
 		ObsPort:                   "1234",
 		ServicePort:               "8080",
 		ClusterControllerEndpoint: "http://10.254.185.50:32138/",
+		EdgeProvider:              "orange",
 	}
 }
 

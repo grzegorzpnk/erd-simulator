@@ -15,7 +15,7 @@ func main() {
 	graph = &topology.Graph{}
 	initializingGraph()
 
-	go topology.TopologyMetricsUpdate(graph)
+	go topology.TopologyMetricsUpdateTest(graph)
 
 	httpRouter := api.NewRouter(graph)
 
