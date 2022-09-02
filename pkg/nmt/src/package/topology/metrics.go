@@ -1,7 +1,6 @@
 package topology
 
 import (
-	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -37,30 +36,40 @@ func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
 }
 
 //gorutine function
-func TopologyMetricsUpdate(g *Graph) {
+func ClustersMetricsUpdate(g *Graph) {
 
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
 
 	for {
 		// update metrics for MEC Clusters
-		for i, v := range g.Vertices {
+		for _, v := range g.Vertices {
 			if v.Type == "MEC" {
 				cm, err := getClusterMetricsNotification(strconv.Itoa(v.Id), endpoint)
 				if err != nil {
 					fmt.Errorf(err.Error())
 				}
-				g.Vertices[i].VertexMetrics.UpdateClusterMetrics(cm)
+				g.GetVertex(v.Id).VertexMetrics.UpdateClusterMetrics(cm)
+				//g.Vertices[i].VertexMetrics.UpdateClusterMetrics(cm)
 			}
 		}
-		/*
-			//Update metrics for each EDGE
-			for j, k := range g.Edges {
-				nm := getNetworkMetricsNotification(endpoint, k, g)
-				g.Edges[j].EdgeMetrics.UpdateNetworkMetrics(nm)
-			}*/
+		time.Sleep(1 * time.Second)
 	}
 
-	time.Sleep(1 * time.Second)
+}
+
+//gorutine function
+func NetworkMetricsUpdate(g *Graph) {
+
+	endpoint := config.GetConfiguration().ClusterControllerEndpoint
+
+	for {
+		//Update metrics for each EDGE
+		for j, k := range g.Edges {
+			nm := getNetworkMetricsNotification(endpoint, k, g)
+			g.Edges[j].EdgeMetrics.UpdateNetworkMetrics(nm)
+		}
+		time.Sleep(1 * time.Second)
+	}
 }
 
 func TopologyMetricsUpdateTest(g *Graph) {
@@ -145,10 +154,14 @@ func getNetworkMetricsNotification(endpoint string, edge *Edge, g *Graph) Networ
 	}
 	defer latencyResp.Body.Close()
 
-	fmt.Println("Latency Response status:", latencyResp.Status)
-
-	CPUscanner := bufio.NewScanner(latencyResp.Body)
-	nm.Latency, _ = strconv.ParseFloat(CPUscanner.Text(), 20)
+	LatencyBody, err := ioutil.ReadAll(latencyResp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//Convert the body to type string
+	sb := string(LatencyBody)
+	log.Printf(sb)
+	fmt.Printf("Latency Response status:%v , Latency: %v\n", latencyResp.Status, sb)
 
 	return nm
 }
