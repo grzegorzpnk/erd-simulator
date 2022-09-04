@@ -112,6 +112,7 @@ func getClusterMetricsNotification(clusterId, endpoint string) (ClusterMetrics, 
 	//Convert the body to type string
 	sb := string(CPUbody)
 	log.Printf(sb)
+	cm.CpuUsage, _ = strconv.Atoi(sb)
 	fmt.Printf("CPU Response status:%v , CPU: %v\n", CPUresp.Status, sb)
 
 	//get current Memory
@@ -128,6 +129,7 @@ func getClusterMetricsNotification(clusterId, endpoint string) (ClusterMetrics, 
 	}
 	//Convert the body to type string
 	sb2 := string(Memorybody)
+	cm.MemoryUsage, _ = strconv.Atoi(sb2)
 	log.Printf(sb2)
 	fmt.Printf("Memory Response status:%v , Memory: %v\n", MemoryResp.Status, sb2)
 
@@ -170,6 +172,7 @@ func getNetworkMetricsNotification(endpoint string, edge *Edge, g *Graph) Networ
 func buildLatencyURL(endpoint, cellID, MECID string) string {
 
 	var latencyURL string
+	//todo
 	/*baseURL := endpoint + "v1/obs/ksm/provider/edge-provider/"
 	providerURL := baseURL + "orange/"
 	baseClusterURL := providerURL + "cluster/meh"
