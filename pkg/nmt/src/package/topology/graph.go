@@ -14,6 +14,7 @@ type Vertex struct {
 	Type          string         `json:"type"` //MEC or CELL
 	Neighbours    []int          `json:"neighbours"`
 	VertexMetrics ClusterMetrics `json:"vertexMetrics"`
+	//todo: add edge provider
 }
 
 type Edge struct {
