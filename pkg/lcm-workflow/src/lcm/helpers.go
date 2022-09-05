@@ -259,7 +259,7 @@ func GenerateListenerEndpoint(baseUrl, notifyType string) string {
 	return url
 }
 
-func getPriorityLevel(level string) eri.Priority {
+func getPriorityLevel(level string) eri.AppPriority {
 	if strings.ToLower(level) == "low" || level == "0" {
 		return eri.PRIORITY_LOW
 	} else if strings.ToLower(level) == "normal" || level == "1" {
@@ -269,7 +269,7 @@ func getPriorityLevel(level string) eri.Priority {
 	} else if strings.ToLower(level) == "critical" || level == "3" {
 		return eri.PRIORITY_CRITICAL
 	} else {
-		log.Printf("Priority level [%v] not recognized. Using default: [PRIORITY_NORMAL (1)]\n", level)
+		log.Printf("AppPriority level [%v] not recognized. Using default: [PRIORITY_NORMAL (1)]\n", level)
 		return eri.PRIORITY_NORMAL
 	}
 }

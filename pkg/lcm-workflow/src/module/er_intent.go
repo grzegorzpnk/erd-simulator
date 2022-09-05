@@ -1,9 +1,9 @@
 package module
 
-type Priority int
+type AppPriority int
 
 const (
-	PRIORITY_LOW Priority = iota
+	PRIORITY_LOW AppPriority = iota
 	PRIORITY_NORMAL
 	PRIORITY_IMPORTANT
 	PRIORITY_CRITICAL
@@ -27,7 +27,7 @@ type SpecData struct {
 }
 
 type IntentStruct struct {
-	PriorityLevel     Priority    `json:"priority-level,omitempty"`
+	PriorityLevel     AppPriority `json:"priority-level,omitempty"`
 	ConstraintsList   Constraints `json:"constraints-list,omitempty"`
 	ParametersWeights Weights     `json:"parameters-weights,omitempty"`
 }
