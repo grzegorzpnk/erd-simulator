@@ -70,6 +70,7 @@ metadata :
 spec:
   intent:
     genericPlacementIntent: {{.GenericPlacementIntent}}
+    tac: "tac-intent"
 
 ---
 #create the generic placement intent (notice the reference to the "default" logical cloud)

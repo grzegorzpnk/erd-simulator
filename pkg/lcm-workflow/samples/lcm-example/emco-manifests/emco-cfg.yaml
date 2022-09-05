@@ -23,3 +23,6 @@ dtc:
 workflowmgr:
   host: 10.254.185.42
   port: 30495
+tac:
+  host: 10.254.185.42
+  port: 30464

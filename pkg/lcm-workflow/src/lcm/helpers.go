@@ -4,15 +4,20 @@
 package lcm
 
 import (
+	eri "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/module"
 	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
+
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
+	ti "gitlab.com/project-emco/core/emco-base/src/workflowmgr/pkg/module"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -90,6 +95,13 @@ type MigParam struct {
 	AppsNameDetails map[string][]AppNameDetails
 	NotifyUrl       string
 	NewCellId       types.CellId
+	ErIntent        eri.ErIntent
+	OptimalCluster  Cluster
+	ErWfIntent      ti.WorkflowIntent
+}
+
+func (mp *MigParam) GetParamByKey(key string) string {
+	return mp.InParams[key]
 }
 
 func (mp *MigParam) GetInnotUrl() string {
@@ -104,6 +116,17 @@ func (mp *MigParam) GetOrchestratorGrpcEndpoint() string {
 // GetClmEndpoint is endpoint for cluster manager microservice
 func (mp *MigParam) GetClmEndpoint() string {
 	return mp.InParams["emcoClmEndpoint"]
+}
+
+func (mp *MigParam) buildWfMgrURL() string {
+	url := mp.InParams["emcoWfMgrURL"]
+	url += "/v2/projects/" + mp.InParams["project"]
+	url += "/composite-apps/" + mp.InParams["compositeApp"]
+	url += "/" + mp.InParams["compositeAppVersion"]
+	url += "/deployment-intent-groups/" + mp.InParams["deploymentIntentGroup"]
+	url += "/temporal-workflow-intents"
+
+	return url
 }
 
 func (mp *MigParam) buildDigURL() string {
@@ -196,14 +219,14 @@ type SubMsg struct {
 	} `json:"subscription"`
 }
 
-func postHttp(url string, data types.AmfEventSubscription) error {
+func postHttp(url string, data interface{}) (string, error) {
 	body, err := json.Marshal(data)
-
 	if err != nil {
 		fmt.Println("error: marshaling failed")
 	}
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
+	fmt.Println("Body in postHttp: %v\n", string(body))
 
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		log.Fatalf("Could not make post request. reason: %v\n", err)
 	}
@@ -212,12 +235,11 @@ func postHttp(url string, data types.AmfEventSubscription) error {
 		log.Fatal(err)
 	}
 	if resp.StatusCode == http.StatusOK {
-		var res map[string]interface{}
+		var res string
 		json.NewDecoder(resp.Body).Decode(&res)
-		fmt.Println(res)
-		return err
+		return res, err
 	}
-	return err
+	return "", err
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -235,4 +257,82 @@ func GenerateListenerEndpoint(baseUrl, notifyType string) string {
 	randStr := RandString()
 	url := fmt.Sprintf("/%s/%s/%s/notify", baseUrl, notifyType, randStr)
 	return url
+}
+
+func getPriorityLevel(level string) eri.Priority {
+	if strings.ToLower(level) == "low" || level == "0" {
+		return eri.PRIORITY_LOW
+	} else if strings.ToLower(level) == "normal" || level == "1" {
+		return eri.PRIORITY_NORMAL
+	} else if strings.ToLower(level) == "important" || level == "2" {
+		return eri.PRIORITY_IMPORTANT
+	} else if strings.ToLower(level) == "critical" || level == "3" {
+		return eri.PRIORITY_CRITICAL
+	} else {
+		log.Printf("Priority level [%v] not recognized. Using default: [PRIORITY_NORMAL (1)]\n", level)
+		return eri.PRIORITY_NORMAL
+	}
+}
+
+func serveNotification(w http.ResponseWriter, r *http.Request) {
+	var info types.CellChangedInfo
+	err := json.NewDecoder(r.Body).Decode(&info)
+	if err != nil {
+		fmt.Errorf("error while decoding: %v\n", err)
+	}
+
+	log.Printf("Notification reason: %v, cell id: %v", info.Reason, info.Cell)
+
+	waitNotification <- info.Cell
+
+}
+
+func generateSubscriptionBody() types.AmfEventSubscription {
+	boole := true
+
+	amfEventArea := types.AmfEventArea{
+		LadnInfo: &types.LadnInfo{
+			Ladn:     "",
+			Presence: nil,
+		},
+		PresenceInfo: &types.PresenceInfo{
+			EcgiList:            nil,
+			GlobalRanNodeIdList: nil,
+			NcgiList:            nil,
+			PraId:               nil,
+			PresenceState:       nil,
+			TrackingAreaList: &[]types.Tai{types.Tai{
+				PlmnId: types.PlmnId{"208", "93"},
+				Tac:    "000001",
+			}},
+		},
+	}
+	amfEvent := types.AmfEvent{
+		AreaList:                 &[]types.AmfEventArea{amfEventArea},
+		ImmediateFlag:            &boole,
+		LocationFilterList:       nil,
+		SubscribedDataFilterList: nil,
+		Type:                     "LOCATION_REPORT",
+	}
+
+	body := types.AmfEventSubscription{
+		AnyUE:                         &boole,
+		EventList:                     &[]types.AmfEvent{amfEvent},
+		EventNotifyUri:                "http://localhost/workflow-listener/cell-changed/ABCDEFGHIJ/notify",
+		Gpsi:                          nil,
+		GroupId:                       nil,
+		NfId:                          uuid.UUID{},
+		NotifyCorrelationId:           "",
+		Options:                       &types.AmfEventMode{Trigger: "ONE_TIME"},
+		Pei:                           nil,
+		SubsChangeNotifyCorrelationId: nil,
+		SubsChangeNotifyUri:           nil,
+		Supi:                          nil,
+	}
+	return body
+}
+
+type Cluster struct {
+	ProviderName string `json:"provider-name"`
+	ClusterName  string `json:"cluster-name"`
 }

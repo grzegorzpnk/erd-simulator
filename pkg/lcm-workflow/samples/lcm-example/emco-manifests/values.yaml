@@ -7,16 +7,16 @@ DeploymentIntent: dig1
 GenericPlacementIntent: dig1-placement-intent
 
 # Provider1, Cluster1
-ClusterProvider1: provider1
-Cluster1Name: cluster1
-Cluster1Label: edge-cluster1
-Cluster1KubeConfig: ../cfg/cluster1.config
+ClusterProvider1: edge-provider-2
+Cluster1Name: meh02
+Cluster1Label: meh02-label
+Cluster1KubeConfig: ../cfg/cluster2.config
 
 # Provider2, Cluster2
-ClusterProvider2: provider2
-Cluster2Name: cluster2
-Cluster2Label: edge-cluster2
-Cluster2KubeConfig: ../cfg/cluster2.config
+ClusterProvider2: edge-provider-1
+Cluster2Name: meh01
+Cluster2Label: meh01-label
+Cluster2KubeConfig: ../cfg/cluster1.config
 
 # Collectd App
 AppName: collectd
@@ -42,3 +42,7 @@ InnotUrl: "http://10.254.185.44:32137/v1/intermediate-notifier/subscribe"
 # Temporal server
 TemporalServerIP: 10.254.185.48
 TemporalServerPort: 32155
+
+HostIP: 10.254.185.42
+RsyncPort: 30431
+TacPort: 30465

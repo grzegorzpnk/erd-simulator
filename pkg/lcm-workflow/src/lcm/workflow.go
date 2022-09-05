@@ -14,17 +14,20 @@ const ALL_ACTIVITIES = "all-activities"
 
 // NeededParams should be treated as a const
 var NeededParams = []string{ // parameters needed for this workflow
-	"emcoOrchEndpoint", "project", "compositeApp", "compositeAppVersion", "deploymentIntentGroup", "targetAppName"}
+	"emcoOrchEndpoint", "project", "compositeApp", "compositeAppVersion", "deploymentIntentGroup", "targetAppName",
+	"innotUrl", "plcControllerUrl", "appPriorityLevel"}
 
-// LcmWorkflow is a Temporal workflow that relocates selected app of a given deployment intent group (DIG)
-// to a given target cluster in zero down-time mode. It means that new app instance will be in 'ready' STATE before
-// old app instance will be deleted. It expects an "all-activities" parameter inside wfParam.InParams that specifies
-// the common retry/timeout policies for all activities. It may have other activity-specific options on top of that.
+// LcmWorkflow is a Temporal workflow that should be run after application instantiation
+// It should listen for different types of notifications and serve them. For now it listens
+// for CELL_ID_CHANGED notifications, calls ER Plc Controller and then invokes ER Workflow
 func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error) {
 	// List all activities for this workflow
 	activityNames := []string{
 		"SubCellChangedNotification",
 		"GetCellChangedNotification",
+		"GenerateERIntent",
+		"CallPlacementController",
+		"CreateTemporalErWfIntent",
 	}
 
 	// Set current state and define workflow queries
@@ -83,34 +86,33 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error)
 		_, _ = fmt.Fprintf(os.Stderr, wferr.Error())
 		return nil, wferr
 	}
-	//
-	//currentState = "call-plc-ctrl"
-	//ctx3 := ctxMap["CallPlcCtrl"]
-	//err = wf.ExecuteActivity(ctx3, CallPlcCtrl, migParam).Get(ctx3, &migParam)
-	//if err != nil {
-	//	wferr := fmt.Errorf("CallPlcCtrl failed: %s", err.Error())
-	//	fmt.Fprintf(os.Stderr, wferr.Error())
-	//	return nil, wferr
-	//}
-	//
-	//currentState = "wait-plc-info"
-	//ctx4 := ctxMap["WaitPlcInfo"]
-	//err = wf.ExecuteActivity(ctx4, WaitPlcInfo, migParam).Get(ctx4, &migParam)
-	//if err != nil {
-	//	wferr := fmt.Errorf("WaitPlcInfo failed: %s", err.Error())
-	//	fmt.Fprintf(os.Stderr, wferr.Error())
-	//	return nil, wferr
-	//}
-	//
-	//currentState = "create-temporal-er-intent"
-	//ctx5 := ctxMap["CreateTemporalERIntent"]
-	//err = wf.ExecuteActivity(ctx5, CreateTemporalERIntent, migParam).Get(ctx5, &migParam)
-	//if err != nil {
-	//	wferr := fmt.Errorf("CreateTemporalERIntent failed: %s", err.Error())
-	//	fmt.Fprintf(os.Stderr, wferr.Error())
-	//	return nil, wferr
-	//}
-	//
+
+	currentState = "generate-er-intent"
+	ctx3 := ctxMap["GenerateERIntent"]
+	err = wf.ExecuteActivity(ctx3, GenerateERIntent, migParam).Get(ctx3, &migParam)
+	if err != nil {
+		wferr := fmt.Errorf("GenerateERIntent failed: %s", err.Error())
+		fmt.Fprintf(os.Stderr, wferr.Error())
+		return nil, wferr
+	}
+	currentState = "call-placement-controller"
+	ctx4 := ctxMap["CallPlacementController"]
+	err = wf.ExecuteActivity(ctx4, CallPlacementController, migParam).Get(ctx4, &migParam)
+	if err != nil {
+		wferr := fmt.Errorf("CallPlacementController failed: %s", err.Error())
+		fmt.Fprintf(os.Stderr, wferr.Error())
+		return nil, wferr
+	}
+
+	currentState = "create-temporal-er-wf-intent"
+	ctx5 := ctxMap["CreateTemporalErWfIntent"]
+	err = wf.ExecuteActivity(ctx5, CreateTemporalErWfIntent, migParam).Get(ctx5, &migParam)
+	if err != nil {
+		wferr := fmt.Errorf("CreateTemporalERIntent failed: %s", err.Error())
+		fmt.Fprintf(os.Stderr, wferr.Error())
+		return nil, wferr
+	}
+
 	//currentState = "invoke-temporal-er-intent"
 	//ctx6 := ctxMap["InvokeTemporalERIntent"]
 	//err = wf.ExecuteActivity(ctx6, InvokeTemporalERIntent, migParam).Get(ctx6, &migParam)
@@ -122,7 +124,8 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error)
 
 	currentState = "completed"
 
-	fmt.Printf("After all activities: migParam = %#v\n", migParam)
+	//fmt.Printf("After all activities: migParam = %#v\n", migParam)
+	fmt.Printf("Workflow ended successfully!\n")
 
 	return &migParam, nil
 }
