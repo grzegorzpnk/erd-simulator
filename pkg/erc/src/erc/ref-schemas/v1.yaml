@@ -1,0 +1,12 @@
+# If the controller wants to create a new resource in the database, 
+# it should be present in the referential schema.The referential schema enforces 
+# the referential integrity rules for any database insert/update/delete operation(s).
+# ref: https://gitlab.com/project-emco/core/emco-base/-/tree/main/docs/developer/ReferentialIntegrity.md
+# In this example, we want to create an SmartPlacementIntent and, this SmartPlacementIntent should have a
+# deploymentIntentGroup(parent) and a referenced app.
+name: erc
+resources:
+  - name: smartPlacementIntent
+    parent: deploymentIntentGroup
+    references:
+      - name: app
