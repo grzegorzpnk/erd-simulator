@@ -5,8 +5,14 @@
 /pkg/innot/bin/
 /pkg/innot/.idea/
 
-/pkg/pmc/bin/
-/pkg/pmc/.idea/
+/pkg/lcm-workflow/bin/
+/pkg/lcm-workflow/.idea/
+
+/pkg/nmt/bin/
+/pkg/nmt/.idea/
+
+/pkg/obs/bin/
+/pkg/obs/.idea/
 
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/

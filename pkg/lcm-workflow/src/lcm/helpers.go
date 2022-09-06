@@ -4,7 +4,7 @@
 package lcm
 
 import (
-	eri "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/module"
+	spi "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/model"
 	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
 
 	"bytes"
@@ -92,12 +92,12 @@ type AppNameDetails struct {
 type MigParam struct {
 	InParams map[string]string
 	// map indexed by generic placement intent name
-	AppsNameDetails map[string][]AppNameDetails
-	NotifyUrl       string
-	NewCellId       types.CellId
-	ErIntent        eri.ErIntent
-	OptimalCluster  Cluster
-	ErWfIntent      ti.WorkflowIntent
+	AppsNameDetails      map[string][]AppNameDetails
+	NotifyUrl            string
+	NewCellId            types.CellId
+	SmartPlacementIntent spi.SmartPlacementIntent
+	OptimalCluster       Cluster
+	ErWfIntent           ti.WorkflowIntent
 }
 
 func (mp *MigParam) GetParamByKey(key string) string {
@@ -258,18 +258,18 @@ func GenerateListenerEndpoint(baseUrl, notifyType string) string {
 	return url
 }
 
-func getPriorityLevel(level string) eri.AppPriority {
+func getPriorityLevel(level string) spi.AppPriority {
 	if strings.ToLower(level) == "low" || level == "0" {
-		return eri.PRIORITY_LOW
+		return spi.PRIORITY_LOW
 	} else if strings.ToLower(level) == "normal" || level == "1" {
-		return eri.PRIORITY_NORMAL
+		return spi.PRIORITY_NORMAL
 	} else if strings.ToLower(level) == "important" || level == "2" {
-		return eri.PRIORITY_IMPORTANT
+		return spi.PRIORITY_IMPORTANT
 	} else if strings.ToLower(level) == "critical" || level == "3" {
-		return eri.PRIORITY_CRITICAL
+		return spi.PRIORITY_CRITICAL
 	} else {
 		log.Printf("AppPriority level [%v] not recognized. Using default: [PRIORITY_NORMAL (1)]\n", level)
-		return eri.PRIORITY_NORMAL
+		return spi.PRIORITY_NORMAL
 	}
 }
 

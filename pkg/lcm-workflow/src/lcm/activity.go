@@ -4,7 +4,7 @@
 package lcm
 
 import (
-	eri "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/module"
+	spi "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/model"
 	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
 
 	"context"
@@ -90,21 +90,21 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigP
 	cpuWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationWeight"), 64)
 	memWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("memUtilizationWeight"), 64)
 
-	erIntent := eri.ErIntent{
-		MetaData: eri.MetaData{
+	erIntent := spi.SmartPlacementIntent{
+		Metadata: spi.Metadata{
 			Name:        targetAppName + "-er-intent",
 			Description: fmt.Sprintf("Edge Relocation Intent for app: %s", targetAppName),
 		},
-		Spec: eri.SpecData{
+		Spec: spi.SmartPlacementIntentSpec{
 			AppName: targetAppName,
-			Intent: eri.IntentStruct{
+			SmartPlacementIntentData: spi.SmartPlacementIntentStruct{
 				PriorityLevel: getPriorityLevel(priorityLevel),
-				ConstraintsList: eri.Constraints{
+				ConstraintsList: spi.Constraints{
 					LatencyMax:        latMax,
 					CpuUtilizationMax: cpuUtilMax,
 					MemUtilizationMax: memUtilMax,
 				},
-				ParametersWeights: eri.Weights{
+				ParametersWeights: spi.Weights{
 					LatencyWeight:        latWeight,
 					CpuUtilizationWeight: cpuWeight,
 					MemUtilizationWeight: memWeight,
@@ -113,7 +113,7 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigP
 		},
 	}
 	log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", erIntent)
-	migParam.ErIntent = erIntent
+	migParam.SmartPlacementIntent = erIntent
 	return &migParam, nil
 }
 
@@ -122,7 +122,7 @@ func CallPlacementController(ctx context.Context, migParam MigParam) (*MigParam,
 	var resp Cluster
 
 	plcCtrlUrl := migParam.GetParamByKey("plcControllerUrl")
-	data := migParam.ErIntent
+	data := migParam.SmartPlacementIntent
 
 	responseBody, err := postHttp(plcCtrlUrl, data)
 	if err != nil {
