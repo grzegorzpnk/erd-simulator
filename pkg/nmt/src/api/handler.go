@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"nmt/src/package/topology"
-	"strconv"
 )
 
 type apiHandler struct {
@@ -33,11 +32,11 @@ func (h *apiHandler) updateClusterMetrics(w http.ResponseWriter, r *http.Request
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
-	id, _ := strconv.Atoi(params["Id"])
+	id, _ := params["Id"]
 	var clusterMetrics topology.ClusterMetrics
 	_ = json.NewDecoder(r.Body).Decode(&clusterMetrics)
 
-	if topology.ContainsVertex(h.graphClient.Vertices, id) {
+	if topology.ContainsVertex(h.graphClient.Vertices, topology.Vertex{Id: id, Type: "MEC"}) {
 		h.graphClient.GetVertex(id).VertexMetrics.UpdateClusterMetrics(clusterMetrics)
 		w.WriteHeader(http.StatusOK)
 		fmt.Printf("Client updates cluster metrics for vertex ID: %v\n", params["Id"])
@@ -78,7 +77,7 @@ func (h *apiHandler) getVertexHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	for i, v := range h.graphClient.Vertices {
-		if strconv.Itoa(v.Id) == params["Id"] {
+		if v.Id == params["Id"] {
 			json.NewEncoder(w).Encode(h.graphClient.Vertices[i])
 		}
 	}
@@ -91,7 +90,7 @@ func (h *apiHandler) createVertex(w http.ResponseWriter, r *http.Request) {
 	var vertex topology.Vertex
 	_ = json.NewDecoder(r.Body).Decode(&vertex)
 	fmt.Printf("Client tries to add new vertex ID: %v\n", vertex.Id)
-	if topology.ContainsVertex(h.graphClient.Vertices, vertex.Id) {
+	if topology.ContainsVertex(h.graphClient.Vertices, vertex) {
 		err := fmt.Errorf("Vertex %v not added beacuse it is an existing key", vertex.Id)
 		fmt.Println(err.Error())
 		w.WriteHeader(http.StatusConflict)

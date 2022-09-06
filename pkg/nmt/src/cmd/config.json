@@ -2,7 +2,8 @@
   "obs-ip": "http://10.254.185.42",
   "obs-port": "1234",
   "service-port":"8282",
-  "cluster-controller-endpoint" : "http://10.254.185.50:32138/",
-  "edge-provider" : "edge-provider"
+  "cluster-controller-endpoint" : "http://10.254.185.50:32138",
+  "edge-provider" : "edge-provider",
+  "timestamp" : 5
 
 }
