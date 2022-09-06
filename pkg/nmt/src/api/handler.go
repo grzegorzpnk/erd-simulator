@@ -24,7 +24,6 @@ func (h *apiHandler) createEdgeHandler(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&edge)
 	fmt.Printf("Client tries to add new Edge: %v --- %v \n", edge.Source, edge.Target)
 	h.graphClient.AddEdge(edge)
-
 }
 
 func (h *apiHandler) updateClusterMetrics(w http.ResponseWriter, r *http.Request) {
@@ -42,6 +41,23 @@ func (h *apiHandler) updateClusterMetrics(w http.ResponseWriter, r *http.Request
 		fmt.Printf("Client updates cluster metrics for vertex ID: %v\n", params["Id"])
 	} else {
 		err := fmt.Errorf("Vertex %v not updated beacuse it's not exist", id)
+		fmt.Println(err.Error())
+		w.WriteHeader(http.StatusConflict)
+	}
+}
+
+func (h *apiHandler) getClusterMetrics(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+	id, _ := params["Id"]
+
+	if topology.ContainsVertex(h.graphClient.Vertices, topology.Vertex{Id: id}) {
+		json.NewEncoder(w).Encode(h.graphClient.GetVertex(id).VertexMetrics)
+		w.WriteHeader(http.StatusOK)
+	} else {
+		err := fmt.Errorf("Vertex %v not not exist", id)
 		fmt.Println(err.Error())
 		w.WriteHeader(http.StatusConflict)
 	}
@@ -116,7 +132,7 @@ func containsAnyEdge(vertex topology.Vertex) bool {
 func (h *apiHandler) getEdgesHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
-	for i, _ := range h.graphClient.Edges {
+	for i := range h.graphClient.Edges {
 		json.NewEncoder(w).Encode(h.graphClient.Edges[i])
 	}
 

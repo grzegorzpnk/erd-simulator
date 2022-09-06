@@ -12,16 +12,19 @@ func NewRouter(graphClient *topology.Graph) *mux.Router {
 	var handler apiHandler
 	handler.SetClients(*graphClient)
 
-	r = mux.NewRouter()
+	r := mux.NewRouter().PathPrefix("/v1").Subrouter()
 
-	r.HandleFunc("/graph/vertex", handler.getAllVertexesHandler).Methods("GET")
-	r.HandleFunc("/graph/vertex/{Id}", handler.getVertexHandler).Methods("GET")
-	r.HandleFunc("/graph/vertex/{Id}/metrics", handler.updateClusterMetrics).Methods("PUT")
-	r.HandleFunc("/graph/vertex", handler.createVertex).Methods("POST")
+	baseUrl := "/nmt"
 
-	r.HandleFunc("/graph/edge", handler.getEdgesHandler).Methods("GET")
-	r.HandleFunc("/graph/edge", handler.createEdgeHandler).Methods("POST")
-	r.HandleFunc("/graph/edge/{IdSource}/{IdTarget}/metrics", updateEdgeMetrics).Methods("POST")
+	r.HandleFunc(baseUrl+"/graph/vertex", handler.getAllVertexesHandler).Methods("GET")
+	r.HandleFunc(baseUrl+"/graph/vertex/{Id}", handler.getVertexHandler).Methods("GET")
+	r.HandleFunc(baseUrl+"/graph/vertex/{Id}/metrics", handler.updateClusterMetrics).Methods("PUT")
+	r.HandleFunc(baseUrl+"/graph/vertex/{Id}/metrics", handler.getClusterMetrics).Methods("GET")
+	r.HandleFunc(baseUrl+"/graph/vertex", handler.createVertex).Methods("POST")
+
+	r.HandleFunc(baseUrl+"/graph/edge", handler.getEdgesHandler).Methods("GET")
+	r.HandleFunc(baseUrl+"/graph/edge", handler.createEdgeHandler).Methods("POST")
+	r.HandleFunc(baseUrl+"/graph/edge/{IdSource}/{IdTarget}/metrics", updateEdgeMetrics).Methods("POST")
 
 	return r
 

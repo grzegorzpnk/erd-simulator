@@ -300,7 +300,7 @@ func generateSubscriptionBody() types.AmfEventSubscription {
 			NcgiList:            nil,
 			PraId:               nil,
 			PresenceState:       nil,
-			TrackingAreaList: &[]types.Tai{types.Tai{
+			TrackingAreaList: &[]types.Tai{{
 				PlmnId: types.PlmnId{"208", "93"},
 				Tac:    "000001",
 			}},

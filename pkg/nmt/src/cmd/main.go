@@ -11,6 +11,11 @@ import (
 
 var graph *topology.Graph
 
+//todo:
+// 1 add edge provider
+// 2 add api
+// 3 documentation
+
 func main() {
 
 	graph = &topology.Graph{}

@@ -14,7 +14,7 @@ type Vertex struct {
 	Type          string         `json:"type"` //MEC or CELL
 	Neighbours    []string       `json:"neighbours"`
 	VertexMetrics ClusterMetrics `json:"vertexMetrics"`
-	//todo: add edge provider
+	EdgeProvider  string         `json:"edgeProvider"`
 }
 
 type Edge struct {
@@ -78,9 +78,6 @@ func (g *Graph) PrintGraph() {
 	for _, v := range g.Vertices {
 		fmt.Printf("\nVertex: %v : ", v.Id)
 		fmt.Print(*v)
-		/*	for _, v := range v.Neighbours {
-			fmt.Printf("%v  ", v)
-		}*/
 	}
 	fmt.Println()
 
@@ -111,12 +108,3 @@ func containsNeighbour(s []string, k string) bool {
 	return false
 
 }
-
-/*func getEdge (sourceId, TargetId int) *Edge {
-
-/*	for i,v := range graph.Edges{
-		if v.Source == sourceId & v.Target == TargetId
-			return gra
-		}
-	}
-*/
