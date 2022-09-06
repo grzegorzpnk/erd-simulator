@@ -76,8 +76,8 @@ func GetCellChangedNotification(ctx context.Context, migParam MigParam) (*MigPar
 	return &migParam, nil
 }
 
-func GenerateERIntent(ctx context.Context, migParam MigParam) (*MigParam, error) {
-	log.Printf("GenerateERIntent: activity start\n")
+func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigParam, error) {
+	log.Printf("GenerateSmartPlacementIntent: activity start\n")
 
 	targetAppName := migParam.GetParamByKey("targetAppName")
 	priorityLevel := migParam.GetParamByKey("appPriorityLevel")
@@ -112,7 +112,7 @@ func GenerateERIntent(ctx context.Context, migParam MigParam) (*MigParam, error)
 			},
 		},
 	}
-	log.Printf("GenerateERIntent: intent = %+v\n", erIntent)
+	log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", erIntent)
 	migParam.ErIntent = erIntent
 	return &migParam, nil
 }
@@ -138,8 +138,8 @@ func CallPlacementController(ctx context.Context, migParam MigParam) (*MigParam,
 	return &migParam, nil
 }
 
-func CreateTemporalErWfIntent(ctx context.Context, migParam MigParam) (*MigParam, error) {
-	log.Printf("CreateTemporalErWfIntent: activity start\n")
+func GenerateRelocateWfIntent(ctx context.Context, migParam MigParam) (*MigParam, error) {
+	log.Printf("GenerateRelocateWfIntent: activity start\n")
 
 	appName := migParam.GetParamByKey("appName")
 	clientName := migParam.GetParamByKey("rClientName")
@@ -192,24 +192,30 @@ func CreateTemporalErWfIntent(ctx context.Context, migParam MigParam) (*MigParam
 	}
 
 	migParam.ErWfIntent = erWfIntent
-	log.Printf("CreateTemporalErWfIntent: generated WfIntent = %+v\n", migParam.ErWfIntent)
+	log.Printf("GenerateRelocateWfIntent: generated WfIntent = %+v\n", migParam.ErWfIntent)
+
+	return &migParam, nil
+}
+
+func CallTemporalWfController(ctx context.Context, migParam MigParam) (*MigParam, error) {
+	log.Printf("CallTemporalWfController: activity start\n")
 
 	createWfUrl := migParam.buildWfMgrURL()
 
-	_, err := postHttp(createWfUrl, erWfIntent)
+	_, err := postHttp(createWfUrl, migParam.ErWfIntent)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("CreateTemporalErWfIntent: created ER Wf Intent.\n")
+	fmt.Printf("CallTemporalWfController: created ER Wf Intent.\n")
 
-	startWfUrl := createWfUrl + "/" + erWfIntent.Metadata.Name + "/start"
+	startWfUrl := createWfUrl + "/" + migParam.ErWfIntent.Metadata.Name + "/start"
 
 	startBody, err := postHttp(startWfUrl, "")
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Printf("CreateTemporalErWfIntent: started ER Wf Intent, resp body: %v.\n", startBody)
+	fmt.Printf("CallTemporalWfController: started ER Wf Intent, response body: %v.\n", startBody)
 
 	return &migParam, nil
 }

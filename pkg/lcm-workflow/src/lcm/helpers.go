@@ -224,7 +224,6 @@ func postHttp(url string, data interface{}) (string, error) {
 	if err != nil {
 		fmt.Println("error: marshaling failed")
 	}
-	fmt.Println("Body in postHttp: %v\n", string(body))
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {

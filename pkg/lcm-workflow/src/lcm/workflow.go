@@ -25,9 +25,10 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error)
 	activityNames := []string{
 		"SubCellChangedNotification",
 		"GetCellChangedNotification",
-		"GenerateERIntent",
+		"GenerateSmartPlacementIntent",
 		"CallPlacementController",
-		"CreateTemporalErWfIntent",
+		"GenerateRelocateWfIntent",
+		"CallTemporalWfController",
 	}
 
 	// Set current state and define workflow queries
@@ -87,11 +88,11 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error)
 		return nil, wferr
 	}
 
-	currentState = "generate-er-intent"
-	ctx3 := ctxMap["GenerateERIntent"]
-	err = wf.ExecuteActivity(ctx3, GenerateERIntent, migParam).Get(ctx3, &migParam)
+	currentState = "generate-smart-placement-intent"
+	ctx3 := ctxMap["GenerateSmartPlacementIntent"]
+	err = wf.ExecuteActivity(ctx3, GenerateSmartPlacementIntent, migParam).Get(ctx3, &migParam)
 	if err != nil {
-		wferr := fmt.Errorf("GenerateERIntent failed: %s", err.Error())
+		wferr := fmt.Errorf("GenerateSmartPlacementIntent failed: %s", err.Error())
 		fmt.Fprintf(os.Stderr, wferr.Error())
 		return nil, wferr
 	}
@@ -104,23 +105,23 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error)
 		return nil, wferr
 	}
 
-	currentState = "create-temporal-er-wf-intent"
-	ctx5 := ctxMap["CreateTemporalErWfIntent"]
-	err = wf.ExecuteActivity(ctx5, CreateTemporalErWfIntent, migParam).Get(ctx5, &migParam)
+	currentState = "generate-relocate-wf-intent"
+	ctx5 := ctxMap["GenerateRelocateWfIntent"]
+	err = wf.ExecuteActivity(ctx5, GenerateRelocateWfIntent, migParam).Get(ctx5, &migParam)
 	if err != nil {
 		wferr := fmt.Errorf("CreateTemporalERIntent failed: %s", err.Error())
 		fmt.Fprintf(os.Stderr, wferr.Error())
 		return nil, wferr
 	}
 
-	//currentState = "invoke-temporal-er-intent"
-	//ctx6 := ctxMap["InvokeTemporalERIntent"]
-	//err = wf.ExecuteActivity(ctx6, InvokeTemporalERIntent, migParam).Get(ctx6, &migParam)
-	//if err != nil {
-	//	wferr := fmt.Errorf("InvokeTemporalERIntent failed: %s", err.Error())
-	//	fmt.Fprintf(os.Stderr, wferr.Error())
-	//	return nil, wferr
-	//}
+	currentState = "call-temporal-wf-controller"
+	ctx6 := ctxMap["CallTemporalWfController"]
+	err = wf.ExecuteActivity(ctx6, CallTemporalWfController, migParam).Get(ctx6, &migParam)
+	if err != nil {
+		wferr := fmt.Errorf("CallTemporalWfController failed: %s", err.Error())
+		fmt.Fprintf(os.Stderr, wferr.Error())
+		return nil, wferr
+	}
 
 	currentState = "completed"
 

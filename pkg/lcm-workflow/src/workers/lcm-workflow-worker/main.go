@@ -49,9 +49,10 @@ func main() {
 	w.RegisterWorkflow(lcm.LcmWorkflow)
 	w.RegisterActivity(lcm.SubCellChangedNotification)
 	w.RegisterActivity(lcm.GetCellChangedNotification)
-	w.RegisterActivity(lcm.GenerateERIntent)
+	w.RegisterActivity(lcm.GenerateSmartPlacementIntent)
 	w.RegisterActivity(lcm.CallPlacementController)
-	w.RegisterActivity(lcm.CreateTemporalErWfIntent)
+	w.RegisterActivity(lcm.GenerateRelocateWfIntent)
+	w.RegisterActivity(lcm.CallTemporalWfController)
 
 	// Start listening to the Task Queue
 	err = w.Run(worker.InterruptCh())
