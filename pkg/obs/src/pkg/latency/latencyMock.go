@@ -86,7 +86,7 @@ func (mc *MockClient) MehExists(mehName string) bool {
 
 func (mc *MockClient) GetMockedLatencyMs(cell, meh string) (float64, error) {
 	if !mc.CellExists(cell) || !mc.MehExists(meh) {
-		err := errors.New(fmt.Sprintf("could not get latency. reason: cell-id: %v or meh-name: %v, doesn't exist", cell, meh))
+		err := errors.New(fmt.Sprintf("could not get latency. reason: cell-id: %v or mec-name: %v, doesn't exist", cell, meh))
 		log.Errorf("[LTC] error: %v", err)
 		return -1, err
 	}

@@ -93,7 +93,7 @@ func (h *apiHandler) getMemLimHandler(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) getLatencyHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	cell := vars["cell-id"]
-	meh := vars["meh-id"]
+	meh := vars["mec-id"]
 
 	value, err := h.ltcClient.GetMockedLatencyMs(cell, meh)
 	if err != nil {

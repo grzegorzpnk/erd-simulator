@@ -45,13 +45,13 @@ localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory-limits
 ### Latency Endpoints
 
 ```yaml
-SAMPLE URL: http://localhost:8282/v1/obs/ltc/cell/1/meh/edge-provider+meh01/latency-ms
+SAMPLE URL: http://localhost:8282/v1/obs/ltc/cell/1/mec/edge-provider+mec1/latency-ms
 ```
 
 
 ```go
-// Get (mocked) latency between Cell: cell-id AND MEC Host: meh-id
+// Get (mocked) latency between Cell: cell-id AND MEC Host: mec-id
 
-localhost:8282/v1/obs/ltc/cell/{cell-id}/meh/{meh-id}/latency-ms
+localhost:8282/v1/obs/ltc/cell/{cell-id}/mec/{mec-id}/latency-ms
 ```
 
