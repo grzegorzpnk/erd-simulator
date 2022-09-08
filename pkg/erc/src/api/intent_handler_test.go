@@ -11,8 +11,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"10.254.188.33/matyspi5/erd/pkg/erc/api"
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/model"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/api"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"

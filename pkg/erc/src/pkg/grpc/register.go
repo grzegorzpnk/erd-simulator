@@ -15,8 +15,8 @@ import (
 	"strconv"
 	"strings"
 
-	actioncontroller "10.254.188.33/matyspi5/erd/pkg/erc/pkg/grpc/action-controller"
-	placementcontroller "10.254.188.33/matyspi5/erd/pkg/erc/pkg/grpc/placement-controller"
+	actioncontroller "10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/grpc/action-controller"
+	placementcontroller "10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/grpc/placement-controller"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/grpc/contextupdate"
 	orchplacementcontroller "gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/grpc/placementcontroller"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"

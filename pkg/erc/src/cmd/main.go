@@ -5,26 +5,21 @@ package main
 
 import (
 	"context"
-	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
-	"10.254.188.33/matyspi5/erd/pkg/erc/api"
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/grpc"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/api"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/config"
+	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
 	"github.com/gorilla/handlers"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/auth"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/config"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/contextdb"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/db"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
 )
 
 func main() {
 	if err := run(); err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 }
 
@@ -48,36 +43,30 @@ func run() error {
 	return nil
 }
 
-// initDataBases initializes the emco databases
-func initDataBases() error {
-	// Initialize the emco database(Mongo DB)
-	err := db.InitializeDatabaseConnection("emco")
-	if err != nil {
-		logutils.Error("Failed to initialize mongo database connection.",
-			logutils.Fields{
-				"Error": err})
-		return err
-	}
-
-	// Initialize etcd
-	err = contextdb.InitializeContextDatabase()
-	if err != nil {
-		logutils.Error("Failed to initialize etcd database connection.",
-			logutils.Fields{
-				"Error": err})
-		return err
-	}
-
-	return nil
-}
+//// initDataBases initializes the emco databases
+//func initDataBases() error {
+//	// Initialize the emco database(Mongo DB)
+//	err := db.InitializeDatabaseConnection("emco")
+//	if err != nil {
+//		log.Errorf("Failed to initialize mongo database connection. Error: %v", err)
+//		return err
+//	}
+//
+//	// Initialize etcd
+//	err = contextdb.InitializeContextDatabase()
+//	if err != nil {
+//		log.Errorf("Failed to initialize etcd database connection. Error: %v", err)
+//		return err
+//	}
+//
+//	return nil
+//}
 
 // serve start the controller and handle requests on incoming connections
 func serve() error {
 	p := config.GetConfiguration().ServicePort
 
-	logutils.Info("Starting controller",
-		logutils.Fields{
-			"Port": p})
+	log.Infof("Starting controller. Port: %v.", p)
 
 	r := api.NewRouter(nil)
 	h := handlers.LoggingHandler(os.Stdout, r)
@@ -95,22 +84,22 @@ func serve() error {
 		close(connection)
 	}()
 
-	c, err := auth.GetTLSConfig("ca.cert", "server.cert", "server.key")
-	if err != nil {
-		logutils.Warn("Failed to get the TLS configuration. Starting without TLS.",
-			logutils.Fields{})
-		return server.ListenAndServe()
-	}
-
-	server.TLSConfig = c
-	return server.ListenAndServeTLS("", "") // empty string. tlsconfig already has this information
+	//c, err := auth.GetTLSConfig("ca.cert", "server.cert", "server.key")
+	//if err != nil {
+	//	log.Info("Failed to get the TLS configuration. Starting without TLS.")
+	//	return server.ListenAndServe()
+	//}
+	//
+	//server.TLSConfig = c
+	//return server.ListenAndServeTLS("", "") // empty string. tlsconfig already has this information
+	return server.ListenAndServe()
 }
 
-// initGrpcServer start the gRPC server
-func initGrpcServer() {
-	go func() {
-		if err := grpc.StartGrpcServer(); err != nil {
-			log.Fatal(err)
-		}
-	}()
-}
+//// initGrpcServer start the gRPC server
+//func initGrpcServer() {
+//	go func() {
+//		if err := grpc.StartGrpcServer(); err != nil {
+//			log.Fatalln(err)
+//		}
+//	}()
+//}

@@ -8,8 +8,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/model"
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/module"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/db"
 	orchmodule "gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/module"
 )

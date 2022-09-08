@@ -6,23 +6,21 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
+	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/validation"
 	"io"
 	"net/http"
 
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/model"
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/module"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
 )
 
 type intentHandler struct {
 	client module.SmartPlacementIntentManager
 }
 
-// The JSON file defines the allowed fields and values for the SmartPlacementIntent.
-// It ensures that the data received from the client is valid before storing it in the database.
-var ErJSONFile string = "../json-schemas/intent.json"
+var ErJSONFile string = "./json-schemas/intent.json"
 
 func (h intentHandler) handleSmartPlacementIntentOutsideEMCO(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent

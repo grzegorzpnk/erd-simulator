@@ -4,12 +4,14 @@
 package module
 
 import (
-	topology "10.254.188.33/matyspi5/erd/pkg/erc/mock"
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/model"
-	"fmt"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/db"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
+	log "github.com/sirupsen/logrus"
 
+	//topology "10.254.188.33/matyspi5/erd/pkg/erc/src/mock"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
+	"fmt"
 	"github.com/pkg/errors"
+	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/db"
 )
 
 // SmartPlacementIntentClient implements the SmartPlacementIntentManager.
@@ -37,52 +39,28 @@ type SmartPlacementIntentManager interface {
 }
 
 func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, string, error) {
-	intentData := intent.Spec.SmartPlacementIntentData
-
-	c := intentData.ConstraintsList
-	pw := intentData.ParametersWeights
-	fmt.Printf("intent: %+v\n", intent)
-
-	// x1 -> latency 			| weight = w1
-	// x2 -> cpu utilization 	| weight = w2
-	// x3 -> mem utilization	| weight = w3
-	// minimize w1 * x1 + w2 * x2 + w3 * x3
-	// x1 < latencyMax
-	// x2 < cpuUtilMax
-	// x3 < memUtilMax
-
-	constraintsMet := func(latency, cpuUtilization, memUtilization float64) bool {
-		if latency > c.LatencyMax {
-			return false
-		} else if cpuUtilization > c.CpuUtilizationMax {
-			return false
-		} else if memUtilization > c.MemUtilizationMax {
-			return false
-		} else {
-			return true
-		}
-	}
-	normalize := func(latency, cpuUtilization, memUtilization float64) (float64, float64, float64) {
-		return latency / c.LatencyMax, cpuUtilization / c.CpuUtilizationMax, memUtilization / c.MemUtilizationMax
-	}
-
-	compute := func(latency, cpuUtilization, memUtilization float64) (float64, bool) {
-		if !constraintsMet(latency, cpuUtilization, memUtilization) {
-			return 3, false
-		}
-		latency, cpuUtilization, memUtilization = normalize(latency, cpuUtilization, memUtilization)
-
-		return pw.LatencyWeight*latency + pw.CpuUtilizationWeight*cpuUtilization + pw.MemUtilizationWeight*memUtilization, true
-	}
-
-	MecHosts := topology.GetMecHostsByCellId(intentData.TargetCell)
-
-	bestMecHost := MecHosts[0]
 	var bestOk bool
 	var best float64
-	for _, mecHost := range MecHosts {
-		best, bestOk = compute(bestMecHost.Latency, bestMecHost.CpuUtilization, bestMecHost.MemUtilization)
-		current, currentOk := compute(mecHost.Latency, mecHost.CpuUtilization, mecHost.MemUtilization)
+	topoClient := topology.NewTopologyClient()
+
+	fmt.Printf("Smart Placement Intent: %+v\n", intent)
+
+	targetCell := intent.Spec.SmartPlacementIntentData.TargetCell
+
+	mecHosts, err := topoClient.GetMecHostsByCellId(targetCell)
+	if err != nil {
+		log.Errorf("could not serve Smart Placement Intent: %v", err)
+		return "", "", err
+	}
+
+	if len(mecHosts) <= 0 {
+		return "", "", errors.New(fmt.Sprintf("no mec hosts found for given cell: %v\n.", targetCell))
+	}
+
+	bestMecHost := mecHosts[0]
+	for _, mecHost := range mecHosts {
+		best, bestOk = ComputeObjectiveValue(intent, bestMecHost)
+		current, currentOk := ComputeObjectiveValue(intent, mecHost)
 
 		if currentOk && (best > current) {
 			bestMecHost = mecHost
@@ -155,4 +133,32 @@ func (i *SmartPlacementIntentClient) GetSmartPlacementIntent(name, project, app,
 	}
 
 	return intents, nil
+}
+
+func ComputeObjectiveValue(i model.SmartPlacementIntent, mec topology.MecHost) (float64, bool) {
+	cl := i.Spec.SmartPlacementIntentData.ConstraintsList
+	pw := i.Spec.SmartPlacementIntentData.ParametersWeights
+
+	if !CheckConstraintsForGiven(cl, mec) {
+		return 3, false
+	}
+	latency, cpuUtilization, memUtilization := NormalizeMecParameters(cl, mec)
+
+	return pw.LatencyWeight*latency + pw.CpuUtilizationWeight*cpuUtilization + pw.MemUtilizationWeight*memUtilization, true
+}
+
+func CheckConstraintsForGiven(cl model.Constraints, mec topology.MecHost) bool {
+	if mec.Latency > cl.LatencyMax {
+		return false
+	} else if mec.CpuUtilization > cl.CpuUtilizationMax {
+		return false
+	} else if mec.MemUtilization > cl.MemUtilizationMax {
+		return false
+	} else {
+		return true
+	}
+}
+
+func NormalizeMecParameters(cl model.Constraints, mec topology.MecHost) (float64, float64, float64) {
+	return mec.Latency / cl.LatencyMax, mec.CpuUtilization / cl.CpuUtilizationMax, mec.MemUtilization / cl.MemUtilizationMax
 }

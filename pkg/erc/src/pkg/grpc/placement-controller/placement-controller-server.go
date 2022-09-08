@@ -20,7 +20,7 @@ import (
 	"context"
 	"errors"
 
-	"10.254.188.33/matyspi5/erd/pkg/erc/internal/action"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/internal/action"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/grpc/placementcontroller"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
 )

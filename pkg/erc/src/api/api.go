@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/module"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
 	"github.com/gorilla/mux"
 )
 
@@ -18,7 +18,7 @@ import (
 // If the mockClient parameter is not nil, the router is configured with a mock handler.
 func NewRouter(mockClient interface{}) *mux.Router {
 	//const baseURL string = "/projects/{project}/composite-apps/{compositeApp}/{compositeAppVersion}/deployment-intent-groups/{deploymentIntentGroup}/smartPlacementIntents"
-	const baseURL string = "/smartPlacementIntents"
+	const baseURL string = "/erc/smart-placement-intents"
 	r := mux.NewRouter().PathPrefix("/v2").Subrouter()
 	c := module.NewClient()
 	h := intentHandler{
@@ -28,7 +28,7 @@ func NewRouter(mockClient interface{}) *mux.Router {
 	//r.HandleFunc(baseURL, h.handleSmartPlacementIntentCreate).Methods("POST")
 	//r.HandleFunc(baseURL+"/{smartPlacementIntent}", h.handleSmartPlacementIntentGet).Methods("GET")
 
-	r.HandleFunc(baseURL, h.handleSmartPlacementIntentOutsideEMCO).Methods("GET")
+	r.HandleFunc(baseURL+"/optimal-mec", h.handleSmartPlacementIntentOutsideEMCO).Methods("GET")
 
 	return r
 }
