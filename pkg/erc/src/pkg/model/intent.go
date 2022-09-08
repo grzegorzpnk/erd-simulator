@@ -6,6 +6,7 @@
 package model
 
 type AppPriority int
+type CellId string
 
 const (
 	PRIORITY_LOW AppPriority = iota
@@ -33,21 +34,22 @@ type SmartPlacementIntentSpec struct {
 }
 
 type SmartPlacementIntentStruct struct {
+	TargetCell        CellId      `json:"targetCell"`
 	PriorityLevel     AppPriority `json:"priorityLevel"`
-	ConstraintsList   Constraints `json:"constraintsList,omitempty"`
+	ConstraintsList   Constraints `json:"constraintsList"`
 	ParametersWeights Weights     `json:"parametersWeights,omitempty"`
 }
 
 type Constraints struct {
-	LatencyMax        float64 `json:"latencyMax,omitempty"`
-	CpuUtilizationMax float64 `json:"cpuUtilizationMax,omitempty"`
-	MemUtilizationMax float64 `json:"memUtilizationMax,omitempty"`
+	LatencyMax        float64 `json:"latencyMax"`
+	CpuUtilizationMax float64 `json:"cpuUtilizationMax"`
+	MemUtilizationMax float64 `json:"memUtilizationMax"`
 }
 
 type Weights struct {
-	LatencyWeight        float64
-	CpuUtilizationWeight float64
-	MemUtilizationWeight float64
+	LatencyWeight        float64 `json:"latencyWeight"`
+	CpuUtilizationWeight float64 `json:"cpuUtilizationWeight"`
+	MemUtilizationWeight float64 `json:"memUtilizationWeight"`
 }
 
 // SmartPlacementIntentKey is the key structure that is used in the database

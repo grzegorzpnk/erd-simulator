@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the SmartPlacementIntent",
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$"
+        },
+        "description": {
+          "description": "Description for the SmartPlacementIntent",
+          "type": "string",
+          "maxLength": 1024
+        },
+        "userData1": {
+          "description": "User relevant data for the SmartPlacementIntent",
+          "type": "string",
+          "maxLength": 512
+        },
+        "userData2": {
+          "description": "User relevant data for the SmartPlacementIntent",
+          "type": "string",
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "app",
+        "smartPlacementIntentData"
+      ],
+      "properties": {
+        "app": {
+          "type": "string",
+          "maxLength": 63,
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "smartPlacementIntentIntentData": {
+          "type": "object",
+          "required": [
+            "targetCell",
+            "priorityLevel"
+          ],
+          "properties": {
+            "targetCell": {
+              "description": "Cell Id for which optimal cluster will be found",
+              "type": "string",
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$"
+            },
+            "priorityLevel": {
+              "description": "Application priority level: low, normal, important, critical",
+              "type": "string"
+            },
+            "constraintsList": {
+              "description": "Constraints for optimal cluster, including latency, cpu and memory utilization",
+              "type": "object",
+              "required": [
+                "latencyMax",
+                "cpuUtilizationMax",
+                "memUtilizationMax"
+              ],
+              "properties": {
+                "latencyMax": {
+                  "type": "number"
+                },
+                "cpuUtilizationMax": {
+                  "type": "number"
+                },
+                "memUtilizationMax": {
+                  "type": "number"
+                }
+              }
+            },
+            "parametersWeights": {
+              "type": "object",
+              "required": [
+                "latencyWeight",
+                "cpuUtilizationWeight",
+                "memUtilizationWeight"
+              ],
+              "properties": {
+                "latencyWeight": {
+                  "type": "number"
+                },
+                "cpuUtilizationWeight": {
+                  "type": "number"
+                },
+                "memUtilizationWeight": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

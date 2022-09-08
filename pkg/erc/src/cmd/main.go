@@ -32,13 +32,13 @@ func main() {
 func run() error {
 	rand.Seed(time.Now().UnixNano())
 
-	// Initialize database(s)
-	if err := initDataBases(); err != nil {
-		return err
-	}
-
-	// Initialize grpc server, if required
-	initGrpcServer()
+	//// Initialize database(s)
+	//if err := initDataBases(); err != nil {
+	//	return err
+	//}
+	//
+	//// Initialize grpc server, if required
+	//initGrpcServer()
 
 	// Handle requests on incoming connections
 	if err := serve(); err != nil {

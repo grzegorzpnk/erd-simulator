@@ -17,19 +17,18 @@ import (
 // NewRouter creates a router that registers the various routes.
 // If the mockClient parameter is not nil, the router is configured with a mock handler.
 func NewRouter(mockClient interface{}) *mux.Router {
-	const baseURL string = "/projects/{project}/composite-apps/{compositeApp}/{compositeAppVersion}/deployment-intent-groups/{deploymentIntentGroup}/smartPlacementIntents"
-
+	//const baseURL string = "/projects/{project}/composite-apps/{compositeApp}/{compositeAppVersion}/deployment-intent-groups/{deploymentIntentGroup}/smartPlacementIntents"
+	const baseURL string = "/smartPlacementIntents"
 	r := mux.NewRouter().PathPrefix("/v2").Subrouter()
 	c := module.NewClient()
 	h := intentHandler{
 		client: setClient(c.SmartPlacementIntent, mockClient).(module.SmartPlacementIntentManager),
 	}
 
-	// You can have multiple handlers based on the requirement and its implementation.
-	// ref: https://gitlab.com/project-emco/core/emco-base/-/blob/main/src/hpa-plc/api/api.go
+	//r.HandleFunc(baseURL, h.handleSmartPlacementIntentCreate).Methods("POST")
+	//r.HandleFunc(baseURL+"/{smartPlacementIntent}", h.handleSmartPlacementIntentGet).Methods("GET")
 
-	r.HandleFunc(baseURL, h.handleSmartPlacementIntentCreate).Methods("POST")
-	r.HandleFunc(baseURL+"/{smartPlacementIntent}", h.handleSmartPlacementIntentGet).Methods("GET")
+	r.HandleFunc(baseURL, h.handleSmartPlacementIntentOutsideEMCO).Methods("GET")
 
 	return r
 }

@@ -5,6 +5,8 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
+	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/validation"
 	"io"
 	"net/http"
 
@@ -12,9 +14,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/pkg/module"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/validation"
-
-	"github.com/gorilla/mux"
 )
 
 type intentHandler struct {
@@ -23,55 +22,72 @@ type intentHandler struct {
 
 // The JSON file defines the allowed fields and values for the SmartPlacementIntent.
 // It ensures that the data received from the client is valid before storing it in the database.
-var ErJSONFile string = "json-schemas/intent.json"
+var ErJSONFile string = "../json-schemas/intent.json"
 
-// handleSEIntentCreate handles the route for creating a new SmartPlacementIntent
-func (h intentHandler) handleSmartPlacementIntentCreate(w http.ResponseWriter, r *http.Request) {
+func (h intentHandler) handleSmartPlacementIntentOutsideEMCO(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
-	vars := mux.Vars(r)
-	project := vars["project"]
-	app := vars["compositeApp"]
-	version := vars["compositeAppVersion"]
-	group := vars["deploymentIntentGroup"]
 
-	// Validate the request body before storing it in the database.
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)
 	if !isValid {
 		return
 	}
 
-	// Insert the new SmartPlacementIntent in the database.
-	intent, err := h.client.CreateSmartPlacementIntent(i, project, app, version, group, true) // true - fail if exists
+	provider, cluster, err := h.client.ServeSmartPlacementIntentOutsideEMCO(i)
 	if err != nil {
-		handleError(w, vars, err, i)
+		//handleError(w, map[string]string{}, err, i)
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	fmt.Printf("Provider: %v, cluster: %v", provider, cluster)
 
-	// Send the response to the client.
-	sendResponse(w, intent, http.StatusCreated)
+	sendResponse(w, provider+"+"+cluster, http.StatusOK)
 }
 
-// handleSmartPlacementIntentGet handles the route for retrieving an SmartPlacementIntent from the database
-func (h intentHandler) handleSmartPlacementIntentGet(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	name := vars["smartPlacementIntent"]
-	project := vars["project"]
-	app := vars["compositeApp"]
-	version := vars["compositeAppVersion"]
-	group := vars["deploymentIntentGroup"]
-
-	// Retrieve the SmartPlacementIntent details from the database.
-	intent, err := h.client.GetSmartPlacementIntent(name, project, app, version, group)
-	if err != nil {
-		handleError(w, vars, err, nil)
-		return
-	}
-
-	// Send the response to the client.
-	sendResponse(w, intent[0], http.StatusOK)
-}
-
-// The following methods can be part of a common package based on usage.
+//// handleSEIntentCreate handles the route for creating a new SmartPlacementIntent
+//func (h intentHandler) handleSmartPlacementIntentCreate(w http.ResponseWriter, r *http.Request) {
+//	var i model.SmartPlacementIntent
+//	vars := mux.Vars(r)
+//	project := vars["project"]
+//	app := vars["compositeApp"]
+//	version := vars["compositeAppVersion"]
+//	group := vars["deploymentIntentGroup"]
+//
+//	// Validate the request body before storing it in the database.
+//	isValid := validateRequestBody(w, r, &i, ErJSONFile)
+//	if !isValid {
+//		return
+//	}
+//
+//	// Insert the new SmartPlacementIntent in the database.
+//	intent, err := h.client.CreateSmartPlacementIntent(i, project, app, version, group, true) // true - fail if exists
+//	if err != nil {
+//		handleError(w, vars, err, i)
+//		return
+//	}
+//
+//	// Send the response to the client.
+//	sendResponse(w, intent, http.StatusCreated)
+//}
+//
+//// handleSmartPlacementIntentGet handles the route for retrieving an SmartPlacementIntent from the database
+//func (h intentHandler) handleSmartPlacementIntentGet(w http.ResponseWriter, r *http.Request) {
+//	vars := mux.Vars(r)
+//	name := vars["smartPlacementIntent"]
+//	project := vars["project"]
+//	app := vars["compositeApp"]
+//	version := vars["compositeAppVersion"]
+//	group := vars["deploymentIntentGroup"]
+//
+//	// Retrieve the SmartPlacementIntent details from the database.
+//	intent, err := h.client.GetSmartPlacementIntent(name, project, app, version, group)
+//	if err != nil {
+//		handleError(w, vars, err, nil)
+//		return
+//	}
+//
+//	// Send the response to the client.
+//	sendResponse(w, intent[0], http.StatusOK)
+//}
 
 // validateRequestBody validate the request body before storing it in the database
 func validateRequestBody(w http.ResponseWriter, r *http.Request, v interface{}, filename string) bool {

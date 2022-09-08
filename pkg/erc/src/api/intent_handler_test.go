@@ -90,7 +90,7 @@ var _ = Describe("IntentHandler",
 						},
 						Spec: model.SmartPlacementIntentSpec{
 							AppName:                  "testApp",
-							SmartPlacementIntentData: "testIntentData",
+							SmartPlacementIntentData: model.SmartPlacementIntentStruct{},
 						},
 					},
 					err: nil,
@@ -125,7 +125,7 @@ var _ = Describe("IntentHandler",
 						},
 						Spec: model.SmartPlacementIntentSpec{
 							AppName:                  "testApp",
-							SmartPlacementIntentData: "testIntentData",
+							SmartPlacementIntentData: model.SmartPlacementIntentStruct{},
 						},
 					},
 					client: &mockIntentManager{
@@ -151,7 +151,7 @@ func populateTestData() []model.SmartPlacementIntent {
 			},
 			Spec: model.SmartPlacementIntentSpec{
 				AppName:                  "testApp",
-				SmartPlacementIntentData: "testIntentData",
+				SmartPlacementIntentData: model.SmartPlacementIntentStruct{},
 			},
 		},
 		{
@@ -163,7 +163,7 @@ func populateTestData() []model.SmartPlacementIntent {
 			},
 			Spec: model.SmartPlacementIntentSpec{
 				AppName:                  "newApp",
-				SmartPlacementIntentData: "newIntentData",
+				SmartPlacementIntentData: model.SmartPlacementIntentStruct{},
 			},
 		},
 		// Add more data based on the test scenarios.
