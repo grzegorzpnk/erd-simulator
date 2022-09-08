@@ -7,7 +7,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	log "github.com/sirupsen/logrus"
 
-	//topology "10.254.188.33/matyspi5/erd/pkg/erc/src/mock"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
 	"fmt"
 	"github.com/pkg/errors"
@@ -41,13 +40,13 @@ type SmartPlacementIntentManager interface {
 func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, string, error) {
 	var bestOk bool
 	var best float64
-	topoClient := topology.NewTopologyClient()
+	tClient := topology.NewTopologyClient()
 
 	fmt.Printf("Smart Placement Intent: %+v\n", intent)
 
 	targetCell := intent.Spec.SmartPlacementIntentData.TargetCell
 
-	mecHosts, err := topoClient.GetMecHostsByCellId(targetCell)
+	mecHosts, err := tClient.GetMecHostsByCellId(targetCell)
 	if err != nil {
 		log.Errorf("could not serve Smart Placement Intent: %v", err)
 		return "", "", err
