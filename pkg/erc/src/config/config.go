@@ -16,7 +16,7 @@ import (
 type Configuration struct {
 	PluginDir        string `json:"plugin-dir"`
 	ServicePort      string `json:"service-port"`
-	TopologyEndpoint string `json:"topology"`
+	TopologyEndpoint string `json:"topology-endpoint"`
 }
 
 // Config is the structure that stores the configuration
@@ -87,7 +87,7 @@ func GetConfiguration() *Configuration {
 		conf, err := readConfigFile("config.json")
 		if err != nil {
 			log.Println("Error loading config file: ", err)
-			log.Printf("Using defaultss... %v", defaultConfiguration())
+			log.Println("Using defaults...")
 		}
 		gConfig = conf
 

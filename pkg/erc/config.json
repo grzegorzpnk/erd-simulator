@@ -1,6 +1,5 @@
 {
-    "database-type": "mongo",
-    "database-ip": "mongo",
-    "etcd-ip": "etcd",
-    "service-port": "9024"
+    "plugin-dir":"cwd",
+    "service-port":"8888",
+    "topology-endpoint": "localhost:8787/v2/topology"
 }

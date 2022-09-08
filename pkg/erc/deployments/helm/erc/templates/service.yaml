@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "erc.fullname" . }}
+  labels:
+    {{- include "erc.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.config.servicePort }}
+      nodePort: 32147
+  selector:
+    {{- include "erc.selectorLabels" . | nindent 4 }}

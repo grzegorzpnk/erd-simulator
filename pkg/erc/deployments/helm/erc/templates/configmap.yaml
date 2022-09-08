@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: erc-cm
+  labels:
+    app: {{ include "erc.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: |
+    {
+      "plugin-dir": "cwd",
+      "service-port": "{{ .Values.config.servicePort }}",
+      "topology-endpoint": "{{ .Values.config.topologyEndpoint }}"
+    }

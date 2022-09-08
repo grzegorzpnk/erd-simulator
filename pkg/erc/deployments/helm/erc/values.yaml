@@ -1,0 +1,65 @@
+replicaCount: 1
+
+image:
+  repository: pmatysiaq/erc
+  pullPolicy: Always
+  tag: "latest"
+
+config:
+  servicePort: 8686
+  topologyEndpoint: "localhost:8787/v2/topology"
+
+workingDir: "/erc"
+command: "./erc"
+
+args: ""
+
+debugEnabled: false
+
+nodeSelector: {}
+
+affinity: {}
+
+liveness:
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  enabled: true
+
+readiness:
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+service:
+  type: NodePort
+  name: erc
+  portName: http
+  port: 8686
+  nodePort: 32147
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+# Configure resource requests and limits
+#flavor: large
+#resources:
+#  small:
+#    limits:
+#      cpu: 200m
+#      memory: 500Mi
+#    requests:
+#      cpu: 10m
+#      memory: 10Mi
+#  large:
+#    limits:
+#      cpu: 400m
+#      memory: 1Gi
+#    requests:
+#      cpu: 10m
+#      memory: 100Mi
+#  unlimited: {}
