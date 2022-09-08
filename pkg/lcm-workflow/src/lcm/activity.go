@@ -90,7 +90,7 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigP
 	cpuWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationWeight"), 64)
 	memWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("memUtilizationWeight"), 64)
 
-	erIntent := spi.SmartPlacementIntent{
+	spIntent := spi.SmartPlacementIntent{
 		Metadata: spi.Metadata{
 			Name:        targetAppName + "-er-intent",
 			Description: fmt.Sprintf("Edge Relocation Intent for app: %s", targetAppName),
@@ -98,6 +98,7 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigP
 		Spec: spi.SmartPlacementIntentSpec{
 			AppName: targetAppName,
 			SmartPlacementIntentData: spi.SmartPlacementIntentStruct{
+				TargetCell:    migParam.NewCellId,
 				PriorityLevel: getPriorityLevel(priorityLevel),
 				ConstraintsList: spi.Constraints{
 					LatencyMax:        latMax,
@@ -112,8 +113,8 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigP
 			},
 		},
 	}
-	log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", erIntent)
-	migParam.SmartPlacementIntent = erIntent
+	log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
+	migParam.SmartPlacementIntent = spIntent
 	return &migParam, nil
 }
 
