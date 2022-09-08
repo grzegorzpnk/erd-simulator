@@ -14,6 +14,9 @@
 /pkg/obs/bin/
 /pkg/obs/.idea/
 
+/pkg/erc/bin/
+/pkg/erc/.idea/
+
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/
 /pkg/ueransim-ho/.vscode/
