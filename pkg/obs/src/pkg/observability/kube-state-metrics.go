@@ -11,60 +11,88 @@ import (
 )
 
 type Cluster struct {
-	Provider    string
-	Name        string
-	CpuRequests float64
-	CpuLimits   float64
-	MemRequests float64
-	MemLimits   float64
+	Provider       string
+	Name           string
+	CpuRequests    float64
+	CpuLimits      float64
+	CpuAllocatable float64
+	MemRequests    float64
+	MemLimits      float64
+	MemAllocatable float64
 }
 
 // NewCluster method is called to register clusters from configuration file.
-func NewCluster(provider, name string, cpuReq, cpuLim, ramReq, ramLim float64) Cluster {
+func NewCluster(provider, name string, cpuReq, cpuLim, cpuAlloc, memReq, memLim, memAlloc float64) Cluster {
 	return Cluster{
-		Provider:    provider,
-		Name:        name,
-		CpuRequests: cpuReq,
-		CpuLimits:   cpuLim,
-		MemRequests: ramReq,
-		MemLimits:   ramLim,
+		Provider:       provider,
+		Name:           name,
+		CpuRequests:    cpuReq,
+		CpuLimits:      cpuLim,
+		CpuAllocatable: cpuAlloc,
+		MemRequests:    memReq,
+		MemLimits:      memLim,
+		MemAllocatable: memAlloc,
 	}
 }
 
 // Setters
 
 func (c *Cluster) SetCpuReq(val float64) {
-	c.CpuRequests = val
+	c.CpuRequests = math.Round(val*100) / 100
 }
 
 func (c *Cluster) SetCpuLim(val float64) {
-	c.CpuLimits = val
+	c.CpuLimits = math.Round(val*100) / 100
+}
+
+func (c *Cluster) SetCpuAlloc(val float64) {
+	c.CpuAllocatable = math.Round(val*100) / 100
 }
 
 func (c *Cluster) SetMemReq(val float64) {
-	c.MemRequests = val
+	c.MemRequests = math.Round(val*100) / 100
 }
 
 func (c *Cluster) SetMemLim(val float64) {
-	c.MemLimits = val
+	c.MemLimits = math.Round(val*100) / 100
+}
+
+func (c *Cluster) SetMemAlloc(val float64) {
+	c.MemAllocatable = math.Round(val*100) / 100
 }
 
 // Getters
 
 func (c *Cluster) GetCpuReq() float64 {
-	return c.CpuRequests
+	return math.Round(c.CpuRequests*100) / 100
 }
 
 func (c *Cluster) GetCpuLim() float64 {
-	return c.CpuLimits
+	return math.Round(c.CpuLimits*100) / 100
+}
+
+func (c *Cluster) GetCpuAlloc() float64 {
+	return math.Round(c.CpuAllocatable*100) / 100
+}
+
+func (c *Cluster) GetCpuReqUtilization() float64 {
+	return math.Round(100*100*(c.CpuRequests/c.CpuAllocatable)) / 100
 }
 
 func (c *Cluster) GetMemReq() float64 {
-	return c.MemRequests
+	return math.Round(c.MemRequests*100) / 100
 }
 
 func (c *Cluster) GetMemLim() float64 {
-	return c.MemLimits
+	return math.Round(c.MemLimits*100) / 100
+}
+
+func (c *Cluster) GetMemAlloc() float64 {
+	return math.Round(c.MemAllocatable*100) / 100
+}
+
+func (c *Cluster) GetMemReqUtilization() float64 {
+	return math.Round(100*100*(c.MemRequests/c.MemAllocatable)) / 100
 }
 
 type ClustersInfo struct {
@@ -75,6 +103,9 @@ type ClustersInfo struct {
 // InitializeClustersInfo reads providers and clusters from config file. Then fetches cpu/memory requests/limits
 // from Prometheus data-source and saves to the ClusterInfo. This information are updated in separate goroutine.
 func (ci *ClustersInfo) InitializeClustersInfo(client promql.PromQL) {
+	var cpuReq, cpuLim, cpuAll, memReq, memLim, memAll float64
+	var err error
+
 	log.Info("[KSM] Initializing ClustersInfo...")
 	ci.client = client
 
@@ -82,18 +113,26 @@ func (ci *ClustersInfo) InitializeClustersInfo(client promql.PromQL) {
 
 	for _, clusterSet := range ClusterSets {
 		for _, cluster := range clusterSet.Clusters {
-			cpuReq, cpuLim, err := ci.client.GetCpuRequestsLimits(cluster)
-			if err != nil {
-				log.Errorf("Skipping. Error: %v", err)
-				continue
+			if cpuReq, err = ci.client.GetCurrentRequests(promql.CPU, cluster); err != nil {
+				log.Warnf("Type[%v], Cluster[%v]. Could not get current requests. Reason: %v.", promql.CPU, cluster, err)
 			}
-			ramReq, ramLim, err := ci.client.GetMemoryRequestsLimits(cluster)
-			if err != nil {
-				log.Errorf("Skipping. Error: %v", err)
-				continue
+			if cpuLim, err = ci.client.GetCurrentLimits(promql.CPU, cluster); err != nil {
+				log.Warnf("Type[%v], Cluster[%v]. Could not get current limits. Reason: %v.", promql.CPU, cluster, err)
+			}
+			if cpuAll, err = ci.client.GetAllocatable(promql.CPU, cluster); err != nil {
+				log.Warnf("Type[%v], Cluster[%v]. Could not get allocatable. Reason: %v.", promql.CPU, cluster, err)
+			}
+			if memReq, err = ci.client.GetCurrentRequests(promql.MEMORY, cluster); err != nil {
+				log.Warnf("Type[%v], Cluster[%v]. Could not get current requests. Reason: %v.", promql.MEMORY, cluster, err)
+			}
+			if memLim, err = ci.client.GetCurrentLimits(promql.MEMORY, cluster); err != nil {
+				log.Warnf("Type[%v], Cluster[%v]. Could not get current limits. Reason: %v.", promql.MEMORY, cluster, err)
+			}
+			if memAll, err = ci.client.GetAllocatable(promql.MEMORY, cluster); err != nil {
+				log.Warnf("Type[%v], Cluster[%v]. Could not get allocatable. Reason: %v.", promql.MEMORY, cluster, err)
 			}
 
-			cl := NewCluster(clusterSet.Provider, cluster, cpuReq, cpuLim, ramReq, ramLim)
+			cl := NewCluster(clusterSet.Provider, cluster, cpuReq, cpuLim, cpuAll, memReq, memLim, memAll)
 			ci.clusters = append(ci.clusters, cl)
 		}
 	}
@@ -103,66 +142,89 @@ func (ci *ClustersInfo) InitializeClustersInfo(client promql.PromQL) {
 
 // updateClustersInfo fetches current cpu/memory request/limits utilization and updates ClusterInfo
 func (ci *ClustersInfo) updateClustersInfo() {
+	var cpuReq, cpuLim, cpuAll, memReq, memLim, memAll float64
+	var err error
 	ci.client.Time = time.Now()
 
-	for id, cluster := range ci.clusters {
-		cpuReq, cpuLim, err := ci.client.GetCpuRequestsLimits(cluster.Name)
-		if err != nil {
-			log.Errorf("[KSM] error: could not updateClustersInfo. reason: %v", err)
+	for id, cl := range ci.clusters {
+		cluster := cl.Name
+		if cpuReq, err = ci.client.GetCurrentRequests(promql.CPU, cluster); err != nil {
+			log.Warnf("Type[%v], Cluster[%v]. Could not get current requests. Reason: %v.", promql.CPU, cluster, err)
 		}
-		memReq, memLim, err := ci.client.GetMemoryRequestsLimits(cluster.Name)
-		if err != nil {
-			log.Errorf("[KSM] error: could not updateClustersInfo. reason: %v", err)
+		if cpuLim, err = ci.client.GetCurrentLimits(promql.CPU, cluster); err != nil {
+			log.Warnf("Type[%v], Cluster[%v]. Could not get current limits. Reason: %v.", promql.CPU, cluster, err)
+		}
+		if cpuAll, err = ci.client.GetAllocatable(promql.CPU, cluster); err != nil {
+			log.Warnf("Type[%v], Cluster[%v]. Could not get allocatable. Reason: %v.", promql.CPU, cluster, err)
+		}
+		if memReq, err = ci.client.GetCurrentRequests(promql.MEMORY, cluster); err != nil {
+			log.Warnf("Type[%v], Cluster[%v]. Could not get current requests. Reason: %v.", promql.MEMORY, cluster, err)
+		}
+		if memLim, err = ci.client.GetCurrentLimits(promql.MEMORY, cluster); err != nil {
+			log.Warnf("Type[%v], Cluster[%v]. Could not get current limits. Reason: %v.", promql.MEMORY, cluster, err)
+		}
+		if memAll, err = ci.client.GetAllocatable(promql.MEMORY, cluster); err != nil {
+			log.Warnf("Type[%v], Cluster[%v]. Could not get allocatable. Reason: %v.", promql.MEMORY, cluster, err)
 		}
 
-		ci.clusters[id].SetCpuReq(math.Round(cpuReq*100) / 100)
-		ci.clusters[id].SetCpuLim(math.Round(cpuLim*100) / 100)
-		ci.clusters[id].SetMemReq(math.Round(memReq*100) / 100)
-		ci.clusters[id].SetMemLim(math.Round(memLim*100) / 100)
+		ci.clusters[id].SetCpuReq(cpuReq)
+		ci.clusters[id].SetCpuLim(cpuLim)
+		ci.clusters[id].SetCpuAlloc(cpuAll)
+		ci.clusters[id].SetMemReq(memReq)
+		ci.clusters[id].SetMemLim(memLim)
+		ci.clusters[id].SetMemAlloc(memAll)
 	}
 
 	time.Sleep(5 * time.Second)
 	ci.updateClustersInfo()
 }
 
-func (ci *ClustersInfo) GetClusterCpuReq(clusterProvider, clusterName string) (float64, error) {
+func (ci *ClustersInfo) GetClusterReq(resType promql.Resource, clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster cpu requests. reason: %v", err)
+		err = fmt.Errorf("could not get cluster %v requests. Reason: %v", resType, err)
 		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
-	return cluster.GetCpuReq(), nil
+	if resType == promql.CPU {
+		return cluster.GetCpuReq(), nil
+	} else if resType == promql.MEMORY {
+		return cluster.GetMemReq(), nil
+	} else {
+		return -1, errors.New(fmt.Sprintf("could not get cluster requests. Reason: resType[%v] doesn't exist", resType))
+	}
 }
 
-func (ci *ClustersInfo) GetClusterCpuLim(clusterProvider, clusterName string) (float64, error) {
+func (ci *ClustersInfo) GetClusterLim(resType promql.Resource, clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster cpu limits. reason: %v", err)
+		err = fmt.Errorf("could not get cluster %v limits. Reason: %v", resType, err)
 		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
-	return cluster.GetCpuLim(), nil
+	if resType == promql.CPU {
+		return cluster.GetCpuLim(), nil
+	} else if resType == promql.MEMORY {
+		return cluster.GetMemLim(), nil
+	} else {
+		return -1, errors.New(fmt.Sprintf("could not get cluster limits. Reason: resType[%v] doesn't exist", resType))
+	}
 }
 
-func (ci *ClustersInfo) GetClusterMemReq(clusterProvider, clusterName string) (float64, error) {
+func (ci *ClustersInfo) GetClusterAlloc(resType promql.Resource, clusterProvider, clusterName string) (float64, error) {
 	cluster, err := ci.GetCluster(clusterProvider, clusterName)
 	if err != nil {
-		err = fmt.Errorf("can't get cluster memory requests. reason: %v", err)
+		err = fmt.Errorf("could not get cluster %v allocatable. Reason: %v", resType, err)
 		log.Errorf("[KSM] error: %v", err)
 		return -1, err
 	}
-	return cluster.GetMemReq(), nil
-}
-
-func (ci *ClustersInfo) GetClusterMemLim(clusterProvider, clusterName string) (float64, error) {
-	cluster, err := ci.GetCluster(clusterProvider, clusterName)
-	if err != nil {
-		err = fmt.Errorf("can't get cluster memory limits. reason: %v", err)
-		log.Errorf("[KSM] error: %v", err)
-		return -1, err
+	if resType == promql.CPU {
+		return cluster.GetCpuAlloc(), nil
+	} else if resType == promql.MEMORY {
+		return cluster.GetMemAlloc(), nil
+	} else {
+		return -1, errors.New(fmt.Sprintf("could not get cluster allocatable. Reason: resType[%v] doesn't exist", resType))
 	}
-	return cluster.GetMemLim(), nil
 }
 
 func (ci *ClustersInfo) GetCluster(clusterProvider, clusterName string) (Cluster, error) {

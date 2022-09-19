@@ -36,16 +36,16 @@ func main() {
 	}
 	cApi.Client = client
 
-	var nodes observability.NodesInfo
-	nodes.InitializeNodesInfo(cApi)
+	//var nodes observability.NodesInfo
+	//nodes.InitializeNodesInfo(cApi)
 
 	var clusters observability.ClustersInfo
 	clusters.InitializeClustersInfo(cApi)
 
-	var latency latency.MockClient
-	latency.InitializeLatencyMock()
+	var ltc latency.MockClient
+	ltc.InitializeLatencyMock()
 
-	httpRouter := api.NewRouter(&clusters, &latency)
+	httpRouter := api.NewRouter(&clusters, &ltc)
 	loggedRouter := handlers.LoggingHandler(os.Stdout, httpRouter)
 
 	httpServer := &http.Server{

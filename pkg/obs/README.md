@@ -14,32 +14,29 @@ we should rely on K8s level parameters, rather than Node level resource utilizat
 ### Observability Endpoints
 
 ```yaml
-SAMPLE URL: http://localhost:8282/v1/obs/ksm/provider/edge-provider/cluster/meh01/memory-requests
+SAMPLE URL: http://10.254.185.50:32138/v1/obs/ksm/provider/edge-provider/cluster/mec1/cpu/requests
 ```
 
 
 ```go
-// Get provider+cluster CPU Requsts utilization (in percentage)
+// Get provider+cluster CPU/Memory allocated requests
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu-requests
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu/requests
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory/requests
 ```
 
 ```go
-// Get provider+cluster CPU Limits utilization (in percentage)
+// Get provider+cluster CPU/Memory allocated limits
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu-limits
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu/limits
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory/limits
 ```
 
 ```go
-// Get provider+cluster MEMORY Requsts utilization (in percentage)
+// Get provider+cluster CPU/Memory utilized requests (in percentage)
 
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory-requests
-```
-
-```go
-// Get provider+cluster Memory Limits utilization (in percentage)
-
-localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory-limits
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu/utilization
+localhost:8282/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory/utilization
 ```
 
 ### Latency Endpoints
