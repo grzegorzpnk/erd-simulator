@@ -4,21 +4,28 @@
 package module
 
 import (
+	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
-	log "github.com/sirupsen/logrus"
-
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
-	"fmt"
 	"github.com/pkg/errors"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/db"
 )
 
+const MaxSearchDepth int = 3
+
 // SmartPlacementIntentClient implements the SmartPlacementIntentManager.
-// It will also be used to maintain some localized state.
+// It will also be used to maintain some localized state (Not important, inherited from sample emco controller)
 type SmartPlacementIntentClient struct {
 	dbInfo DBInfo
 }
 
+type SearchParams struct {
+	currentMECs   []model.MecHost
+	evalNeighMECs []model.MecHost
+	checkedMECs   []model.MecHost
+	candidateMECs []model.MecHost
+}
+
+// NewIntentClient creates and returns new SmartPlacementIntentClient
 func NewIntentClient() *SmartPlacementIntentClient {
 	return &SmartPlacementIntentClient{
 		dbInfo: DBInfo{
@@ -29,31 +36,181 @@ func NewIntentClient() *SmartPlacementIntentClient {
 }
 
 // SmartPlacementIntentManager a manager is an interface for exposing the client's functionalities.
-// You can have multiple managers based on the requirement and its implementation.
-// In this example, SmartPlacementIntentManager exposes the SmartPlacementIntentClient functionalities.
 type SmartPlacementIntentManager interface {
-	CreateSmartPlacementIntent(intent model.SmartPlacementIntent, project, app, version, deploymentIntentGroup string, failIfExists bool) (model.SmartPlacementIntent, error)
-	GetSmartPlacementIntent(name, project, app, version, deploymentIntentGroup string) ([]model.SmartPlacementIntent, error)
-	ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, string, error)
+	ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, error)
 }
 
-func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, string, error) {
-	var bestOk bool
-	var best float64
-	tClient := topology.NewTopologyClient()
+// ServeSmartPlacementIntentOutsideEMCO TODO: not ready.
+func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, error) {
+	var err error
+	var sp SearchParams
+	var bestMecHost model.MecHost
+	var checkFurther bool
 
-	fmt.Printf("Smart Placement Intent: %+v\n", intent)
+	tc := topology.NewTopologyClient()
+	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
 
-	targetCell := intent.Spec.SmartPlacementIntentData.TargetCell
+	log.Infof("Smart Placement Intent: %+v", intent)
 
-	mecHosts, err := tClient.GetMecHostsByCellId(targetCell)
+	// Get all MEC Hosts associated with given Cell ID
+	sp.currentMECs, err = tc.GetMecHostsByCellId(tc.CurrentCell)
+
+	// Check if any cluster is a valid candidate, if yes -> try to find optimal cluster
+	sp, err = FindCandidates(tc, sp, intent)
 	if err != nil {
-		log.Errorf("could not serve Smart Placement Intent: %v", err)
-		return "", "", err
+		log.Errorf("Could not serve Smart Placement Intent: %v", err)
+		return "", err
 	}
 
+	// Try to find the optimal cluster.
+	bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
+	if err != nil {
+		// save information about checked clusters -> no need to check single cluster twice
+		sp.checkedMECs = append(sp.checkedMECs, sp.currentMECs...)
+		// currentMECs list will be evaluated based on valid neighbours
+		sp.currentMECs = []model.MecHost{}
+		// candidateMecs list will be evaluated based on new currentMECs list
+		sp.candidateMECs = []model.MecHost{}
+		// flag which indicates, if we should search further
+		//	* search until best cluster is found OR
+		//	* until there are any clusters on the evalNeighMECs list
+		checkFurther = true
+	}
+
+	for checkFurther {
+		checkFurther = false
+		if len(sp.evalNeighMECs) == 0 {
+			// If evalNeighMECs list is empty -> there are not any clusters to check (search failed).
+			return "", errors.New("Could not find optimal cluster!")
+		}
+
+		log.Infof("EvalNeighList: %v", sp.evalNeighMECs)
+		for _, mec := range sp.evalNeighMECs {
+			mec, err = tc.GetMecNeighbours(mec)
+			if err != nil {
+				continue
+			}
+
+			for _, neigh := range mec.Neighbours {
+				if skip := checkIfSkip(*neigh, sp.checkedMECs); skip {
+					// If MEC Host already checked -> just skip
+					continue
+				}
+				if skip := checkIfSkip(*neigh, sp.currentMECs); skip {
+					// If MEC Host is in the current search space -> just skip
+					continue
+				}
+				sp.currentMECs = append(sp.currentMECs, *neigh)
+			}
+		}
+		// Delete old clusters from evalNeighMECs list -> later add new if any exists
+		sp.evalNeighMECs = []model.MecHost{}
+
+		sp, err = FindCandidates(tc, sp, intent)
+		if err != nil {
+			log.Errorf("Could not serve Smart Placement Intent: %v", err)
+			return "", err
+		}
+
+		bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
+		if err != nil {
+			sp.checkedMECs = append(sp.checkedMECs, sp.currentMECs...)
+			sp.currentMECs = []model.MecHost{}
+			sp.candidateMECs = []model.MecHost{}
+			checkFurther = true
+		} else {
+			// if error is nil -> best MEC Host is found. Just return.
+			return bestMecHost.BuildClusterEmcoFQDN(), err
+		}
+	}
+
+	return bestMecHost.BuildClusterEmcoFQDN(), err
+}
+
+func checkIfSkip(mec model.MecHost, mecList []model.MecHost) bool {
+	for _, candidate := range mecList {
+		if mec.BuildClusterEmcoFQDN() == candidate.BuildClusterEmcoFQDN() {
+			return true
+		}
+	}
+	return false
+}
+
+func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacementIntent) (SearchParams, error) {
+	log.Infof("Looking for candidates...")
+	for _, mec := range sp.currentMECs {
+		// Shortest path is a sum of latency on all the links -> from targetCell to the candidate MEC Host
+		latency, err := tc.GetShortestPath(tc.CurrentCell, mec)
+		if err != nil {
+			log.Warnf("Could not get shortest path: %v. Skipping.", err)
+			continue
+		}
+
+		mec.SetLatency(latency)
+
+		if !latencyOk(i, mec) {
+			log.Warnf("Latency condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
+			continue
+		}
+
+		// If considered mec that meets latency requirements, we can consider his neighbours as candidates later
+		// If latency is not met for this MEC Host -> his neighbours can't be a valid candidates
+		sp.evalNeighMECs = append(sp.evalNeighMECs, mec)
+
+		mec, err = tc.CollectResourcesInfo(mec)
+
+		if !resourcesOk(i, mec) {
+			log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
+			continue
+		}
+
+		// TODO: we can specify more restrictions for the candidate MEC Hosts: for example consider only specific level/region
+		sp.candidateMECs = append(sp.candidateMECs, mec)
+	}
+	log.Infof("Candidates list: %v", sp.candidateMECs)
+	return sp, nil
+}
+
+// latencyOk checks if latency constraints specified in intent (i) are met
+func latencyOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
+	latency := mec.GetLatency()
+	latencyMax := i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax
+
+	if mec.GetLatency() < 0 {
+		return false
+	} else if latencyMax > latency {
+		return true
+	} else {
+		return false
+	}
+}
+
+// resourcesOk checks if resource constraints specified in intent (i) are met
+func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
+	cpu := mec.GetCpuUtilization()
+	mem := mec.GetMemUtilization()
+	cpuMax := i.Spec.SmartPlacementIntentData.ConstraintsList.CpuUtilizationMax
+	memMax := i.Spec.SmartPlacementIntentData.ConstraintsList.MemUtilizationMax
+
+	if cpu < 0 || mem < 0 {
+		return false
+	} else if cpuMax > cpu && memMax > mem {
+		return true
+	} else {
+		return false
+	}
+}
+
+// FindOptimalCluster TODO: implement algorithm to find the optimal cluster among mecHosts (candidates)
+func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementIntent) (model.MecHost, error) {
+	log.Infof("Looking for optimal cluster...")
+	var bestOk bool
+	var best float64
+
 	if len(mecHosts) <= 0 {
-		return "", "", errors.New(fmt.Sprintf("no mec hosts found for given cell: %v\n.", targetCell))
+		err := errors.New("could not proceed to find optimal cluster: mec host list is empty")
+		log.Warnf("%v", err)
+		return model.MecHost{}, err
 	}
 
 	bestMecHost := mecHosts[0]
@@ -66,79 +223,20 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent
 		}
 	}
 	if !bestOk {
-		return "", "", errors.New("No clusters met all constraints!")
+		err := errors.New("no clusters met all constraints!")
+		log.Warnf("Error while looking for optimal cluster: %v", err)
+		return model.MecHost{}, err
 	}
-	return bestMecHost.ProviderName, bestMecHost.ClusterName, nil
+	log.Infof("Found best cluster: %+v", bestMecHost)
+	return bestMecHost, nil
 }
 
-// CreateSmartPlacementIntent insert a new SmartPlacementIntent in the database
-func (i *SmartPlacementIntentClient) CreateSmartPlacementIntent(intent model.SmartPlacementIntent, project, app, version, deploymentIntentGroup string, failIfExists bool) (model.SmartPlacementIntent, error) {
-	// Construct key and tag to select the entry.
-	key := model.SmartPlacementIntentKey{
-		Project:               project,
-		CompositeApp:          app,
-		CompositeAppVersion:   version,
-		DeploymentIntentGroup: deploymentIntentGroup,
-		SmartPlacementIntent:  intent.Metadata.Name,
-	}
-
-	// Check if this SmartPlacementIntent already exists.
-	intents, err := i.GetSmartPlacementIntent(intent.Metadata.Name, project, app, version, deploymentIntentGroup)
-	if err == nil &&
-		len(intents) > 0 &&
-		intents[0].Metadata.Name == intent.Metadata.Name &&
-		failIfExists {
-		return model.SmartPlacementIntent{}, errors.New("SmartPlacementIntent already exists")
-	}
-
-	err = db.DBconn.Insert(i.dbInfo.collection, key, nil, i.dbInfo.tag, intent)
-	if err != nil {
-		return model.SmartPlacementIntent{}, err
-	}
-
-	return intent, nil
-}
-
-// GetSmartPlacementIntent returns the SmartPlacementIntent for the corresponding name
-func (i *SmartPlacementIntentClient) GetSmartPlacementIntent(name, project, app, version, deploymentIntentGroup string) ([]model.SmartPlacementIntent, error) {
-	// Construct key and tag to select the entry.
-	key := model.SmartPlacementIntentKey{
-		Project:               project,
-		CompositeApp:          app,
-		CompositeAppVersion:   version,
-		DeploymentIntentGroup: deploymentIntentGroup,
-		SmartPlacementIntent:  name,
-	}
-
-	values, err := db.DBconn.Find(i.dbInfo.collection, key, i.dbInfo.tag)
-	if err != nil {
-		return []model.SmartPlacementIntent{}, err
-	}
-
-	if len(values) == 0 {
-		return []model.SmartPlacementIntent{}, errors.New("SmartPlacementIntent not found")
-	}
-
-	intents := []model.SmartPlacementIntent{}
-
-	for _, v := range values {
-		i := model.SmartPlacementIntent{}
-		err = db.DBconn.Unmarshal(v, &i)
-		if err != nil {
-			return []model.SmartPlacementIntent{}, errors.Wrap(err, "Unmarshalling Value")
-		}
-
-		intents = append(intents, i)
-	}
-
-	return intents, nil
-}
-
-func ComputeObjectiveValue(i model.SmartPlacementIntent, mec topology.MecHost) (float64, bool) {
+// ComputeObjectiveValue TODO: implement function to calculate the objective function
+func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) (float64, bool) {
 	cl := i.Spec.SmartPlacementIntentData.ConstraintsList
 	pw := i.Spec.SmartPlacementIntentData.ParametersWeights
 
-	if !CheckConstraintsForGiven(cl, mec) {
+	if !CheckConstraintsForGivenMec(cl, mec) {
 		return 3, false
 	}
 	latency, cpuUtilization, memUtilization := NormalizeMecParameters(cl, mec)
@@ -146,18 +244,18 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec topology.MecHost) (
 	return pw.LatencyWeight*latency + pw.CpuUtilizationWeight*cpuUtilization + pw.MemUtilizationWeight*memUtilization, true
 }
 
-func CheckConstraintsForGiven(cl model.Constraints, mec topology.MecHost) bool {
-	if mec.Latency > cl.LatencyMax {
+func CheckConstraintsForGivenMec(cl model.Constraints, mec model.MecHost) bool {
+	if mec.GetLatency() > cl.LatencyMax {
 		return false
-	} else if mec.CpuUtilization > cl.CpuUtilizationMax {
+	} else if mec.GetCpuUtilization() > cl.CpuUtilizationMax {
 		return false
-	} else if mec.MemUtilization > cl.MemUtilizationMax {
+	} else if mec.GetMemUtilization() > cl.MemUtilizationMax {
 		return false
 	} else {
 		return true
 	}
 }
 
-func NormalizeMecParameters(cl model.Constraints, mec topology.MecHost) (float64, float64, float64) {
-	return mec.Latency / cl.LatencyMax, mec.CpuUtilization / cl.CpuUtilizationMax, mec.MemUtilization / cl.MemUtilizationMax
+func NormalizeMecParameters(cl model.Constraints, mec model.MecHost) (float64, float64, float64) {
+	return mec.GetLatency() / cl.LatencyMax, mec.GetCpuUtilization() / cl.CpuUtilizationMax, mec.GetMemUtilization() / cl.MemUtilizationMax
 }

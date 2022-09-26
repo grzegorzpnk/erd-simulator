@@ -1,5 +1,5 @@
 {
     "plugin-dir":"cwd",
     "service-port":"8888",
-    "topology-endpoint": "localhost:8787/v2/topology"
+    "topology-endpoint": "localhost:8787/v2"
 }

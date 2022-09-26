@@ -1,11 +1,11 @@
-package topology
+package model
 
 type MecInfo string
 type MecType int
 
 const (
-	MecCpuUtil MecInfo = "/cpu"
-	MecMemUtil MecInfo = "/memory"
+	MecCpu MecInfo = "cpu"
+	MecMem MecInfo = "memory"
 )
 
 const (
@@ -69,8 +69,12 @@ func (mh *MecHost) GetCpuUtilization() float64 {
 	return mh.Resources.Cpu.Utilization
 }
 
-func (mh *MecHost) SetCpuUtilization(cpuUtilization float64) {
-	mh.Resources.Cpu.Utilization = cpuUtilization
+//func (mh *MecHost) SetCpuUtilization(cpuUtilization float64) {
+//	mh.Resources.Cpu.Utilization = cpuUtilization
+//}
+
+func (mh *MecHost) SetCpuInfo(cpuInfo MecResInfo) {
+	mh.Resources.Cpu = cpuInfo
 }
 
 func (mh *MecHost) GetMemUsed() float64 {
@@ -85,8 +89,12 @@ func (mh *MecHost) GetMemUtilization() float64 {
 	return mh.Resources.Memory.Utilization
 }
 
-func (mh *MecHost) SetMemUtilization(memUtilization float64) {
-	mh.Resources.Memory.Utilization = memUtilization
+//func (mh *MecHost) SetMemUtilization(memUtilization float64) {
+//	mh.Resources.Memory.Utilization = memUtilization
+//}
+
+func (mh *MecHost) SetMemInfo(memInfo MecResInfo) {
+	mh.Resources.Cpu = memInfo
 }
 
 func (mh *MecHost) GetNeighbours() []*MecHost {
