@@ -209,7 +209,7 @@ func getHttpRespBody(url string) ([]byte, error) {
 
 // TODO: Use Generics in the future
 // checkIfSkipPrimaryIntentAllOf is used to make sure, that in the newly created placement intent
-// there will not be any duplicated intents in AllOf array. If target Cluster was already present
+// there will not be any duplicated intents in AllOf array. If target ClusterName was already present
 // in the Primary Intent we can skip Primary Intent and still service continuity will be maintained
 func checkIfSkipPrimaryIntentAllOf(mp MigParam, primaryIntent AllOf, newIntents []AllOf) (skip bool) {
 	for _, newIntent := range newIntents {
@@ -220,8 +220,8 @@ func checkIfSkipPrimaryIntentAllOf(mp MigParam, primaryIntent AllOf, newIntents 
 			skip = true
 			return
 		}
-		// If Primary Intent is based on Cluster Label, rather than on Cluster Name. Check if target Cluster isn't
-		// represented by that Cluster Label. If it is, skip Primary Intent. Otherwise, DIG Update will fail.
+		// If Primary Intent is based on ClusterName Label, rather than on ClusterName Name. Check if target ClusterName isn't
+		// represented by that ClusterName Label. If it is, skip Primary Intent. Otherwise, DIG Update will fail.
 		if primaryIntent.ClusterLabelName != "" {
 			clmEndpoint := GetClmEndpoint(mp)
 			provider := primaryIntent.ProviderName
@@ -252,7 +252,7 @@ func checkIfSkipPrimaryIntentAllOf(mp MigParam, primaryIntent AllOf, newIntents 
 
 // TODO: Use Generics in the future
 // checkIfSkipPrimaryIntentAnyOf is used to make sure, that in the newly created placement intent
-// there will not be any duplicated intents in AnyOf array. If target Cluster was already present
+// there will not be any duplicated intents in AnyOf array. If target ClusterName was already present
 // in the Primary Intent we can skip Primary Intent and still service continuity will be maintained
 func checkIfSkipPrimaryIntentAnyOf(mp MigParam, primaryIntent AnyOf, newIntents []AnyOf) (skip bool) {
 	for _, newIntent := range newIntents {
@@ -263,8 +263,8 @@ func checkIfSkipPrimaryIntentAnyOf(mp MigParam, primaryIntent AnyOf, newIntents 
 			skip = true
 			return
 		}
-		// If Primary Intent is based on Cluster Label, rather than on Cluster Name. Check if target Cluster isn't
-		// represented by that Cluster Label. If it is, skip Primary Intent. Otherwise, DIG Update will fail.
+		// If Primary Intent is based on ClusterName Label, rather than on ClusterName Name. Check if target ClusterName isn't
+		// represented by that ClusterName Label. If it is, skip Primary Intent. Otherwise, DIG Update will fail.
 		if primaryIntent.ClusterLabelName != "" {
 			clmEndpoint := GetClmEndpoint(mp)
 			provider := primaryIntent.ProviderName

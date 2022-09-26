@@ -35,7 +35,7 @@ func (h *apiHandler) updateClusterMetrics(w http.ResponseWriter, r *http.Request
 	var clusterMetrics topology.ClusterMetrics
 	_ = json.NewDecoder(r.Body).Decode(&clusterMetrics)
 
-	if topology.ContainsVertex(h.graphClient.Vertices, topology.Vertex{Id: id, Type: "MEC"}) {
+	if topology.ContainsVertex(h.graphClient.MecHosts, topology.Vertex{Id: id, Type: "MEC"}) {
 		h.graphClient.GetVertex(id).VertexMetrics.UpdateClusterMetrics(clusterMetrics)
 		w.WriteHeader(http.StatusOK)
 		fmt.Printf("Client updates cluster metrics for vertex ID: %v\n", params["Id"])
@@ -53,7 +53,7 @@ func (h *apiHandler) getClusterMetrics(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, _ := params["Id"]
 
-	if topology.ContainsVertex(h.graphClient.Vertices, topology.Vertex{Id: id}) {
+	if topology.ContainsVertex(h.graphClient.MecHosts, topology.Vertex{Id: id}) {
 		json.NewEncoder(w).Encode(h.graphClient.GetVertex(id).VertexMetrics)
 		w.WriteHeader(http.StatusOK)
 	} else {
@@ -76,7 +76,7 @@ func updateEdgeMetrics(w http.ResponseWriter, r *http.Request) {
 
 	//sprawdz czy istnieje dany link i go pobierz
 	//update danych na łaczu
-	/*if exist(graph.Vertices, id) {
+	/*if exist(graph.MecHosts, id) {
 		graph.getVertex(id).VertexMetrics.updateClusterMetrics(clusterMetrics)
 		w.WriteHeader(http.StatusOK)
 		fmt.Printf("Client updates cluster metrics for vertex ID: %v\n", params["Id"])
@@ -92,9 +92,9 @@ func (h *apiHandler) getVertexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	for i, v := range h.graphClient.Vertices {
+	for i, v := range h.graphClient.MecHosts {
 		if v.Id == params["Id"] {
-			json.NewEncoder(w).Encode(h.graphClient.Vertices[i])
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i])
 		}
 	}
 
@@ -106,7 +106,7 @@ func (h *apiHandler) createVertex(w http.ResponseWriter, r *http.Request) {
 	var vertex topology.Vertex
 	_ = json.NewDecoder(r.Body).Decode(&vertex)
 	fmt.Printf("Client tries to add new vertex ID: %v\n", vertex.Id)
-	if topology.ContainsVertex(h.graphClient.Vertices, vertex) {
+	if topology.ContainsVertex(h.graphClient.MecHosts, vertex) {
 		err := fmt.Errorf("Vertex %v not added beacuse it is an existing key", vertex.Id)
 		fmt.Println(err.Error())
 		w.WriteHeader(http.StatusConflict)
@@ -141,6 +141,6 @@ func (h *apiHandler) getEdgesHandler(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) getAllVertexesHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(h.graphClient.Vertices)
+	json.NewEncoder(w).Encode(h.graphClient.MecHosts)
 
 }

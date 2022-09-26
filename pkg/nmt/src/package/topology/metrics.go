@@ -16,6 +16,12 @@ type ClusterMetrics struct {
 	MemoryUsage float64 `json:"memoryUsage"`
 }
 
+type MecResources struct {
+	//Latency float64    `json:"latency"`
+	Cpu    MecResInfo `json:"cpu"`
+	Memory MecResInfo `json:"memory"`
+}
+
 type NetworkMetrics struct {
 
 	//ms
@@ -40,14 +46,14 @@ func ClustersMetricsUpdate(g *Graph) {
 
 	for {
 		// update metrics for MEC Clusters
-		for _, v := range g.Vertices {
+		for _, v := range g.MecHosts {
 			if v.Type == "MEC" {
 				cm, err := getClusterMetricsNotification(v.Id, endpoint)
 				if err != nil {
 					fmt.Errorf(err.Error())
 				}
 				g.GetVertex(v.Id).VertexMetrics.UpdateClusterMetrics(cm)
-				//g.Vertices[i].VertexMetrics.UpdateClusterMetrics(cm)
+				//g.MecHosts[i].VertexMetrics.UpdateClusterMetrics(cm)
 				fmt.Printf("Controller updates cluster metrics for vertex ID: %v\n", v.Id)
 			}
 		}
@@ -102,7 +108,7 @@ func NetworkMetricsUpdateTest(g *Graph) {
 	}
 }
 
-//this function takes clusterID and requests to receive latest info about Cluster Metrics at the end it returns ClusterMetrics object
+//this function takes clusterID and requests to receive latest info about ClusterName Metrics at the end it returns ClusterMetrics object
 func getClusterMetricsNotification(clusterId, endpoint string) (ClusterMetrics, error) {
 
 	var cm ClusterMetrics
