@@ -16,7 +16,7 @@ echo "Pushing ${DOCKER_REPO}${GNB_NAME}:${UERANSIM_TAG}"
 sudo docker push ${DOCKER_REPO}${GNB_NAME}:${UERANSIM_TAG}
 
 echo "Building ${DOCKER_REPO}${UE_NAME}:${UERANSIM_TAG}"
-sudo docker build . -f ./Dockerfile.ue -t ${DOCKER_REPO}${GNB_NAME}:${UERANSIM_TAG}
+sudo docker build . -f ./Dockerfile.ue -t ${DOCKER_REPO}${UE_NAME}:${UERANSIM_TAG}
 
 echo "Pushing ${DOCKER_REPO}${UE_NAME}:${UERANSIM_TAG}"
 sudo docker push ${DOCKER_REPO}${UE_NAME}:${UERANSIM_TAG}
