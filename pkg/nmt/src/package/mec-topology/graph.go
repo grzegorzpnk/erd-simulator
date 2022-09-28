@@ -1,4 +1,4 @@
-package topology
+package mec_topology
 
 import (
 	"fmt"
@@ -20,8 +20,9 @@ func (g *Graph) GetMecHost(clusterName, clusterProvider string) *MecHost {
 	return nil
 }
 
+//methods that adds MEC Host to the list of MEC HOSTS of given g Graph
 func (g *Graph) AddMecHost(mecHost MecHost) {
-	if CheckGraphContainsVertex(g.MecHosts, mecHost) {
+	if g.CheckGraphContainsVertex(mecHost) {
 		err := fmt.Errorf("Vertex %v not added beacuse already exist vertex with the same name and provider id \n", mecHost.Identity.ClusterName, mecHost.Identity.Provider)
 		fmt.Println(err.Error())
 	} else {
@@ -33,20 +34,20 @@ func (g *Graph) AddMecHost(mecHost MecHost) {
 func (g *Graph) AddEdge(edge Edge) {
 
 	//get vertex
-	fromVertex := g.GetMecHost(edge.SourceVertexName, edge.SourceVertexProviderName)
-	toVertex := g.GetMecHost(edge.TargetVertexName, edge.TargetVertexProviderName)
+	fromMECHost := g.GetMecHost(edge.SourceVertexName, edge.SourceVertexProviderName)
+	toMECHost := g.GetMecHost(edge.TargetVertexName, edge.TargetVertexProviderName)
 
 	//check error
-	if fromVertex == nil || toVertex == nil {
-		err := fmt.Errorf("Invalid edge- at least one of Vertex not exists (%v<-->%v)\n", edge.SourceVertexName, edge.TargetVertexName)
+	if fromMECHost == nil || toMECHost == nil {
+		err := fmt.Errorf("Invalid edge- at least one of MEC Host doesn't exist (%v, %v <--> %v, %v)\n", edge.SourceVertexName, edge.SourceVertexProviderName, edge.TargetVertexName, edge.TargetVertexProviderName)
 		fmt.Println(err.Error())
-	} else if CheckGraphContainsNeighbour(fromVertex.Neighbours, edge.TargetVertexName) || CheckGraphContainsNeighbour(toVertex.Neighbours, edge.SourceVertexName) {
+	} else if g.CheckAlreadExistLink(edge) {
 		err := fmt.Errorf("Edge between (%v--%v) already exist\n", edge.SourceVertexName, edge.TargetVertexName)
 		fmt.Println(err.Error())
 	} else {
 		//add edge at vertexes instances
-		fromVertex.Neighbours = append(fromVertex.Neighbours, edge.TargetVertexName)
-		toVertex.Neighbours = append(toVertex.Neighbours, edge.SourceVertexName)
+		fromMECHost.Neighbours = append(fromMECHost.Neighbours, edge)
+		toMECHost.Neighbours = append(toMECHost.Neighbours, edge)
 
 		//add edge at  Edges list
 		g.Edges = append(g.Edges, &edge)
@@ -54,6 +55,7 @@ func (g *Graph) AddEdge(edge Edge) {
 	}
 }
 
+//that function prints graph: Nodes and Links
 func (g *Graph) PrintGraph() {
 
 	fmt.Println("Graph: ")

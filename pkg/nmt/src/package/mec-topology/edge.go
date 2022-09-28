@@ -1,4 +1,4 @@
-package topology
+package mec_topology
 
 type Edge struct {
 	SourceVertexName         string         `json:"source"`

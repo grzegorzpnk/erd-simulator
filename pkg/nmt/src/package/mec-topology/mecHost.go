@@ -1,12 +1,12 @@
-package topology
+package mec_topology
 
 type MecInfo string
 type MecType int
 
 type MecHost struct {
-	Identity   MecIdentity  `json:"identity"`
-	Resources  MecResources `json:"resources,omitempty"`
-	Neighbours []string
+	Identity   MecIdentity      `json:"identity"`
+	Resources  ClusterResources `json:"resources,omitempty"`
+	Neighbours []Edge
 }
 
 const (
