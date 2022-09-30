@@ -4,7 +4,7 @@ all: clean compile build
 
 build:
 	@echo "Building obs app"
-	sudo docker build --rm -f ./build/Dockerfile -t obs .
+	sudo docker build --rm -f ./build/docker/Dockerfile -t obs .
 
 compile:
 	@echo "Compiling obs app"

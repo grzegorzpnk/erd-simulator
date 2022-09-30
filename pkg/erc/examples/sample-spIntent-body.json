@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "name": "test-smart-intent",
+    "description": "",
+    "userData1": "",
+    "userData2": ""
+  },
+  "spec": {
+    "app": "test-app",
+    "smartPlacementIntentData": {
+      "targetCell":"00000020",
+      "priorityLevel": 1,
+      "constraintsList":{
+        "latencyMax":13,
+        "cpuUtilizationMax":25,
+        "memUtilizationMax":10
+      },
+      "parametersWeights":{
+        "latencyWeight":0.34,
+        "cpuUtilizationWeight":0.33,
+        "memUtilizationWeight":0.33
+      }
+    }
+  }
+}

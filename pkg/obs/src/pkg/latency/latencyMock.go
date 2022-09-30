@@ -100,7 +100,6 @@ func (mc *MockClient) GetMockedLatencyMs(cell, meh string) (float64, error) {
 	} else {
 		return math.Round(getRandFloat(500, 1500)*100) / 100, nil
 	}
-
 }
 
 func getRandFloat(min, max float64) float64 {
