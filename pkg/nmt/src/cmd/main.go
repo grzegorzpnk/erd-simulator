@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"nmt/src/api"
 	"nmt/src/config"
-	"nmt/src/package/topology"
-	"strconv"
+	"nmt/src/package/mec-topology"
 )
 
-var graph *topology.Graph
+var graph *mec_topology.Graph
 
 //todo:
 // 1 add edge provider
@@ -18,11 +17,12 @@ var graph *topology.Graph
 
 func main() {
 
-	graph = &topology.Graph{}
+	graph = &mec_topology.Graph{}
 	initializingGraph()
 
-	go topology.NetworkMetricsUpdate(graph)
-	go topology.ClustersMetricsUpdate(graph)
+	//gorutines to update cluster resources and network metrics
+	//go mec_topology.NetworkMetricsUpdate(graph)
+	go mec_topology.ClustersResourcesUpdate(graph)
 
 	httpRouter := api.NewRouter(graph)
 
@@ -37,25 +37,48 @@ func main() {
 
 func initializingGraph() {
 
-	//add cells
-	for i := 1; i <= 18; i++ {
-		graph.AddVertex(topology.Vertex{Id: strconv.Itoa(i), Type: "CELL"})
-	}
 	//add MECs
-	graph.AddVertex(topology.Vertex{Id: "mec1", Type: "MEC"})
-	graph.AddVertex(topology.Vertex{Id: "mec5", Type: "MEC"})
-	graph.AddVertex(topology.Vertex{Id: "mec7", Type: "MEC"})
-	graph.AddVertex(topology.Vertex{Id: "mec15", Type: "MEC"})
+	mec := createMecHost("mec1", "edge-provider")
+	graph.AddMecHost(mec)
+	mec = createMecHost("mec5", "edge-provider")
+	graph.AddMecHost(mec)
+	mec = createMecHost("mec7", "edge-provider")
+	graph.AddMecHost(mec)
+	mec = createMecHost("mec15", "edge-provider")
+	graph.AddMecHost(mec)
 
 	//addEdges
-	graph.AddEdge(topology.Edge{Source: "mec1", Target: "2"})
-	graph.AddEdge(topology.Edge{Source: "mec7", Target: "2"})
-	graph.AddEdge(topology.Edge{Source: "mec1", Target: "8"})
-	graph.AddEdge(topology.Edge{Source: "mec5", Target: "8"})
-	graph.AddEdge(topology.Edge{Source: "mec7", Target: "8"})
+	link := createLink("mec1", "edge-provider", "mec5", "edge-provider")
+	graph.AddEdge(link)
+	link = createLink("mec5", "edge-provider", "mec1", "edge-provider")
+	graph.AddEdge(link)
+	link = createLink("mec5", "edge-provider", "mec7", "edge-provider")
+	graph.AddEdge(link)
+	link = createLink("mec7", "edge-provider", "mec1", "edge-provider")
+	graph.AddEdge(link)
+	link = createLink("mec1", "edge-provider", "mec15", "edge-provider")
+	graph.AddEdge(link)
 
-	graph.GetVertex("mec1").VertexMetrics.UpdateClusterMetrics(topology.ClusterMetrics{12.231, 1.23})
+	//graph.PrintGraph()
 
-	graph.PrintGraph()
-	graph.PrintGraph()
+}
+
+func createMecHost(clusterName, clusterProvider string) mec_topology.MecHost {
+
+	var mec mec_topology.MecHost
+	mec.Identity.ClusterName = clusterName
+	mec.Identity.Provider = clusterProvider
+
+	return mec
+}
+
+func createLink(startMecHost, startMecProvider, destMecHost, destMecProvider string) mec_topology.Edge {
+
+	var link mec_topology.Edge
+	link.SourceVertexName = startMecHost
+	link.SourceVertexProviderName = startMecProvider
+	link.TargetVertexName = destMecHost
+	link.TargetVertexProviderName = destMecProvider
+
+	return link
 }

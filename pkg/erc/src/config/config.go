@@ -16,7 +16,7 @@ import (
 type Configuration struct {
 	PluginDir        string `json:"plugin-dir"`
 	ServicePort      string `json:"service-port"`
-	TopologyEndpoint string `json:"topology-endpoint"`
+	TopologyEndpoint string `json:"mec-topology-endpoint"`
 }
 
 // Config is the structure that stores the configuration
