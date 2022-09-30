@@ -401,7 +401,7 @@ void NgapTask::receiveHandoverCommand(int amfId, ASN_NGAP_HandoverCommand *msg){
 }
 
 void NgapTask::sendHandoverNotify(int amfId, ASN_NGAP_HandoverRequest *msg){
-    m_logger->debug("Handover notify");
+    m_logger->debug("Sending Handover Notify");
     
     //ASN_NGAP_HandoverNotifyIEs
     auto *ieAmfUeId = asn::New<ASN_NGAP_HandoverNotifyIEs>();

@@ -185,6 +185,8 @@ void UeRrcTask::establishRrcToNewCell(int cellId) // pmq
         m_logger->err("Cell Id not supported! For now allow only 2 cells.");
     }
 
+    m_logger->info("New selected CELL_ID[%i]", cellId);
+
     auto &selectedCell = m_cellDesc[cellId]; // pmq
 
     // newCell.cellId = selectedId; 
