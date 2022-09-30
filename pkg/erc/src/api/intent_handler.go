@@ -20,7 +20,7 @@ type intentHandler struct {
 	client module.SmartPlacementIntentManager
 }
 
-var ErJSONFile string = "./json-schemas/intent.json"
+var ErJSONFile = "./json-schemas/intent.json"
 
 func (h intentHandler) handleSmartPlacementIntentOutsideEMCO(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent

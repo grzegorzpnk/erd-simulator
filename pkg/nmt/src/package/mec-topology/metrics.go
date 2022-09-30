@@ -194,12 +194,13 @@ func buildLatencyURL(endpoint, cellID, MECID string) string {
 
 func buildCpuUrl(clusterName, clusterProvider, endpoint string) string {
 	//http://10.254.185.50:32138/v1/obs/ksm/provider/edge-provider/cluster/mec1/cpu-requests
+	//http://10.254.185.50:32138/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu
 
 	baseURL := endpoint + "/v1/obs/ksm/provider/"
 	providerURL := baseURL + clusterProvider + "/"
 	baseClusterURL := providerURL + "cluster/"
 	clusterURL := baseClusterURL + clusterName + "/"
-	clusterCPUURL := clusterURL + "cpu-requests"
+	clusterCPUURL := clusterURL + "cpu"
 	//fmt.Println("cpu url: ", clusterCPUURL)
 
 	return clusterCPUURL
@@ -207,12 +208,12 @@ func buildCpuUrl(clusterName, clusterProvider, endpoint string) string {
 
 func buildMemoryUrl(clusterName, clusterProvider, endpoint string) string {
 	//np. http://10.254.185.50:32138/v1/obs/ksm/provider/edge-provider/cluster/mec2/memory-requests
-
+	////  http://10.254.185.50:32138/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory
 	baseURL := endpoint + "/v1/obs/ksm/provider/"
 	providerURL := baseURL + clusterProvider + "/"
 	baseClusterURL := providerURL + "cluster/"
 	clusterURL := baseClusterURL + clusterName + "/"
-	clusterMemoryURL := clusterURL + "memory-requests"
+	clusterMemoryURL := clusterURL + "memory"
 	//fmt.Println("memory url: ", clusterMemoryURL)
 
 	return clusterMemoryURL

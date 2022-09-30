@@ -17,7 +17,7 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	baseUrl := "/nmt"
 	//refactored:
 	r.HandleFunc(baseUrl+"/graph/vertex", handler.createMecHostHandler).Methods("POST")
-	r.HandleFunc(baseUrl+"/graph/vertex/{Id}", handler.getMecHostHandler).Methods("GET")
+	r.HandleFunc(baseUrl+"/graph/vertex/provider/{provider}/cluster/{cluster}", handler.getMecHostHandler).Methods("GET")
 	r.HandleFunc(baseUrl+"/graph/edge", handler.createEdgeHandler).Methods("POST")
 	r.HandleFunc(baseUrl+"/graph/vertex", handler.getAllMecHostsHandler).Methods("GET")
 	r.HandleFunc(baseUrl+"/graph/edge", handler.getEdgesHandler).Methods("GET")

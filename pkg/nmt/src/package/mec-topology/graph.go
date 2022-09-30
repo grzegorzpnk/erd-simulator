@@ -51,7 +51,7 @@ func (g *Graph) AddEdge(edge Edge) {
 
 		//add edge at  Edges list
 		g.Edges = append(g.Edges, &edge)
-		fmt.Printf("New Edge added : %v %v --- %v %v \n", edge.SourceVertexName, edge.TargetVertexName)
+		fmt.Printf("New Edge added : %v %v --- %v %v \n", edge.SourceVertexName, edge.SourceVertexProviderName, edge.TargetVertexName, edge.TargetVertexProviderName)
 	}
 }
 
