@@ -2,10 +2,13 @@
 .vscode/
 .history/
 
+/pkg/erc/bin/
+/pkg/erc/.idea/
+
 /pkg/innot/bin/
 /pkg/innot/.idea/
 
-/pkg/lcm-workflow/bin/
+/pkg/lcm-workflow/bin/*
 /pkg/lcm-workflow/.idea/
 
 /pkg/nmt/bin/
@@ -13,9 +16,6 @@
 
 /pkg/obs/bin/
 /pkg/obs/.idea/
-
-/pkg/erc/bin/
-/pkg/erc/.idea/
 
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/
