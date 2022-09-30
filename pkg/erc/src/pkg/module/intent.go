@@ -37,11 +37,11 @@ func NewIntentClient() *SmartPlacementIntentClient {
 
 // SmartPlacementIntentManager a manager is an interface for exposing the client's functionalities.
 type SmartPlacementIntentManager interface {
-	ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, error)
+	ServeSmartPlacementIntent(intent model.SmartPlacementIntent) (model.MecHost, error)
 }
 
-// ServeSmartPlacementIntentOutsideEMCO TODO: not ready.
-func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent model.SmartPlacementIntent) (string, error) {
+// ServeSmartPlacementIntent TODO: not ready.
+func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.SmartPlacementIntent) (model.MecHost, error) {
 	var err error
 	var sp SearchParams
 	var bestMecHost model.MecHost
@@ -59,7 +59,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent
 	sp, err = FindCandidates(tc, sp, intent)
 	if err != nil {
 		log.Errorf("Could not serve Smart Placement Intent: %v", err)
-		return "", err
+		return model.MecHost{}, err
 	}
 
 	// Try to find the optimal cluster.
@@ -81,7 +81,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent
 		checkFurther = false
 		if len(sp.evalNeighMECs) == 0 {
 			// If evalNeighMECs list is empty -> there are not any clusters to check (search failed).
-			return "", errors.New("Could not find optimal cluster!")
+			return model.MecHost{}, errors.New("Could not find optimal cluster!")
 		}
 
 		log.Infof("EvalNeighList: %v", sp.evalNeighMECs)
@@ -109,7 +109,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent
 		sp, err = FindCandidates(tc, sp, intent)
 		if err != nil {
 			log.Errorf("Could not serve Smart Placement Intent: %v", err)
-			return "", err
+			return model.MecHost{}, err
 		}
 
 		bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
@@ -120,11 +120,11 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOutsideEMCO(intent
 			checkFurther = true
 		} else {
 			// if error is nil -> best MEC Host is found. Just return.
-			return bestMecHost.BuildClusterEmcoFQDN(), err
+			return bestMecHost, err
 		}
 	}
 
-	return bestMecHost.BuildClusterEmcoFQDN(), err
+	return bestMecHost, err
 }
 
 func checkIfSkip(mec model.MecHost, mecList []model.MecHost) bool {
@@ -208,8 +208,9 @@ func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementInt
 	var best float64
 
 	if len(mecHosts) <= 0 {
-		err := errors.New("could not proceed to find optimal cluster: mec host list is empty")
-		log.Warnf("%v", err)
+		reason := "mec host list is empty"
+		err := errors.New(reason)
+		log.Warnf("Could not find optimal cluster: %v", reason)
 		return model.MecHost{}, err
 	}
 

@@ -15,6 +15,11 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
 )
 
+type ResponseBody struct {
+	Provider string `json:"provider"`
+	Cluster  string `json:"cluster"`
+}
+
 type intentHandler struct {
 	client module.SmartPlacementIntentManager
 }
@@ -29,14 +34,19 @@ func (h intentHandler) handleSmartPlacementIntent(w http.ResponseWriter, r *http
 		return
 	}
 
-	mecFqdn, err := h.client.ServeSmartPlacementIntentOutsideEMCO(i)
+	mec, err := h.client.ServeSmartPlacementIntent(i)
 	if err != nil {
 		//handleError(w, map[string]string{}, err, i)
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	sendResponse(w, mecFqdn, http.StatusOK)
+	body := ResponseBody{
+		Provider: mec.Identity.Provider,
+		Cluster:  mec.Identity.Cluster,
+	}
+
+	sendResponse(w, body, http.StatusOK)
 }
 
 // validateRequestBody validate the request body before storing it in the database

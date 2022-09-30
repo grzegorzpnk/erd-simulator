@@ -25,7 +25,7 @@ func NewRouter(mockClient interface{}) *mux.Router {
 		client: setClient(c.SmartPlacementIntent, mockClient).(module.SmartPlacementIntentManager),
 	}
 
-	r.HandleFunc(baseURL+"/optimal-mec", h.handleSmartPlacementIntent).Methods("GET")
+	r.HandleFunc(baseURL+"/optimal-mec", h.handleSmartPlacementIntent).Methods("POST")
 
 	return r
 }
