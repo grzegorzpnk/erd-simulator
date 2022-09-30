@@ -4,9 +4,10 @@ type MecInfo string
 type MecType int
 
 type MecHost struct {
-	Identity   MecIdentity      `json:"identity"`
-	Resources  ClusterResources `json:"resources,omitempty"`
-	Neighbours []Edge
+	Identity        MecIdentity      `json:"identity"`
+	CpuResources    ClusterResources `json:"cpu_resources,omitempty"`
+	MemoryResources ClusterResources `json:"memory_resources,omitempty"`
+	Neighbours      []Edge
 }
 
 const (
@@ -33,7 +34,7 @@ type MecResInfo struct {
 }
 
 type MecLocation struct {
-	Type      MecType `json:"type"`
+	Level     MecType `json:"type"`
 	Region    string  `json:"region"`               // eg. poland
 	Zone      string  `json:"zone,omitempty"`       // eg. west, "" if type different from MecLocal and MecRegional
 	LocalZone string  `json:"local-zone,omitempty"` // eg. wroclaw, "" if type different from MecLocal

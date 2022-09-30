@@ -21,8 +21,8 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/graph/edge", handler.createEdgeHandler).Methods("POST")
 	r.HandleFunc(baseUrl+"/graph/vertex", handler.getAllMecHostsHandler).Methods("GET")
 	r.HandleFunc(baseUrl+"/graph/edge", handler.getEdgesHandler).Methods("GET")
-	r.HandleFunc(baseUrl+"/graph/vertex/{Id}/metrics", handler.getClusterResourcesMetrics).Methods("GET")
-	r.HandleFunc(baseUrl+"/graph/vertex/{Id}/metrics", handler.updateClusterResourcesMetrics).Methods("PUT")
+	r.HandleFunc(baseUrl+"/graph/vertex/{Id}/metrics", handler.getClusterCPUResources).Methods("GET")
+	r.HandleFunc(baseUrl+"/graph/vertex/{Id}/metrics", handler.updateClusterCPUResources).Methods("PUT")
 
 	//to refactor:
 

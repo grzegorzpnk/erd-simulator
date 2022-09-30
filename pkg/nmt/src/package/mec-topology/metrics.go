@@ -1,20 +1,25 @@
 package mec_topology
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"nmt/src/config"
-	"strconv"
-	"strings"
 	"time"
 )
 
-type ClusterResources struct {
+/*type ClusterResources struct {
 	//Latency float64    `json:"latency"`
-	CpuUsage    MecResInfo `json:"cpu"`
-	MemoryUsage MecResInfo `json:"memory"`
+	CpuUsage    ClusterResources `json:"cpu"`
+	MemoryUsage ClusterResources `json:"memory"`
+}*/
+
+type ClusterResources struct {
+	Used        float64 `json:"used"`        // How many cpu/memory used (value)
+	Allocatable float64 `json:"allocatable"` // How many cpu/memory available (value)
+	Utilization float64 `json:"utilization"` // How much is cpu/memory utilized (percentage)
 }
 
 type NetworkMetrics struct {
@@ -23,8 +28,9 @@ type NetworkMetrics struct {
 }
 
 func (cm *ClusterResources) UpdateClusterMetrics(clusterResources ClusterResources) {
-	cm.CpuUsage = clusterResources.CpuUsage
-	cm.MemoryUsage = clusterResources.MemoryUsage
+	cm.Utilization = clusterResources.Utilization
+	cm.Used = clusterResources.Used
+	cm.Allocatable = clusterResources.Allocatable
 }
 
 func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
@@ -32,7 +38,7 @@ func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
 }
 
 //gorutine function
-func ClustersMetricsUpdate(g *Graph) {
+func ClustersResourcesUpdate(g *Graph) {
 
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
 
@@ -40,11 +46,22 @@ func ClustersMetricsUpdate(g *Graph) {
 		// update metrics for MEC Clusters
 		for _, v := range g.MecHosts {
 
-			cr, err := getClusterMetricsNotification(v.Identity.ClusterName, v.Identity.Provider, endpoint)
+			clusterCPUURL := buildCpuUrl(v.Identity.ClusterName, v.Identity.Provider, endpoint)
+			clusterMemoryURL := buildMemoryUrl(v.Identity.ClusterName, v.Identity.Provider, endpoint)
+			fmt.Printf("update for cluster %v\n", v.Identity.ClusterName)
+			fmt.Println("cpu latest update:")
+			cpuCr, err := getClusterMetrics(v.Identity.ClusterName, v.Identity.Provider, clusterCPUURL)
 			if err != nil {
 				fmt.Errorf(err.Error())
 			}
-			g.GetMecHost(v.Identity.ClusterName, v.Identity.Provider).Resources.UpdateClusterMetrics(cr)
+			fmt.Println("memory latest update:")
+			memoryCr, err := getClusterMetrics(v.Identity.ClusterName, v.Identity.Provider, clusterMemoryURL)
+			if err != nil {
+				fmt.Errorf(err.Error())
+			}
+
+			g.GetMecHost(v.Identity.ClusterName, v.Identity.Provider).CpuResources.UpdateClusterMetrics(cpuCr)
+			g.GetMecHost(v.Identity.ClusterName, v.Identity.Provider).MemoryResources.UpdateClusterMetrics(memoryCr)
 			fmt.Printf("Controller updates cluster metrics for Mec Host: %v\n", v.Identity.ClusterName)
 
 		}
@@ -61,7 +78,7 @@ func ClusterMetricsUpdateTest(g *Graph) {
 	for {
 		// update metrics for MEC Clusters
 
-		_, err := getClusterMetricsNotification("mec1", endpoint)
+		_, err := getClusterMetrics("mec1", endpoint)
 		if err != nil {
 			fmt.Errorf(err.Error())
 		}
@@ -100,28 +117,13 @@ func NetworkMetricsUpdate(g *Graph) {
 
 	}
 }
+
+
 */
-//this function takes clusterID and requests to receive latest info about ClusterName Metrics at the end it returns ClusterMetrics object
-func getClusterMetricsNotification(clusterName, clusterProvider, endpoint string) (ClusterResources, error) {
+func getClusterMetrics(clusterName, clusterProvider, endpoint string) (ClusterResources, error) {
 
-	var cr ClusterResources
-
-	//CPU----------------------------------------------------------------------------
-	clusterCPUURL := buildCpuUrl(clusterName, clusterProvider, endpoint)
-	clusterMemoryURL := buildMemoryUrl(clusterProvider, clusterProvider, endpoint)
-
-	//get current CPU
-	cpuStr := httpGet(clusterCPUURL)
-
-	log.Printf("CPU resp: %v", cpuStr)
-	//fmt.Printf("CPU Response :%v\n", cpuStr)
-	cr.CpuUsage.Used, _ = strconv.ParseFloat(cpuStr, 32)
-
-	//MEMORY-------------------------------------------------------------------------
-	MemoryStr := httpGet(clusterMemoryURL)
-	log.Printf("Memory resp: %v", MemoryStr)
-	//fmt.Printf("Memory: %v\n", MemoryStr)
-	cr.MemoryUsage.Used, _ = strconv.ParseFloat(MemoryStr, 32)
+	cr := httpGet(endpoint)
+	log.Printf("Resp: %v", cr)
 
 	return cr, nil
 }
@@ -150,7 +152,7 @@ func getNetworkMetricsNotification(endpoint string, edge *Edge, g *Graph) Networ
 	return nm
 }
 */
-func httpGet(endpoint string) string {
+func httpGet(endpoint string) ClusterResources {
 
 	resp, err := http.Get(endpoint)
 	if err != nil {
@@ -163,12 +165,15 @@ func httpGet(endpoint string) string {
 		log.Fatalln(err)
 	}
 	//Convert the body to type string
-	sb := string(body)
+	var cr ClusterResources
+	json.Unmarshal(body, &cr)
+
+	/*sb := string(body)
 
 	//delete whitespaces
-	ret := strings.TrimSpace(sb)
+	ret := strings.TrimSpace(sb)*/
 
-	return ret
+	return cr
 
 }
 

@@ -78,14 +78,14 @@ func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Reques
 
 }
 
-func (h *apiHandler) updateClusterResourcesMetrics(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) updateClusterCPUResources(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
 	cluster, _ := params["cluster"]
-	//todo check if provider works, seems it should
 	provider, _ := params["provider"]
+
 	mecHost := mec_topology.MecHost{}
 	mecHost.Identity.ClusterName = cluster
 	mecHost.Identity.Provider = provider
@@ -94,7 +94,7 @@ func (h *apiHandler) updateClusterResourcesMetrics(w http.ResponseWriter, r *htt
 	_ = json.NewDecoder(r.Body).Decode(&clusterMetrics)
 
 	if h.graphClient.CheckGraphContainsVertex(mecHost) {
-		h.graphClient.GetMecHost(cluster, provider).Resources.UpdateClusterMetrics(clusterMetrics)
+		h.graphClient.GetMecHost(cluster, provider).CpuResources.UpdateClusterMetrics(clusterMetrics)
 		w.WriteHeader(http.StatusOK)
 		fmt.Printf("Client updates cluster metrics for vertex ID: %v\n", cluster)
 	} else {
@@ -104,7 +104,7 @@ func (h *apiHandler) updateClusterResourcesMetrics(w http.ResponseWriter, r *htt
 	}
 }
 
-func (h *apiHandler) getClusterResourcesMetrics(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) getClusterCPUResources(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -116,7 +116,7 @@ func (h *apiHandler) getClusterResourcesMetrics(w http.ResponseWriter, r *http.R
 	mecHost.Identity.Provider = provider
 
 	if h.graphClient.CheckGraphContainsVertex(mecHost) {
-		json.NewEncoder(w).Encode(h.graphClient.GetMecHost(cluster, provider).Resources)
+		json.NewEncoder(w).Encode(h.graphClient.GetMecHost(cluster, provider).CpuResources)
 		w.WriteHeader(http.StatusOK)
 	} else {
 		err := fmt.Errorf("Vertex %v not not exist", cluster)
