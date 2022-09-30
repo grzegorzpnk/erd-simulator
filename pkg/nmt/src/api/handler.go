@@ -52,6 +52,45 @@ func (h *apiHandler) getMecHostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *apiHandler) getMECCpu(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	for i, v := range h.graphClient.MecHosts {
+		if v.Identity.ClusterName == params["cluster"] &&
+			v.Identity.Provider == params["provider"] {
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].CpuResources)
+		}
+	}
+}
+
+func (h *apiHandler) getMECMemory(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	for i, v := range h.graphClient.MecHosts {
+		if v.Identity.ClusterName == params["cluster"] &&
+			v.Identity.Provider == params["provider"] {
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].MemoryResources)
+		}
+	}
+}
+
+func (h *apiHandler) getMECNeighbours(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	for i, v := range h.graphClient.MecHosts {
+		if v.Identity.ClusterName == params["cluster"] &&
+			v.Identity.Provider == params["provider"] {
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Neighbours)
+		}
+	}
+}
+
 func (h *apiHandler) createEdgeHandler(w http.ResponseWriter, r *http.Request) {
 	//todo: validate body of REST POST
 	w.Header().Set("Content-Type", "application/json")
@@ -74,7 +113,10 @@ func (h *apiHandler) getEdgesHandler(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(h.graphClient.MecHosts)
+
+	for i, _ := range h.graphClient.MecHosts {
+		json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+	}
 
 }
 
