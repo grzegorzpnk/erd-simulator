@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-const MigTaskQueue = "LCM_TASK_Q"
+const TaskQueue = "LCM_TASK_Q"
 
 const (
 	ApplyPhase UpdatePhase = iota
@@ -89,7 +89,7 @@ type AppNameDetails struct {
 	PrimaryIntent IntentStruc
 }
 
-type MigParam struct {
+type WorkflowParams struct {
 	InParams map[string]string
 	// map indexed by generic placement intent name
 	AppsNameDetails      map[string][]AppNameDetails
@@ -100,25 +100,25 @@ type MigParam struct {
 	ErWfIntent           ti.WorkflowIntent
 }
 
-func (mp *MigParam) GetParamByKey(key string) string {
+func (mp *WorkflowParams) GetParamByKey(key string) string {
 	return mp.InParams[key]
 }
 
-func (mp *MigParam) GetInnotUrl() string {
+func (mp *WorkflowParams) GetInnotUrl() string {
 	return mp.InParams["innotUrl"]
 }
 
 // GetOrchestratorGrpcEndpoint gRPC endpoint for Orchestrator
-func (mp *MigParam) GetOrchestratorGrpcEndpoint() string {
+func (mp *WorkflowParams) GetOrchestratorGrpcEndpoint() string {
 	return mp.InParams["emcoOrchStatusEndpoint"]
 }
 
 // GetClmEndpoint is endpoint for cluster manager microservice
-func (mp *MigParam) GetClmEndpoint() string {
+func (mp *WorkflowParams) GetClmEndpoint() string {
 	return mp.InParams["emcoClmEndpoint"]
 }
 
-func (mp *MigParam) buildWfMgrURL() string {
+func (mp *WorkflowParams) buildWfMgrURL() string {
 	url := mp.InParams["emcoWfMgrURL"]
 	url += "/v2/projects/" + mp.InParams["project"]
 	url += "/composite-apps/" + mp.InParams["compositeApp"]
@@ -129,7 +129,7 @@ func (mp *MigParam) buildWfMgrURL() string {
 	return url
 }
 
-func (mp *MigParam) buildDigURL() string {
+func (mp *WorkflowParams) buildDigURL() string {
 	url := mp.InParams["emcoOrchEndpoint"]
 	url += "/v2/projects/" + mp.InParams["project"]
 	url += "/composite-apps/" + mp.InParams["compositeApp"]
@@ -139,7 +139,7 @@ func (mp *MigParam) buildDigURL() string {
 	return url
 }
 
-func (mp *MigParam) buildGenericPlacementIntentsURL() string {
+func (mp *WorkflowParams) buildGenericPlacementIntentsURL() string {
 	url := mp.buildDigURL()
 	url += "/generic-placement-intents"
 
@@ -217,6 +217,33 @@ type SubMsg struct {
 			Trigger string `json:"trigger"`
 		} `json:"options"`
 	} `json:"subscription"`
+}
+
+func postHttpRespBody(url string, data interface{}) ([]byte, error) {
+	body, err := json.Marshal(data)
+	if err != nil {
+		fmt.Println("error: marshaling failed")
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		log.Fatalf("Could not make post request. reason: %v\n", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		getErr := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n",
+			resp.Status, url)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return b, nil
 }
 
 func postHttp(url string, data interface{}) (string, error) {
@@ -332,6 +359,6 @@ func generateSubscriptionBody() types.AmfEventSubscription {
 }
 
 type Cluster struct {
-	ProviderName string `json:"provider-name"`
-	ClusterName  string `json:"cluster-name"`
+	Provider string `json:"provider"`
+	Cluster  string `json:"cluster"`
 }

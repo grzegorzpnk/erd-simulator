@@ -20,7 +20,7 @@ var NeededParams = []string{ // parameters needed for this workflow
 // LcmWorkflow is a Temporal workflow that should be run after application instantiation
 // It should listen for different types of notifications and serve them. For now it listens
 // for CELL_ID_CHANGED notifications, calls ER Plc Controller and then invokes ER Workflow
-func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error) {
+func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, error) {
 	// List all activities for this workflow
 	activityNames := []string{
 		"SubCellChangedNotification",
@@ -68,67 +68,69 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*MigParam, error)
 		return nil, err
 	}
 
-	migParam := MigParam{InParams: allActivitiesParams}
+	wfParams := WorkflowParams{InParams: allActivitiesParams}
 
 	currentState = "sub-cell-changed-notification"
 	ctx1 := ctxMap["SubCellChangedNotification"]
-	err = wf.ExecuteActivity(ctx1, SubCellChangedNotification, migParam).Get(ctx1, &migParam)
+	err = wf.ExecuteActivity(ctx1, SubCellChangedNotification, wfParams).Get(ctx1, &wfParams)
 	if err != nil {
 		wferr := fmt.Errorf("SubCellChangedNotification failed: %s", err.Error())
 		_, _ = fmt.Fprintf(os.Stderr, wferr.Error())
 		return nil, wferr
 	}
 
-	currentState = "get-cell-changed-notification"
-	ctx2 := ctxMap["GetCellChangedNotification"]
-	err = wf.ExecuteActivity(ctx2, GetCellChangedNotification, migParam).Get(ctx2, &migParam)
-	if err != nil {
-		wferr := fmt.Errorf("GetCellChangedNotification failed: %s", err.Error())
-		_, _ = fmt.Fprintf(os.Stderr, wferr.Error())
-		return nil, wferr
-	}
+	for i := 0; i < 2; i++ {
+		currentState = "get-cell-changed-notification"
+		ctx2 := ctxMap["GetCellChangedNotification"]
+		err = wf.ExecuteActivity(ctx2, GetCellChangedNotification, wfParams).Get(ctx2, &wfParams)
+		if err != nil {
+			wferr := fmt.Errorf("GetCellChangedNotification failed: %s", err.Error())
+			_, _ = fmt.Fprintf(os.Stderr, wferr.Error())
+			return nil, wferr
+		}
 
-	currentState = "generate-smart-placement-intent"
-	ctx3 := ctxMap["GenerateSmartPlacementIntent"]
-	err = wf.ExecuteActivity(ctx3, GenerateSmartPlacementIntent, migParam).Get(ctx3, &migParam)
-	if err != nil {
-		wferr := fmt.Errorf("GenerateSmartPlacementIntent failed: %s", err.Error())
-		fmt.Fprintf(os.Stderr, wferr.Error())
-		return nil, wferr
-	}
-	currentState = "call-placement-controller"
-	ctx4 := ctxMap["CallPlacementController"]
-	err = wf.ExecuteActivity(ctx4, CallPlacementController, migParam).Get(ctx4, &migParam)
-	if err != nil {
-		wferr := fmt.Errorf("CallPlacementController failed: %s", err.Error())
-		fmt.Fprintf(os.Stderr, wferr.Error())
-		return nil, wferr
-	}
+		currentState = "generate-smart-placement-intent"
+		ctx3 := ctxMap["GenerateSmartPlacementIntent"]
+		err = wf.ExecuteActivity(ctx3, GenerateSmartPlacementIntent, wfParams).Get(ctx3, &wfParams)
+		if err != nil {
+			wferr := fmt.Errorf("GenerateSmartPlacementIntent failed: %s", err.Error())
+			fmt.Fprintf(os.Stderr, wferr.Error())
+			return nil, wferr
+		}
+		currentState = "call-placement-controller"
+		ctx4 := ctxMap["CallPlacementController"]
+		err = wf.ExecuteActivity(ctx4, CallPlacementController, wfParams).Get(ctx4, &wfParams)
+		if err != nil {
+			wferr := fmt.Errorf("CallPlacementController failed: %s", err.Error())
+			fmt.Fprintf(os.Stderr, wferr.Error())
+			return nil, wferr
+		}
 
-	currentState = "generate-relocate-wf-intent"
-	ctx5 := ctxMap["GenerateRelocateWfIntent"]
-	err = wf.ExecuteActivity(ctx5, GenerateRelocateWfIntent, migParam).Get(ctx5, &migParam)
-	if err != nil {
-		wferr := fmt.Errorf("CreateTemporalERIntent failed: %s", err.Error())
-		fmt.Fprintf(os.Stderr, wferr.Error())
-		return nil, wferr
-	}
+		currentState = "generate-relocate-wf-intent"
+		ctx5 := ctxMap["GenerateRelocateWfIntent"]
+		err = wf.ExecuteActivity(ctx5, GenerateRelocateWfIntent, wfParams).Get(ctx5, &wfParams)
+		if err != nil {
+			wferr := fmt.Errorf("CreateTemporalERIntent failed: %s", err.Error())
+			fmt.Fprintf(os.Stderr, wferr.Error())
+			return nil, wferr
+		}
 
-	currentState = "call-temporal-wf-controller"
-	ctx6 := ctxMap["CallTemporalWfController"]
-	err = wf.ExecuteActivity(ctx6, CallTemporalWfController, migParam).Get(ctx6, &migParam)
-	if err != nil {
-		wferr := fmt.Errorf("CallTemporalWfController failed: %s", err.Error())
-		fmt.Fprintf(os.Stderr, wferr.Error())
-		return nil, wferr
-	}
+		currentState = "call-temporal-wf-controller"
+		ctx6 := ctxMap["CallTemporalWfController"]
+		err = wf.ExecuteActivity(ctx6, CallTemporalWfController, wfParams).Get(ctx6, &wfParams)
+		if err != nil {
+			wferr := fmt.Errorf("CallTemporalWfController failed: %s", err.Error())
+			fmt.Fprintf(os.Stderr, wferr.Error())
+			return nil, wferr
+		}
 
+	}
 	currentState = "completed"
 
-	//fmt.Printf("After all activities: migParam = %#v\n", migParam)
+	//fmt.Printf("After all activities: wfParams = %#v\n", wfParams)
 	fmt.Printf("Workflow ended successfully!\n")
 
-	return &migParam, nil
+	return &wfParams, nil
 }
 
 // getActivityContextMap returns a list of Temporal contexts for each activity.

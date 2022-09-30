@@ -16,7 +16,7 @@ import (
 
 const (
 	TemporalIpEnvVar   = "TEMPORAL_SERVER_IP"
-	temporalPortEnvVar = "TEMPORAL_SERVER_PORT" // 7233
+	TemporalPortEnvVar = "TEMPORAL_SERVER_PORT" // 7233
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 	}
 
 	// Get the TemporalServer's Port
-	temporalServerPort := os.Getenv(temporalPortEnvVar)
+	temporalServerPort := os.Getenv(TemporalPortEnvVar)
 	if temporalServerPort == "" {
 		fmt.Fprintf(os.Stderr, "Error: Need to define $TEMPORAL_SERVER_PORT\n")
 		os.Exit(1)
@@ -51,7 +51,7 @@ func main() {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Quitting due to errors.\n")
 	}
-	spec.WfStartOpts.TaskQueue = lcm.MigTaskQueue //override task queue
+	spec.WfStartOpts.TaskQueue = lcm.TaskQueue //override task queue
 
 	// Create the client object just once per process
 	clientOptions := client.Options{HostPort: hostPort}

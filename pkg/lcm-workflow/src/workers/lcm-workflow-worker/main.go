@@ -45,7 +45,7 @@ func main() {
 	}
 	defer c.Close()
 	// This worker hosts both Workflow and Activity functions
-	w := worker.New(c, lcm.MigTaskQueue, worker.Options{})
+	w := worker.New(c, lcm.TaskQueue, worker.Options{})
 	w.RegisterWorkflow(lcm.LcmWorkflow)
 	w.RegisterActivity(lcm.SubCellChangedNotification)
 	w.RegisterActivity(lcm.GetCellChangedNotification)

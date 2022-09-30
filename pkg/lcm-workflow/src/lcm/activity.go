@@ -24,7 +24,7 @@ import (
 
 var waitNotification = make(chan types.CellId)
 
-func SubCellChangedNotification(ctx context.Context, migParam MigParam) (*MigParam, error) {
+func SubCellChangedNotification(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 
 	log.Printf("SubCellChangedNotification got params: %#v\n", migParam)
 	log.Printf("SubCellChangedNotification: activity start\n")
@@ -35,7 +35,7 @@ func SubCellChangedNotification(ctx context.Context, migParam MigParam) (*MigPar
 
 	log.Printf("\nSubCellChangedNotification: InnotUrl = %s\n", innotUrl)
 
-	host := fmt.Sprintf("http://10.254.185.48:%v", os.Getenv("NOTIFICATION_NODE_PORT"))
+	host := fmt.Sprintf("http://%v:%v", os.Getenv("NOTIFICATION_NODE_ADDR"), os.Getenv("NOTIFICATION_NODE_PORT"))
 
 	data := generateSubscriptionBody()
 	data.EventNotifyUri = host + migParam.NotifyUrl
@@ -52,7 +52,7 @@ func SubCellChangedNotification(ctx context.Context, migParam MigParam) (*MigPar
 	return &migParam, nil
 }
 
-func GetCellChangedNotification(ctx context.Context, migParam MigParam) (*MigParam, error) {
+func GetCellChangedNotification(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 	log.Printf("GetCellChangedNotification: activity start\n")
 
 	router := mux.NewRouter()
@@ -76,7 +76,7 @@ func GetCellChangedNotification(ctx context.Context, migParam MigParam) (*MigPar
 	return &migParam, nil
 }
 
-func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigParam, error) {
+func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 	log.Printf("GenerateSmartPlacementIntent: activity start\n")
 
 	targetAppName := migParam.GetParamByKey("targetAppName")
@@ -118,28 +118,32 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam MigParam) (*MigP
 	return &migParam, nil
 }
 
-func CallPlacementController(ctx context.Context, migParam MigParam) (*MigParam, error) {
+func CallPlacementController(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 	log.Printf("CallPlacementController: activity start\n")
 	var resp Cluster
 
 	plcCtrlUrl := migParam.GetParamByKey("plcControllerUrl")
 	data := migParam.SmartPlacementIntent
 
-	responseBody, err := postHttp(plcCtrlUrl, data)
+	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	_ = json.Unmarshal([]byte(responseBody), &resp)
+	err = json.Unmarshal(responseBody, &resp)
+	if err != nil {
+		log.Printf("error occured while unmarshaling: %v. Resp body: %v", err, string(responseBody))
+		os.Exit(0)
+	}
 
 	migParam.OptimalCluster = resp
 
-	log.Printf("CallPlacementController: Optimal cluster = provider{%v}, cluster={%v}.\n", resp.ProviderName, resp.ClusterName)
+	log.Printf("CallPlacementController: Optimal cluster = provider{%v}, cluster={%v}.\n", resp.Provider, resp.Cluster)
 
 	return &migParam, nil
 }
 
-func GenerateRelocateWfIntent(ctx context.Context, migParam MigParam) (*MigParam, error) {
+func GenerateRelocateWfIntent(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 	log.Printf("GenerateRelocateWfIntent: activity start\n")
 
 	appName := migParam.GetParamByKey("appName")
@@ -183,8 +187,8 @@ func GenerateRelocateWfIntent(ctx context.Context, migParam MigParam) (*MigParam
 						"compositeApp":           migParam.GetParamByKey("compositeApp"),
 						"compositeAppVersion":    migParam.GetParamByKey("compositeAppVersion"),
 						"deploymentIntentGroup":  migParam.GetParamByKey("deploymentIntentGroup"),
-						"targetClusterProvider":  migParam.OptimalCluster.ProviderName,
-						"targetClusterName":      migParam.OptimalCluster.ClusterName,
+						"targetClusterProvider":  migParam.OptimalCluster.Provider,
+						"targetClusterName":      migParam.OptimalCluster.Cluster,
 						"targetAppName":          migParam.GetParamByKey("targetAppName"),
 					}},
 				},
@@ -198,7 +202,7 @@ func GenerateRelocateWfIntent(ctx context.Context, migParam MigParam) (*MigParam
 	return &migParam, nil
 }
 
-func CallTemporalWfController(ctx context.Context, migParam MigParam) (*MigParam, error) {
+func CallTemporalWfController(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 	log.Printf("CallTemporalWfController: activity start\n")
 
 	createWfUrl := migParam.buildWfMgrURL()
