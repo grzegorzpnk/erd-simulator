@@ -45,9 +45,9 @@ func (g *Graph) AddEdge(edge Edge) {
 		err := fmt.Errorf("Edge between (%v--%v) already exist\n", edge.SourceVertexName, edge.TargetVertexName)
 		fmt.Println(err.Error())
 	} else {
-		//add edge at vertexes instances
-		fromMECHost.Neighbours = append(fromMECHost.Neighbours, edge)
-		toMECHost.Neighbours = append(toMECHost.Neighbours, edge)
+		//add neighbours at vertexes instances
+		fromMECHost.Neighbours = append(fromMECHost.Neighbours, toMECHost.Identity)
+		toMECHost.Neighbours = append(toMECHost.Neighbours, fromMECHost.Identity)
 
 		//add edge at  Edges list
 		g.Edges = append(g.Edges, &edge)

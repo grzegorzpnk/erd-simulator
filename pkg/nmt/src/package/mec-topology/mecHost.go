@@ -7,7 +7,7 @@ type MecHost struct {
 	Identity        MecIdentity      `json:"identity"`
 	CpuResources    ClusterResources `json:"cpu_resources,omitempty"`
 	MemoryResources ClusterResources `json:"memory_resources,omitempty"`
-	Neighbours      []Edge
+	Neighbours      []MecIdentity
 }
 
 const (
