@@ -12,6 +12,8 @@ then
     
     if [[ $AC == "install"  ]];
     then
+        helm --kubeconfig $KC repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm --kubeconfig $KC repo update
         helm --kubeconfig $KC --namespace $NS $AC ksm prometheus-community/kube-state-metrics
     else
         helm --kubeconfig $KC --namespace $NS $AC ksm
