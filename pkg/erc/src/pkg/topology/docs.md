@@ -76,8 +76,9 @@ var mecList = []MecIdentity{
 }
 ```
 3. MEC `latency`, `cpu` & `memory` should be collected independently.
-  - *Note that there are two types of latency: between `MEC Host` and `targetCell` & between `two MEC Hosts`.*
 
+ ~~Note that there are two types of latency: between `MEC Host` and `targetCell` & between `two MEC Hosts`.~~
+Latency between MecHosts isn't important -> we will check the shortest path instead and consider as E2E latency.
 
 5. MEC `Neighbours` should be collected independently
 
@@ -91,13 +92,13 @@ http://localhost:8787/v2
 
 Then we can introduce few endpoints
 
-a. [GET] `MEC Hosts` list associated with given `cell-id` (as []MecIdentity)
+a. [GET] `MEC Hosts` (MecIdentity) list associated with given `cell-id` (as []MecIdentity)
 
 ```http request
 /topology/cell/{cell-id}/mec-hosts
 ```
 
-b. [GET] `Latency` between given `cell-id` and `MEC Hosts`
+~~b. [GET] `Latency` between given `cell-id` and `MEC Hosts`~~
 
 ```go
 // eg. cell-id = 00000020; mec-name=provider1+mec1
@@ -107,7 +108,7 @@ b. [GET] `Latency` between given `cell-id` and `MEC Hosts`
 /topology/cell/{cell-id}/mec/{mec-name}/latency
 ```
 
-c. [GET] `Latency` between given MEC Hosts and his neighbour
+~~c. [GET] `Latency` between given MEC Hosts and his neighbour~~
 
 ```go
 // eg. mec-name=provider1+mec1; mec-neighbour=provider1+mec2
@@ -117,9 +118,9 @@ c. [GET] `Latency` between given MEC Hosts and his neighbour
 /topology/mec/{mec-name}/neighbour/{mec-neighbour}/latency
 ```
 
-d. [GET] `CPU` for given `MEC Hosts`
+d. [GET] `CPU` struct for given `MEC Hosts` (used, allocatable, utilization)
 
-Single endpoint for all CPU information (or consider endpoint for each: used, allocatable, utilization):
+~~Single endpoint for all CPU information~~ (or consider endpoint for each: used, allocatable, utilization):
 
 ```go
 // eg. mec-name=provider1+mec1
@@ -129,9 +130,9 @@ Single endpoint for all CPU information (or consider endpoint for each: used, al
 /topology/mec/{mec-name}/cpu
 ```
 
-e. [GET] `MEMORY` for given `MEC Host`
+e. [GET] `MEMORY` struct for given `MEC Host` (used, allocatable, utilization)
 
-Single endpoint for all MEMORY information (or consider endpoint for each: used, allocatable, utilization):
+~~Single endpoint for all MEMORY information~~ (or consider endpoint for each: used, allocatable, utilization):
 
 ```go
 // eg. mec-name=provider1+mec1
@@ -155,7 +156,10 @@ Returned neighbours suppose to be a list of []MecIdentity
 
 g. [GET] Shortest Path between two MEC Hosts as latency between `start-mec` and `end-mec`
 
-Returns value of Shortest Path which can be compared to latency constraints
+Returns value of The Shortest Path which represents E2E latency
+
 ```http request
-/topology/start/{start-mec}/stop/{stop-mec}/shortest-path
+/topology/start/{start-node}/stop/{stop-node}/shortest-path
 ```
+
+*Note: we always consider cell <-> mec path?? or we also consider mec <-> mec path?*
