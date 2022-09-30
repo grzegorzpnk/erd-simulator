@@ -4,7 +4,7 @@ all: clean compile build
 
 build:
 	@echo "Building innot app"
-	sudo docker build --rm -f ./build/Dockerfile -t innot .
+	sudo docker build --rm -f ./build/docker/Dockerfile -t innot .
 
 compile:
 	@echo "Compiling innot app"

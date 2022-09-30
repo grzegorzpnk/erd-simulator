@@ -48,17 +48,17 @@ METHOD POST: 10.254.185.45:32137/v1/intermediate-notifier/subscribe
 
 ```yaml
 # Unsubscribe (Not supported yet)
-METHOD POST: 10.254.185.45:32137/v1/intermediate-notifier/unsubscribe
+# METHOD POST: 10.254.185.45:32137/v1/intermediate-notifier/unsubscribe
 ```
 
 ```yaml
 # Unsubscribe based on subscriptionId (Not supported yet)
-METHOD POST: 10.254.185.45:32137/v1/intermediate-notifier/unsubscribe/{subscriptionId}
+# METHOD POST: 10.254.185.45:32137/v1/intermediate-notifier/unsubscribe/{subscriptionId}
 ```
 
 ```yaml
 # Get all subscriptions (Not supported yet)
-METHOD GET: 10.254.185.45:32137/v1/intermediate-notifier/get-all
+# METHOD GET: 10.254.185.45:32137/v1/intermediate-notifier/get-all
 ```
 
 ## Sample Body Request
@@ -114,7 +114,7 @@ METHOD GET: 10.254.185.45:32137/v1/intermediate-notifier/get-all
          }
       ],
       "anyUE":true,
-      "eventNotifyUri":"http://workflow-listener-ip:8181/v1/eventNotifier/notify",
+      "eventNotifyUri":"http://localhost/workflow-listener/cell-changed/ABCDEFGHIJ/notify",
       "options":{
          "trigger":"ONE_TIME"
       }
