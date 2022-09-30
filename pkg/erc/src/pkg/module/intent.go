@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2022 Intel Corporation
-
 package module
 
 import (
@@ -9,8 +6,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
 	"github.com/pkg/errors"
 )
-
-const MaxSearchDepth int = 3
 
 // SmartPlacementIntentClient implements the SmartPlacementIntentManager.
 // It will also be used to maintain some localized state (Not important, inherited from sample emco controller)
@@ -153,7 +148,7 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 			continue
 		}
 
-		// If considered mec that meets latency requirements, we can consider his neighbours as candidates later
+		// If considered mec meets latency requirements, we can consider his neighbours as candidates later
 		// If latency is not met for this MEC Host -> his neighbours can't be a valid candidates
 		sp.evalNeighMECs = append(sp.evalNeighMECs, mec)
 
@@ -186,6 +181,7 @@ func latencyOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 }
 
 // resourcesOk checks if resource constraints specified in intent (i) are met
+// TODO: consider also current application requests
 func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 	cpu := mec.GetCpuUtilization()
 	mem := mec.GetMemUtilization()
@@ -202,6 +198,7 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 }
 
 // FindOptimalCluster TODO: implement algorithm to find the optimal cluster among mecHosts (candidates)
+// This is old dummy implementation.. Here we check constraints for the second time (its redundant -> remove)
 func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementIntent) (model.MecHost, error) {
 	log.Infof("Looking for optimal cluster...")
 	var bestOk bool
@@ -233,6 +230,7 @@ func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementInt
 }
 
 // ComputeObjectiveValue TODO: implement function to calculate the objective function
+// TODO: Remember that MEC cost should be considered
 func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) (float64, bool) {
 	cl := i.Spec.SmartPlacementIntentData.ConstraintsList
 	pw := i.Spec.SmartPlacementIntentData.ParametersWeights
@@ -245,6 +243,7 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) (flo
 	return pw.LatencyWeight*latency + pw.CpuUtilizationWeight*cpuUtilization + pw.MemUtilizationWeight*memUtilization, true
 }
 
+// CheckConstraintsForGivenMec TODO: this is redundant
 func CheckConstraintsForGivenMec(cl model.Constraints, mec model.MecHost) bool {
 	if mec.GetLatency() > cl.LatencyMax {
 		return false
@@ -257,6 +256,7 @@ func CheckConstraintsForGivenMec(cl model.Constraints, mec model.MecHost) bool {
 	}
 }
 
+// NormalizeMecParameters TODO: find the best way to normalize all the values
 func NormalizeMecParameters(cl model.Constraints, mec model.MecHost) (float64, float64, float64) {
 	return mec.GetLatency() / cl.LatencyMax, mec.GetCpuUtilization() / cl.CpuUtilizationMax, mec.GetMemUtilization() / cl.MemUtilizationMax
 }
