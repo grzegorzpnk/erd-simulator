@@ -1,5 +1,3 @@
-# SPDX-License-Identifier: Apache-2.0
-# Copyright (c) 2022 Intel Corporation
 export GO111MODULE=on
 export EMCOBUILDROOT=$(shell pwd)
 export CONFIG := $(wildcard config/*.txt)

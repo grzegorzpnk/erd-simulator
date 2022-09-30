@@ -40,6 +40,8 @@ spec:
               value: "{{ .Values.temporalServerPort }}"
             - name: NOTIFICATION_NODE_PORT
               value: "{{ .Values.notificationService.nodePort }}"
+            - name: NOTIFICATION_NODE_ADDR
+              value: "{{ .Values.notificationService.addr }}"
           ports:
             - name: http
               containerPort: 80

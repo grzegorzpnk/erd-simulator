@@ -2,11 +2,11 @@ FROM nicolaka/netshoot
 
 WORKDIR /opt/emco
 
-COPY ./lcm_workflowclient .
-COPY ./http_server .
+USER root
+
+COPY --chown=root ./lcm_workflowclient .
+COPY --chown=root ./http_server .
 
 EXPOSE 9090
-
-USER root
 
 ENTRYPOINT ["./http_server"]

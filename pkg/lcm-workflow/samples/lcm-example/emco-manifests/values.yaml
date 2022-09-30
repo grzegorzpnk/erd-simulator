@@ -1,22 +1,22 @@
 # General
-ProjectName: proj1
+ProjectName: test
 AdminCloud: default
-CompositeApp: capp1
-CompositeProfile: capp1-profile
-DeploymentIntent: dig1
-GenericPlacementIntent: dig1-placement-intent
+CompositeApp: test-ca
+CompositeProfile: test-cp
+DeploymentIntent: test-dig
+GenericPlacementIntent: test-placement-intent
 
 # Provider1, Cluster1
-ClusterProvider1: edge-provider-2
-Cluster1Name: meh02
-Cluster1Label: meh02-label
-Cluster1KubeConfig: ../cfg/cluster2.config
+ClusterProvider1: edge-provider
+Cluster1Name: mec1
+Cluster1Label: mec1-label
+Cluster1KubeConfig: ../cfg/cluster1.config
 
 # Provider2, Cluster2
-ClusterProvider2: edge-provider-1
-Cluster2Name: meh01
-Cluster2Label: meh01-label
-Cluster2KubeConfig: ../cfg/cluster1.config
+ClusterProvider2: edge-provider
+Cluster2Name: mec9
+Cluster2Label: mec9-label
+Cluster2KubeConfig: ../cfg/cluster2.config
 
 # Collectd App
 AppName: collectd
@@ -26,8 +26,8 @@ ProfileAppFile: ../apps/collectd_profile.tar.gz
 AppPlacementIntent: collectd-placement-intent
 
 # Workflow Intent
-WfIntentName: dig1-workflow-intent
-WfClientEndpointName: 10.254.185.48
+WfIntentName: test-workflow-intent
+WfClientEndpointName: 10.254.185.27
 WfClientEndpointPort: 32522
 WfClientName: lcm_workflowclient
 WfID: test-workflow-1
@@ -40,8 +40,8 @@ WfEmcoOrchStatus: 10.254.185.42:30416
 InnotUrl: "http://10.254.185.44:32137/v1/intermediate-notifier/subscribe"
 
 # Temporal server
-TemporalServerIP: 10.254.185.48
-TemporalServerPort: 32155
+TemporalServerIP: 10.254.185.27
+TemporalServerPort: 30124
 
 HostIP: 10.254.185.42
 RsyncPort: 30431

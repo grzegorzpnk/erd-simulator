@@ -38,15 +38,15 @@ spec:
           deploymentIntentGroup: {{.DeploymentIntent}}
           targetAppName: {{.AppName}}
           appPriorityLevel: "critical"
-          latencyMax: "6"
-          cpuUtilizationMax: "93"
-          memUtilizationMax: "93"
-          latencyWeight: "0.5"
-          cpuUtilizationWeight: "0.25"
-          memUtilizationWeight: "0.25"
+          latencyMax: "13"
+          cpuUtilizationMax: "25"
+          memUtilizationMax: "8"
+          latencyWeight: "0.34"
+          cpuUtilizationWeight: "0.33"
+          memUtilizationWeight: "0.33"
           innotUrl: {{ .InnotUrl }}
-          plcControllerUrl: "http://10.254.185.44:32137/v1/plc-ctrl"
-          rClientName: "10.254.185.27"
-          rClientPort: "30102"
+          plcControllerUrl: "http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec"
+          rClientName: "10.254.185.54"
+          rClientPort: "32523"
           rWfClientName: "relocate_workflowclient"
 

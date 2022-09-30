@@ -2,13 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-temporalServerIp: "10.254.185.48"
-temporalServerPort: "32155"
+temporalServerIp: "10.254.185.27"
+temporalServerPort: "30124"
 
 notificationService:
   type: NodePort
   port: 8585
   nodePort: 32140
+  addr: 10.254.185.27
 
 replicaCount: 1
 
