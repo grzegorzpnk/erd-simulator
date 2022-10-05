@@ -52,6 +52,19 @@ func (h *apiHandler) getMecHostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	cellId, _ := params["cell-id"]
+
+	for i, v := range h.graphClient.MecHosts {
+		if v.CheckMECsupportsCell(cellId) {
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+		}
+	}
+}
+
 func (h *apiHandler) getMECCpu(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -98,7 +111,7 @@ func (h *apiHandler) createEdgeHandler(w http.ResponseWriter, r *http.Request) {
 	var edge mec_topology.Edge
 	_ = json.NewDecoder(r.Body).Decode(&edge)
 	fmt.Printf("Client tries to add new Edge: %v --- %v \n", edge.SourceVertexName, edge.TargetVertexName)
-	h.graphClient.AddEdge(edge)
+	h.graphClient.AddLink(edge)
 }
 
 func (h *apiHandler) getEdgesHandler(w http.ResponseWriter, r *http.Request) {
@@ -114,8 +127,8 @@ func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "application/json")
 
-	for i, _ := range h.graphClient.MecHosts {
-		json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+	for i := range h.graphClient.MecHosts {
+		json.NewEncoder(w).Encode(h.graphClient.MecHosts[i])
 	}
 
 }

@@ -8,6 +8,7 @@ type MecHost struct {
 	CpuResources    ClusterResources `json:"cpu_resources,omitempty"`
 	MemoryResources ClusterResources `json:"memory_resources,omitempty"`
 	Neighbours      []MecIdentity
+	SupportingCells []Cell `json:"supporting_cells"`
 }
 
 const (
@@ -34,8 +35,15 @@ type MecResInfo struct {
 }
 
 type MecLocation struct {
-	Level     MecType `json:"type"`
-	Region    string  `json:"region"`               // eg. poland
-	Zone      string  `json:"zone,omitempty"`       // eg. west, "" if type different from MecLocal and MecRegional
-	LocalZone string  `json:"local-zone,omitempty"` // eg. wroclaw, "" if type different from MecLocal
+	Level  MecType `json:"type"`
+	Region string  `json:"region"`
+	Zone   string  `json:"zone,omitempty"`
+	//city-level eg. west, "" if type different from MecLocal and MecRegional
+	LocalZone string `json:"local-zone,omitempty"` // eg. wroclaw, "" if type different from MecLocal
+}
+
+type Cell struct {
+	Id        string  `json:"id"`
+	Latency   float32 `json:"latency"`
+	LocalZone string  `json:"local-zone,omitempty"`
 }

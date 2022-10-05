@@ -30,3 +30,15 @@ func (g *Graph) CheckAlreadExistLink(k Edge) bool {
 	return false
 
 }
+
+//check if cluster supports given Cell ID
+func (mec MecHost) CheckMECsupportsCell(cell_id string) bool {
+
+	for _, v := range mec.SupportingCells {
+		if v.Id == cell_id {
+			return true
+			break
+		}
+	}
+	return false
+}

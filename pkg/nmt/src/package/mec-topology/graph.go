@@ -31,7 +31,7 @@ func (g *Graph) AddMecHost(mecHost MecHost) {
 	}
 }
 
-func (g *Graph) AddEdge(edge Edge) {
+func (g *Graph) AddLink(edge Edge) {
 
 	//get vertex
 	fromMECHost := g.GetMecHost(edge.SourceVertexName, edge.SourceVertexProviderName)
