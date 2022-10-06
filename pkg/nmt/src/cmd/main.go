@@ -28,7 +28,7 @@ func main() {
 
 	//gorutines to update cluster resources and network metrics
 	//go mec_topology.NetworkMetricsUpdate(graph)
-	//go graph.ClustersResourcesUpdate()
+	go graph.ClustersResourcesUpdate()
 
 	httpRouter := api.NewRouter(graph)
 

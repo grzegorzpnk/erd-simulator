@@ -82,7 +82,7 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 	//check if they are direct neighbours, if so the latency is just between start and stop node
 	if destCluster.CheckMECsupportsCell(stopNode) {
 		json.NewEncoder(w).Encode(destCluster.GetCell(startNode).Latency)
-		fmt.Println("direct nodes")
+		log.Infof("direct nodes")
 	}
 	// if not, we have to calculate path between all MEC clusters that are in the same local zone as cell, to the target cluster, the final latency is a sum of the calculated one + between started mec and cell
 

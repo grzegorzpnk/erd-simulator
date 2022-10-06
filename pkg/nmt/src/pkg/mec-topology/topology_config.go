@@ -1,11 +1,11 @@
 package mec_topology
 
 import (
+	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
+
 	"encoding/json"
-	"fmt"
 	"io"
-	"log"
 	"os"
 )
 
@@ -13,7 +13,7 @@ import (
 func (g *Graph) ReadTopologyConfigFile(file string) {
 	f, err := os.Open(file)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Errorf(err.Error())
 	}
 	defer f.Close()
 
@@ -28,7 +28,7 @@ func (g *Graph) ReadTopologyConfigFile(file string) {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		g.MecHosts = mec
@@ -40,7 +40,7 @@ func (g *Graph) ReadTopologyConfigFile(file string) {
 func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 	f, err := os.Open(file)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Errorf(err.Error())
 	}
 	defer f.Close()
 
@@ -55,9 +55,9 @@ func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
-		fmt.Println(cells)
+		log.Infof("cells: %v", cells)
 	}
 
 	g.NetworkCells = cells
