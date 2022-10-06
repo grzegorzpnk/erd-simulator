@@ -1,4 +1,4 @@
-module 10.254.188.33/matyspi5/erd/pkg/obs
+module "10.254.188.33/matyspi5/erd/pkg/obs"
 
 go 1.18
 
