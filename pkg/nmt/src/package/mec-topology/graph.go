@@ -5,8 +5,9 @@ import (
 )
 
 type Graph struct {
-	MecHosts []*MecHost
-	Edges    []*Edge
+	MecHosts     []*MecHost
+	Edges        []*Edge
+	NetworkCells []*Cell
 }
 
 func (g *Graph) GetMecHost(clusterName, clusterProvider string) *MecHost {
@@ -16,6 +17,17 @@ func (g *Graph) GetMecHost(clusterName, clusterProvider string) *MecHost {
 		if v.Identity.ClusterName == clusterName && v.Identity.Provider == clusterProvider {
 			return g.MecHosts[i]
 		}
+	}
+	return nil
+}
+
+func (g *Graph) GetCell(cellId string) *Cell {
+
+	for i, v := range g.NetworkCells {
+		if v.Id == cellId {
+			return g.NetworkCells[i]
+		}
+
 	}
 	return nil
 }

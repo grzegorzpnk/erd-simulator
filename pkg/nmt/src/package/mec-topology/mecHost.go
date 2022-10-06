@@ -47,3 +47,14 @@ type Cell struct {
 	Latency   float32 `json:"latency"`
 	LocalZone string  `json:"local-zone,omitempty"`
 }
+
+func (m *MecHost) GetCell(cellId string) *Cell {
+
+	for i, v := range m.SupportingCells {
+		if v.Id == cellId {
+			return &m.SupportingCells[i]
+		}
+
+	}
+	return nil
+}

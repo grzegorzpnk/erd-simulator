@@ -45,7 +45,7 @@ func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 
 	dec := json.NewDecoder(f)
 	dec.DisallowUnknownFields()
-	var cells []Cell
+	var cells []*Cell
 
 	for {
 		err := dec.Decode(&cells)
@@ -59,10 +59,12 @@ func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 		fmt.Println(cells)
 	}
 
+	g.NetworkCells = cells
+
 	for _, v := range cells {
 		for _, n := range g.MecHosts {
 			if n.Identity.Location.LocalZone == v.LocalZone {
-				n.SupportingCells = append(n.SupportingCells, v)
+				n.SupportingCells = append(n.SupportingCells, *v)
 			}
 
 		}

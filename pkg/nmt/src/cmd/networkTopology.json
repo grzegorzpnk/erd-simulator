@@ -166,5 +166,93 @@
   {
     "id": "42",
     "local-zone": "warszawa"
+  },
+  {
+    "id": "43",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "44",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "45",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "46",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "47",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "48",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "49",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "50",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "51",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "52",
+    "local-zone": "kielce"
+  },
+  {
+    "id": "53",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "54",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "55",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "56",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "57",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "58",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "59",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "60",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "61",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "62",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "63",
+    "local-zone": "krakow"
+  },
+  {
+    "id": "64",
+    "local-zone": "krakow"
   }
 ]

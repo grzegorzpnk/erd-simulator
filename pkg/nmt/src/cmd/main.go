@@ -20,7 +20,7 @@ func main() {
 	graph = &mec_topology.Graph{}
 	//	initializingGraph()
 
-	graph.ReadTopologyConfigFile("topologyconfig.json")
+	graph.ReadTopologyConfigFile("mecTopology.json")
 	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
 	//gorutines to update cluster resources and network metrics

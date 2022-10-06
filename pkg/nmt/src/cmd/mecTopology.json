@@ -298,5 +298,137 @@
       "local-zone": "krakow"
     }
   }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec4",
+    "location": {
+      "type": 1,
+      "region": "poland east",
+      "zone": "east",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec5",
+    "location": {
+      "type": 1,
+      "region": "poland east",
+      "zone": "east",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec6",
+    "location": {
+      "type": 1,
+      "region": "poland east",
+      "zone": "east",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec7",
+    "location": {
+      "type": 1,
+      "region": "poland central",
+      "zone": "central",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec8",
+    "location": {
+      "type": 1,
+      "region": "poland central",
+      "zone": "central",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec9",
+    "location": {
+      "type": 1,
+      "region": "poland west",
+      "zone": "west",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec10",
+    "location": {
+      "type": 1,
+      "region": "poland west",
+      "zone": "west",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec11",
+    "location": {
+      "type": 1,
+      "region": "poland west",
+      "zone": "west",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec1",
+    "location": {
+      "type": 2,
+      "region": "poland east",
+      "zone": "",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec12",
+    "location": {
+      "type": 2,
+      "region": "poland central",
+      "zone": "",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "edge-provider",
+    "cluster": "mec13",
+    "location": {
+      "type": 2,
+      "region": "poland west",
+      "zone": "",
+      "local-zone": ""
+    }
+  }
   }
 ]
