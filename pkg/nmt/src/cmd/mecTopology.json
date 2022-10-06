@@ -410,7 +410,7 @@
   { "identity":
   {
     "provider": "edge-provider",
-    "cluster": "mec12",
+    "cluster": "mec2",
     "location": {
       "type": 2,
       "region": "poland central",
@@ -422,7 +422,7 @@
   { "identity":
   {
     "provider": "edge-provider",
-    "cluster": "mec13",
+    "cluster": "mec3",
     "location": {
       "type": 2,
       "region": "poland west",
