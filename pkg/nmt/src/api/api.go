@@ -1,8 +1,8 @@
 package api
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
 	"github.com/gorilla/mux"
-	"nmt/src/package/mec-topology"
 )
 
 var r *mux.Router

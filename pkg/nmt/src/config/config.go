@@ -13,8 +13,6 @@ import (
 // Configuration loads up all the values that are used to configure
 // backend implementations
 type Configuration struct {
-	ObsIp                     string `json:"obs-ip"`
-	ObsPort                   string `json:"obs-port"`
 	ServicePort               string `json:"service-port"`
 	ClusterControllerEndpoint string `json:"cluster-controller-endpoint"`
 	EdgeProvider              string `json:"edge-provider"`
@@ -55,8 +53,6 @@ func readConfigFile(file string) (*Configuration, error) {
 func defaultConfiguration() *Configuration {
 
 	return &Configuration{
-		ObsIp:                     "http://localhost:9009/prometheus",
-		ObsPort:                   "1234",
 		ServicePort:               "8080",
 		ClusterControllerEndpoint: "http://10.254.185.50:32138/",
 		EdgeProvider:              "orange",

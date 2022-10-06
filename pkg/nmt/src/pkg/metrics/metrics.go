@@ -1,12 +1,10 @@
-package mec_topology
+package metrics
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 /*type ClusterResources struct {
@@ -36,39 +34,6 @@ func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
 	nm.Latency = networkMetrics.Latency
 }
 
-//gorutine function
-func ClustersResourcesUpdate(g *Graph) {
-
-	endpoint := config.GetConfiguration().ClusterControllerEndpoint
-
-	for {
-		// update metrics for MEC Clusters
-		for _, v := range g.MecHosts {
-
-			clusterCPUURL := buildCpuUrl(v.Identity.ClusterName, v.Identity.Provider, endpoint)
-			clusterMemoryURL := buildMemoryUrl(v.Identity.ClusterName, v.Identity.Provider, endpoint)
-			log.Debugf("update for cluster %v\n", v.Identity.ClusterName)
-			log.Debugf("cpu latest update:")
-			cpuCr, err := getClusterMetrics(v.Identity.ClusterName, v.Identity.Provider, clusterCPUURL)
-			if err != nil {
-				log.Errorf(err.Error())
-			}
-			log.Debugf("memory latest update:")
-			memoryCr, err := getClusterMetrics(v.Identity.ClusterName, v.Identity.Provider, clusterMemoryURL)
-			if err != nil {
-				log.Errorf(err.Error())
-			}
-
-			g.GetMecHost(v.Identity.ClusterName, v.Identity.Provider).CpuResources.UpdateClusterMetrics(cpuCr)
-			g.GetMecHost(v.Identity.ClusterName, v.Identity.Provider).MemoryResources.UpdateClusterMetrics(memoryCr)
-			log.Infof("Controller updates cluster metrics for Mec Host: %v\n", v.Identity.ClusterName)
-
-		}
-		time.Sleep(1 * time.Second)
-	}
-
-}
-
 /*
 func ClusterMetricsUpdateTest(g *Graph) {
 
@@ -87,6 +52,7 @@ func ClusterMetricsUpdateTest(g *Graph) {
 	}
 }
 */
+
 /*
 //gorutine function
 func NetworkMetricsUpdate(g *Graph) {
@@ -103,7 +69,8 @@ func NetworkMetricsUpdate(g *Graph) {
 	}
 }*/
 
-/*func NetworkMetricsUpdateTest(g *Graph) {
+/*
+func NetworkMetricsUpdateTest(g *Graph) {
 
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
 	latencyURL := buildLatencyURL(endpoint, "1", "1")
@@ -116,13 +83,12 @@ func NetworkMetricsUpdate(g *Graph) {
 
 	}
 }
-
-
 */
-func getClusterMetrics(clusterName, clusterProvider, endpoint string) (ClusterResources, error) {
+
+func GetClusterMetrics(clusterName, clusterProvider, endpoint string) (ClusterResources, error) {
 
 	cr := httpGet(endpoint)
-	log.Debugf("Resp: %v", cr)
+	log.Infof("Resp: %v", cr)
 
 	return cr, nil
 }
@@ -145,7 +111,7 @@ func getNetworkMetricsNotification(endpoint string, edge *Edge, g *Graph) Networ
 
 	//get current latency
 	log.Printf("Latency resp: %v ", latencyStr)
-	//	log.Debugf("Latency: %v\n", latencyStr)
+	//	log.Infof("Latency: %v\n", latencyStr)
 	nm.Latency, _ = strconv.ParseFloat(latencyStr, 32)
 
 	return nm
@@ -186,12 +152,12 @@ func buildLatencyURL(endpoint, cellID, MECID string) string {
 	cellURL := baseURL + cellID + "/mec/"
 	mecURL := cellURL + config.GetConfiguration().EdgeProvider + "+" + MECID
 	latencyURL = mecURL + "/latency-ms"
-	log.Debugf("latency url: ", latencyURL)
+	log.Infof("latency url: ", latencyURL)
 
 	return latencyURL
 }*/
 
-func buildCpuUrl(clusterName, clusterProvider, endpoint string) string {
+func BuildCpuUrl(clusterName, clusterProvider, endpoint string) string {
 
 	//http://10.254.185.50:32138/v1/obs/ksm/provider/{provider}/cluster/{cluster}/cpu
 
@@ -200,12 +166,12 @@ func buildCpuUrl(clusterName, clusterProvider, endpoint string) string {
 	baseClusterURL := providerURL + "cluster/"
 	clusterURL := baseClusterURL + clusterName + "/"
 	clusterCPUURL := clusterURL + "cpu"
-	//log.Debugf("cpu url: ", clusterCPUURL)
+	//log.Infof("cpu url: ", clusterCPUURL)
 
 	return clusterCPUURL
 }
 
-func buildMemoryUrl(clusterName, clusterProvider, endpoint string) string {
+func BuildMemoryUrl(clusterName, clusterProvider, endpoint string) string {
 
 	////  http://10.254.185.50:32138/v1/obs/ksm/provider/{provider}/cluster/{cluster}/memory
 	baseURL := endpoint + "/v1/obs/ksm/provider/"
@@ -213,7 +179,7 @@ func buildMemoryUrl(clusterName, clusterProvider, endpoint string) string {
 	baseClusterURL := providerURL + "cluster/"
 	clusterURL := baseClusterURL + clusterName + "/"
 	clusterMemoryURL := clusterURL + "memory"
-	//log.Debugf("memory url: ", clusterMemoryURL)
+	//log.Infof("memory url: ", clusterMemoryURL)
 
 	return clusterMemoryURL
 }

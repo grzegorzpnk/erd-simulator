@@ -1,10 +1,12 @@
 package mec_topology
 
-func (g *Graph) CheckGraphContainsVertex(mecHost MecHost) bool {
+import "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
+
+func (g *Graph) CheckGraphContainsVertex(mecHost model.MecHost) bool {
 
 	for _, v := range g.MecHosts {
-		if mecHost.Identity.ClusterName == v.Identity.ClusterName &&
-			mecHost.Identity.Provider == v.Identity.ClusterName {
+		if mecHost.Identity.Cluster == v.Identity.Cluster &&
+			mecHost.Identity.Provider == v.Identity.Cluster {
 			return true
 		}
 	}
@@ -12,7 +14,7 @@ func (g *Graph) CheckGraphContainsVertex(mecHost MecHost) bool {
 }
 
 // this func checks in bidirectional way
-func (g *Graph) CheckAlreadExistLink(k Edge) bool {
+func (g *Graph) CheckAlreadExistLink(k model.Edge) bool {
 
 	for _, v := range g.Edges {
 		if (k.SourceVertexName == v.SourceVertexName &&

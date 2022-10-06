@@ -1,11 +1,12 @@
 package main
 
 import (
-	"log"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/api"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
+	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"net/http"
-	"nmt/src/api"
-	"nmt/src/config"
-	"nmt/src/package/mec-topology"
 )
 
 var graph *mec_topology.Graph
@@ -16,13 +17,15 @@ var graph *mec_topology.Graph
 // 3 documentation
 
 func main() {
+	log.Infof("[SERVER] Starting NMT server. Port: %v", config.GetConfiguration().ServicePort)
+	log.Infof("[SERVER] OBS endpoint: %v", config.GetConfiguration().ClusterControllerEndpoint)
 
 	graph = &mec_topology.Graph{}
 	initializingGraph()
 
 	//gorutines to update cluster resources and network metrics
 	//go mec_topology.NetworkMetricsUpdate(graph)
-	go mec_topology.ClustersResourcesUpdate(graph)
+	go graph.ClustersResourcesUpdate()
 
 	httpRouter := api.NewRouter(graph)
 
@@ -31,7 +34,7 @@ func main() {
 		Addr:    ":" + config.GetConfiguration().ServicePort,
 	}
 
-	log.Fatal(httpServer.ListenAndServe())
+	log.Fatalln(httpServer.ListenAndServe())
 
 }
 
@@ -63,18 +66,18 @@ func initializingGraph() {
 
 }
 
-func createMecHost(clusterName, clusterProvider string) mec_topology.MecHost {
+func createMecHost(clusterName, clusterProvider string) model.MecHost {
 
-	var mec mec_topology.MecHost
-	mec.Identity.ClusterName = clusterName
+	var mec model.MecHost
+	mec.Identity.Cluster = clusterName
 	mec.Identity.Provider = clusterProvider
 
 	return mec
 }
 
-func createLink(startMecHost, startMecProvider, destMecHost, destMecProvider string) mec_topology.Edge {
+func createLink(startMecHost, startMecProvider, destMecHost, destMecProvider string) model.Edge {
 
-	var link mec_topology.Edge
+	var link model.Edge
 	link.SourceVertexName = startMecHost
 	link.SourceVertexProviderName = startMecProvider
 	link.TargetVertexName = destMecHost

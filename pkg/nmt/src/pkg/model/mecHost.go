@@ -1,12 +1,16 @@
-package mec_topology
+package model
+
+import (
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
+)
 
 type MecInfo string
 type MecType int
 
 type MecHost struct {
-	Identity        MecIdentity      `json:"identity"`
-	CpuResources    ClusterResources `json:"cpu_resources,omitempty"`
-	MemoryResources ClusterResources `json:"memory_resources,omitempty"`
+	Identity        MecIdentity              `json:"identity"`
+	CpuResources    metrics.ClusterResources `json:"cpu_resources,omitempty"`
+	MemoryResources metrics.ClusterResources `json:"memory_resources,omitempty"`
 	Neighbours      []MecIdentity
 }
 
@@ -22,9 +26,9 @@ const (
 )
 
 type MecIdentity struct {
-	Provider    string      `json:"provider"`
-	ClusterName string      `json:"cluster"`
-	Location    MecLocation `json:"location"`
+	Provider string      `json:"provider"`
+	Cluster  string      `json:"cluster"`
+	Location MecLocation `json:"location"`
 }
 
 type MecResInfo struct {

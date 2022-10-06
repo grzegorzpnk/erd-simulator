@@ -1,37 +1,44 @@
 package mec_topology
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
+	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
+	"errors"
+
 	"fmt"
+	"time"
 )
 
 type Graph struct {
-	MecHosts []*MecHost
-	Edges    []*Edge
+	MecHosts []*model.MecHost
+	Edges    []*model.Edge
 }
 
-func (g *Graph) GetMecHost(clusterName, clusterProvider string) *MecHost {
+func (g *Graph) GetMecHost(clusterName, clusterProvider string) *model.MecHost {
 	//getVertexHandler return a pointer to the mecHost with a specific name and provider
 
 	for i, v := range g.MecHosts {
-		if v.Identity.ClusterName == clusterName && v.Identity.Provider == clusterProvider {
+		if v.Identity.Cluster == clusterName && v.Identity.Provider == clusterProvider {
 			return g.MecHosts[i]
 		}
 	}
 	return nil
 }
 
-//methods that adds MEC Host to the list of MEC HOSTS of given g Graph
-func (g *Graph) AddMecHost(mecHost MecHost) {
+//AddMecHost method that adds MEC Host to the list of MEC HOSTS of given g Graph
+func (g *Graph) AddMecHost(mecHost model.MecHost) {
 	if g.CheckGraphContainsVertex(mecHost) {
-		err := fmt.Errorf("Vertex %v not added beacuse already exist vertex with the same name and provider id \n", mecHost.Identity.ClusterName, mecHost.Identity.Provider)
-		fmt.Println(err.Error())
+		err := errors.New(fmt.Sprintf("Vertex %v+%v not added beacuse already exist vertex with the same name and provider id", mecHost.Identity.Provider, mecHost.Identity.Cluster))
+		log.Errorf(err.Error())
 	} else {
 		g.MecHosts = append(g.MecHosts, &mecHost)
-		fmt.Printf("Added new mec host:  %v\n", mecHost)
+		log.Infof("Added new mec host:  %v\n", mecHost)
 	}
 }
 
-func (g *Graph) AddEdge(edge Edge) {
+func (g *Graph) AddEdge(edge model.Edge) {
 
 	//get vertex
 	fromMECHost := g.GetMecHost(edge.SourceVertexName, edge.SourceVertexProviderName)
@@ -40,10 +47,10 @@ func (g *Graph) AddEdge(edge Edge) {
 	//check error
 	if fromMECHost == nil || toMECHost == nil {
 		err := fmt.Errorf("Invalid edge- at least one of MEC Host doesn't exist (%v, %v <--> %v, %v)\n", edge.SourceVertexName, edge.SourceVertexProviderName, edge.TargetVertexName, edge.TargetVertexProviderName)
-		fmt.Println(err.Error())
+		log.Errorf(err.Error())
 	} else if g.CheckAlreadExistLink(edge) {
-		err := fmt.Errorf("Edge between (%v--%v) already exist\n", edge.SourceVertexName, edge.TargetVertexName)
-		fmt.Println(err.Error())
+		err := errors.New(fmt.Sprintf("Edge between (%v--%v) already exist", edge.SourceVertexName, edge.TargetVertexName))
+		log.Warnf(err.Error())
 	} else {
 		//add neighbours at vertexes instances
 		fromMECHost.Neighbours = append(fromMECHost.Neighbours, toMECHost.Identity)
@@ -51,24 +58,55 @@ func (g *Graph) AddEdge(edge Edge) {
 
 		//add edge at  Edges list
 		g.Edges = append(g.Edges, &edge)
-		fmt.Printf("New Edge added : %v %v --- %v %v \n", edge.SourceVertexName, edge.SourceVertexProviderName, edge.TargetVertexName, edge.TargetVertexProviderName)
+		log.Infof("New Edge added : %v %v --- %v %v \n", edge.SourceVertexName, edge.SourceVertexProviderName, edge.TargetVertexName, edge.TargetVertexProviderName)
 	}
 }
 
-//that function prints graph: Nodes and Links
+//PrintGraph logs graph: Nodes and Links
 func (g *Graph) PrintGraph() {
 
-	fmt.Println("Graph: ")
+	log.Infof("Graph: ")
 	//print vertexes
 	for _, v := range g.MecHosts {
-		fmt.Printf("\nVertex: %v %v", v.Identity.ClusterName, v.Identity.Provider)
-		fmt.Print(*v)
+		log.Infof("Vertex: %v %v", v.Identity.Cluster, v.Identity.Provider)
+		log.Info(*v)
 	}
-	fmt.Println()
 
 	//print edges
 	for _, v := range g.Edges {
-		fmt.Printf("Edge between: %v and %v\n", v.SourceVertexName, v.TargetVertexName)
+		log.Infof("Edge between: %v and %v\n", v.SourceVertexName, v.TargetVertexName)
 	}
 
+}
+
+//ClustersResourcesUpdate is a gorutine function
+func (g *Graph) ClustersResourcesUpdate() {
+
+	endpoint := config.GetConfiguration().ClusterControllerEndpoint
+
+	for {
+		// update metrics for MEC Clusters
+		for _, v := range g.MecHosts {
+
+			clusterCPUURL := metrics.BuildCpuUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
+			clusterMemoryURL := metrics.BuildMemoryUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
+			log.Infof("update for cluster %v\n", v.Identity.Cluster)
+			log.Infof("cpu latest update:")
+			cpuCr, err := metrics.GetClusterMetrics(v.Identity.Cluster, v.Identity.Provider, clusterCPUURL)
+			if err != nil {
+				log.Errorf(err.Error())
+			}
+			log.Infof("memory latest update:")
+			memoryCr, err := metrics.GetClusterMetrics(v.Identity.Cluster, v.Identity.Provider, clusterMemoryURL)
+			if err != nil {
+				log.Errorf(err.Error())
+			}
+
+			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).CpuResources.UpdateClusterMetrics(cpuCr)
+			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).MemoryResources.UpdateClusterMetrics(memoryCr)
+			log.Infof("Controller updates cluster metrics for Mec Host: %v\n", v.Identity.Cluster)
+
+		}
+		time.Sleep(1 * time.Second)
+	}
 }
