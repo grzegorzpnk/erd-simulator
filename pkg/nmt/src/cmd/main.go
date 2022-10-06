@@ -21,11 +21,14 @@ func main() {
 	log.Infof("[SERVER] OBS endpoint: %v", config.GetConfiguration().ClusterControllerEndpoint)
 
 	graph = &mec_topology.Graph{}
-	initializingGraph()
+	//	initializingGraph()
+
+	graph.ReadTopologyConfigFile("mecTopology.json")
+	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
 	//gorutines to update cluster resources and network metrics
 	//go mec_topology.NetworkMetricsUpdate(graph)
-	go graph.ClustersResourcesUpdate()
+	//go graph.ClustersResourcesUpdate()
 
 	httpRouter := api.NewRouter(graph)
 
@@ -52,15 +55,15 @@ func initializingGraph() {
 
 	//addEdges
 	link := createLink("mec1", "edge-provider", "mec5", "edge-provider")
-	graph.AddEdge(link)
+	graph.AddLink(link)
 	link = createLink("mec5", "edge-provider", "mec1", "edge-provider")
-	graph.AddEdge(link)
+	graph.AddLink(link)
 	link = createLink("mec5", "edge-provider", "mec7", "edge-provider")
-	graph.AddEdge(link)
+	graph.AddLink(link)
 	link = createLink("mec7", "edge-provider", "mec1", "edge-provider")
-	graph.AddEdge(link)
+	graph.AddLink(link)
 	link = createLink("mec1", "edge-provider", "mec15", "edge-provider")
-	graph.AddEdge(link)
+	graph.AddLink(link)
 
 	//graph.PrintGraph()
 
@@ -71,6 +74,11 @@ func createMecHost(clusterName, clusterProvider string) model.MecHost {
 	var mec model.MecHost
 	mec.Identity.Cluster = clusterName
 	mec.Identity.Provider = clusterProvider
+	mec.Identity.Location.LocalZone = "city1"
+	mec.Identity.Location.LocalZone = "city1"
+	mec.Identity.Location.Zone = "mazowieckie"
+	mec.Identity.Location.Region = "poland west"
+	mec.Identity.Location.Level = 0
 
 	return mec
 }

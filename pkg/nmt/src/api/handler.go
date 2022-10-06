@@ -55,6 +55,56 @@ func (h *apiHandler) getMecHostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	cellId, _ := params["cell-id"]
+
+	for i, v := range h.graphClient.MecHosts {
+		if v.CheckMECsupportsCell(cellId) {
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+		}
+	}
+}
+
+func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	startNode, _ := params["start-node"]
+	stopNode, _ := params["stop-node"]
+
+	//todo: provider?
+	destCluster := h.graphClient.GetMecHost(stopNode, "edge-provider")
+	startCell := h.graphClient.GetCell(startNode)
+
+	//check if they are direct neighbours, if so the latency is just between start and stop node
+	if destCluster.CheckMECsupportsCell(stopNode) {
+		json.NewEncoder(w).Encode(destCluster.GetCell(startNode).Latency)
+		fmt.Println("direct nodes")
+	}
+	// if not, we have to calculate path between all MEC clusters that are in the same local zone as cell, to the target cluster, the final latency is a sum of the calculated one + between started mec and cell
+
+	var startClusters []model.MecHost
+
+	for _, v := range h.graphClient.MecHosts {
+		if v.Identity.Location.LocalZone == startCell.LocalZone {
+			startClusters = append(startClusters, *v)
+		}
+	}
+
+	//ranking := make(map[string]float32)
+
+	/*for i, _ := range startClusters {
+		latency := calculateShortestPath(startClusters[i], destCluster)
+		ranking[startClusters[i].Identity.ClusterName] = latency
+	}
+
+	return Min(ranking)
+	*/
+}
+
 func (h *apiHandler) getMECCpu(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -101,7 +151,7 @@ func (h *apiHandler) createEdgeHandler(w http.ResponseWriter, r *http.Request) {
 	var edge model.Edge
 	_ = json.NewDecoder(r.Body).Decode(&edge)
 	log.Infof("Client tries to add new Edge: %v --- %v \n", edge.SourceVertexName, edge.TargetVertexName)
-	h.graphClient.AddEdge(edge)
+	h.graphClient.AddLink(edge)
 }
 
 func (h *apiHandler) getEdgesHandler(w http.ResponseWriter, r *http.Request) {
@@ -117,8 +167,8 @@ func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "application/json")
 
-	for i, _ := range h.graphClient.MecHosts {
-		json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+	for i := range h.graphClient.MecHosts {
+		json.NewEncoder(w).Encode(h.graphClient.MecHosts[i])
 	}
 
 }

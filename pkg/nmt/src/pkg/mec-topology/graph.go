@@ -12,8 +12,9 @@ import (
 )
 
 type Graph struct {
-	MecHosts []*model.MecHost
-	Edges    []*model.Edge
+	MecHosts     []*model.MecHost
+	Edges        []*model.Edge
+	NetworkCells []*model.Cell
 }
 
 func (g *Graph) GetMecHost(clusterName, clusterProvider string) *model.MecHost {
@@ -23,6 +24,17 @@ func (g *Graph) GetMecHost(clusterName, clusterProvider string) *model.MecHost {
 		if v.Identity.Cluster == clusterName && v.Identity.Provider == clusterProvider {
 			return g.MecHosts[i]
 		}
+	}
+	return nil
+}
+
+func (g *Graph) GetCell(cellId string) *model.Cell {
+
+	for i, v := range g.NetworkCells {
+		if v.Id == cellId {
+			return g.NetworkCells[i]
+		}
+
 	}
 	return nil
 }
@@ -38,7 +50,7 @@ func (g *Graph) AddMecHost(mecHost model.MecHost) {
 	}
 }
 
-func (g *Graph) AddEdge(edge model.Edge) {
+func (g *Graph) AddLink(edge model.Edge) {
 
 	//get vertex
 	fromMECHost := g.GetMecHost(edge.SourceVertexName, edge.SourceVertexProviderName)
