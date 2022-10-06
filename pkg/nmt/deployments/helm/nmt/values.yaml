@@ -1,0 +1,38 @@
+replicaCount: 1
+
+image:
+  repository: pmatysiaq/nmt
+  pullPolicy: Always
+  tag: "latest"
+
+workingDir: "/nmt"
+command: "./nmt"
+config:
+  servicePort: 8282
+  clusterProvider: "edge-provider"
+  timestamp: 5
+  obs:
+    endpoint: "http://10.254.185.50"
+    port: "32138"
+
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 8282
+  nodePort: 32139
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
