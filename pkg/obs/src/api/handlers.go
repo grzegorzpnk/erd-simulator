@@ -3,9 +3,12 @@ package api
 import (
 	log "10.254.188.33/matyspi5/erd/pkg/obs/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/latency"
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/model"
 	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/observability"
 	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/promql"
-	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/types"
+	"errors"
+	"strconv"
+	"strings"
 
 	"fmt"
 
@@ -41,7 +44,7 @@ func (h *apiHandler) getMemInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	util := 100 * (req / alloc)
 
-	val := types.MecResInfo{
+	val := model.MecResInfo{
 		Used:        req,
 		Allocatable: alloc,
 		Utilization: util,
@@ -71,7 +74,7 @@ func (h *apiHandler) getCpuInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	util := 100 * (req / alloc)
 
-	val := types.MecResInfo{
+	val := model.MecResInfo{
 		Used:        req,
 		Allocatable: alloc,
 		Utilization: util,
@@ -243,11 +246,31 @@ func (h *apiHandler) getMemReqUtilizationHandler(w http.ResponseWriter, r *http.
 }
 
 func (h *apiHandler) getLatencyHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	cell := vars["cell-id"]
-	meh := vars["mec-id"]
+	var target, source interface{}
+	var err error
 
-	value, err := h.ltcClient.GetMockedLatencyMs(cell, meh)
+	vars := mux.Vars(r)
+	sourceId := vars["source-node"]
+	targetId := vars["target-node"]
+
+	source, err = h.checkType(w, sourceId)
+	if err != nil {
+		return
+	}
+	target, err = h.checkType(w, targetId)
+	if err != nil {
+		return
+	}
+
+	if fmt.Sprintf("%T", source) == fmt.Sprintf("%T", model.Cell{}) &&
+		fmt.Sprintf("%T", target) == fmt.Sprintf("%T", model.Cell{}) {
+		err := errors.New(fmt.Sprintf("source and target node are both of %T type, which is not permited", target))
+		log.Warnf("couldn't get latency: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	value, err := h.ltcClient.GetMockedLatencyMs(source, target)
 	if err != nil {
 		fmt.Errorf("[API] Error: %v", err)
 	}
@@ -257,6 +280,31 @@ func (h *apiHandler) getLatencyHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func (h *apiHandler) checkType(w http.ResponseWriter, param string) (object interface{}, err error) {
+	_, err = strconv.Atoi(param)
+	if err != nil {
+		ok := strings.Contains(param, "+")
+		if !ok {
+			err = errors.New(fmt.Sprintf("couldn't find cell or mecHost based on sourceId[%v]", param))
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			object, err = h.ltcClient.GetMehByFqdn(param)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	} else {
+		object, err = h.ltcClient.GetCellById(param)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	return
 }
 
 // sendResponse sends an HTTP response to the client with the provided status

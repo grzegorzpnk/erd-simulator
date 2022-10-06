@@ -72,7 +72,7 @@ func (pql *PromQL) GetCurrentRequests(resType Resource, targetCluster string) (f
 			return -1, err
 		}
 	} else {
-		log.Errorf("Error while fetching %v requests for cluster: %v. reason: %v.", resType, targetCluster, err)
+		log.Warnf("Error while fetching %v requests for cluster: %v. reason: %v.", resType, targetCluster, err)
 	}
 
 	return fVal, nil
@@ -95,7 +95,7 @@ func (pql *PromQL) GetCurrentLimits(resType Resource, targetCluster string) (flo
 			return -1, err
 		}
 	} else {
-		log.Errorf("Error while fetching %v limits for cluster: %v. reason: %v.", resType, targetCluster, err)
+		log.Warnf("Error while fetching %v limits for cluster: %v. reason: %v.", resType, targetCluster, err)
 	}
 
 	return fVal, nil
@@ -118,127 +118,127 @@ func (pql *PromQL) GetAllocatable(resType Resource, targetCluster string) (float
 			return -1, err
 		}
 	} else {
-		log.Errorf("Error while fetching %v allocatable for cluster: %v. reason: %v.", resType, targetCluster, err)
+		log.Warnf("Error while fetching %v allocatable for cluster: %v. reason: %v.", resType, targetCluster, err)
 	}
 
 	return fVal, nil
 }
 
-// GetCpuRequestsLimits returns percentage of utilized CPU requests and CPU limits at cluster targetCluster
-// Query is based on `kube-state-metrics` data-source. Skips nodes with master in the hostname
-func (pql *PromQL) GetCpuRequestsLimits(targetCluster string) (float64, float64, error) {
-
-	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
-	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
-	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
-
-	var lim, req, alloc float64
-
-	val, err := pql.Query(limits)
-	if err != nil {
-		log.Errorf("[PromQL] Error: %v", err)
-		return -1, -1, err
-	}
-	if len(val) > 0 {
-		lim, err = strconv.ParseFloat(val[0].Value.String(), 64)
-		if err != nil {
-			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
-			return -1, -1, err
-		}
-	} else {
-		log.Errorf("Error while fetching CPU limits: %v", err)
-	}
-
-	val, err = pql.Query(requests)
-	if err != nil {
-		log.Errorf("[PromQL] Error: %v", err)
-		return -1, -1, err
-	}
-	if len(val) > 0 {
-		req, err = strconv.ParseFloat(val[0].Value.String(), 64)
-		if err != nil {
-			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
-			return -1, -1, err
-		}
-	} else {
-		log.Errorf("Error while fetching CPU requests: %v", err)
-	}
-
-	val, err = pql.Query(allocatable)
-	if err != nil {
-		log.Errorf("[PromQL] Error: %v", err)
-		return -1, -1, err
-	}
-	if len(val) > 0 {
-		alloc, err = strconv.ParseFloat(val[0].Value.String(), 64)
-		if err != nil {
-			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
-			return -1, -1, err
-		}
-	} else {
-		log.Errorf("Error while fetching CPU allocatable: %v", err)
-	}
-
-	return 100 * (req / alloc), 100 * (lim / alloc), nil
-}
-
-// GetMemoryRequestsLimits returns percentage of utilized CPU requests and CPU limits at cluster targetCluster
-// Query is based on `kube-state-metrics` data-source. Skips nodes with master in the hostname
-func (pql *PromQL) GetMemoryRequestsLimits(targetCluster string) (float64, float64, error) {
-	//log.Infof("Getting MEMORY (requests, limits) for cluster %s", targetCluster)
-	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
-	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
-	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
-
-	var lim, req, alloc float64
-
-	val, err := pql.Query(limits)
-	if err != nil {
-		log.Errorf("[PromQL] Error: %v", err)
-		return -1, -1, err
-	}
-	if len(val) > 0 {
-		lim, err = strconv.ParseFloat(val[0].Value.String(), 64)
-		if err != nil {
-			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
-			return -1, -1, err
-		}
-	} else {
-		log.Errorf("Error while fetching MEMORY limits: %v", err)
-	}
-
-	val, err = pql.Query(requests)
-	if err != nil {
-		log.Errorf("[PromQL] Error: %v", err)
-		return -1, -1, err
-	}
-	if len(val) > 0 {
-		req, err = strconv.ParseFloat(val[0].Value.String(), 64)
-		if err != nil {
-			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
-			return -1, -1, err
-		}
-	} else {
-		log.Errorf("Error while fetching MEMORY requests: %v", err)
-	}
-
-	val, err = pql.Query(allocatable)
-	if err != nil {
-		log.Errorf("[PromQL] Error: %v", err)
-		return -1, -1, err
-	}
-	if len(val) > 0 {
-		alloc, err = strconv.ParseFloat(val[0].Value.String(), 64)
-		if err != nil {
-			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
-			return -1, -1, err
-		}
-	} else {
-		log.Errorf("Error while fetching MEMORY allocatable: %v", err)
-	}
-
-	return 100 * (req / alloc), 100 * (lim / alloc), nil
-}
+//// GetCpuRequestsLimits returns percentage of utilized CPU requests and CPU limits at cluster targetCluster
+//// Query is based on `kube-state-metrics` data-source. Skips nodes with master in the hostname
+//func (pql *PromQL) GetCpuRequestsLimits(targetCluster string) (float64, float64, error) {
+//
+//	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
+//	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
+//	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{cluster=~\"%s\",resource=\"cpu\",node!~\"^(.*master).*$\"})", targetCluster)
+//
+//	var lim, req, alloc float64
+//
+//	val, err := pql.Query(limits)
+//	if err != nil {
+//		log.Errorf("[PromQL] Error: %v", err)
+//		return -1, -1, err
+//	}
+//	if len(val) > 0 {
+//		lim, err = strconv.ParseFloat(val[0].Value.String(), 64)
+//		if err != nil {
+//			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+//			return -1, -1, err
+//		}
+//	} else {
+//		log.Errorf("Error while fetching CPU limits: %v", err)
+//	}
+//
+//	val, err = pql.Query(requests)
+//	if err != nil {
+//		log.Errorf("[PromQL] Error: %v", err)
+//		return -1, -1, err
+//	}
+//	if len(val) > 0 {
+//		req, err = strconv.ParseFloat(val[0].Value.String(), 64)
+//		if err != nil {
+//			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+//			return -1, -1, err
+//		}
+//	} else {
+//		log.Errorf("Error while fetching CPU requests: %v", err)
+//	}
+//
+//	val, err = pql.Query(allocatable)
+//	if err != nil {
+//		log.Errorf("[PromQL] Error: %v", err)
+//		return -1, -1, err
+//	}
+//	if len(val) > 0 {
+//		alloc, err = strconv.ParseFloat(val[0].Value.String(), 64)
+//		if err != nil {
+//			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+//			return -1, -1, err
+//		}
+//	} else {
+//		log.Errorf("Error while fetching CPU allocatable: %v", err)
+//	}
+//
+//	return 100 * (req / alloc), 100 * (lim / alloc), nil
+//}
+//
+//// GetMemoryRequestsLimits returns percentage of utilized CPU requests and CPU limits at cluster targetCluster
+//// Query is based on `kube-state-metrics` data-source. Skips nodes with master in the hostname
+//func (pql *PromQL) GetMemoryRequestsLimits(targetCluster string) (float64, float64, error) {
+//	//log.Infof("Getting MEMORY (requests, limits) for cluster %s", targetCluster)
+//	limits := fmt.Sprintf("sum(kube_pod_container_resource_limits{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
+//	requests := fmt.Sprintf("sum(kube_pod_container_resource_requests{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
+//	allocatable := fmt.Sprintf("sum(kube_node_status_allocatable{cluster=~\"%s\",resource=\"memory\",node!~\"^(.*master).*$\"})", targetCluster)
+//
+//	var lim, req, alloc float64
+//
+//	val, err := pql.Query(limits)
+//	if err != nil {
+//		log.Errorf("[PromQL] Error: %v", err)
+//		return -1, -1, err
+//	}
+//	if len(val) > 0 {
+//		lim, err = strconv.ParseFloat(val[0].Value.String(), 64)
+//		if err != nil {
+//			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+//			return -1, -1, err
+//		}
+//	} else {
+//		log.Errorf("Error while fetching MEMORY limits: %v", err)
+//	}
+//
+//	val, err = pql.Query(requests)
+//	if err != nil {
+//		log.Errorf("[PromQL] Error: %v", err)
+//		return -1, -1, err
+//	}
+//	if len(val) > 0 {
+//		req, err = strconv.ParseFloat(val[0].Value.String(), 64)
+//		if err != nil {
+//			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+//			return -1, -1, err
+//		}
+//	} else {
+//		log.Errorf("Error while fetching MEMORY requests: %v", err)
+//	}
+//
+//	val, err = pql.Query(allocatable)
+//	if err != nil {
+//		log.Errorf("[PromQL] Error: %v", err)
+//		return -1, -1, err
+//	}
+//	if len(val) > 0 {
+//		alloc, err = strconv.ParseFloat(val[0].Value.String(), 64)
+//		if err != nil {
+//			log.Errorf("[PromQL] Could not ParseFloat. Reason: %v", err)
+//			return -1, -1, err
+//		}
+//	} else {
+//		log.Errorf("Error while fetching MEMORY allocatable: %v", err)
+//	}
+//
+//	return 100 * (req / alloc), 100 * (lim / alloc), nil
+//}
 
 // GetCpuUtilisation returns cpu utilisation on targetNode, as a percentage of used resources.
 // targetNode suppose to be a node-exported pod endpoint, eg. 10.41.1.168:9100

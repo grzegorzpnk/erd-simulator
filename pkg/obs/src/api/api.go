@@ -44,7 +44,7 @@ func NewRouter(ksmClient *observability.ClustersInfo, ltcClient *latency.MockCli
 	//router.HandleFunc(ksmClusterUrl+"/provider/{provider}/cluster/{cluster}/memory-limits", handler.getMemLimHandler).Methods("GET")
 
 	// SAMPLE URL: http://localhost:8282/v1/obs/ltc/cell/1/mec/edge-provider+mec1/latency-ms
-	router.HandleFunc(ltcUrl+"/cell/{cell-id}/mec/{mec-id}/latency-ms", handler.getLatencyHandler).Methods("GET")
+	router.HandleFunc(ltcUrl+"/source/{source-node}/target/{target-node}/latency-ms", handler.getLatencyHandler).Methods("GET")
 
 	return router
 }

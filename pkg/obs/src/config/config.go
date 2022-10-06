@@ -3,8 +3,10 @@
 package config
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/obs/src/pkg/model"
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
+	"io"
 	"os"
 	"reflect"
 	"strings"
@@ -109,4 +111,50 @@ func GetConfiguration() *Configuration {
 	}
 
 	return gConfig
+}
+
+func ReadTopologyConfigFile(file string) []model.MecHost {
+	f, err := os.Open(file)
+	if err != nil {
+		log.Errorf(err.Error())
+	}
+	defer f.Close()
+
+	dec := json.NewDecoder(f)
+	dec.DisallowUnknownFields()
+
+	var mecs []model.MecHost
+
+	err = dec.Decode(&mecs)
+	if err == io.EOF {
+		// all done
+	}
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//log.Infof("mec-hosts: %+v", mecs)
+
+	return mecs
+}
+
+func ReadNetworkTopologyConfigFile(file string) []model.Cell {
+	f, err := os.Open(file)
+	if err != nil {
+		log.Errorf(err.Error())
+	}
+	defer f.Close()
+
+	dec := json.NewDecoder(f)
+	dec.DisallowUnknownFields()
+	var cells []model.Cell
+
+	_ = dec.Decode(&cells)
+	if err == io.EOF {
+		// all done
+	}
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//log.Infof("cells: %+v", cells)
+	return cells
 }
