@@ -16,23 +16,6 @@ type MockClient struct {
 	Mecs  []model.MecHost
 }
 
-//type CellInfo struct {
-//	id   string
-//	zone string
-//
-//	// leave it for now
-//	latitude  float64
-//	longitude float64
-//}
-//
-//type MehInfo struct {
-//	mecName string
-//	mecType int
-//	// leave it for now
-//	latitude  float64
-//	longitude float64
-//}
-
 func (mc *MockClient) InitializeLatencyMock() {
 	log.Info("[LTC] Initializing LatencyMock...")
 	rand.Seed(time.Now().UnixNano())
@@ -47,26 +30,7 @@ func (mc *MockClient) InitializeLatencyMock() {
 
 	mc.Mecs = mecHosts
 
-	// debug
-	//mc.PrintMecs()
-	//mc.PrintCells()
 }
-
-//func (mc *MockClient) PrintCells() {
-//	var cellsMsg string
-//	for _, cell := range mc.Cells {
-//		cellsMsg += cell.Id + " "
-//	}
-//	log.Infof("Got cells: %v", cellsMsg)
-//}
-//
-//func (mc *MockClient) PrintMecs() {
-//	var mecsMsg string
-//	for _, mec := range mc.Mecs {
-//		mecsMsg += mec.Identity.Provider + "+" + mec.Identity.Cluster + " "
-//	}
-//	log.Infof("Got mecs: %v", mecsMsg)
-//}
 
 func (mc *MockClient) GetCellById(cellId string) (model.Cell, error) {
 	for _, cell := range mc.Cells {
@@ -148,6 +112,7 @@ func (mc *MockClient) GetMockedLatencyMs(sNode, tNode interface{}) (float64, err
 				log.Errorf("[LTC] error: %v", err)
 				return -1, err
 			}
+			// increase latency based on mec level
 			levelDiff := math.Abs(float64(source.Identity.Location.Level - target.Identity.Location.Level))
 			if levelDiff != 0 {
 				latency += 30
@@ -158,7 +123,6 @@ func (mc *MockClient) GetMockedLatencyMs(sNode, tNode interface{}) (float64, err
 			}
 		}
 	}
-
 	return latency, nil
 }
 

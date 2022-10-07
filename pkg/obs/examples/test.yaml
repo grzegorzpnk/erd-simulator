@@ -5,7 +5,7 @@ metadata:
   name: frontend
 spec:
   containers:
-  - name: app
+  - name: app-1
     image: nginx
     resources:
       requests:
@@ -14,7 +14,7 @@ spec:
       limits:
         memory: "128Mi"
         cpu: "500m"
-  - name: log-aggregator
+  - name: app-2
     image: nginx
     resources:
       requests:
