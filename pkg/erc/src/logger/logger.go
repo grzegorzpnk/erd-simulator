@@ -24,6 +24,14 @@ func Errorf(format string, args ...interface{}) {
 	log.Errorf(format, args...)
 }
 
+func Debug(args ...interface{}) {
+	log.Debug(args...)
+}
+
+func Debugf(format string, args ...interface{}) {
+	log.Debugf(format, args...)
+}
+
 func Info(args ...interface{}) {
 	log.Info(args...)
 }

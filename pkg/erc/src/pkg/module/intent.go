@@ -83,6 +83,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.Smar
 		for _, mec := range sp.evalNeighMECs {
 			mec, err = tc.GetMecNeighbours(mec)
 			if err != nil {
+				log.Warnf("Could not proceed %v neighbours. Reason: %v", mec.BuildClusterEmcoFQDN(), err)
 				continue
 			}
 
@@ -125,6 +126,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.Smar
 func checkIfSkip(mec model.MecHost, mecList []model.MecHost) bool {
 	for _, candidate := range mecList {
 		if mec.BuildClusterEmcoFQDN() == candidate.BuildClusterEmcoFQDN() {
+			log.Infof("Skipping: %v", candidate.BuildClusterEmcoFQDN())
 			return true
 		}
 	}

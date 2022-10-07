@@ -7,7 +7,7 @@ image:
 
 config:
   servicePort: 8686
-  topologyEndpoint: "localhost:8787/v2/mec-topology"
+  topologyEndpoint: "http://10.254.185.44:32137/v1"
 
 workingDir: "/erc"
 command: "./erc"

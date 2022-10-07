@@ -46,7 +46,10 @@ type MecHost struct {
 }
 
 func (mh *MecHost) BuildClusterEmcoFQDN() string {
-	return mh.Identity.Provider + "+" + mh.Identity.Cluster
+	if mh.Identity.Provider != "" && mh.Identity.Cluster != "" {
+		return mh.Identity.Provider + "+" + mh.Identity.Cluster
+	}
+	return ""
 }
 
 func (mh *MecHost) GetLatency() float64 {
