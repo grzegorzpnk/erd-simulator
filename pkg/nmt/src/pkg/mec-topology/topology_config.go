@@ -32,9 +32,7 @@ func (g *Graph) ReadTopologyConfigFile(file string) {
 		}
 
 		g.MecHosts = mec
-
 	}
-
 }
 
 func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
