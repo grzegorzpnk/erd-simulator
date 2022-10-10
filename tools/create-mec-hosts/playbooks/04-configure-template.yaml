@@ -1,0 +1,20 @@
+- hosts: nodes
+  become: yes
+  tasks:
+    - name: Allow scheduling on master -> remove node-role.kubernetes.io/master:NoSchedule-
+      become: no
+      shell: kubectl taint node $(kubectl get nodes -o=jsonpath='{.items[0].metadata.labels.kubernetes\.io/hostname}') node-role.kubernetes.io/master:NoSchedule-
+      ignore_errors: yes
+
+    - name: Set worker annotation
+      become: no
+      shell: kubectl label node $(kubectl get nodes -o=jsonpath='{.items[0].metadata.labels.kubernetes\.io/hostname}') node-role.kubernetes.io/worker=worker
+      ignore_errors: yes
+
+    - name: Copy kube-config to local machine
+      become: yes
+      fetch:
+        src: /etc/kubernetes/admin.conf
+        dest: ../configs/$MEC_NAME.config
+        remote_src: yes
+      ignore_errors: yes

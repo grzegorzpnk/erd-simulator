@@ -11,12 +11,13 @@ then
     AC=$1 # create|delete|apply
     KC=$2
     NS=$3 # suppose to be kube-system
-    
+
+    echo "--- Deploying metrics-server..."
     kubectl --kubeconfig $KC --namespace $NS $AC -f .
 
-    if [ $AC == "create" || $AC == "apply" ];
+    if [ $AC == "create" ] || [ $AC == "apply" ];
     then
-        echo "--- Created!"
+        echo "--- Deployed metrics-server!"
     fi
 else 
     echo "Usage: ./deploy-metrics-server.sh  <create|delete|apply> <kubeconfig-path> <namespace>"

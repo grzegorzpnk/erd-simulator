@@ -1,0 +1,31 @@
+- hosts: nodes
+  become: yes
+  tasks:
+    - name: Initialize K8s cluster (kubeadm init) for $NODE_IP
+      shell: sudo kubeadm init --pod-network-cidr=$NETWORK_CIDR --service-cidr=$SERVICE_CIDR --control-plane-endpoint $NODE_IP
+      args:
+        chdir: /home/ubuntu
+
+    - name: Create .kube directory
+      become: yes
+      become_user: ubuntu
+      file:
+        path: /home/ubuntu/.kube
+        state: directory
+        mode: 0755
+
+    - name: Copy admin.conf to user's kube config
+      become: yes
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        remote_src: yes
+        owner: ubuntu
+
+    - name: Install Flannel CNI with NETWORK_CIDR[$NETWORK_CIDR]
+      become: yes
+      become_user: ubuntu
+      shell: kubectl apply -f https://raw.githubusercontent.com/pmatysiakq/Flannel/main/$MEC_NAME
+      args:
+        chdir: /home/ubuntu
+
