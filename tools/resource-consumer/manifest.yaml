@@ -1,0 +1,14 @@
+# memory unit[Mi], cpu unit[m]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-consumer
+spec:
+  containers:
+  - name: app-1
+    image: nginx
+    resources:
+      requests:
+        memory: ""
+        cpu: ""
