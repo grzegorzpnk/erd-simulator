@@ -1,0 +1,39 @@
+[
+
+  {
+    "source": "mec12",
+    "sourceVertexProviderName": "edge-provider",
+    "target": "mec13",
+    "targetVertexProviderName": "edge-provider",
+    "edgeMetrics": {
+      "latency": 12.32
+    }
+  },
+  {
+    "source": "mec12",
+    "sourceVertexProviderName": "edge-provider",
+    "target": "mec14",
+    "targetVertexProviderName": "edge-provider",
+    "edgeMetrics": {
+      "latency": 12.32
+    }
+  },
+  {
+    "source": "mec12",
+    "sourceVertexProviderName": "edge-provider",
+    "target": "mec15",
+    "targetVertexProviderName": "edge-provider",
+    "edgeMetrics": {
+      "latency": 12.32
+    }
+  },
+  {
+    "source": "mec13",
+    "sourceVertexProviderName": "edge-provider",
+    "target": "mec12",
+    "targetVertexProviderName": "edge-provider",
+    "edgeMetrics": {
+      "latency": 12.32
+    }
+  }
+]

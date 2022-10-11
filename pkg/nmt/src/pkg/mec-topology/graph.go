@@ -34,7 +34,6 @@ func (g *Graph) GetCell(cellId string) *model.Cell {
 		if v.Id == cellId {
 			return g.NetworkCells[i]
 		}
-
 	}
 	return nil
 }
@@ -102,13 +101,63 @@ func (g *Graph) ClustersResourcesUpdate() {
 
 			clusterCPUURL := metrics.BuildCpuUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
 			clusterMemoryURL := metrics.BuildMemoryUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
-			log.Infof("update for cluster %v\n", v.Identity.Cluster)
-			log.Infof("cpu latest update:")
+			//	log.Infof("update for cluster %v\n", v.Identity.Cluster)
+			//	log.Infof("cpu latest update:")
+			cpuCr, err := metrics.GetClusterMetrics(clusterCPUURL)
+			if err != nil {
+				log.Errorf(err.Error())
+			}
+			//	log.Infof("memory latest update:")
+			memoryCr, err := metrics.GetClusterMetrics(clusterMemoryURL)
+			if err != nil {
+				log.Errorf(err.Error())
+			}
+
+			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).CpuResources.UpdateClusterMetrics(cpuCr)
+			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).MemoryResources.UpdateClusterMetrics(memoryCr)
+			//	log.Infof("Controller updates cluster metrics for Mec Host: %v\n", v.Identity.Cluster)
+
+		}
+		time.Sleep(1 * time.Second)
+	}
+}
+
+//is a gorutine function
+func (g *Graph) NetworkMetricsUpdate() {
+
+	endpoint := config.GetConfiguration().ClusterControllerEndpoint
+
+	for {
+
+		//update cell-mecs latencies - this is kept by MEC hosts
+		for i, v := range g.MecHosts {
+			for k, c := range v.SupportingCells {
+				cellLatenyUrl := metrics.BuildCellLatencyURL(endpoint, c.Id, v.Identity.Cluster, v.Identity.Provider)
+				latency, err := metrics.GetCellLatency(cellLatenyUrl)
+				if err != nil {
+					log.Errorf(err.Error())
+				} else {
+					g.MecHosts[i].SupportingCells[k].Latency = latency
+				}
+			}
+		}
+
+	}
+	//update mecs-mecs latencies - this is kept by Edges
+
+	/*	for {
+		// update metrics for MEC Clusters
+		for _, v := range g.MecHosts {
+
+			clusterCPUURL := metrics.BuildCpuUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
+			clusterMemoryURL := metrics.BuildMemoryUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
+			//log.Infof("update for cluster %v\n", v.Identity.Cluster)
+			//log.Infof("cpu latest update:")
 			cpuCr, err := metrics.GetClusterMetrics(v.Identity.Cluster, v.Identity.Provider, clusterCPUURL)
 			if err != nil {
 				log.Errorf(err.Error())
 			}
-			log.Infof("memory latest update:")
+			//log.Infof("memory latest update:")
 			memoryCr, err := metrics.GetClusterMetrics(v.Identity.Cluster, v.Identity.Provider, clusterMemoryURL)
 			if err != nil {
 				log.Errorf(err.Error())
@@ -120,5 +169,5 @@ func (g *Graph) ClustersResourcesUpdate() {
 
 		}
 		time.Sleep(1 * time.Second)
-	}
+	}*/
 }

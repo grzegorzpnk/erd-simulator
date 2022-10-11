@@ -2,9 +2,13 @@ package metrics
 
 import (
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
+	"encoding/binary"
 	"encoding/json"
 	"io/ioutil"
+	"math"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 /*type ClusterResources struct {
@@ -34,27 +38,7 @@ func (nm *NetworkMetrics) UpdateNetworkMetrics(networkMetrics NetworkMetrics) {
 	nm.Latency = networkMetrics.Latency
 }
 
-/*
-func ClusterMetricsUpdateTest(g *Graph) {
-
-	endpoint := config.GetConfiguration().ClusterControllerEndpoint
-
-	for {
-		// update metrics for MEC Clusters
-
-		_, err := getClusterMetrics("mec1", endpoint)
-		if err != nil {
-			log.Errorf(err.Error())
-		}
-
-		time.Sleep(5 * time.Second)
-
-	}
-}
-*/
-
-/*
-//gorutine function
+/*//gorutine function
 func NetworkMetricsUpdate(g *Graph) {
 
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
@@ -67,8 +51,8 @@ func NetworkMetricsUpdate(g *Graph) {
 		}
 		time.Sleep(1 * time.Second)
 	}
-}*/
-
+}
+*/
 /*
 func NetworkMetricsUpdateTest(g *Graph) {
 
@@ -85,38 +69,22 @@ func NetworkMetricsUpdateTest(g *Graph) {
 }
 */
 
-func GetClusterMetrics(clusterName, clusterProvider, endpoint string) (ClusterResources, error) {
+func GetClusterMetrics(endpoint string) (ClusterResources, error) {
 
 	cr := httpGet(endpoint)
-	log.Infof("Resp: %v", cr)
+	//	log.Infof("Resp: %v", cr)
 
 	return cr, nil
 }
 
-/*
-//to be tested
-func getNetworkMetricsNotification(endpoint string, edge *Edge, g *Graph) NetworkMetrics {
-	var nm NetworkMetrics
-	var cellID, mecID string
+func GetCellLatency(endpoint string) (float64, error) {
 
-	if g.GetVertex(edge.Source).Type == "CELL" {
-		cellID = edge.Source
-		mecID = edge.Target
-	} else {
-		cellID = edge.Target
-		mecID = edge.Source
-	}
-	latencyURL := buildLatencyURL(endpoint, cellID, mecID)
-	latencyStr := httpGet(latencyURL)
+	lat, _ := httpGetLatency(endpoint)
+	log.Infof("Resp: %v", lat)
 
-	//get current latency
-	log.Printf("Latency resp: %v ", latencyStr)
-	//	log.Infof("Latency: %v\n", latencyStr)
-	nm.Latency, _ = strconv.ParseFloat(latencyStr, 32)
-
-	return nm
+	return lat, nil
 }
-*/
+
 func httpGet(endpoint string) ClusterResources {
 
 	resp, err := http.Get(endpoint)
@@ -133,29 +101,49 @@ func httpGet(endpoint string) ClusterResources {
 	var cr ClusterResources
 	json.Unmarshal(body, &cr)
 
-	/*sb := string(body)
-
-	//delete whitespaces
-	ret := strings.TrimSpace(sb)*/
-
 	return cr
 
 }
 
-/*
-func buildLatencyURL(endpoint, cellID, MECID string) string {
+func httpGetLatency(endpoint string) (float64, error) {
+
+	resp, err := http.Get(endpoint)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	sb := string(body)
+	ret := strings.TrimSpace(sb)
+	tmp, _ := strconv.ParseFloat(ret, 64)
+
+	return tmp, nil
+}
+
+func Float64frombytes(bytes []byte) float64 {
+	bits := binary.LittleEndian.Uint64(bytes)
+	float := math.Float64frombits(bits)
+	return float
+}
+
+func BuildCellLatencyURL(endpoint, CellId, MecName, MecProvider string) string {
 	//http://10.254.185.50:32138/v1/obs/ltc/cell/1/mec/edge-provider+mec1/latency-ms
+	//http://10.254.185.50:32138/v1/obs/ltc/source/edge-provider+mec1/target/edge-provider+mec2/latency-ms
 
 	var latencyURL string
-	//todo
-	baseURL := endpoint + "/v1/obs/ltc/cell/"
-	cellURL := baseURL + cellID + "/mec/"
-	mecURL := cellURL + config.GetConfiguration().EdgeProvider + "+" + MECID
+	baseURL := endpoint + "/v1/obs/ltc/source/"
+	cellURL := baseURL + CellId + "/target/"
+	mecURL := cellURL + MecProvider + "+" + MecName
 	latencyURL = mecURL + "/latency-ms"
 	log.Infof("latency url: ", latencyURL)
 
 	return latencyURL
-}*/
+}
 
 func BuildCpuUrl(clusterName, clusterProvider, endpoint string) string {
 

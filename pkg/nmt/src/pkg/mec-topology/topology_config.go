@@ -35,6 +35,35 @@ func (g *Graph) ReadTopologyConfigFile(file string) {
 	}
 }
 
+// readConfigFile reads the specified smsConfig file to setup some env variables
+func (g *Graph) ReadMECConnectionFile(file string) {
+	f, err := os.Open(file)
+	if err != nil {
+		log.Errorf(err.Error())
+	}
+	defer f.Close()
+
+	dec := json.NewDecoder(f)
+	dec.DisallowUnknownFields()
+
+	for {
+		var links []*model.Edge
+		err := dec.Decode(&links)
+		if err == io.EOF {
+			// all done
+			break
+		}
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		for _, v := range links {
+			g.AddLink(*v)
+		}
+	}
+
+}
+
 func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 	f, err := os.Open(file)
 	if err != nil {

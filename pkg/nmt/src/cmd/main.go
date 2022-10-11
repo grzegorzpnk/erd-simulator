@@ -5,7 +5,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"net/http"
 )
 
@@ -24,10 +23,20 @@ func main() {
 	//	initializingGraph()
 
 	graph.ReadTopologyConfigFile("mecTopology.json")
+	graph.ReadMECConnectionFile("mecLinks.json")
 	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
+	/*	var link model.Edge
+		link.SourceVertexName = "mec12"
+		link.TargetVertexName = "mec13"
+		link.TargetVertexProviderName = "edge-provider"
+		link.SourceVertexProviderName = "edge-provider"
+		link.EdgeMetrics.Latency = 12.32
+
+		graph.AddLink(link)
+	*/
 	//gorutines to update cluster resources and network metrics
-	//go mec_topology.NetworkMetricsUpdate(graph)
+	// go graph.NetworkMetricsUpdate()
 	go graph.ClustersResourcesUpdate()
 
 	httpRouter := api.NewRouter(graph)
@@ -39,57 +48,4 @@ func main() {
 
 	log.Fatalln(httpServer.ListenAndServe())
 
-}
-
-func initializingGraph() {
-
-	//add MECs
-	mec := createMecHost("mec1", "edge-provider")
-	graph.AddMecHost(mec)
-	mec = createMecHost("mec5", "edge-provider")
-	graph.AddMecHost(mec)
-	mec = createMecHost("mec7", "edge-provider")
-	graph.AddMecHost(mec)
-	mec = createMecHost("mec15", "edge-provider")
-	graph.AddMecHost(mec)
-
-	//addEdges
-	link := createLink("mec1", "edge-provider", "mec5", "edge-provider")
-	graph.AddLink(link)
-	link = createLink("mec5", "edge-provider", "mec1", "edge-provider")
-	graph.AddLink(link)
-	link = createLink("mec5", "edge-provider", "mec7", "edge-provider")
-	graph.AddLink(link)
-	link = createLink("mec7", "edge-provider", "mec1", "edge-provider")
-	graph.AddLink(link)
-	link = createLink("mec1", "edge-provider", "mec15", "edge-provider")
-	graph.AddLink(link)
-
-	//graph.PrintGraph()
-
-}
-
-func createMecHost(clusterName, clusterProvider string) model.MecHost {
-
-	var mec model.MecHost
-	mec.Identity.Cluster = clusterName
-	mec.Identity.Provider = clusterProvider
-	mec.Identity.Location.LocalZone = "city1"
-	mec.Identity.Location.LocalZone = "city1"
-	mec.Identity.Location.Zone = "mazowieckie"
-	mec.Identity.Location.Region = "poland west"
-	mec.Identity.Location.Level = 0
-
-	return mec
-}
-
-func createLink(startMecHost, startMecProvider, destMecHost, destMecProvider string) model.Edge {
-
-	var link model.Edge
-	link.SourceVertexName = startMecHost
-	link.SourceVertexProviderName = startMecProvider
-	link.TargetVertexName = destMecHost
-	link.TargetVertexProviderName = destMecProvider
-
-	return link
 }

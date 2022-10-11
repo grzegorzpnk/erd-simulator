@@ -48,7 +48,7 @@ type MecLocation struct {
 
 type Cell struct {
 	Id        string  `json:"id"`
-	Latency   float32 `json:"latency"`
+	Latency   float64 `json:"latency"`
 	LocalZone string  `json:"local-zone,omitempty"`
 }
 
