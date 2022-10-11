@@ -51,6 +51,7 @@ func (h *apiHandler) getMecHostHandler(w http.ResponseWriter, r *http.Request) {
 		if v.Identity.Cluster == params["cluster"] &&
 			v.Identity.Provider == params["provider"] {
 			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i])
+			break
 		}
 	}
 }

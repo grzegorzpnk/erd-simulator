@@ -133,7 +133,7 @@ func (g *Graph) NetworkMetricsUpdate() {
 		for i, v := range g.MecHosts {
 			for k, c := range v.SupportingCells {
 				cellLatenyUrl := metrics.BuildCellLatencyURL(endpoint, c.Id, v.Identity.Cluster, v.Identity.Provider)
-				latency, err := metrics.GetCellLatency(cellLatenyUrl)
+				latency, err := metrics.GetLatency(cellLatenyUrl)
 				if err != nil {
 					log.Errorf(err.Error())
 				} else {
@@ -142,32 +142,21 @@ func (g *Graph) NetworkMetricsUpdate() {
 			}
 		}
 
-	}
-	//update mecs-mecs latencies - this is kept by Edges
+		//update mecs-mecs latencies - this is kept by Edges
 
-	/*	for {
 		// update metrics for MEC Clusters
-		for _, v := range g.MecHosts {
+		for d, b := range g.Edges {
 
-			clusterCPUURL := metrics.BuildCpuUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
-			clusterMemoryURL := metrics.BuildMemoryUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
-			//log.Infof("update for cluster %v\n", v.Identity.Cluster)
-			//log.Infof("cpu latest update:")
-			cpuCr, err := metrics.GetClusterMetrics(v.Identity.Cluster, v.Identity.Provider, clusterCPUURL)
+			mecLatenyUrl := metrics.BuildMECLatencyURL(endpoint, b.TargetVertexName, b.TargetVertexProviderName, b.SourceVertexName, b.SourceVertexProviderName)
+			latency, err := metrics.GetLatency(mecLatenyUrl)
 			if err != nil {
 				log.Errorf(err.Error())
+			} else {
+				g.Edges[d].EdgeMetrics.Latency = latency
 			}
-			//log.Infof("memory latest update:")
-			memoryCr, err := metrics.GetClusterMetrics(v.Identity.Cluster, v.Identity.Provider, clusterMemoryURL)
-			if err != nil {
-				log.Errorf(err.Error())
-			}
-
-			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).CpuResources.UpdateClusterMetrics(cpuCr)
-			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).MemoryResources.UpdateClusterMetrics(memoryCr)
-			log.Infof("Controller updates cluster metrics for Mec Host: %v\n", v.Identity.Cluster)
 
 		}
-		time.Sleep(1 * time.Second)
-	}*/
+
+		time.Sleep(time.Duration(5 * config.GetConfiguration().Timestamp))
+	}
 }

@@ -36,7 +36,7 @@ func main() {
 		graph.AddLink(link)
 	*/
 	//gorutines to update cluster resources and network metrics
-	// go graph.NetworkMetricsUpdate()
+	go graph.NetworkMetricsUpdate()
 	go graph.ClustersResourcesUpdate()
 
 	httpRouter := api.NewRouter(graph)

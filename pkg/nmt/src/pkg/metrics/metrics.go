@@ -77,10 +77,10 @@ func GetClusterMetrics(endpoint string) (ClusterResources, error) {
 	return cr, nil
 }
 
-func GetCellLatency(endpoint string) (float64, error) {
+func GetLatency(endpoint string) (float64, error) {
 
 	lat, _ := httpGetLatency(endpoint)
-	log.Infof("Resp: %v", lat)
+	//log.Infof("Resp: %v", lat)
 
 	return lat, nil
 }
@@ -139,6 +139,20 @@ func BuildCellLatencyURL(endpoint, CellId, MecName, MecProvider string) string {
 	baseURL := endpoint + "/v1/obs/ltc/source/"
 	cellURL := baseURL + CellId + "/target/"
 	mecURL := cellURL + MecProvider + "+" + MecName
+	latencyURL = mecURL + "/latency-ms"
+	log.Infof("latency url: ", latencyURL)
+
+	return latencyURL
+}
+
+func BuildMECLatencyURL(endpoint, targetMEC, targetProvider, SourceMEC, SourceProvider string) string {
+	//http://10.254.185.50:32138/v1/obs/ltc/cell/1/mec/edge-provider+mec1/latency-ms
+	//http://10.254.185.50:32138/v1/obs/ltc/source/edge-provider+mec1/target/edge-provider+mec2/latency-ms
+
+	var latencyURL string
+	baseURL := endpoint + "/v1/obs/ltc/source/"
+	cellURL := baseURL + SourceProvider + "+" + SourceMEC + "/target/"
+	mecURL := cellURL + targetProvider + "+" + targetMEC
 	latencyURL = mecURL + "/latency-ms"
 	log.Infof("latency url: ", latencyURL)
 
