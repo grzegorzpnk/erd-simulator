@@ -6,20 +6,19 @@ then
 
     if [[ $MEC_NAME == "" ]];
     then
-      echo "Error: MEC_NAME env variable not set"
+      echo "[PROMETHEUS] Error: MEC_NAME env variable not set"
       exit 0
     else
-      echo "Deploying prometheus for Cluster[$MEC_NAME]"
+      echo "--- [PROMETHEUS] Deploying Prometheus for Cluster[$MEC_NAME]"
       envsubst < config-map-template.yaml >config-map.yaml
     fi
 
     if [[ $AC != "create" && $AC != "delete" && $AC != "apply" ]];
     then
-        echo "Usage: ./deploy-prometheus.sh <create|delete|apply> <kubeconfig-path> <namespace>"
+        echo "[PROMETHEUS] Usage: ./deploy-prometheus.sh <create|delete|apply> <kubeconfig-path> <namespace>"
 	    exit 0
     fi
 
-    # kubectl --kubeconfig $KC $AC ns $NS
     kubectl --kubeconfig $KC --namespace $NS $AC -f cluster-role.yaml
     
     kubectl --kubeconfig $KC --namespace $NS $AC -f config-map.yaml
@@ -27,20 +26,9 @@ then
     kubectl --kubeconfig $KC --namespace $NS $AC -f prometheus-deployment.yaml
     
     kubectl --kubeconfig $KC --namespace $NS $AC -f prometheus-service.yaml
-    
-    sleep 5
-    
-    if [ $AC == "create" ] || [ $AC == "apply" ];
-    then
-        echo "--- Verifying Prometheus deployment..."
-        kubectl --kubeconfig $KC --namespace $NS get deployments
-        
-        echo "--- Verifying Prometheus service..."
-        kubectl --kubeconfig $KC --namespace $NS get services
-    fi
 
-     echo "--- Clear up: delete config-map.yaml..."
+     echo "--- [PROMETHEUS] Clear up: delete config-map.yaml..."
      rm config-map.yaml
 else 
-    echo "Usage: ./deploy-prometheus.sh <create|delete> <kubeconfig-path> <namespace>"
+    echo "[PROMETHEUS] Usage: ./deploy-prometheus.sh <create|delete> <kubeconfig-path> <namespace>"
 fi

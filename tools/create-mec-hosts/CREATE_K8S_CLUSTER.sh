@@ -17,21 +17,24 @@ declare -a clusters=(
 for cluster in "${clusters[@]}"; do
     IFS=',' read -ra PARAMS <<< "$cluster"
     node_ip=${PARAMS[0]}  && export NODE_IP=$node_ip   
-    ncidr=${PARAMS[1]} && export NETWORK_CIDR=$ncidr
-    scidr=${PARAMS[2]} && export SERVICE_CIDR=$scidr
+    network_cidr=${PARAMS[1]} && export NETWORK_CIDR=$network_cidr
+    service_cidr=${PARAMS[2]} && export SERVICE_CIDR=$service_cidr
     node_name=${PARAMS[3]} && export MEC_NAME=$node_name
-    echo "Generating hosts, 03-master.yaml & 04-configure.yaml files for cluster $node_ip"
+
+    echo "Generating files from template: hosts, 03-master.yaml & 04-configure.yaml files for cluster $node_ip"
     envsubst < ./playbooks/03-init-template.yaml >playbooks/03-init.yaml
     envsubst < ./playbooks/04-configure-template.yaml >playbooks/04-configure.yaml
     envsubst < ./hosts-template >hosts
 
     echo "Run Ansible playbooks"
-    #ansible-playbook -i ./hosts ./playbooks/01-initial.yaml
-    #ansible-playbook -i ./hosts ./playbooks/02-kube-dependencies.yaml
-    #ansible-playbook -i ./hosts ./playbooks/03-init.yaml
-    #sleep 10
+    ansible-playbook -i ./hosts ./playbooks/01-initial.yaml
+    ansible-playbook -i ./hosts ./playbooks/02-kube-dependencies.yaml
+    ansible-playbook -i ./hosts ./playbooks/03-init.yaml
+
+    # wait until new cluster is healthy to apply configuration via kubectl
+    sleep 10
     ansible-playbook -i ./hosts ./playbooks/04-configure.yaml
 done
 
-echo "DONE! Clear up hosts & init.yaml"
+echo "DONE! Clear up hosts, 03-init.yaml & 04-configure.yaml"
 rm ./hosts ./playbooks/03-init.yaml ./playbooks/04-configure.yaml
