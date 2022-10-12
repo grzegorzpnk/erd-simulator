@@ -10,11 +10,6 @@ import (
 
 var graph *mec_topology.Graph
 
-//todo:
-// 1 add edge provider
-// 2 add api
-// 3 documentation
-
 func main() {
 	log.Infof("[SERVER] Starting NMT server. Port: %v", config.GetConfiguration().ServicePort)
 	log.Infof("[SERVER] OBS endpoint: %v", config.GetConfiguration().ClusterControllerEndpoint)
