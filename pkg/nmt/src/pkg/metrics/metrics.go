@@ -140,7 +140,7 @@ func BuildCellLatencyURL(endpoint, CellId, MecName, MecProvider string) string {
 	cellURL := baseURL + CellId + "/target/"
 	mecURL := cellURL + MecProvider + "+" + MecName
 	latencyURL = mecURL + "/latency-ms"
-	log.Infof("latency url: ", latencyURL)
+	//log.Infof("latency url: ", latencyURL)
 
 	return latencyURL
 }
@@ -154,7 +154,7 @@ func BuildMECLatencyURL(endpoint, targetMEC, targetProvider, SourceMEC, SourcePr
 	cellURL := baseURL + SourceProvider + "+" + SourceMEC + "/target/"
 	mecURL := cellURL + targetProvider + "+" + targetMEC
 	latencyURL = mecURL + "/latency-ms"
-	log.Infof("latency url: ", latencyURL)
+	//log.Infof("latency url: ", latencyURL)
 
 	return latencyURL
 }

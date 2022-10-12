@@ -5,8 +5,8 @@
       "cluster": "mec12",
       "location": {
        "type": 0,
-       "region": "poland east",
-       "zone": "east",
+       "region": "poland 1",
+       "zone": "west",
        "local-zone": "wroclaw"
       }
     }
@@ -17,8 +17,8 @@
     "cluster": "mec13",
     "location": {
       "type": 0,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": "wroclaw"
     }
   }
@@ -29,8 +29,8 @@
     "cluster": "mec14",
     "location": {
       "type": 0,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": "wroclaw"
     }
   }
@@ -41,8 +41,8 @@
     "cluster": "mec11",
     "location": {
       "type": 0,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": "wroclaw"
     }
   }
@@ -53,8 +53,8 @@
   "cluster": "mec16",
   "location": {
     "type": 0,
-    "region": "poland east",
-    "zone": "east",
+    "region": "poland 1",
+    "zone": "west",
     "local-zone": "poznan"
   }
 }
@@ -65,8 +65,8 @@
   "cluster": "mec17",
   "location": {
     "type": 0,
-    "region": "poland east",
-    "zone": "east",
+    "region": "poland 1",
+    "zone": "west",
     "local-zone": "poznan"
   }
 }
@@ -77,8 +77,8 @@
     "cluster": "mec18",
     "location": {
       "type": 0,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": "poznan"
     }
   }
@@ -89,8 +89,8 @@
     "cluster": "mec15",
     "location": {
       "type": 0,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": "poznan"
     }
   }
@@ -101,7 +101,7 @@
     "cluster": "mec20",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "lodz"
     }
@@ -113,7 +113,7 @@
     "cluster": "mec21",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "lodz"
     }
@@ -125,7 +125,7 @@
     "cluster": "mec22",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "lodz"
     }
@@ -137,7 +137,7 @@
     "cluster": "mec19",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "lodz"
     }
@@ -149,7 +149,7 @@
     "cluster": "mec24",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "warszawa"
     }
@@ -161,7 +161,7 @@
     "cluster": "mec25",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "warszawa"
     }
@@ -173,7 +173,7 @@
     "cluster": "mec26",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "warszawa"
     }
@@ -185,7 +185,7 @@
     "cluster": "mec23",
     "location": {
       "type": 0,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": "warszawa"
     }
@@ -197,8 +197,8 @@
     "cluster": "mec28",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "kielce"
     }
   }
@@ -209,8 +209,8 @@
     "cluster": "mec29",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "kielce"
     }
   }
@@ -221,8 +221,8 @@
     "cluster": "mec30",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "kielce"
     }
   }
@@ -233,8 +233,8 @@
     "cluster": "mec27",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "kielce"
     }
   }
@@ -245,8 +245,8 @@
     "cluster": "mec32",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "krakow"
     }
   }
@@ -257,8 +257,8 @@
     "cluster": "mec33",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "krakow"
     }
   }
@@ -269,8 +269,8 @@
     "cluster": "mec34",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "krakow"
     }
   }
@@ -281,8 +281,8 @@
     "cluster": "mec35",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "krakow"
     }
   }
@@ -293,8 +293,8 @@
     "cluster": "mec31",
     "location": {
       "type": 0,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": "krakow"
     }
   }
@@ -305,8 +305,8 @@
     "cluster": "mec3",
     "location": {
       "type": 1,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": ""
     }
   }
@@ -317,8 +317,8 @@
     "cluster": "mec4",
     "location": {
       "type": 1,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": ""
     }
   }
@@ -329,8 +329,8 @@
     "cluster": "mec5",
     "location": {
       "type": 1,
-      "region": "poland east",
-      "zone": "east",
+      "region": "poland 1",
+      "zone": "west",
       "local-zone": ""
     }
   }
@@ -341,7 +341,7 @@
     "cluster": "mec6",
     "location": {
       "type": 1,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": ""
     }
@@ -353,7 +353,7 @@
     "cluster": "mec7",
     "location": {
       "type": 1,
-      "region": "poland central",
+      "region": "poland 1",
       "zone": "central",
       "local-zone": ""
     }
@@ -365,8 +365,8 @@
     "cluster": "mec8",
     "location": {
       "type": 1,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": ""
     }
   }
@@ -377,8 +377,8 @@
     "cluster": "mec9",
     "location": {
       "type": 1,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": ""
     }
   }
@@ -389,8 +389,8 @@
     "cluster": "mec10",
     "location": {
       "type": 1,
-      "region": "poland west",
-      "zone": "west",
+      "region": "poland 2",
+      "zone": "east",
       "local-zone": ""
     }
   }
@@ -401,7 +401,7 @@
     "cluster": "mec1",
     "location": {
       "type": 2,
-      "region": "poland east",
+      "region": "poland 1",
       "zone": "",
       "local-zone": ""
     }
@@ -413,7 +413,7 @@
     "cluster": "mec2",
     "location": {
       "type": 2,
-      "region": "poland central",
+      "region": "poland 2",
       "zone": "",
       "local-zone": ""
     }

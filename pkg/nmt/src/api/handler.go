@@ -61,11 +61,32 @@ func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	cellId, _ := params["cell-id"]
+	var zone, region string
 
-	//todo -> piotr: consider clusters on N+1 and N+2 level to return entire search space, not only N-level MecHosts
+	//send N level
 	for i, v := range h.graphClient.MecHosts {
 		if v.CheckMECsupportsCell(cellId) {
 			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+			zone = v.Identity.Location.Zone
+			region = v.Identity.Location.Region
+		}
+	}
+
+	//send N+1 level
+	for i, v := range h.graphClient.MecHosts {
+		if v.Identity.Location.Level == 1 {
+			if v.Identity.Location.Zone == zone {
+				json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+			}
+		}
+	}
+
+	//send N+2 level
+	for i, v := range h.graphClient.MecHosts {
+		if v.Identity.Location.Level == 2 {
+			if v.Identity.Location.Region == region {
+				json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+			}
 		}
 	}
 }
