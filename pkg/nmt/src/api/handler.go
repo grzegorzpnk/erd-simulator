@@ -121,6 +121,24 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 		}
 	}
 
+	/*	//calculate shortest path
+		var inputGraph InputGraph
+		inputGraph.Graph = make([]InputData, 200)
+	*/
+	//add all mec hosts to temp graph
+	/*	for i,v := range h.graphClient.MecHosts{
+
+
+
+
+		}
+	*/
+	/*
+		inputGraph.Graph[0].Source = "mec1"
+		inputGraph.Graph[0].Destination = "mec2"
+		inputGraph.Graph[0].Weight = 2
+	*/
+
 	//ranking := make(map[string]float32)
 
 	/*for i, _ := range startClusters {
