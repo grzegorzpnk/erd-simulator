@@ -62,6 +62,7 @@ func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *
 	params := mux.Vars(r)
 	cellId, _ := params["cell-id"]
 
+	//todo -> piotr: consider clusters on N+1 and N+2 level to return entire search space, not only N-level MecHosts
 	for i, v := range h.graphClient.MecHosts {
 		if v.CheckMECsupportsCell(cellId) {
 			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
@@ -77,6 +78,10 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 	stopNode, _ := params["stop-node"]
 
 	//todo: provider?
+	// piotr: imo cluster powinien być reprezentowany jako edge-provider+mecX
+	// clusterInfo := strings.Split(stopNode, "+")
+	// cName, cProvider := clusterInfo[0], clusterInfo[1]
+	// destCluster := h.graphClient.GetMecHost(cName, cProvider)
 	destCluster := h.graphClient.GetMecHost(stopNode, "edge-provider")
 	startCell := h.graphClient.GetCell(startNode)
 
