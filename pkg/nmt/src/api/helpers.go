@@ -13,3 +13,8 @@ func containsAnyEdge(vertex mec_topology.MecHost) bool {
 	}
 
 }
+
+type ShortestPathResult struct {
+	latencyResults float64
+	path           []string
+}
