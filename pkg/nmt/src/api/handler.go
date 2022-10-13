@@ -6,8 +6,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
-	"strings"
-
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -98,22 +96,20 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	startNode, _ := params["start-node"]
-	stopNode, _ := params["stop-node"]
+	cell, _ := params["cell-id"]
+	cProvider, _ := params["provider"]
+	cName, _ := params["cluster"]
 
-	//stop node should be provided as provider+mecHostName
-	clusterInfo := strings.Split(stopNode, "+")
-	cProvider, cName := clusterInfo[0], clusterInfo[1]
 	destCluster := h.graphClient.GetMecHost(cName, cProvider)
-	startCell := h.graphClient.GetCell(startNode)
+	startCell := h.graphClient.GetCell(cell)
 	if destCluster == nil {
 		log.Fatalln("destination MEC host not recognized!")
 
 	}
 	//check if they are direct neighbours, if so the latency is just between start and stop node
 	if destCluster.CheckMECsupportsCell(startCell.Id) {
-		json.NewEncoder(w).Encode(destCluster.GetCell(startNode).Latency)
-		fmt.Printf("direct nodes, latency between cell: %v and mec: %v, is: %v", startCell.Id, stopNode, destCluster.GetCell(startNode).Latency)
+		json.NewEncoder(w).Encode(destCluster.GetCell(cell).Latency)
+		fmt.Printf("direct nodes, latency between cell: %v and mec: [%v+%v], is: %v", startCell.Id, cProvider, cName, destCluster.GetCell(cell).Latency)
 
 	} else {
 		// if not, we have to calculate path between all MEC clusters that are in the same local zone as cell, to the target cluster, the final latency is a sum of the calculated one + between started mec and cell
@@ -162,7 +158,7 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 				results[v.Identity.Cluster] += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(startNode).Latency
 				finalResults[i] = results[v.Identity.Cluster]*/
 
-			resultTmp.latencyResults += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(startNode).Latency
+			resultTmp.latencyResults += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(cell).Latency
 			//finalResults[i] = res.latencyResults[v.Identity.Cluster]
 			results = append(results, resultTmp)
 
@@ -183,7 +179,7 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 		}
 
 		json.NewEncoder(w).Encode(min)
-		log.Infof("indirect nodes, latency between cell: %v and mec: %v, is: %v", startCell.Id, stopNode, min)
+		log.Infof("indirect nodes, latency between cell: %v and mec: [%v+%v], is: %v", startCell.Id, cProvider, cName, min)
 
 	}
 

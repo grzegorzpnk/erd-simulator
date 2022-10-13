@@ -157,6 +157,6 @@ func (g *Graph) NetworkMetricsUpdate() {
 
 		}
 
-		time.Sleep(time.Duration(5))
+		time.Sleep(10 * time.Second)
 	}
 }
