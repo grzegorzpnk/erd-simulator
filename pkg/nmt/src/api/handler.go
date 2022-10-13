@@ -63,11 +63,13 @@ func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *
 	params := mux.Vars(r)
 	cellId, _ := params["cell-id"]
 	var zone, region string
+	response := make([]model.MecIdentity, 0)
 
 	//send N level
 	for i, v := range h.graphClient.MecHosts {
 		if v.CheckMECsupportsCell(cellId) {
-			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+			response = append(response, h.graphClient.MecHosts[i].Identity)
+			//json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
 			zone = v.Identity.Location.Zone
 			region = v.Identity.Location.Region
 		}
@@ -77,7 +79,8 @@ func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *
 	for i, v := range h.graphClient.MecHosts {
 		if v.Identity.Location.Level == 1 {
 			if v.Identity.Location.Zone == zone {
-				json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+				//json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+				response = append(response, h.graphClient.MecHosts[i].Identity)
 			}
 		}
 	}
@@ -86,10 +89,12 @@ func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *
 	for i, v := range h.graphClient.MecHosts {
 		if v.Identity.Location.Level == 2 {
 			if v.Identity.Location.Region == region {
-				json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+				//json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+				response = append(response, h.graphClient.MecHosts[i].Identity)
 			}
 		}
 	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request) {
@@ -132,38 +137,25 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 		}
 		itemGraph := djikstra.CreateGraph(inputGraph)
 
-		//calculate shortest path between all []startClusters and stopNode
-
-		type Result struct {
-			latencyResults float64
-			path           []string
-		}
-
-		//var results []Result
-		results := make([]Result, 0)
-
-		/*results := make(map[string]float64)
-		finalPath := make(map[string][]string)*/
+		//calculate shortest path between all []startClusters and stopNode, where startClusters is a list of cluster directly associated with cell
+		results := make([]ShortestPathResult, 0)
 
 		for _, v := range startClusters {
 
 			startNd := djikstra.Node{v.Identity.Cluster}
 			stopNd := djikstra.Node{destCluster.Identity.Cluster}
 
-			var resultTmp Result
-			//finalPath[v.Identity.Cluster], results[v.Identity.Cluster] = djikstra.GetShortestPath(&startNd, &stopNd, itemGraph)
+			var resultTmp ShortestPathResult
 			resultTmp.path, resultTmp.latencyResults = djikstra.GetShortestPath(&startNd, &stopNd, itemGraph)
 
-			/*
-				results[v.Identity.Cluster] += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(startNode).Latency
-				finalResults[i] = results[v.Identity.Cluster]*/
+			//add latency between cell and start MEC host
+			resultTmp.latencyResults += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(startNode).Latency
 
-			resultTmp.latencyResults += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(cell).Latency
-			//finalResults[i] = res.latencyResults[v.Identity.Cluster]
 			results = append(results, resultTmp)
 
 		}
 
+		//find minimal value
 		min := results[0].latencyResults
 		for _, v := range results {
 			if v.latencyResults < min {
