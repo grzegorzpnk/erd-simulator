@@ -16,7 +16,7 @@ func (g *ItemGraph) AddNode(n *Node) {
 }
 
 // AddEdge adds an edge to the graph
-func (g *ItemGraph) AddEdge(n1, n2 *Node, weight int) {
+func (g *ItemGraph) AddEdge(n1, n2 *Node, weight float64) {
 	g.Lock.Lock()
 	if g.Edges == nil {
 		g.Edges = make(map[Node][]*Edge)

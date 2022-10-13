@@ -1,14 +1,13 @@
 package djikstra
 
 import (
-	"fmt"
 	"math"
 	"sync"
 )
 
-func GetShortestPath(startNode *Node, endNode *Node, g *ItemGraph) ([]string, int) {
+func GetShortestPath(startNode *Node, endNode *Node, g *ItemGraph) ([]string, float64) {
 	visited := make(map[string]bool)
-	dist := make(map[string]int)
+	dist := make(map[string]float64)
 	prev := make(map[string]string)
 	//pq := make(PriorityQueue, 1)
 	//heap.Init(&pq)
@@ -48,8 +47,8 @@ func GetShortestPath(startNode *Node, endNode *Node, g *ItemGraph) ([]string, in
 			}
 		}
 	}
-	fmt.Println(dist)
-	fmt.Println(prev)
+	//fmt.Println(dist)
+	//fmt.Println(prev)
 	pathval := prev[endNode.Value]
 	var finalArr []string
 	finalArr = append(finalArr, endNode.Value)
@@ -58,7 +57,7 @@ func GetShortestPath(startNode *Node, endNode *Node, g *ItemGraph) ([]string, in
 		pathval = prev[pathval]
 	}
 	finalArr = append(finalArr, pathval)
-	fmt.Println(finalArr)
+	//fmt.Println(finalArr)
 	for i, j := 0, len(finalArr)-1; i < j; i, j = i+1, j-1 {
 		finalArr[i], finalArr[j] = finalArr[j], finalArr[i]
 	}
@@ -72,12 +71,12 @@ type Node struct {
 
 type Edge struct {
 	Node   *Node
-	Weight int
+	Weight float64
 }
 
 type Vertex struct {
 	Node     *Node
-	Distance int
+	Distance float64
 }
 
 /*type ItemGraph struct {
@@ -100,7 +99,7 @@ type InputGraph struct {
 }
 
 type InputData struct {
-	Source      string `json:"source"`
-	Destination string `json:"destination"`
-	Weight      int    `json:"weight"`
+	Source      string  `json:"source"`
+	Destination string  `json:"destination"`
+	Weight      float64 `json:"weight"`
 }

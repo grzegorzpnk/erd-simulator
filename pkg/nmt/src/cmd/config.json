@@ -1,6 +1,6 @@
 {
   "service-port":"8282",
-  "cluster-controller-endpoint" : "http://10.254.185.50:32138",
+  "cluster-controller-endpoint" : "http://10.254.185.42:32138",
   "edge-provider" : "edge-provider",
   "timestamp" : 5
 }

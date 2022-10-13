@@ -46,6 +46,11 @@ func main() {
 	inputGraph.Graph[9].Source = "mec5"
 	inputGraph.Graph[9].Destination = "mec6"
 	inputGraph.Graph[9].Weight = 2
+
+	inputGraph.Graph[10].Source = "mec1"
+	inputGraph.Graph[10].Destination = "mec2"
+	inputGraph.Graph[10].Weight = 2
+
 	/*
 		inputGraph.From = "mec1"
 		inputGraph.To = "mec3"
