@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: resource-consumer
+  name: resource-consumer-2
 spec:
   containers:
   - name: app-1

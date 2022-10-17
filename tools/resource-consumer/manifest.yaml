@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: resource-consumer
+  name: resource-consumer-2
 spec:
   containers:
   - name: app-1
     image: nginx
     resources:
       requests:
-        memory: ""
-        cpu: ""
+        memory: "384Mi"
+        cpu: "125m"

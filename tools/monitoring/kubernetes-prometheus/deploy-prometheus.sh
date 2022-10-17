@@ -4,9 +4,9 @@ then
     KC=$2 # kubeconfig path
     NS=$3 # namespace
 
-    if [[ $MEC_NAME == "" ]];
+    if [[ $MEC_NAME == "" ]] || [[ $MIMIR_ENDPOINT == "" ]];
     then
-      echo "[PROMETHEUS] Error: MEC_NAME env variable not set"
+      echo "[PROMETHEUS] Error: MEC_NAME or MIMIR_ENDPOINT env variable not set"
       exit 0
     else
       echo "--- [PROMETHEUS] Deploying Prometheus for Cluster[$MEC_NAME]"
