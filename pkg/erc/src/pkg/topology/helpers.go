@@ -24,6 +24,7 @@ func getHTTPRespBody(url string) ([]byte, error) {
 	}
 
 	b, err := ioutil.ReadAll(resp.Body)
+
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -5,6 +5,7 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
 	"github.com/pkg/errors"
+	"math"
 )
 
 // SmartPlacementIntentClient implements the SmartPlacementIntentManager.
@@ -36,6 +37,7 @@ type SmartPlacementIntentManager interface {
 }
 
 // ServeSmartPlacementIntent TODO: not ready.
+// TODO: Consider that mecs need to be in the same region
 func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.SmartPlacementIntent) (model.MecHost, error) {
 	var err error
 	var sp SearchParams
@@ -126,7 +128,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.Smar
 func checkIfSkip(mec model.MecHost, mecList []model.MecHost) bool {
 	for _, candidate := range mecList {
 		if mec.BuildClusterEmcoFQDN() == candidate.BuildClusterEmcoFQDN() {
-			log.Infof("Skipping: %v", candidate.BuildClusterEmcoFQDN())
+			//log.Infof("Skipping: %v", candidate.BuildClusterEmcoFQDN())
 			return true
 		}
 	}
@@ -146,7 +148,7 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 		mec.SetLatency(latency)
 
 		if !latencyOk(i, mec) {
-			log.Warnf("Latency condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
+			//log.Warnf("Latency condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
 			continue
 		}
 
@@ -157,7 +159,7 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 		mec, err = tc.CollectResourcesInfo(mec)
 
 		if !resourcesOk(i, mec) {
-			log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
+			//log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
 			continue
 		}
 
@@ -203,8 +205,6 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 // This is old dummy implementation.. Here we check constraints for the second time (its redundant -> remove)
 func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementIntent) (model.MecHost, error) {
 	log.Infof("Looking for optimal cluster...")
-	var bestOk bool
-	var best float64
 
 	if len(mecHosts) <= 0 {
 		reason := "mec host list is empty"
@@ -213,49 +213,41 @@ func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementInt
 		return model.MecHost{}, err
 	}
 
-	bestMecHost := mecHosts[0]
+	var bestMecHost model.MecHost
+	var bestCost float64 = math.Inf(1)
 	for _, mecHost := range mecHosts {
-		best, bestOk = ComputeObjectiveValue(intent, bestMecHost)
-		current, currentOk := ComputeObjectiveValue(intent, mecHost)
-
-		if currentOk && (best > current) {
+		currentCost := ComputeObjectiveValue(intent, mecHost)
+		if currentCost < bestCost {
 			bestMecHost = mecHost
+			bestCost = currentCost
 		}
 	}
-	if !bestOk {
-		err := errors.New("no clusters met all constraints!")
-		log.Warnf("Error while looking for optimal cluster: %v", err)
-		return model.MecHost{}, err
-	}
+
 	log.Infof("Found best cluster: %+v", bestMecHost)
 	return bestMecHost, nil
 }
 
 // ComputeObjectiveValue TODO: implement function to calculate the objective function
 // TODO: Remember that MEC cost should be considered
-func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) (float64, bool) {
+func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) float64 {
+	var staticCost int
+	switch mec.Identity.Location.Type {
+	case 0:
+		staticCost = 1
+	case 1:
+		staticCost = 2
+	case 2:
+		staticCost = 3
+	default:
+		log.Warnf("[INTENT] MEC Type[%v] should not be considered: static-cost[%v].", mec.Identity.Location.Type, 404)
+		staticCost = 404
+	}
 	cl := i.Spec.SmartPlacementIntentData.ConstraintsList
 	pw := i.Spec.SmartPlacementIntentData.ParametersWeights
 
-	if !CheckConstraintsForGivenMec(cl, mec) {
-		return 3, false
-	}
-	latency, cpuUtilization, memUtilization := NormalizeMecParameters(cl, mec)
+	nLat, nCpu, nMem := NormalizeMecParameters(cl, mec)
 
-	return pw.LatencyWeight*latency + pw.CpuUtilizationWeight*cpuUtilization + pw.MemUtilizationWeight*memUtilization, true
-}
-
-// CheckConstraintsForGivenMec TODO: this is redundant
-func CheckConstraintsForGivenMec(cl model.Constraints, mec model.MecHost) bool {
-	if mec.GetLatency() > cl.LatencyMax {
-		return false
-	} else if mec.GetCpuUtilization() > cl.CpuUtilizationMax {
-		return false
-	} else if mec.GetMemUtilization() > cl.MemUtilizationMax {
-		return false
-	} else {
-		return true
-	}
+	return float64(staticCost) * (pw.LatencyWeight*nLat + pw.CpuUtilizationWeight*nCpu + pw.MemUtilizationWeight*nMem)
 }
 
 // NormalizeMecParameters TODO: find the best way to normalize all the values

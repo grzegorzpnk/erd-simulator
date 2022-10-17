@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	ApiBase             = "/topology"
-	ApiGetMecHosts      = "/mec-hosts"
-	ApiGetByCellId      = "/cell"
-	ApiGetByMecName     = "/mec"
-	ApiGetByNeighbour   = "/neighbour"
-	ApiGetMecNeighbours = "/neighbours"
+	ApiBase               = "/topology"
+	ApiCollectionMecHosts = "/mecHosts"
+	ApiCollectionCells    = "/cells"
+	ApiGetMecHosts        = "/mec-hosts"
+	ApiGetMecNeighbours   = "/neighbours"
+	ApiGetShortestPath    = "/shortest-path"
 )
 
 type Client struct {
@@ -30,30 +30,6 @@ func NewTopologyClient() *Client {
 	}
 }
 
-//// GetMecHostsByCellId
-//// TODO: change to collecting MecIdentity
-//func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
-//	var mhs []model.MecHost
-//
-//	url, err := c.buildGetMecHostsByCellIdUrl(id)
-//	if err != nil {
-//		return []model.MecHost{}, err
-//	}
-//
-//	respBody, err := getHTTPRespBody(url)
-//	if err := json.Unmarshal(respBody, &mhs); err != nil {
-//		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
-//		return []model.MecHost{}, err
-//	}
-//
-//	if len(mhs) <= 0 {
-//		err = errors.New(fmt.Sprintf("no mec hosts found for given cell: %v\n.", id))
-//		return []model.MecHost{}, err
-//	}
-//
-//	return mhs, nil
-//}
-
 // GetMecHostsByCellId
 // TODO resolved: Consider only MEC Identity as response no entire MecHost struct
 func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
@@ -66,6 +42,7 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	}
 
 	respBody, err := getHTTPRespBody(url)
+	fmt.Printf("GOT respBody: %v", string(respBody))
 	if err := json.Unmarshal(respBody, &mhsIdentity); err != nil {
 		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
 		return []model.MecHost{}, err
@@ -83,23 +60,6 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 
 	return mhs, nil
 }
-
-//// GetMecNeighbours calls topology server to get neighbours list for given MecHost
-//// TODO: change to collecting MecIdentity
-//func (c *Client) GetMecNeighbours(mec model.MecHost) (model.MecHost, error) {
-//	url, err := c.buildGetNeighboursUrl(mec)
-//	if err != nil {
-//		return model.MecHost{}, err
-//	}
-//
-//	respBody, err := getHTTPRespBody(url)
-//	if err := json.Unmarshal(respBody, &mec.Neighbours); err != nil {
-//		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
-//		return model.MecHost{}, err
-//	}
-//
-//	return mec, nil
-//}
 
 // GetMecNeighbours calls topology server to get neighbours list for given MecHost
 // TODO resolved: Consider only MEC Identity as response no entire MecHost struct
@@ -244,7 +204,7 @@ func (c *Client) buildGetMecHostsByCellIdUrl(id model.CellId) (string, error) {
 
 	endpoint += c.TopologyEndpoint
 	endpoint += ApiBase
-	endpoint += ApiGetByCellId
+	endpoint += ApiCollectionCells
 	endpoint += "/" + string(id)
 	endpoint += ApiGetMecHosts
 
@@ -262,8 +222,8 @@ func (c *Client) buildGetResourcesUrl(resType model.MecInfo, mec model.MecHost) 
 
 	endpoint += c.TopologyEndpoint
 	endpoint += ApiBase
-	endpoint += ApiGetByMecName
-	endpoint += "/" + mec.Identity.Provider + "+" + mec.Identity.Cluster
+	endpoint += ApiCollectionMecHosts
+	endpoint += "/provider/" + mec.Identity.Provider + "/cluster/" + mec.Identity.Cluster
 	endpoint += "/" + string(resType)
 
 	return endpoint, nil
@@ -283,11 +243,11 @@ func (c *Client) buildGetShortestPathLatencyBased(mec model.MecHost, cell model.
 
 	endpoint += c.TopologyEndpoint
 	endpoint += ApiBase
-	endpoint += ApiGetByCellId
+	endpoint += ApiCollectionCells
 	endpoint += "/" + string(cell)
-	endpoint += ApiGetByMecName
-	endpoint += "/" + mec.Identity.Provider + "+" + mec.Identity.Cluster
-	endpoint += "/shortest-path"
+	endpoint += ApiCollectionMecHosts
+	endpoint += "/provider/" + mec.Identity.Provider + "/cluster/" + mec.Identity.Cluster
+	endpoint += ApiGetShortestPath
 
 	return endpoint, nil
 }
@@ -325,8 +285,8 @@ func (c *Client) buildGetNeighboursUrl(mec model.MecHost) (string, error) {
 
 	endpoint += c.TopologyEndpoint
 	endpoint += ApiBase
-	endpoint += ApiGetByMecName
-	endpoint += "/" + mec.Identity.Provider + "+" + mec.Identity.Cluster
+	endpoint += ApiCollectionMecHosts
+	endpoint += "/provider/" + mec.Identity.Provider + "/cluster/" + mec.Identity.Cluster
 	endpoint += ApiGetMecNeighbours
 
 	return endpoint, nil

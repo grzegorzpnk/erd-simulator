@@ -1,5 +1,5 @@
 {
     "plugin-dir":"cwd",
-    "service-port":"8888",
-    "mec-topology-endpoint": "localhost:8787/v2"
+    "service-port":"8686",
+    "mec-topology-endpoint": "http://10.254.185.42:32139/v1"
 }
