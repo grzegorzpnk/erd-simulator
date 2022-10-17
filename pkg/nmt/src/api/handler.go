@@ -149,7 +149,7 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 			resultTmp.path, resultTmp.latencyResults = djikstra.GetShortestPath(&startNd, &stopNd, itemGraph)
 
 			//add latency between cell and start MEC host
-			resultTmp.latencyResults += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(startNode).Latency
+			resultTmp.latencyResults += h.graphClient.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(cell).Latency
 
 			results = append(results, resultTmp)
 
