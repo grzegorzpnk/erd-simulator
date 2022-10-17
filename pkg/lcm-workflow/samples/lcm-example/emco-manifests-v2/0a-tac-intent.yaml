@@ -1,0 +1,58 @@
+{{- range $i, $deployment := .Deployments }}
+{{- range $j, $app := $deployment.Apps }}
+{{- range $k, $wf := $app.Workflows }}
+{{ if eq $wf.WfType "lcm" }}
+---
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/temporal-action-controller
+metadata :
+  name: {{ $app.Name }}-lcm-workflow-intent
+  description: {{ $wf.WfDescription }} for app [{{ $app.Name }}]
+spec:
+  hookType: {{ $wf.HookType }}
+  hookBlocking: true
+  workflowClient:
+    clientEndpointName: {{ $wf.WfClientEndpointName }}
+    clientEndpointPort: {{ $wf.WfClientEndpointPort }}
+  temporal:
+    workflowClientName: {{ $wf.WfClientName }}
+    workflowStartOptions:
+      id: {{ $wf.WfID }}
+      taskQueue: {{ $wf.WfTaskQueue }}
+      retryPolicy:
+        maximumAttempts: 1
+    workflowParams:
+      activityOptions:
+        all-activities:
+          startToCloseTimeout: 6000000000000
+          heartbeatTimeout: 5000000000000
+          retryPolicy:
+            initialInterval: 10
+      activityParams:
+        all-activities:
+          emcoOrchEndpoint: {{ $wf.WfEmcoOrch }}
+          emcoOrchStatusEndpoint: {{ $wf.WfEmcoOrchStatus }}
+          emcoClmEndpoint: {{ $wf.WfEmcoClm }}
+          emcoWfMgrURL: {{ $wf.WfEmcoMgr }}
+          project: {{ $.ProjectName }}
+          compositeApp: {{ $deployment.CaName }}
+          compositeAppVersion: v1
+          deploymentIntentGroup: {{ $deployment.DigName }}
+          targetAppName: {{ $app.Name }}
+          appPriorityLevel: "critical"
+          latencyMax: "{{ $wf.Params.LatencyMax }}"
+          cpuUtilizationMax: "{{ $wf.Params.CpuUtilMax }}"
+          memUtilizationMax: "{{ $wf.Params.MemUtilMax }}"
+          latencyWeight: "{{ $wf.Params.LtcWeigh }}"
+          cpuUtilizationWeight: "{{ $wf.Params.CpuWeigh }}"
+          memUtilizationWeight: "{{ $wf.Params.MemWeigh }}"
+          innotUrl: "{{ $wf.Params.InnotUrl }}"
+          plcControllerUrl: "{{ $wf.Params.PlcControllerUrl }}"
+          rClientName: "{{ $wf.Params.RelocateClientName }}"
+          rClientPort: "{{ $wf.Params.RelocateClientPort }}"
+          rWfClientName: "{{ $wf.Params.RelocateWfName }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

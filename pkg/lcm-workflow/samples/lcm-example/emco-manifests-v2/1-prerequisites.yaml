@@ -1,0 +1,95 @@
+---
+# create project
+version: emco/v2
+resourceContext:
+  anchor: projects
+metadata :
+  name: {{ .ProjectName }}
+  
+---
+#creating rsync controller
+version: emco/v2
+resourceContext:
+  anchor: controllers
+metadata :
+   name: rsync
+spec:
+  host:  {{.HostIP}}
+  port: {{.RsyncPort}}
+
+{{- range $index, $ctrl := .Controllers }}
+
+---
+# create controller entities
+version: emco/v2
+resourceContext:
+  anchor: {{ $ctrl.Anchor }}
+metadata :
+   name: {{ $ctrl.Name }}
+spec:
+  host: {{ $.HostIP }}
+  port: {{ $ctrl.Port }}
+  type: {{ $ctrl.Type }}
+  priority: {{ $ctrl.Priority }}
+
+{{- end }}
+
+{{- range $i, $provider := .Providers }}
+
+---
+# create provider
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers
+metadata :
+   name: {{ $provider.Name }}
+
+{{- range $j, $cluster := $provider.Clusters }}
+
+---
+# create clusters
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{ $provider.Name }}/clusters
+metadata :
+   name: {{ $cluster.Name }}
+file:
+  {{ $cluster.KubeConfig }}
+
+---
+#label clusters
+version: emco/v2
+resourceContext:
+  anchor: cluster-providers/{{ $provider.Name }}/clusters/{{ $cluster.Name }}/labels
+clusterLabel: {{ $cluster.Label }}
+
+{{- end }}
+{{- end }}
+
+---
+# create admin logical cloud
+version: emco/v2
+resourceContext:
+  anchor: projects/{{.ProjectName}}/logical-clouds
+metadata:
+  name: {{ .AdminCloud }}
+spec:
+  level: "0"
+
+{{- range $i, $provider := .Providers  }}
+{{- range $j, $cluster := $provider.Clusters }}
+
+---
+# add reference - "MEC Host 1 cluster"
+version: emco/v2
+resourceContext:
+  anchor: projects/{{ $.ProjectName }}/logical-clouds/{{ $.AdminCloud }}/cluster-references
+metadata:
+  name: {{ $cluster.Reference }}
+spec:
+  clusterProvider: {{ $provider.Name }}
+  cluster: {{ $cluster.Name }}
+  loadbalancerIp: "0.0.0.0"
+
+{{- end }}
+{{- end }}

@@ -1,6 +1,6 @@
 # General
 ProjectName: test
-AdminCloud: default
+AdminCloud: test-cloud
 CompositeApp: test-ca
 CompositeProfile: test-cp
 DeploymentIntent: test-dig
@@ -10,13 +10,13 @@ GenericPlacementIntent: test-placement-intent
 ClusterProvider1: edge-provider
 Cluster1Name: mec1
 Cluster1Label: mec1-label
-Cluster1KubeConfig: ../cfg/cluster1.config
+Cluster1KubeConfig: ../cfg/mec1.config
 
 # Provider2, Cluster2
 ClusterProvider2: edge-provider
-Cluster2Name: mec9
-Cluster2Label: mec9-label
-Cluster2KubeConfig: ../cfg/cluster2.config
+Cluster2Name: mec3
+Cluster2Label: mec3-label
+Cluster2KubeConfig: ../cfg/mec3.config
 
 # Collectd App
 AppName: collectd
@@ -27,7 +27,7 @@ AppPlacementIntent: collectd-placement-intent
 
 # Workflow Intent
 WfIntentName: test-workflow-intent
-WfClientEndpointName: 10.254.185.27
+WfClientEndpointName: 10.254.185.42
 WfClientEndpointPort: 32522
 WfClientName: lcm_workflowclient
 WfID: test-workflow-1
@@ -40,7 +40,7 @@ WfEmcoOrchStatus: 10.254.185.42:30416
 InnotUrl: "http://10.254.185.44:32137/v1/intermediate-notifier/subscribe"
 
 # Temporal server
-TemporalServerIP: 10.254.185.27
+TemporalServerIP: 10.254.185.42
 TemporalServerPort: 30124
 
 HostIP: 10.254.185.42
