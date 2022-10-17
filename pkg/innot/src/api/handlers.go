@@ -19,8 +19,19 @@ func (h apiHandler) subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	var subId db.SubscriptionId
 
 	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	log.Infof("GOT BODY: %v", body)
+
+	if body == (types.AmfEventSubscription{}) {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, "Subscription body not found!", http.StatusInternalServerError)
+		return
+	}
 
 	// For now allow subscription for single EventType per request
 	eventTypes := *body.EventList
@@ -67,6 +78,15 @@ func (h apiHandler) unsubscribeByEndpointHandler(w http.ResponseWriter, r *http.
 
 // TODO not implementd
 func (h apiHandler) getAllSubscriptions(w http.ResponseWriter, r *http.Request) {
+
+	subs := db.DummyDB.GetItems()
+
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNotImplemented)
+	w.WriteHeader(http.StatusCreated)
+	err := json.NewEncoder(w).Encode(subs)
+	if err != nil {
+		log.Error("[API] Error encoding.")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

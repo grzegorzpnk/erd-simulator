@@ -6,6 +6,8 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/db"
 	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/types"
 	"math"
+	"strconv"
+	"strings"
 
 	"bytes"
 	"encoding/json"
@@ -18,6 +20,19 @@ import (
 
 type counter float64
 
+func normalizeCellId(cellStr string) (int, error) {
+	// e.g. get["000000020"] -> return[2]
+	if strings.HasSuffix(cellStr, "0") {
+		cellStr = cellStr[:len(cellStr)-1]
+	}
+	cell, err := strconv.Atoi(cellStr)
+	if err != nil {
+		log.Errorf("Could not parse CELL_ID[%v] to integer value", cellStr)
+		return -1, err
+	}
+	return cell, nil
+}
+
 // ServeSubscription method is invoked (as goroutine) when new db.Subscriber is created
 // It will request notification from AMF (once per second) and if conditions are met, the notification to the MEO
 // client is sent. For now there is no mechanism implemented, which will allow to cancel this subscription.
@@ -28,7 +43,7 @@ func ServeSubscription(id db.SubscriptionId) {
 
 	var lcounter counter = 0
 
-	currentCell := ""
+	currentCell := 0
 	sub, err = db.DummyDB.GetItemByKey(id)
 	if err != nil {
 		return
@@ -60,15 +75,21 @@ func ServeSubscription(id db.SubscriptionId) {
 
 			reportList := *respBody.ReportList
 
-			if currentCell == "" {
-				currentCell = reportList[0].Location.NrLocation.Ncgi.NrCellId
+			if currentCell == 0 {
+				currentCell, err = normalizeCellId(reportList[0].Location.NrLocation.Ncgi.NrCellId)
+				if err != nil {
+					return // TODO: Handle error
+				}
 			}
-			newCell := reportList[0].Location.NrLocation.Ncgi.NrCellId
+			newCell, err := normalizeCellId(reportList[0].Location.NrLocation.Ncgi.NrCellId)
+			if err != nil {
+				return // TODO: Handle error
+			}
 			if currentCell == newCell {
 				time.Sleep(1 * time.Second)
 				continue
 			} else {
-				sendCellIdCellNotification(sub.Endpoint, types.CellId(newCell), id)
+				sendCellIdCellNotification(sub.Endpoint, types.CellId(strconv.Itoa(newCell)), id)
 				currentCell = newCell
 			}
 		} else if sub.AmfEventType == types.ACCESSTYPEREPORT {
@@ -111,7 +132,6 @@ func ServeSubscription(id db.SubscriptionId) {
 			return
 		}
 	}
-	return
 }
 
 //getNotification requests notification from AMF and returns the response body

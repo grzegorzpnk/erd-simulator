@@ -31,6 +31,10 @@ type subscriptionDb struct {
 	db map[SubscriptionId]Subscriber
 }
 
+func (ddb *subscriptionDb) GetItems() string {
+	return fmt.Sprintf(`{"all-subcriptions": "%+v}"`, ddb.db)
+}
+
 // newDummyDb creates new Database and returns instance of that DB
 func newDummyDb() *subscriptionDb {
 	return &subscriptionDb{

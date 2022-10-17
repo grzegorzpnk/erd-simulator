@@ -9,6 +9,6 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.config.servicePort }}
-      nodePort: 32137
+      nodePort: {{ .Values.service.nodePort }}
   selector:
     {{- include "innot.selectorLabels" . | nindent 4 }}
