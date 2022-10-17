@@ -10,6 +10,7 @@
 
 /pkg/lcm-workflow/bin/*
 /pkg/lcm-workflow/.idea/
+./pkg/lcm-workflow/samples/lcm-example/apps/*.tgz
 
 /pkg/nmt/bin/
 /pkg/nmt/.idea/
