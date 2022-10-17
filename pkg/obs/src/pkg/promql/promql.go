@@ -72,7 +72,8 @@ func (pql *PromQL) GetCurrentRequests(resType Resource, targetCluster string) (f
 			return -1, err
 		}
 	} else {
-		log.Warnf("Error while fetching %v requests for cluster: %v. reason: %v.", resType, targetCluster, err)
+		err = errors.New(fmt.Sprintf("Error while fetching %v requests for cluster: %v. reason: %v.", resType, targetCluster, err))
+		return -1, err
 	}
 
 	return fVal, nil
@@ -95,7 +96,8 @@ func (pql *PromQL) GetCurrentLimits(resType Resource, targetCluster string) (flo
 			return -1, err
 		}
 	} else {
-		log.Warnf("Error while fetching %v limits for cluster: %v. reason: %v.", resType, targetCluster, err)
+		err = errors.New(fmt.Sprintf("Error while fetching %v limits for cluster: %v. reason: %v.", resType, targetCluster, err))
+		return -1, err
 	}
 
 	return fVal, nil
@@ -118,7 +120,8 @@ func (pql *PromQL) GetAllocatable(resType Resource, targetCluster string) (float
 			return -1, err
 		}
 	} else {
-		log.Warnf("Error while fetching %v allocatable for cluster: %v. reason: %v.", resType, targetCluster, err)
+		err = errors.New(fmt.Sprintf("Error while fetching %v allocatable for cluster: %v. reason: %v.", resType, targetCluster, err))
+		return -1, err
 	}
 
 	return fVal, nil

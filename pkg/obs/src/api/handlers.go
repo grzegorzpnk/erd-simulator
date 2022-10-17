@@ -134,7 +134,7 @@ func (h *apiHandler) getCpuAllocHandler(w http.ResponseWriter, r *http.Request) 
 		log.Errorf("[API] Error: %v", err)
 	}
 
-	if val != -1 {
+	if val != -1 && val != 0 {
 		sendResponse(w, val, http.StatusOK)
 	} else {
 		sendResponse(w, err.Error(), http.StatusNoContent)
@@ -185,7 +185,7 @@ func (h *apiHandler) getMemAllocHandler(w http.ResponseWriter, r *http.Request) 
 		log.Errorf("[API] Error: %v", err)
 	}
 
-	if val != -1 {
+	if val != -1 && val != 0 {
 		sendResponse(w, val, http.StatusOK)
 	} else {
 		sendResponse(w, err.Error(), http.StatusNoContent)
