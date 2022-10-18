@@ -182,5 +182,5 @@ func (c *counter) logWaitingForNotification(id db.SubscriptionId, et types.AmfEv
 }
 
 func generateTargetCellId() int {
-	return rand.Intn(64-1) + 1
+	return rand.Intn(42-1) + 1
 }

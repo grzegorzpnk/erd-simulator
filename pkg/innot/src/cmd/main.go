@@ -23,7 +23,7 @@ func main() {
 
 	httpRouter := api.NewRouter()
 	loggedRouter := handlers.LoggingHandler(os.Stdout, httpRouter)
-	log.Info("[SERVER] Starting IN server")
+	log.Info("[SERVER] Starting INNOT server")
 
 	httpServer := &http.Server{
 		Handler: loggedRouter,
