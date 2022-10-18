@@ -261,7 +261,7 @@ func (h *apiHandler) getLatencyHandler(w http.ResponseWriter, r *http.Request) {
 
 	if reflect.TypeOf(source) == reflect.TypeOf(target) && reflect.TypeOf(source) == reflect.TypeOf(model.Cell{}) {
 		err := errors.New(fmt.Sprintf("source and target node are both of %T type, which is not permited", target))
-		log.Warnf("couldn't get latency: %v", err.Error())
+		log.Warnf("Couldn't get latency: %v", err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
