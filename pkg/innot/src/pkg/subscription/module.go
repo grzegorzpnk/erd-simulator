@@ -1,7 +1,6 @@
 package subscription
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/innot/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/innot/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/db"
 	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/types"
@@ -14,8 +13,8 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
-	"time"
 )
 
 type counter float64
@@ -37,18 +36,13 @@ func normalizeCellId(cellStr string) (int, error) {
 // It will request notification from AMF (once per second) and if conditions are met, the notification to the MEO
 // client is sent. For now there is no mechanism implemented, which will allow to cancel this subscription.
 func ServeSubscription(id db.SubscriptionId) {
-	var respBody types.AmfCreatedEventSubscription
 	var err error
 	var sub db.Subscriber
 
-	var lcounter counter = 0
-
-	currentCell := 0
 	sub, err = db.DummyDB.GetItemByKey(id)
 	if err != nil {
 		return
 	}
-	amfEndpoint := config.GetConfiguration().AMFEndpoint
 
 	err = verifyNotificationType(sub.AmfEventType)
 	if err != nil {
@@ -56,82 +50,50 @@ func ServeSubscription(id db.SubscriptionId) {
 		return
 	}
 
-	for {
-		respBody, err = getNotification(sub, amfEndpoint, id)
+	if sub.AmfEventType == types.LOCATIONREPORT {
+		newCell := generateTargetCellId()
+		sendCellIdCellNotification(sub.Endpoint, types.CellId(strconv.Itoa(newCell)), id)
 
-		if err != nil {
-			err = cancelSubscription(id, err)
-			return
-		}
-		if sub.AmfEventType == types.LOCATIONREPORT {
-			lcounter.logWaitingForNotification(id, sub.AmfEventType)
-
-			if respBody.ReportList == nil {
-				err = errors.New("ReportList is empty")
-				log.Errorf("[SUBSCRIPTION][ID=%v] Error: %v. UE probably is not registered!", id, err)
-				err = cancelSubscription(id, err)
-				return
-			}
-
-			reportList := *respBody.ReportList
-
-			if currentCell == 0 {
-				currentCell, err = normalizeCellId(reportList[0].Location.NrLocation.Ncgi.NrCellId)
-				if err != nil {
-					return // TODO: Handle error
-				}
-			}
-			newCell, err := normalizeCellId(reportList[0].Location.NrLocation.Ncgi.NrCellId)
-			if err != nil {
-				return // TODO: Handle error
-			}
-			if currentCell == newCell {
-				time.Sleep(1 * time.Second)
-				continue
-			} else {
-				sendCellIdCellNotification(sub.Endpoint, types.CellId(strconv.Itoa(newCell)), id)
-				currentCell = newCell
-			}
-		} else if sub.AmfEventType == types.ACCESSTYPEREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.COMMUNICATIONFAILUREREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.CONNECTIVITYSTATEREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.PRESENCEINAOIREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.REACHABILITYREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.REGISTRATIONSTATEREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.SUBSCRIBEDDATAREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.SUBSCRIPTIONIDADDITION {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.SUBSCRIPTIONIDCHANGE {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.TIMEZONEREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else if sub.AmfEventType == types.UESINAREAREPORT {
-			log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-			return
-		} else {
-			log.Errorf("[SUBSCRIPTION] Event Type %s doesn't exist!", sub.AmfEventType)
-			err = errors.New(fmt.Sprintf("[SUBSCRIPTION] Exiting! Event Type %s doesn't exist!", sub.AmfEventType))
-			db.INDEX--
-			return
-		}
+	} else if sub.AmfEventType == types.ACCESSTYPEREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.COMMUNICATIONFAILUREREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.CONNECTIVITYSTATEREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.PRESENCEINAOIREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.REACHABILITYREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.REGISTRATIONSTATEREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.SUBSCRIBEDDATAREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.SUBSCRIPTIONIDADDITION {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.SUBSCRIPTIONIDCHANGE {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.TIMEZONEREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else if sub.AmfEventType == types.UESINAREAREPORT {
+		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
+		return
+	} else {
+		log.Errorf("[SUBSCRIPTION] Event Type %s doesn't exist!", sub.AmfEventType)
+		err = errors.New(fmt.Sprintf("[SUBSCRIPTION] Exiting! Event Type %s doesn't exist!", sub.AmfEventType))
+		db.INDEX--
+		return
 	}
+
 }
 
 //getNotification requests notification from AMF and returns the response body
@@ -217,4 +179,8 @@ func (c *counter) logWaitingForNotification(id db.SubscriptionId, et types.AmfEv
 	} else {
 		*c++
 	}
+}
+
+func generateTargetCellId() int {
+	return rand.Intn(64-1) + 1
 }
