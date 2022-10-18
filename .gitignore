@@ -4,19 +4,24 @@
 
 /pkg/erc/bin/
 /pkg/erc/.idea/
+/pkg/erc/deployments/helm/*.tgz
 
 /pkg/innot/bin/
 /pkg/innot/.idea/
+/pkg/innot/deployments/helm/*.tgz
 
 /pkg/lcm-workflow/bin/*
 /pkg/lcm-workflow/.idea/
-./pkg/lcm-workflow/samples/lcm-example/apps/*.tgz
+/pkg/lcm-workflow/deployments/helm/*.tgz
+/pkg/lcm-workflow/samples/lcm-example/apps/*.tgz
 
 /pkg/nmt/bin/
 /pkg/nmt/.idea/
+/pkg/nmt/deployments/helm/*.tgz
 
 /pkg/obs/bin/
 /pkg/obs/.idea/
+/pkg/obs/deployments/helm/*.tgz
 
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/
