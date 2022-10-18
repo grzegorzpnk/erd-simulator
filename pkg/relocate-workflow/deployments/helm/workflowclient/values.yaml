@@ -13,7 +13,7 @@ image:
   repository: "pmatysiaq/workflow-client"
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "test.v1"
 
 imagePullSecrets: []
 nameOverride: ""

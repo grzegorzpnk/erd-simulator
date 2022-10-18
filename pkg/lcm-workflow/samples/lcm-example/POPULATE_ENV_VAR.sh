@@ -1,11 +1,11 @@
 #!/bin/bash
 
 function generateMaxLatency() {
-  echo "$(expr $((5 + $RANDOM % 55)))"
+  echo "$(expr $((1 + $RANDOM % 24)))"
 }
 
 function generateMaxResUtil() {
-   echo "$(expr $((30 + $RANDOM % 60)))"
+   echo "$(expr $((45 + $RANDOM % 60)))"
 }
 
 function mebibytesToBytes() {

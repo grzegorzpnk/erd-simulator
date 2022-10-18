@@ -219,14 +219,14 @@ func GenerateRelocateWfIntent(ctx context.Context, migParam WorkflowParams) (*Wo
 					WorkflowTaskTimeout:                      0,
 					WorkflowIDReusePolicy:                    0,
 					WorkflowExecutionErrorWhenAlreadyStarted: false,
-					RetryPolicy:                              &temporal.RetryPolicy{MaximumAttempts: 10},
+					RetryPolicy:                              &temporal.RetryPolicy{MaximumAttempts: 1},
 					CronSchedule:                             "",
 					Memo:                                     nil,
 					SearchAttributes:                         nil,
 				},
 				WfParams: eta.WorkflowParams{
 					ActivityOpts: map[string]wf.ActivityOptions{"all-activities": {StartToCloseTimeout: 60000000000,
-						HeartbeatTimeout: 50000000000, RetryPolicy: &temporal.RetryPolicy{InitialInterval: 10, MaximumAttempts: 3}}},
+						HeartbeatTimeout: 50000000000, RetryPolicy: &temporal.RetryPolicy{InitialInterval: 10, MaximumAttempts: 1}}},
 					ActivityParams: map[string]map[string]string{"all-activities": {
 						"emcoOrchEndpoint":       migParam.GetParamByKey("emcoOrchEndpoint"),
 						"emcoOrchStatusEndpoint": migParam.GetParamByKey("emcoOrchStatusEndpoint"),
