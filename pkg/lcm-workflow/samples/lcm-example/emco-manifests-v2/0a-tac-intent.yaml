@@ -29,6 +29,7 @@ spec:
           heartbeatTimeout: 5000000000000
           retryPolicy:
             initialInterval: 10
+            maximumAttempts: 1
       activityParams:
         all-activities:
           emcoOrchEndpoint: {{ $wf.WfEmcoOrch }}

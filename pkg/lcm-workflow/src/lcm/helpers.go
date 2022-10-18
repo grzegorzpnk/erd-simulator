@@ -18,7 +18,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 const TaskQueue = "LCM_TASK_Q"
@@ -27,6 +26,22 @@ const (
 	ApplyPhase UpdatePhase = iota
 	DeletePhase
 )
+
+var portList = GenerateNotificationPorts()
+
+func GetPorts(np []NotificationPort) (int, int) {
+	for {
+		index := rand.Intn(len(np) - 1)
+		if !np[index].Used {
+			np[index].Used = true
+			log.Printf("PORTS ARE: %v, %v", np[index].Port, np[index].NodePort)
+			return np[index].Port, np[index].NodePort
+		} else {
+			log.Printf("THESE PORTS ARE USED: %v, %v", np[index].Port, np[index].NodePort)
+		}
+	}
+
+}
 
 // TODO REVISIT Copied from EMCO as import leads to conflicts
 type GenericPlacementIntent struct {
@@ -98,6 +113,8 @@ type WorkflowParams struct {
 	SmartPlacementIntent spi.SmartPlacementIntent
 	OptimalCluster       Cluster
 	ErWfIntent           ti.WorkflowIntent
+	ListenerPort         int
+	ListenerNodePort     int
 }
 
 func (mp *WorkflowParams) GetParamByKey(key string) string {
@@ -271,7 +288,6 @@ func postHttp(url string, data interface{}) (string, error) {
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
 func RandString() string {
-	rand.Seed(time.Now().UnixNano())
 	b := make([]byte, 10)
 	for i := range b {
 		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
@@ -300,7 +316,11 @@ func getPriorityLevel(level string) spi.AppPriority {
 	}
 }
 
-func serveNotification(w http.ResponseWriter, r *http.Request) {
+type apiHandler struct {
+	channel chan types.CellId
+}
+
+func (h *apiHandler) serveNotification(w http.ResponseWriter, r *http.Request) {
 	var info types.CellChangedInfo
 	err := json.NewDecoder(r.Body).Decode(&info)
 	if err != nil {
@@ -309,7 +329,7 @@ func serveNotification(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Notification reason: %v, cell id: %v", info.Reason, info.Cell)
 
-	waitNotification <- info.Cell
+	h.channel <- info.Cell
 
 }
 
@@ -361,4 +381,22 @@ func generateSubscriptionBody() types.AmfEventSubscription {
 type Cluster struct {
 	Provider string `json:"provider"`
 	Cluster  string `json:"cluster"`
+}
+
+type NotificationPort struct {
+	Port     int
+	NodePort int
+	Used     bool
+}
+
+func GenerateNotificationPorts() []NotificationPort {
+	var portList []NotificationPort
+	for i := 1; i <= 200; i++ {
+		portList = append(portList, NotificationPort{
+			Port:     8200 + i,
+			NodePort: 32200 + i,
+			Used:     false,
+		})
+	}
+	return portList
 }

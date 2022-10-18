@@ -79,7 +79,7 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 		return nil, wferr
 	}
 
-	for i := 0; i < 2; i++ {
+	for {
 		currentState = "get-cell-changed-notification"
 		ctx2 := ctxMap["GetCellChangedNotification"]
 		err = wf.ExecuteActivity(ctx2, GetCellChangedNotification, wfParams).Get(ctx2, &wfParams)
@@ -103,7 +103,9 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 		if err != nil {
 			wferr := fmt.Errorf("CallPlacementController failed: %s", err.Error())
 			fmt.Fprintf(os.Stderr, wferr.Error())
-			return nil, wferr
+			// if we fail in this activity, just continue
+			continue
+			//return nil, wferr
 		}
 
 		currentState = "generate-relocate-wf-intent"
