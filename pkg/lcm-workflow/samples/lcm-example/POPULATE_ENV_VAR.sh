@@ -51,7 +51,7 @@ declare -a vars=("TARGET_CLUSTER_" "MAX_LATENCY_" "CPU_UTIL_MAX_" "MEM_UTIL_MAX_
 for app in "${apps[@]}"; do
     targetCluster=${clusters[$index]}
     index=$(expr $(($RANDOM % (${#clusters[@]}))))
-    cpu_req=$(expr $((125 + $RANDOM % 250)))
+    cpu_req=$(expr $((125 + $RANDOM % 175)))
     mem_req=$(expr $((100 + $RANDOM % 150)))
     mem_req_bytes=$(mebibytesToBytes "$mem_req")
     cpu_req_unit="0"$(miliCpuToCpu "$cpu_req")

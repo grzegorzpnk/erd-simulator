@@ -5,15 +5,7 @@
 // In this example, SmartPlacementIntent
 package model
 
-type AppPriority int
 type CellId string
-
-const (
-	PRIORITY_LOW AppPriority = iota
-	PRIORITY_NORMAL
-	PRIORITY_IMPORTANT
-	PRIORITY_CRITICAL
-)
 
 // SmartPlacementIntent defines the high level structure of a network chain document
 type SmartPlacementIntent struct {
@@ -35,7 +27,8 @@ type SmartPlacementIntentSpec struct {
 
 type SmartPlacementIntentStruct struct {
 	TargetCell        CellId      `json:"targetCell"`
-	PriorityLevel     AppPriority `json:"priorityLevel"`
+	AppCpuReq         float64     `json:"appCpuReq"`
+	AppMemReq         float64     `json:"appMemReq"`
 	ConstraintsList   Constraints `json:"constraintsList"`
 	ParametersWeights Weights     `json:"parametersWeights,omitempty"`
 }

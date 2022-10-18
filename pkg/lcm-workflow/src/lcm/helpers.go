@@ -17,7 +17,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"strings"
 )
 
 const TaskQueue = "LCM_TASK_Q"
@@ -34,10 +33,7 @@ func GetPorts(np []NotificationPort) (int, int) {
 		index := rand.Intn(len(np) - 1)
 		if !np[index].Used {
 			np[index].Used = true
-			log.Printf("PORTS ARE: %v, %v", np[index].Port, np[index].NodePort)
 			return np[index].Port, np[index].NodePort
-		} else {
-			log.Printf("THESE PORTS ARE USED: %v, %v", np[index].Port, np[index].NodePort)
 		}
 	}
 
@@ -299,21 +295,6 @@ func GenerateListenerEndpoint(baseUrl, notifyType string) string {
 	randStr := RandString()
 	url := fmt.Sprintf("/%s/%s/%s/notify", baseUrl, notifyType, randStr)
 	return url
-}
-
-func getPriorityLevel(level string) spi.AppPriority {
-	if strings.ToLower(level) == "low" || level == "0" {
-		return spi.PRIORITY_LOW
-	} else if strings.ToLower(level) == "normal" || level == "1" {
-		return spi.PRIORITY_NORMAL
-	} else if strings.ToLower(level) == "important" || level == "2" {
-		return spi.PRIORITY_IMPORTANT
-	} else if strings.ToLower(level) == "critical" || level == "3" {
-		return spi.PRIORITY_CRITICAL
-	} else {
-		log.Printf("AppPriority level [%v] not recognized. Using default: [PRIORITY_NORMAL (1)]\n", level)
-		return spi.PRIORITY_NORMAL
-	}
 }
 
 type apiHandler struct {

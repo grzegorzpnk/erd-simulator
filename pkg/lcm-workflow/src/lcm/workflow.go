@@ -15,7 +15,7 @@ const ALL_ACTIVITIES = "all-activities"
 // NeededParams should be treated as a const
 var NeededParams = []string{ // parameters needed for this workflow
 	"emcoOrchEndpoint", "project", "compositeApp", "compositeAppVersion", "deploymentIntentGroup", "targetAppName",
-	"innotUrl", "plcControllerUrl", "appPriorityLevel"}
+	"innotUrl", "plcControllerUrl", "rClientName", "rClientPort", "rWfClientName"}
 
 // LcmWorkflow is a Temporal workflow that should be run after application instantiation
 // It should listen for different types of notifications and serve them. For now it listens

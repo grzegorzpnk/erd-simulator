@@ -2,15 +2,6 @@ package model
 
 import "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
 
-type AppPriority int
-
-const (
-	PRIORITY_LOW AppPriority = iota
-	PRIORITY_NORMAL
-	PRIORITY_IMPORTANT
-	PRIORITY_CRITICAL
-)
-
 type SmartPlacementIntent struct {
 	Metadata Metadata                 `json:"metadata,omitempty"`
 	Spec     SmartPlacementIntentSpec `json:"spec,omitempty"`
@@ -30,7 +21,8 @@ type SmartPlacementIntentSpec struct {
 
 type SmartPlacementIntentStruct struct {
 	TargetCell        types.CellId `json:"targetCell"`
-	PriorityLevel     AppPriority  `json:"priorityLevel"`
+	AppCpuReq         float64      `json:"appCpuReq"`
+	AppMemReq         float64      `json:"appMemReq"`
 	ConstraintsList   Constraints  `json:"constraintsList,omitempty"`
 	ParametersWeights Weights      `json:"parametersWeights,omitempty"`
 }

@@ -97,7 +97,7 @@ func (mh *MecHost) GetMemUtilization() float64 {
 //}
 
 func (mh *MecHost) SetMemInfo(memInfo MecResInfo) {
-	mh.Resources.Cpu = memInfo
+	mh.Resources.Memory = memInfo
 }
 
 func (mh *MecHost) GetNeighbours() []*MecHost {

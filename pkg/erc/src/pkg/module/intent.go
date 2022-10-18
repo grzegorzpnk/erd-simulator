@@ -78,7 +78,10 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.Smar
 		checkFurther = false
 		if len(sp.evalNeighMECs) == 0 {
 			// If evalNeighMECs list is empty -> there are not any clusters to check (search failed).
-			return model.MecHost{}, errors.New("Could not find optimal cluster!")
+			reason := "no valid neighbours to consider"
+			err := errors.New(reason)
+			log.Warnf("[RESULT] Could not find optimal cluster: %v", reason)
+			return model.MecHost{}, err
 		}
 
 		log.Infof("EvalNeighList: %v", sp.evalNeighMECs)
@@ -96,6 +99,10 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.Smar
 				}
 				if skip := checkIfSkip(*neigh, sp.currentMECs); skip {
 					// If MEC Host is in the current search space -> just skip
+					continue
+				}
+				if skip := checkCoverageZone(*neigh, sp.checkedMECs[0]); skip {
+					// If we are there, checkedMECs[0] exists. Skip neighbour if it's outside coverage zone [region]
 					continue
 				}
 				sp.currentMECs = append(sp.currentMECs, *neigh)
@@ -135,6 +142,13 @@ func checkIfSkip(mec model.MecHost, mecList []model.MecHost) bool {
 	return false
 }
 
+func checkCoverageZone(sMec, tMec model.MecHost) bool {
+	if sMec.Identity.Location.Region != tMec.Identity.Location.Region {
+		return true
+	}
+	return false
+}
+
 func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacementIntent) (SearchParams, error) {
 	log.Infof("Looking for candidates...")
 	for _, mec := range sp.currentMECs {
@@ -157,6 +171,11 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 		sp.evalNeighMECs = append(sp.evalNeighMECs, mec)
 
 		mec, err = tc.CollectResourcesInfo(mec)
+		if err != nil {
+			log.Warnf("Could not collect MEC resources. Error: %v", err)
+		}
+
+		log.Infof("Current MEC is: %+v", mec)
 
 		if !resourcesOk(i, mec) {
 			//log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
@@ -187,16 +206,27 @@ func latencyOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 // resourcesOk checks if resource constraints specified in intent (i) are met
 // TODO: consider also current application requests
 func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
-	cpu := mec.GetCpuUtilization()
-	mem := mec.GetMemUtilization()
+	cpuUtilization := mec.GetCpuUtilization()
+	memUtilization := mec.GetMemUtilization()
 	cpuMax := i.Spec.SmartPlacementIntentData.ConstraintsList.CpuUtilizationMax
 	memMax := i.Spec.SmartPlacementIntentData.ConstraintsList.MemUtilizationMax
+	cpuMecAvaliable := mec.GetCpuAllocatable() - mec.GetCpuUsed()
+	memMecAvaliable := mec.GetMemAllocatable() - mec.GetMemUsed()
 
-	if cpu < 0 || mem < 0 {
+	if cpuUtilization < 0 || memUtilization < 0 {
+		//log.Warnf("[RES-CHECK][DEBUG] cpuUtilization[%v], memUtilization[%v]", cpuUtilization, memUtilization)
 		return false
-	} else if cpuMax > cpu && memMax > mem {
+	} else if cpuMecAvaliable < i.Spec.SmartPlacementIntentData.AppCpuReq {
+		//log.Warnf("[RES-CHECK][DEBUG] cpuMecAvaliable[%v] < appCpuReq[%v] = true", cpuMecAvaliable, i.Spec.SmartPlacementIntentData.AppCpuReq)
+		return false
+	} else if memMecAvaliable < i.Spec.SmartPlacementIntentData.AppMemReq {
+		//log.Warnf("[RES-CHECK][DEBUG] memMecAvaliable[%v] < appMemReq[%v] = true", memMecAvaliable, i.Spec.SmartPlacementIntentData.AppMemReq)
+		return false
+	} else if cpuMax >= cpuUtilization && memMax >= memUtilization {
+		//log.Warnf("[RES-CHECK][DEBUG] Resources OK!")
 		return true
 	} else {
+		//log.Warnf("[RES-CHECK][DEBUG] Resources not OK :/")
 		return false
 	}
 }
@@ -209,7 +239,7 @@ func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementInt
 	if len(mecHosts) <= 0 {
 		reason := "mec host list is empty"
 		err := errors.New(reason)
-		log.Warnf("Could not find optimal cluster: %v", reason)
+		log.Warnf("[RESULT] Could not find optimal cluster: %v", reason)
 		return model.MecHost{}, err
 	}
 

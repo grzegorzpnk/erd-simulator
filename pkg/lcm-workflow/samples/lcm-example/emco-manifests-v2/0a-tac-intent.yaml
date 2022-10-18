@@ -41,13 +41,14 @@ spec:
           compositeAppVersion: v1
           deploymentIntentGroup: {{ $deployment.DigName }}
           targetAppName: {{ $app.Name }}
-          appPriorityLevel: "critical"
           latencyMax: "{{ $wf.Params.LatencyMax }}"
           cpuUtilizationMax: "{{ $wf.Params.CpuUtilMax }}"
           memUtilizationMax: "{{ $wf.Params.MemUtilMax }}"
           latencyWeight: "{{ $wf.Params.LtcWeigh }}"
           cpuUtilizationWeight: "{{ $wf.Params.CpuWeigh }}"
           memUtilizationWeight: "{{ $wf.Params.MemWeigh }}"
+          appCpuReq: "{{ $wf.Params.AppCpuReq }}"
+          appMemReq: "{{ $wf.Params.AppMemReq }}"
           innotUrl: "{{ $wf.Params.InnotUrl }}"
           plcControllerUrl: "{{ $wf.Params.PlcControllerUrl }}"
           rClientName: "{{ $wf.Params.RelocateClientName }}"

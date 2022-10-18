@@ -86,15 +86,54 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) 
 	log.Printf("GenerateSmartPlacementIntent: activity start\n")
 
 	targetAppName := migParam.GetParamByKey("targetAppName")
-	priorityLevel := migParam.GetParamByKey("appPriorityLevel")
 
-	latMax, _ := strconv.ParseFloat(migParam.GetParamByKey("latencyMax"), 64)
-	cpuUtilMax, _ := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationMax"), 64)
-	memUtilMax, _ := strconv.ParseFloat(migParam.GetParamByKey("memUtilizationMax"), 64)
+	appCpuReq, err := strconv.ParseFloat(migParam.GetParamByKey("appCpuReq"), 64)
+	if err != nil {
+		log.Printf("Could not parse appCpuReq[%v] into float", migParam.GetParamByKey("appCpuReq"))
+		appCpuReq = 0.0
+	}
 
-	latWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("latencyWeight"), 64)
-	cpuWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationWeight"), 64)
-	memWeight, _ := strconv.ParseFloat(migParam.GetParamByKey("memUtilizationWeight"), 64)
+	appMemReq, err := strconv.ParseFloat(migParam.GetParamByKey("appMemReq"), 64)
+	if err != nil {
+		log.Printf("Could not parse appMemReq[%v] into float", migParam.GetParamByKey("appMemReq"))
+		appCpuReq = 0.0
+	}
+
+	latMax, err := strconv.ParseFloat(migParam.GetParamByKey("latencyMax"), 64)
+	if err != nil {
+		log.Printf("Could not parse latencyMax[%v] into float", migParam.GetParamByKey("latencyMax"))
+		appCpuReq = 0.0
+	}
+
+	cpuUtilMax, err := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationMax"), 64)
+	if err != nil {
+		log.Printf("Could not parse cpuUtilizationMax[%v] into float", migParam.GetParamByKey("cpuUtilizationMax"))
+		appCpuReq = 0.0
+	}
+
+	memUtilMax, err := strconv.ParseFloat(migParam.GetParamByKey("memUtilizationMax"), 64)
+	if err != nil {
+		log.Printf("Could not parse memUtilizationMax[%v] into float", migParam.GetParamByKey("memUtilizationMax"))
+		appCpuReq = 0.0
+	}
+
+	latWeight, err := strconv.ParseFloat(migParam.GetParamByKey("latencyWeight"), 64)
+	if err != nil {
+		log.Printf("Could not parse latencyWeight[%v] into float", migParam.GetParamByKey("latencyWeight"))
+		appCpuReq = 0.0
+	}
+
+	cpuWeight, err := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationWeight"), 64)
+	if err != nil {
+		log.Printf("Could not parse cpuUtilizationWeight[%v] into float", migParam.GetParamByKey("cpuUtilizationWeight"))
+		appCpuReq = 0.0
+	}
+
+	memWeight, err := strconv.ParseFloat(migParam.GetParamByKey("memUtilizationWeight"), 64)
+	if err != nil {
+		log.Printf("Could not parse memUtilizationWeight[%v] into float", migParam.GetParamByKey("memUtilizationWeight"))
+		appCpuReq = 0.0
+	}
 
 	spIntent := spi.SmartPlacementIntent{
 		Metadata: spi.Metadata{
@@ -104,8 +143,9 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) 
 		Spec: spi.SmartPlacementIntentSpec{
 			AppName: targetAppName,
 			SmartPlacementIntentData: spi.SmartPlacementIntentStruct{
-				TargetCell:    migParam.NewCellId,
-				PriorityLevel: getPriorityLevel(priorityLevel),
+				TargetCell: migParam.NewCellId,
+				AppCpuReq:  appCpuReq,
+				AppMemReq:  appMemReq,
 				ConstraintsList: spi.Constraints{
 					LatencyMax:        latMax,
 					CpuUtilizationMax: cpuUtilMax,
