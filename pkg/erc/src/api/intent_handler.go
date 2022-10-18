@@ -4,6 +4,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
@@ -37,6 +38,8 @@ func (h intentHandler) handleSmartPlacementIntent(w http.ResponseWriter, r *http
 	mec, err := h.client.ServeSmartPlacementIntent(i)
 	if err != nil {
 		//handleError(w, map[string]string{}, err, i)
+		// EXPERIMENTS: remove later
+		http.Post("http://10.254.185.44:32137/v1/results/relocation-failed", "application/json", bytes.NewBuffer([]byte{}))
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -45,7 +48,8 @@ func (h intentHandler) handleSmartPlacementIntent(w http.ResponseWriter, r *http
 		Provider: mec.Identity.Provider,
 		Cluster:  mec.Identity.Cluster,
 	}
-
+	// EXPERIMENTS: remove later
+	http.Post("http://10.254.185.44:32137/v1/results/relocation-successful", "application/json", bytes.NewBuffer([]byte{}))
 	sendResponse(w, body, http.StatusOK)
 }
 

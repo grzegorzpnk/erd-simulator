@@ -23,6 +23,8 @@
 /pkg/obs/.idea/
 /pkg/obs/deployments/helm/*.tgz
 
+/pkg/relocate-workflow/deployments/helm/*.tgz
+
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/
 /pkg/ueransim-ho/.vscode/
