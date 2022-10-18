@@ -30,8 +30,6 @@ func NewTopologyClient() *Client {
 	}
 }
 
-// GetMecHostsByCellId
-// TODO resolved: Consider only MEC Identity as response no entire MecHost struct
 func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	var mhs []model.MecHost
 	var mhsIdentity []model.MecIdentity
@@ -42,7 +40,7 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	}
 
 	respBody, err := getHTTPRespBody(url)
-	fmt.Printf("GOT respBody: %v", string(respBody))
+
 	if err := json.Unmarshal(respBody, &mhsIdentity); err != nil {
 		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
 		return []model.MecHost{}, err
@@ -51,6 +49,8 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	if len(mhsIdentity) <= 0 {
 		err = errors.New(fmt.Sprintf("no mec hosts found for given cell: %v\n.", id))
 		return []model.MecHost{}, err
+	} else {
+		log.Infof("Got CLUSTERS[%+v] for CELL_ID=[%v] ", mhsIdentity, id)
 	}
 
 	for _, mhi := range mhsIdentity {
@@ -62,7 +62,6 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 }
 
 // GetMecNeighbours calls topology server to get neighbours list for given MecHost
-// TODO resolved: Consider only MEC Identity as response no entire MecHost struct
 func (c *Client) GetMecNeighbours(mec model.MecHost) (model.MecHost, error) {
 	var mhsIdentity []model.MecIdentity
 
@@ -99,7 +98,6 @@ func (c *Client) CollectResourcesInfo(mec model.MecHost) (model.MecHost, error) 
 	if err != nil {
 		log.Warnf("[Topology] Could not get cpu utilization: %v", err)
 	}
-
 	mec.SetCpuInfo(cpu)
 
 	mem, err := c.GetMecResource(model.MecMem, mec)
@@ -151,47 +149,6 @@ func (c *Client) GetShortestPath(cell model.CellId, mec model.MecHost) (float64,
 
 	return val, nil
 }
-
-//// GetLatencyToCell returns latency for given MEC Hosts. This value suppose to be
-//// measured between target cell and target mec host.
-//func (c *Client) GetLatencyToCell(mec MecHost, cell model.CellId) (float64, error) {
-//	var val float64
-//
-//	url, err := c.buildGetShortestPathLatencyBased(mec, cell)
-//	if err != nil {
-//		return -1, err
-//	}
-//
-//	respBody, err := getHTTPRespBody(url)
-//	if err := json.Unmarshal(respBody, &val); err != nil {
-//		log.Errorf("[Topology] couldn't unmarshal response body: %v", err)
-//		return -1, err
-//	}
-//
-//	return val, nil
-//}
-//
-//// GetLatencyToNeighbour returns latency for given MEC Hosts. This value suppose to be
-//// measured between target cell and his neighbour (Antecedents).
-//func (c *Client) GetLatencyToNeighbour(mec MecHost) (float64, error) {
-//	var val float64
-//
-//	url, err := c.buildGetLatencyToNeighbourUrl(mec)
-//	if err != nil {
-//		return -1, err
-//	}
-//
-//	respBody, err := getHTTPRespBody(url)
-//	if err := json.Unmarshal(respBody, &val); err != nil {
-//		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
-//		return -1, err
-//	}
-//
-//	// Current mec latency is sum of all latencies on the path (equals Antecedents latency + current mec latency)
-//	val += mec.Antecedents.Latency
-//
-//	return val, nil
-//}
 
 // buildGetMecHostsByCellIdUrl returns topology endpoint to get MEC hosts associated with given CellId
 // e.g. /topology/cell/{cell-id}/mec-hosts
@@ -251,28 +208,6 @@ func (c *Client) buildGetShortestPathLatencyBased(mec model.MecHost, cell model.
 
 	return endpoint, nil
 }
-
-//// buildGetShortestPathLatencyBased returns topology endpoint to get MEC latency between MecHost his neighbour (Antecedents)
-//// e.g. /topology/mec/{mec-name}/neighbour/{mec-name}/latency
-//func (c *Client) buildGetLatencyToNeighbourUrl(sMec, tMec MecHost) (string, error) {
-//	var endpoint string
-//
-//	if sMec.Identity.Provider == "" || sMec.Identity.Cluster == "" {
-//		return "", errors.New("source MEC doesn't exist")
-//	} else if tMec.Identity.Provider == "" || tMec.Identity.Cluster == "" {
-//		return "", errors.New("target MEC doesn't exist")
-//	}
-//
-//	endpoint += c.TopologyEndpoint
-//	endpoint += ApiBase
-//	endpoint += ApiGetByMecName
-//	endpoint += "/" + sMec.Identity.Provider + "+" + sMec.Identity.Cluster
-//	endpoint += ApiGetByNeighbour
-//	endpoint += "/" + tMec.Identity.Provider + "+" + tMec.Identity.Cluster
-//	endpoint += "/latency"
-//
-//	return endpoint, nil
-//}
 
 // buildGetNeighboursUrl returns topology endpoint to get given MecHost neighbours
 // e.g. /topology/mec/{mec-name}/neighbours
