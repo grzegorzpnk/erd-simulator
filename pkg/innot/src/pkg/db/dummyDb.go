@@ -22,6 +22,7 @@ var DummyDB *subscriptionDb
 type Subscriber struct {
 	Endpoint     types.ClientListenerUri
 	AmfEventType types.AmfEventType
+	CurrentCell  types.CellId
 	BodyRequest  types.AmfEventSubscription
 }
 
@@ -33,6 +34,10 @@ type subscriptionDb struct {
 
 func (ddb *subscriptionDb) GetItems() map[SubscriptionId]Subscriber {
 	return ddb.db
+}
+
+func (ddb *subscriptionDb) UpdateItem(id SubscriptionId, sub Subscriber) {
+	ddb.db[id] = sub
 }
 
 // newDummyDb creates new Database and returns instance of that DB

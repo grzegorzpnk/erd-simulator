@@ -52,7 +52,7 @@ func (h *apiHandler) subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	sub := db.Subscriber{
 		Endpoint:     types.ClientListenerUri(endpoint),
 		AmfEventType: eventType,
-		BodyRequest:  body,
+		//BodyRequest:  body,
 	}
 
 	_, err = db.DummyDB.PutItem(sub)

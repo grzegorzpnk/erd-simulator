@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 temporalServerIp: "10.254.185.42"
-temporalServerPort: "30590"
+temporalServerPort: "30199"
 
 replicaCount: 1
 

@@ -51,7 +51,8 @@ func ServeSubscription(id db.SubscriptionId) {
 	}
 
 	if sub.AmfEventType == types.LOCATIONREPORT {
-		newCell := generateTargetCellId()
+		sub, newCell := generateTargetCellId(sub)
+		db.DummyDB.UpdateItem(id, sub)
 		sendCellIdCellNotification(sub.Endpoint, types.CellId(strconv.Itoa(newCell)), id)
 
 	} else if sub.AmfEventType == types.ACCESSTYPEREPORT {
@@ -127,7 +128,7 @@ func getNotification(sub db.Subscriber, amfEndpoint string, id db.SubscriptionId
 // sendCellIdCellNotification will send notification to the types.ClientListenerUri that types.CellId changed.
 // This is sent to the clients which subscribed to that kind of subscription.
 func sendCellIdCellNotification(subscriberEndpoint types.ClientListenerUri, cellId types.CellId, id db.SubscriptionId) {
-	log.Infof("[SUBSCRIPTION][ID=%v] Sending CELL_ID_CHANGED to the client.", id)
+	log.Infof("[SUBSCRIPTION][ID=%v] Sending CELL_ID_CHANGED[%v] to the client.", id, cellId)
 	info := types.CellChangedInfo{
 		Reason: types.CELLCHANGED,
 		Cell:   cellId,
@@ -181,6 +182,61 @@ func (c *counter) logWaitingForNotification(id db.SubscriptionId, et types.AmfEv
 	}
 }
 
-func generateTargetCellId() int {
-	return rand.Intn(42-1) + 1
+func generateTargetCellId(sub db.Subscriber) (db.Subscriber, int) {
+	if sub.CurrentCell == "" {
+		initialState := rand.Intn(42-1) + 1
+		sub.CurrentCell = types.CellId(strconv.Itoa(initialState))
+		return sub, initialState
+	} else {
+		possibleStates := cellStateMachine[sub.CurrentCell]
+		nextState := possibleStates[rand.Intn(len(possibleStates)-1)]
+		log.Infof("[DEBUG] Candidate cells for CELL[%v] are [%v] chosen [%v]", sub.CurrentCell, possibleStates, nextState)
+		sub.CurrentCell = types.CellId(strconv.Itoa(nextState))
+		return sub, nextState
+	}
+}
+
+var cellStateMachine = map[types.CellId][]int{
+	"1":  {2, 4, 5},
+	"2":  {1, 3, 4},
+	"3":  {2, 4, 7, 11, 14},
+	"4":  {1, 2, 3, 5, 6, 7},
+	"5":  {1, 4, 6, 8},
+	"6":  {4, 5, 7, 8, 9, 10},
+	"7":  {3, 4, 6, 10, 11, 14, 17},
+	"8":  {5, 6, 9},
+	"9":  {6, 8, 10},
+	"10": {6, 7, 9, 14, 17, 20},
+	"11": {3, 12, 14},
+	"12": {11, 13, 14, 15, 16},
+	"13": {12, 16, 22},
+	"14": {3, 7, 11, 12, 15, 17},
+	"15": {12, 14, 16, 17, 18, 19},
+	"16": {12, 13, 15, 19, 22, 25},
+	"17": {7, 10, 14, 15, 18, 20},
+	"18": {15, 17, 19, 20, 21},
+	"19": {15, 16, 18, 21, 25, 29},
+	"20": {10, 17, 18},
+	"21": {18, 19, 29},
+	"22": {13, 16, 23, 25, 26},
+	"23": {22, 24, 26},
+	"24": {23, 26, 27, 32, 35},
+	"25": {16, 19, 22, 26, 28, 29},
+	"26": {22, 23, 24, 25, 27, 28},
+	"27": {24, 26, 28, 31, 35, 38},
+	"28": {25, 26, 27, 29, 30, 31},
+	"29": {19, 21, 25, 28, 30},
+	"30": {28, 29, 31},
+	"31": {27, 28, 30, 38, 41},
+	"32": {24, 33, 35},
+	"33": {32, 34, 35, 36, 37},
+	"34": {33, 37}, // consider only cell in 1st Coverage Zone
+	"35": {24, 27, 32, 33, 36, 38},
+	"36": {33, 35, 37, 38, 38, 40},
+	"37": {33, 34, 36, 40}, // consider only cell in 1st Coverage Zone
+	"38": {27, 31, 35, 36, 39, 41},
+	"39": {36, 38, 40, 41, 42},
+	"40": {36, 37, 39, 42}, // consider only cell in 1st Coverage Zone
+	"41": {31, 38, 39},
+	"42": {39, 40}, // consider only cell in 1st Coverage Zone
 }
