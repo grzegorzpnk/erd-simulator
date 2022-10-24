@@ -4,6 +4,7 @@
 package lcm
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/model"
 	spi "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/model"
 	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
 
@@ -107,7 +108,8 @@ type WorkflowParams struct {
 	NotifyUrl            string
 	NewCellId            types.CellId
 	SmartPlacementIntent spi.SmartPlacementIntent
-	OptimalCluster       Cluster
+	CurrentCluster       model.Cluster
+	OptimalCluster       model.Cluster
 	ErWfIntent           ti.WorkflowIntent
 	ListenerPort         int
 	ListenerNodePort     int
@@ -359,11 +361,6 @@ func generateSubscriptionBody() types.AmfEventSubscription {
 	return body
 }
 
-type Cluster struct {
-	Provider string `json:"provider"`
-	Cluster  string `json:"cluster"`
-}
-
 type NotificationPort struct {
 	Port     int
 	NodePort int
@@ -380,4 +377,15 @@ func GenerateNotificationPorts() []NotificationPort {
 		})
 	}
 	return portList
+}
+
+func buildGenericPlacementIntentsURL(params map[string]string) string {
+	url := params["emcoOrchEndpoint"]
+	url += "/v2/projects/" + params["project"]
+	url += "/composite-apps/" + params["compositeApp"]
+	url += "/" + params["compositeAppVersion"]
+	url += "/deployment-intent-groups/" + params["deploymentIntentGroup"]
+	url += "/generic-placement-intents"
+
+	return url
 }

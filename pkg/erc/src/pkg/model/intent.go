@@ -7,10 +7,16 @@ package model
 
 type CellId string
 
+type Cluster struct {
+	Provider string `json:"provider"`
+	Cluster  string `json:"cluster"`
+}
+
 // SmartPlacementIntent defines the high level structure of a network chain document
 type SmartPlacementIntent struct {
-	Metadata Metadata                 `json:"metadata" yaml:"metadata"`
-	Spec     SmartPlacementIntentSpec `json:"spec" yaml:"spec"`
+	Metadata         Metadata `json:"metadata,omitempty"`
+	CurrentPlacement Cluster
+	Spec             SmartPlacementIntentSpec `json:"spec,omitempty"`
 }
 
 type Metadata struct {

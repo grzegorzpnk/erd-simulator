@@ -61,6 +61,27 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	return mhs, nil
 }
 
+func (c *Client) GetMecHost(provider, cluster string) (model.MecHost, error) {
+	var mh model.MecHost
+	var mhIdentity model.MecIdentity
+
+	url, err := c.buildGetMecHostUrl(provider, cluster)
+	if err != nil {
+		return model.MecHost{}, err
+	}
+
+	respBody, err := getHTTPRespBody(url)
+
+	if err := json.Unmarshal(respBody, &mhIdentity); err != nil {
+		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
+		return model.MecHost{}, err
+	}
+
+	mh = model.MecHost{Identity: mhIdentity}
+
+	return mh, nil
+}
+
 func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
 	var mhs []model.MecHost
 	var tempMhs, mhsIdentity []model.MecIdentity
@@ -228,6 +249,19 @@ func (c *Client) buildGetAllMecHostsUrl() string {
 	endpoint += ApiCollectionMecHosts
 
 	return endpoint
+}
+
+func (c *Client) buildGetMecHostUrl(provider, cluster string) (string, error) {
+	var endpoint string
+
+	if provider == "" || cluster == "" {
+		return "", errors.New("could not buildGeMecHostUrl: provider or cluster name empty")
+	}
+
+	endpoint = c.buildGetAllMecHostsUrl()
+	endpoint += "/provider/" + provider + "/cluster/" + cluster
+
+	return endpoint, nil
 }
 
 // buildGetShortestPathLatencyBased returns topology endpoint to get MEC latency between MecHost and given CellId

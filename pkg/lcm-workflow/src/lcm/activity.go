@@ -4,6 +4,7 @@
 package lcm
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/model"
 	spi "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/model"
 	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
 	"context"
@@ -19,6 +20,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func SubCellChangedNotification(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
@@ -78,6 +80,71 @@ func GetCellChangedNotification(ctx context.Context, migParam WorkflowParams) (*
 
 	fmt.Printf("GetCellChangedNotification: Listening for notification..\n")
 	_ = httpServer.ListenAndServe()
+
+	return &migParam, nil
+}
+
+func DiscoverCurrentCluster(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
+	log.Printf("DiscoverCurrentCluster: activity start\n")
+
+	gpiUrl := buildGenericPlacementIntentsURL(migParam.InParams)
+
+	respBody, err := getHttpRespBody(gpiUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	var gpIntents []GenericPlacementIntent
+
+	if err := json.Unmarshal(respBody, &gpIntents); err != nil {
+		decodeErr := fmt.Errorf("Failed to decode GET responde body for URL %s.\n"+"Decoder error: %#v\n", gpiUrl, err)
+		_, _ = fmt.Fprintf(os.Stderr, decodeErr.Error())
+		if err != nil {
+			return nil, err
+		}
+		return nil, decodeErr
+	}
+
+	// For now assume that there is only one GenericPlacementIntent
+	appIntentsUrl := buildAppIntentsURL(gpiUrl, gpIntents[0].MetaData.Name)
+
+	respBody, err = getHttpRespBody(appIntentsUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	var appIntents []AppIntent
+	if err := json.Unmarshal(respBody, &appIntents); err != nil {
+		decodeErr := fmt.Errorf("Failed to decode GET responde body for URL %s.\nDecoder error: %#v\n", appIntentsUrl, err)
+		_, _ = fmt.Fprintf(os.Stderr, decodeErr.Error())
+		return nil, decodeErr
+	}
+	fmt.Printf("\nDiscoverCurrentCluster: body = %#v\n", appIntents)
+
+	for _, appIntent := range appIntents {
+		if strings.ToLower(appIntent.Spec.AppName) == strings.ToLower(migParam.InParams["targetAppName"]) {
+			// Need to consider AllOfArray, AnyOfArray, ClusterNames, ClusterLabels
+			// Assume the simplest case: we consider only 1 application, deployed using ClusterName and the Intent is
+			// in the AllOf array, AnyOf array is empty
+			if len(appIntent.Spec.Intent.AllOfArray) > 0 {
+				for _, elem := range appIntent.Spec.Intent.AllOfArray {
+					if elem.ClusterName != "" {
+						migParam.CurrentCluster = model.Cluster{
+							Provider: elem.ProviderName,
+							Cluster:  elem.ClusterName,
+						}
+					}
+				}
+			}
+			if len(appIntent.Spec.Intent.AnyOfArray) > 0 {
+				for _, elem := range appIntent.Spec.Intent.AnyOfArray {
+					if elem.ClusterName != "" || elem.ClusterLabelName != "" {
+						log.Printf("[WARN]DiscoverCurrentCluster: There was items in the AnyOf array but skipped.")
+					}
+				}
+			}
+		}
+	}
 
 	return &migParam, nil
 }
@@ -146,6 +213,10 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) 
 			Name:        targetAppName + "-er-intent",
 			Description: fmt.Sprintf("Edge Relocation Intent for app: %s", targetAppName),
 		},
+		CurrentPlacement: model.Cluster{
+			Provider: migParam.CurrentCluster.Provider,
+			Cluster:  migParam.CurrentCluster.Cluster,
+		},
 		Spec: spi.SmartPlacementIntentSpec{
 			AppName: targetAppName,
 			SmartPlacementIntentData: spi.SmartPlacementIntentStruct{
@@ -173,7 +244,7 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) 
 
 func CallPlacementController(ctx context.Context, migParam WorkflowParams) (*WorkflowParams, error) {
 	log.Printf("CallPlacementController: activity start\n")
-	var resp Cluster
+	var resp model.Cluster
 
 	plcCtrlUrl := migParam.GetParamByKey("plcControllerUrl")
 	data := migParam.SmartPlacementIntent
@@ -193,7 +264,6 @@ func CallPlacementController(ctx context.Context, migParam WorkflowParams) (*Wor
 	migParam.OptimalCluster = resp
 
 	log.Printf("CallPlacementController: Optimal cluster = provider{%v}, cluster={%v}.\n", resp.Provider, resp.Cluster)
-	log.Printf("CallPlacementController: Optimal cluster = %+v.\n", resp)
 
 	return &migParam, nil
 }

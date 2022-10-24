@@ -26,6 +26,7 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 		"SubCellChangedNotification",
 		"GetCellChangedNotification",
 		"GenerateSmartPlacementIntent",
+		"DiscoverCurrentCluster",
 		"CallPlacementController",
 		"GenerateRelocateWfIntent",
 		"CallTemporalWfController",
@@ -89,6 +90,15 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 			return nil, wferr
 		}
 
+		currentState = "discover-current-cluster"
+		ctx4 := ctxMap["DiscoverCurrentCluster"]
+		err = wf.ExecuteActivity(ctx4, DiscoverCurrentCluster, wfParams).Get(ctx4, &wfParams)
+		if err != nil {
+			wferr := fmt.Errorf("GenerateSmartPlacementIntent failed: %s", err.Error())
+			fmt.Fprintf(os.Stderr, wferr.Error())
+			return nil, wferr
+		}
+
 		currentState = "generate-smart-placement-intent"
 		ctx3 := ctxMap["GenerateSmartPlacementIntent"]
 		err = wf.ExecuteActivity(ctx3, GenerateSmartPlacementIntent, wfParams).Get(ctx3, &wfParams)
@@ -97,9 +107,10 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 			fmt.Fprintf(os.Stderr, wferr.Error())
 			return nil, wferr
 		}
+
 		currentState = "call-placement-controller"
-		ctx4 := ctxMap["CallPlacementController"]
-		err = wf.ExecuteActivity(ctx4, CallPlacementController, wfParams).Get(ctx4, &wfParams)
+		ctx5 := ctxMap["CallPlacementController"]
+		err = wf.ExecuteActivity(ctx5, CallPlacementController, wfParams).Get(ctx5, &wfParams)
 		if err != nil {
 			wferr := fmt.Errorf("CallPlacementController failed: %s", err.Error())
 			fmt.Fprintf(os.Stderr, wferr.Error())
@@ -109,8 +120,8 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 		}
 
 		currentState = "generate-relocate-wf-intent"
-		ctx5 := ctxMap["GenerateRelocateWfIntent"]
-		err = wf.ExecuteActivity(ctx5, GenerateRelocateWfIntent, wfParams).Get(ctx5, &wfParams)
+		ctx6 := ctxMap["GenerateRelocateWfIntent"]
+		err = wf.ExecuteActivity(ctx6, GenerateRelocateWfIntent, wfParams).Get(ctx6, &wfParams)
 		if err != nil {
 			wferr := fmt.Errorf("CreateTemporalERIntent failed: %s", err.Error())
 			fmt.Fprintf(os.Stderr, wferr.Error())
@@ -118,8 +129,8 @@ func LcmWorkflow(ctx wf.Context, wfParam *eta.WorkflowParams) (*WorkflowParams, 
 		}
 
 		currentState = "call-temporal-wf-controller"
-		ctx6 := ctxMap["CallTemporalWfController"]
-		err = wf.ExecuteActivity(ctx6, CallTemporalWfController, wfParams).Get(ctx6, &wfParams)
+		ctx7 := ctxMap["CallTemporalWfController"]
+		err = wf.ExecuteActivity(ctx7, CallTemporalWfController, wfParams).Get(ctx7, &wfParams)
 		if err != nil {
 			wferr := fmt.Errorf("CallTemporalWfController failed: %s", err.Error())
 			fmt.Fprintf(os.Stderr, wferr.Error())

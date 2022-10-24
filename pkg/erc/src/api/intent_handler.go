@@ -4,6 +4,7 @@
 package api
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/errs"
 	"bytes"
 	"encoding/json"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
@@ -37,7 +38,11 @@ func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter
 
 	mec, err := h.client.ServeSmartPlacementIntentHeuristic(i)
 	if err != nil {
-		//handleError(w, map[string]string{}, err, i)
+		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+			http.Post("http://10.254.185.44:32137/v1/results/relocation-skipped", "application/json", bytes.NewBuffer([]byte{}))
+			sendResponse(w, err.Error(), http.StatusNoContent)
+			return
+		}
 		// EXPERIMENTS: remove later
 		http.Post("http://10.254.185.44:32137/v1/results/relocation-failed", "application/json", bytes.NewBuffer([]byte{}))
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
@@ -63,7 +68,11 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 
 	mec, err := h.client.ServeSmartPlacementIntentOptimal(i)
 	if err != nil {
-		//handleError(w, map[string]string{}, err, i)
+		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+			http.Post("http://10.254.185.44:32137/v1/results/relocation-skipped", "application/json", bytes.NewBuffer([]byte{}))
+			sendResponse(w, err.Error(), http.StatusNoContent)
+			return
+		}
 		// EXPERIMENTS: remove later
 		http.Post("http://10.254.185.44:32137/v1/results/relocation-failed", "application/json", bytes.NewBuffer([]byte{}))
 		sendResponse(w, err.Error(), http.StatusInternalServerError)

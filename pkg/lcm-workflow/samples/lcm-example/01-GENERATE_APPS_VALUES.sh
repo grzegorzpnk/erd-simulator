@@ -1,11 +1,11 @@
 #!/bin/bash
 
 function generateMaxLatency() {
-  echo "$(expr $((1 + $RANDOM % 24)))"
+  echo "$(expr $((1 + $RANDOM % 20)))"
 }
 
 function generateMaxResUtil() {
-   echo "$(expr $((45 + $RANDOM % 60)))"
+   echo "$(expr $((50 + $RANDOM % 50)))"
 }
 
 function mebibytesToBytes() {
@@ -51,8 +51,8 @@ declare -a vars=("TARGET_CLUSTER_" "MAX_LATENCY_" "CPU_UTIL_MAX_" "MEM_UTIL_MAX_
 for app in "${apps[@]}"; do
 #    targetCluster=${clusters[$index]}
 #    index=$(expr $(($RANDOM % (${#clusters[@]}))))
-    cpu_req=$(expr $((125 + $RANDOM % 175)))
-    mem_req=$(expr $((100 + $RANDOM % 150)))
+    cpu_req=$(expr $((125 + $RANDOM % 200)))
+    mem_req=$(expr $((200 + $RANDOM % 200)))
     mem_req_bytes=$(mebibytesToBytes "$mem_req")
     cpu_req_unit="0"$(miliCpuToCpu "$cpu_req")
 
@@ -69,9 +69,9 @@ for app in "${apps[@]}"; do
       elif [[ $var == "MEM_UTIL_MAX_" ]]; then
         export "$temp"="$(generateMaxResUtil)"
       elif [[ $var == "LTC_WEIGHT_" ]]; then
-        export "$temp"=0.5
+        export "$temp"=0.0
       elif [[ $var == "RES_WEIGHT_" ]]; then
-        export "$temp"=0.5
+        export "$temp"=1.0
       elif [[ $var == "CPU_WEIGHT_" ]]; then
         export "$temp"=0.5
       elif [[ $var == "MEM_WEIGHT_" ]]; then

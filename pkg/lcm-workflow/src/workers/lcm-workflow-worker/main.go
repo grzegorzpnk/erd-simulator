@@ -50,6 +50,7 @@ func main() {
 	w.RegisterActivity(lcm.SubCellChangedNotification)
 	w.RegisterActivity(lcm.GetCellChangedNotification)
 	w.RegisterActivity(lcm.GenerateSmartPlacementIntent)
+	w.RegisterActivity(lcm.DiscoverCurrentCluster)
 	w.RegisterActivity(lcm.CallPlacementController)
 	w.RegisterActivity(lcm.GenerateRelocateWfIntent)
 	w.RegisterActivity(lcm.CallTemporalWfController)

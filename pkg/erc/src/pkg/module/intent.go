@@ -2,6 +2,7 @@ package module
 
 import (
 	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/errs"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
 	"github.com/pkg/errors"
@@ -47,6 +48,15 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentHeuristic(intent m
 	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
 
 	log.Infof("Smart Placement Intent: %+v", intent)
+
+	skip, err := checkIfCurrentClusterOk(*tc, intent)
+	if err != nil {
+		log.Warnf("Can't skip current cluster. Reason: %v", err)
+	}
+
+	if skip {
+		return model.MecHost{}, errs.ERR_CLUSTER_OK
+	}
 
 	// Get all MEC Hosts associated with given Cell ID
 	sp.currentMECs, err = tc.GetMecHostsByCellId(tc.CurrentCell)
@@ -142,6 +152,15 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 
 	log.Infof("Smart Placement Intent: %+v", intent)
 
+	skip, err := checkIfCurrentClusterOk(*tc, intent)
+	if err != nil {
+		log.Warnf("Can't skip current cluster. Reason: %v", err)
+	}
+
+	if skip {
+		return model.MecHost{}, errs.ERR_CLUSTER_OK
+	}
+
 	// Evaluate what coverage zone we are considering (based on region)
 	temp, err := tc.GetMecHostsByCellId(tc.CurrentCell)
 
@@ -225,6 +244,25 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 	}
 
 	return bestMecHost, err
+}
+
+func checkIfCurrentClusterOk(tc topology.Client, i model.SmartPlacementIntent) (bool, error) {
+	mecHost, err := tc.GetMecHost(i.CurrentPlacement.Provider, i.CurrentPlacement.Cluster)
+	if err != nil {
+		return false, err
+	}
+
+	mecHost, err = tc.CollectResourcesInfo(mecHost)
+	if err != nil {
+		return false, err
+	}
+
+	if resourcesOk(i, mecHost) && latencyOk(i, mecHost) {
+		log.Infof("Current mecHost[%v+%v] is OK. Skipping", i.CurrentPlacement.Provider, i.CurrentPlacement.Cluster)
+		return true, nil
+	}
+
+	return false, err
 }
 
 func checkIfSkip(mec model.MecHost, mecList []model.MecHost) bool {
@@ -353,11 +391,11 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) floa
 	var staticCost int
 	switch mec.Identity.Location.Type {
 	case 0:
-		staticCost = 1
+		staticCost = 3
 	case 1:
 		staticCost = 2
 	case 2:
-		staticCost = 3
+		staticCost = 1
 	default:
 		log.Warnf("[INTENT] MEC Type[%v] should not be considered: static-cost[%v].", mec.Identity.Location.Type, 404)
 		staticCost = 404

@@ -1,10 +1,13 @@
 package model
 
-import "10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
+import (
+	"10.254.188.33/matyspi5/erd/pkg/lcm-workflow/src/types"
+)
 
 type SmartPlacementIntent struct {
-	Metadata Metadata                 `json:"metadata,omitempty"`
-	Spec     SmartPlacementIntentSpec `json:"spec,omitempty"`
+	Metadata         Metadata `json:"metadata,omitempty"`
+	CurrentPlacement Cluster
+	Spec             SmartPlacementIntentSpec `json:"spec,omitempty"`
 }
 
 type Metadata struct {
@@ -38,4 +41,9 @@ type Weights struct {
 	ResourcesWeight      float64 `json:"resourcesWeight"`
 	CpuUtilizationWeight float64 `json:"cpuUtilizationWeight"`
 	MemUtilizationWeight float64 `json:"memUtilizationWeight"`
+}
+
+type Cluster struct {
+	Provider string `json:"provider"`
+	Cluster  string `json:"cluster"`
 }

@@ -48,10 +48,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_1
               CpuUtilMax: $CPU_UTIL_MAX_1
               MemUtilMax: $MEM_UTIL_MAX_1
-              LtcWeigh: $LTC_WEIGHT_1
-              ResWeigh: $RES_WEIGHT_1
-              CpuWeigh: $CPU_WEIGHT_1
-              MemWeigh: $MEM_WEIGHT_1
+              LtcWeight: $LTC_WEIGHT_1
+              ResWeight: $RES_WEIGHT_1
+              CpuWeight: $CPU_WEIGHT_1
+              MemWeight: $MEM_WEIGHT_1
               AppCpuReq: $APP_CPU_REQ_1
               AppMemReq: $APP_MEM_REQ_1
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -90,10 +90,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_2
               CpuUtilMax: $CPU_UTIL_MAX_2
               MemUtilMax: $MEM_UTIL_MAX_2
-              LtcWeigh: $LTC_WEIGHT_2
-              ResWeigh: $RES_WEIGHT_2
-              CpuWeigh: $CPU_WEIGHT_2
-              MemWeigh: $MEM_WEIGHT_2
+              LtcWeight: $LTC_WEIGHT_2
+              ResWeight: $RES_WEIGHT_2
+              CpuWeight: $CPU_WEIGHT_2
+              MemWeight: $MEM_WEIGHT_2
               AppCpuReq: $APP_CPU_REQ_2
               AppMemReq: $APP_MEM_REQ_2
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -132,10 +132,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_3
               CpuUtilMax: $CPU_UTIL_MAX_3
               MemUtilMax: $MEM_UTIL_MAX_3
-              LtcWeigh: $LTC_WEIGHT_3
-              ResWeigh: $RES_WEIGHT_3
-              CpuWeigh: $CPU_WEIGHT_3
-              MemWeigh: $MEM_WEIGHT_3
+              LtcWeight: $LTC_WEIGHT_3
+              ResWeight: $RES_WEIGHT_3
+              CpuWeight: $CPU_WEIGHT_3
+              MemWeight: $MEM_WEIGHT_3
               AppCpuReq: $APP_CPU_REQ_3
               AppMemReq: $APP_MEM_REQ_3
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -174,10 +174,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_4
               CpuUtilMax: $CPU_UTIL_MAX_4
               MemUtilMax: $MEM_UTIL_MAX_4
-              LtcWeigh: $LTC_WEIGHT_4
-              ResWeigh: $RES_WEIGHT_4
-              CpuWeigh: $CPU_WEIGHT_4
-              MemWeigh: $MEM_WEIGHT_4
+              LtcWeight: $LTC_WEIGHT_4
+              ResWeight: $RES_WEIGHT_4
+              CpuWeight: $CPU_WEIGHT_4
+              MemWeight: $MEM_WEIGHT_4
               AppCpuReq: $APP_CPU_REQ_4
               AppMemReq: $APP_MEM_REQ_4
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -216,10 +216,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_5
               CpuUtilMax: $CPU_UTIL_MAX_5
               MemUtilMax: $MEM_UTIL_MAX_5
-              LtcWeigh: $LTC_WEIGHT_5
-              ResWeigh: $RES_WEIGHT_5
-              CpuWeigh: $CPU_WEIGHT_5
-              MemWeigh: $MEM_WEIGHT_5
+              LtcWeight: $LTC_WEIGHT_5
+              ResWeight: $RES_WEIGHT_5
+              CpuWeight: $CPU_WEIGHT_5
+              MemWeight: $MEM_WEIGHT_5
               AppCpuReq: $APP_CPU_REQ_5
               AppMemReq: $APP_MEM_REQ_5
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -258,10 +258,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_6
               CpuUtilMax: $CPU_UTIL_MAX_6
               MemUtilMax: $MEM_UTIL_MAX_6
-              LtcWeigh: $LTC_WEIGHT_6
-              ResWeigh: $RES_WEIGHT_6
-              CpuWeigh: $CPU_WEIGHT_6
-              MemWeigh: $MEM_WEIGHT_6
+              LtcWeight: $LTC_WEIGHT_6
+              ResWeight: $RES_WEIGHT_6
+              CpuWeight: $CPU_WEIGHT_6
+              MemWeight: $MEM_WEIGHT_6
               AppCpuReq: $APP_CPU_REQ_6
               AppMemReq: $APP_MEM_REQ_6
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -300,10 +300,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_7
               CpuUtilMax: $CPU_UTIL_MAX_7
               MemUtilMax: $MEM_UTIL_MAX_7
-              LtcWeigh: $LTC_WEIGHT_7
-              ResWeigh: $RES_WEIGHT_7
-              CpuWeigh: $CPU_WEIGHT_7
-              MemWeigh: $MEM_WEIGHT_7
+              LtcWeight: $LTC_WEIGHT_7
+              ResWeight: $RES_WEIGHT_7
+              CpuWeight: $CPU_WEIGHT_7
+              MemWeight: $MEM_WEIGHT_7
               AppCpuReq: $APP_CPU_REQ_7
               AppMemReq: $APP_MEM_REQ_7
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -342,10 +342,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_8
               CpuUtilMax: $CPU_UTIL_MAX_8
               MemUtilMax: $MEM_UTIL_MAX_8
-              LtcWeigh: $LTC_WEIGHT_8
-              ResWeigh: $RES_WEIGHT_8
-              CpuWeigh: $CPU_WEIGHT_8
-              MemWeigh: $MEM_WEIGHT_8
+              LtcWeight: $LTC_WEIGHT_8
+              ResWeight: $RES_WEIGHT_8
+              CpuWeight: $CPU_WEIGHT_8
+              MemWeight: $MEM_WEIGHT_8
               AppCpuReq: $APP_CPU_REQ_8
               AppMemReq: $APP_MEM_REQ_8
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -384,10 +384,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_9
               CpuUtilMax: $CPU_UTIL_MAX_9
               MemUtilMax: $MEM_UTIL_MAX_9
-              LtcWeigh: $LTC_WEIGHT_9
-              ResWeigh: $RES_WEIGHT_9
-              CpuWeigh: $CPU_WEIGHT_9
-              MemWeigh: $MEM_WEIGHT_9
+              LtcWeight: $LTC_WEIGHT_9
+              ResWeight: $RES_WEIGHT_9
+              CpuWeight: $CPU_WEIGHT_9
+              MemWeight: $MEM_WEIGHT_9
               AppCpuReq: $APP_CPU_REQ_9
               AppMemReq: $APP_MEM_REQ_9
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -426,10 +426,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_10
               CpuUtilMax: $CPU_UTIL_MAX_10
               MemUtilMax: $MEM_UTIL_MAX_10
-              LtcWeigh: $LTC_WEIGHT_10
-              ResWeigh: $RES_WEIGHT_10
-              CpuWeigh: $CPU_WEIGHT_10
-              MemWeigh: $MEM_WEIGHT_10
+              LtcWeight: $LTC_WEIGHT_10
+              ResWeight: $RES_WEIGHT_10
+              CpuWeight: $CPU_WEIGHT_10
+              MemWeight: $MEM_WEIGHT_10
               AppCpuReq: $APP_CPU_REQ_10
               AppMemReq: $APP_MEM_REQ_10
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -468,10 +468,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_11
               CpuUtilMax: $CPU_UTIL_MAX_11
               MemUtilMax: $MEM_UTIL_MAX_11
-              LtcWeigh: $LTC_WEIGHT_11
-              ResWeigh: $RES_WEIGHT_11
-              CpuWeigh: $CPU_WEIGHT_11
-              MemWeigh: $MEM_WEIGHT_11
+              LtcWeight: $LTC_WEIGHT_11
+              ResWeight: $RES_WEIGHT_11
+              CpuWeight: $CPU_WEIGHT_11
+              MemWeight: $MEM_WEIGHT_11
               AppCpuReq: $APP_CPU_REQ_11
               AppMemReq: $APP_MEM_REQ_11
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -510,10 +510,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_12
               CpuUtilMax: $CPU_UTIL_MAX_12
               MemUtilMax: $MEM_UTIL_MAX_12
-              LtcWeigh: $LTC_WEIGHT_12
-              ResWeigh: $RES_WEIGHT_12
-              CpuWeigh: $CPU_WEIGHT_12
-              MemWeigh: $MEM_WEIGHT_12
+              LtcWeight: $LTC_WEIGHT_12
+              ResWeight: $RES_WEIGHT_12
+              CpuWeight: $CPU_WEIGHT_12
+              MemWeight: $MEM_WEIGHT_12
               AppCpuReq: $APP_CPU_REQ_12
               AppMemReq: $APP_MEM_REQ_12
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -552,10 +552,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_13
               CpuUtilMax: $CPU_UTIL_MAX_13
               MemUtilMax: $MEM_UTIL_MAX_13
-              LtcWeigh: $LTC_WEIGHT_13
-              ResWeigh: $RES_WEIGHT_13
-              CpuWeigh: $CPU_WEIGHT_13
-              MemWeigh: $MEM_WEIGHT_13
+              LtcWeight: $LTC_WEIGHT_13
+              ResWeight: $RES_WEIGHT_13
+              CpuWeight: $CPU_WEIGHT_13
+              MemWeight: $MEM_WEIGHT_13
               AppCpuReq: $APP_CPU_REQ_13
               AppMemReq: $APP_MEM_REQ_13
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -594,10 +594,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_14
               CpuUtilMax: $CPU_UTIL_MAX_14
               MemUtilMax: $MEM_UTIL_MAX_14
-              LtcWeigh: $LTC_WEIGHT_14
-              ResWeigh: $RES_WEIGHT_14
-              CpuWeigh: $CPU_WEIGHT_14
-              MemWeigh: $MEM_WEIGHT_14
+              LtcWeight: $LTC_WEIGHT_14
+              ResWeight: $RES_WEIGHT_14
+              CpuWeight: $CPU_WEIGHT_14
+              MemWeight: $MEM_WEIGHT_14
               AppCpuReq: $APP_CPU_REQ_14
               AppMemReq: $APP_MEM_REQ_14
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -636,10 +636,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_15
               CpuUtilMax: $CPU_UTIL_MAX_15
               MemUtilMax: $MEM_UTIL_MAX_15
-              LtcWeigh: $LTC_WEIGHT_15
-              ResWeigh: $RES_WEIGHT_15
-              CpuWeigh: $CPU_WEIGHT_15
-              MemWeigh: $MEM_WEIGHT_15
+              LtcWeight: $LTC_WEIGHT_15
+              ResWeight: $RES_WEIGHT_15
+              CpuWeight: $CPU_WEIGHT_15
+              MemWeight: $MEM_WEIGHT_15
               AppCpuReq: $APP_CPU_REQ_15
               AppMemReq: $APP_MEM_REQ_15
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -678,10 +678,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_16
               CpuUtilMax: $CPU_UTIL_MAX_16
               MemUtilMax: $MEM_UTIL_MAX_16
-              LtcWeigh: $LTC_WEIGHT_16
-              ResWeigh: $RES_WEIGHT_16
-              CpuWeigh: $CPU_WEIGHT_16
-              MemWeigh: $MEM_WEIGHT_16
+              LtcWeight: $LTC_WEIGHT_16
+              ResWeight: $RES_WEIGHT_16
+              CpuWeight: $CPU_WEIGHT_16
+              MemWeight: $MEM_WEIGHT_16
               AppCpuReq: $APP_CPU_REQ_16
               AppMemReq: $APP_MEM_REQ_16
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -720,10 +720,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_17
               CpuUtilMax: $CPU_UTIL_MAX_17
               MemUtilMax: $MEM_UTIL_MAX_17
-              LtcWeigh: $LTC_WEIGHT_17
-              ResWeigh: $RES_WEIGHT_17
-              CpuWeigh: $CPU_WEIGHT_17
-              MemWeigh: $MEM_WEIGHT_17
+              LtcWeight: $LTC_WEIGHT_17
+              ResWeight: $RES_WEIGHT_17
+              CpuWeight: $CPU_WEIGHT_17
+              MemWeight: $MEM_WEIGHT_17
               AppCpuReq: $APP_CPU_REQ_17
               AppMemReq: $APP_MEM_REQ_17
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -762,10 +762,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_18
               CpuUtilMax: $CPU_UTIL_MAX_18
               MemUtilMax: $MEM_UTIL_MAX_18
-              LtcWeigh: $LTC_WEIGHT_18
-              ResWeigh: $RES_WEIGHT_18
-              CpuWeigh: $CPU_WEIGHT_18
-              MemWeigh: $MEM_WEIGHT_18
+              LtcWeight: $LTC_WEIGHT_18
+              ResWeight: $RES_WEIGHT_18
+              CpuWeight: $CPU_WEIGHT_18
+              MemWeight: $MEM_WEIGHT_18
               AppCpuReq: $APP_CPU_REQ_18
               AppMemReq: $APP_MEM_REQ_18
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -804,10 +804,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_19
               CpuUtilMax: $CPU_UTIL_MAX_19
               MemUtilMax: $MEM_UTIL_MAX_19
-              LtcWeigh: $LTC_WEIGHT_19
-              ResWeigh: $RES_WEIGHT_19
-              CpuWeigh: $CPU_WEIGHT_19
-              MemWeigh: $MEM_WEIGHT_19
+              LtcWeight: $LTC_WEIGHT_19
+              ResWeight: $RES_WEIGHT_19
+              CpuWeight: $CPU_WEIGHT_19
+              MemWeight: $MEM_WEIGHT_19
               AppCpuReq: $APP_CPU_REQ_19
               AppMemReq: $APP_MEM_REQ_19
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -846,10 +846,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_20
               CpuUtilMax: $CPU_UTIL_MAX_20
               MemUtilMax: $MEM_UTIL_MAX_20
-              LtcWeigh: $LTC_WEIGHT_20
-              ResWeigh: $RES_WEIGHT_20
-              CpuWeigh: $CPU_WEIGHT_20
-              MemWeigh: $MEM_WEIGHT_20
+              LtcWeight: $LTC_WEIGHT_20
+              ResWeight: $RES_WEIGHT_20
+              CpuWeight: $CPU_WEIGHT_20
+              MemWeight: $MEM_WEIGHT_20
               AppCpuReq: $APP_CPU_REQ_20
               AppMemReq: $APP_MEM_REQ_20
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -888,10 +888,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_21
               CpuUtilMax: $CPU_UTIL_MAX_21
               MemUtilMax: $MEM_UTIL_MAX_21
-              LtcWeigh: $LTC_WEIGHT_21
-              ResWeigh: $RES_WEIGHT_21
-              CpuWeigh: $CPU_WEIGHT_21
-              MemWeigh: $MEM_WEIGHT_21
+              LtcWeight: $LTC_WEIGHT_21
+              ResWeight: $RES_WEIGHT_21
+              CpuWeight: $CPU_WEIGHT_21
+              MemWeight: $MEM_WEIGHT_21
               AppCpuReq: $APP_CPU_REQ_21
               AppMemReq: $APP_MEM_REQ_21
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -930,10 +930,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_22
               CpuUtilMax: $CPU_UTIL_MAX_22
               MemUtilMax: $MEM_UTIL_MAX_22
-              LtcWeigh: $LTC_WEIGHT_22
-              ResWeigh: $RES_WEIGHT_22
-              CpuWeigh: $CPU_WEIGHT_22
-              MemWeigh: $MEM_WEIGHT_22
+              LtcWeight: $LTC_WEIGHT_22
+              ResWeight: $RES_WEIGHT_22
+              CpuWeight: $CPU_WEIGHT_22
+              MemWeight: $MEM_WEIGHT_22
               AppCpuReq: $APP_CPU_REQ_22
               AppMemReq: $APP_MEM_REQ_22
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -972,10 +972,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_23
               CpuUtilMax: $CPU_UTIL_MAX_23
               MemUtilMax: $MEM_UTIL_MAX_23
-              LtcWeigh: $LTC_WEIGHT_23
-              ResWeigh: $RES_WEIGHT_23
-              CpuWeigh: $CPU_WEIGHT_23
-              MemWeigh: $MEM_WEIGHT_23
+              LtcWeight: $LTC_WEIGHT_23
+              ResWeight: $RES_WEIGHT_23
+              CpuWeight: $CPU_WEIGHT_23
+              MemWeight: $MEM_WEIGHT_23
               AppCpuReq: $APP_CPU_REQ_23
               AppMemReq: $APP_MEM_REQ_23
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1014,10 +1014,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_24
               CpuUtilMax: $CPU_UTIL_MAX_24
               MemUtilMax: $MEM_UTIL_MAX_24
-              LtcWeigh: $LTC_WEIGHT_24
-              ResWeigh: $RES_WEIGHT_24
-              CpuWeigh: $CPU_WEIGHT_24
-              MemWeigh: $MEM_WEIGHT_24
+              LtcWeight: $LTC_WEIGHT_24
+              ResWeight: $RES_WEIGHT_24
+              CpuWeight: $CPU_WEIGHT_24
+              MemWeight: $MEM_WEIGHT_24
               AppCpuReq: $APP_CPU_REQ_24
               AppMemReq: $APP_MEM_REQ_24
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1056,10 +1056,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_25
               CpuUtilMax: $CPU_UTIL_MAX_25
               MemUtilMax: $MEM_UTIL_MAX_25
-              LtcWeigh: $LTC_WEIGHT_25
-              ResWeigh: $RES_WEIGHT_25
-              CpuWeigh: $CPU_WEIGHT_25
-              MemWeigh: $MEM_WEIGHT_25
+              LtcWeight: $LTC_WEIGHT_25
+              ResWeight: $RES_WEIGHT_25
+              CpuWeight: $CPU_WEIGHT_25
+              MemWeight: $MEM_WEIGHT_25
               AppCpuReq: $APP_CPU_REQ_25
               AppMemReq: $APP_MEM_REQ_25
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1098,10 +1098,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_26
               CpuUtilMax: $CPU_UTIL_MAX_26
               MemUtilMax: $MEM_UTIL_MAX_26
-              LtcWeigh: $LTC_WEIGHT_26
-              ResWeigh: $RES_WEIGHT_26
-              CpuWeigh: $CPU_WEIGHT_26
-              MemWeigh: $MEM_WEIGHT_26
+              LtcWeight: $LTC_WEIGHT_26
+              ResWeight: $RES_WEIGHT_26
+              CpuWeight: $CPU_WEIGHT_26
+              MemWeight: $MEM_WEIGHT_26
               AppCpuReq: $APP_CPU_REQ_26
               AppMemReq: $APP_MEM_REQ_26
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1140,10 +1140,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_27
               CpuUtilMax: $CPU_UTIL_MAX_27
               MemUtilMax: $MEM_UTIL_MAX_27
-              LtcWeigh: $LTC_WEIGHT_27
-              ResWeigh: $RES_WEIGHT_27
-              CpuWeigh: $CPU_WEIGHT_27
-              MemWeigh: $MEM_WEIGHT_27
+              LtcWeight: $LTC_WEIGHT_27
+              ResWeight: $RES_WEIGHT_27
+              CpuWeight: $CPU_WEIGHT_27
+              MemWeight: $MEM_WEIGHT_27
               AppCpuReq: $APP_CPU_REQ_27
               AppMemReq: $APP_MEM_REQ_27
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1182,10 +1182,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_28
               CpuUtilMax: $CPU_UTIL_MAX_28
               MemUtilMax: $MEM_UTIL_MAX_28
-              LtcWeigh: $LTC_WEIGHT_28
-              ResWeigh: $RES_WEIGHT_28
-              CpuWeigh: $CPU_WEIGHT_28
-              MemWeigh: $MEM_WEIGHT_28
+              LtcWeight: $LTC_WEIGHT_28
+              ResWeight: $RES_WEIGHT_28
+              CpuWeight: $CPU_WEIGHT_28
+              MemWeight: $MEM_WEIGHT_28
               AppCpuReq: $APP_CPU_REQ_28
               AppMemReq: $APP_MEM_REQ_28
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1224,10 +1224,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_29
               CpuUtilMax: $CPU_UTIL_MAX_29
               MemUtilMax: $MEM_UTIL_MAX_29
-              LtcWeigh: $LTC_WEIGHT_29
-              ResWeigh: $RES_WEIGHT_29
-              CpuWeigh: $CPU_WEIGHT_29
-              MemWeigh: $MEM_WEIGHT_29
+              LtcWeight: $LTC_WEIGHT_29
+              ResWeight: $RES_WEIGHT_29
+              CpuWeight: $CPU_WEIGHT_29
+              MemWeight: $MEM_WEIGHT_29
               AppCpuReq: $APP_CPU_REQ_29
               AppMemReq: $APP_MEM_REQ_29
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1266,10 +1266,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_30
               CpuUtilMax: $CPU_UTIL_MAX_30
               MemUtilMax: $MEM_UTIL_MAX_30
-              LtcWeigh: $LTC_WEIGHT_30
-              ResWeigh: $RES_WEIGHT_30
-              CpuWeigh: $CPU_WEIGHT_30
-              MemWeigh: $MEM_WEIGHT_30
+              LtcWeight: $LTC_WEIGHT_30
+              ResWeight: $RES_WEIGHT_30
+              CpuWeight: $CPU_WEIGHT_30
+              MemWeight: $MEM_WEIGHT_30
               AppCpuReq: $APP_CPU_REQ_30
               AppMemReq: $APP_MEM_REQ_30
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1308,10 +1308,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_31
               CpuUtilMax: $CPU_UTIL_MAX_31
               MemUtilMax: $MEM_UTIL_MAX_31
-              LtcWeigh: $LTC_WEIGHT_31
-              ResWeigh: $RES_WEIGHT_31
-              CpuWeigh: $CPU_WEIGHT_31
-              MemWeigh: $MEM_WEIGHT_31
+              LtcWeight: $LTC_WEIGHT_31
+              ResWeight: $RES_WEIGHT_31
+              CpuWeight: $CPU_WEIGHT_31
+              MemWeight: $MEM_WEIGHT_31
               AppCpuReq: $APP_CPU_REQ_31
               AppMemReq: $APP_MEM_REQ_31
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1350,10 +1350,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_32
               CpuUtilMax: $CPU_UTIL_MAX_32
               MemUtilMax: $MEM_UTIL_MAX_32
-              LtcWeigh: $LTC_WEIGHT_32
-              ResWeigh: $RES_WEIGHT_32
-              CpuWeigh: $CPU_WEIGHT_32
-              MemWeigh: $MEM_WEIGHT_32
+              LtcWeight: $LTC_WEIGHT_32
+              ResWeight: $RES_WEIGHT_32
+              CpuWeight: $CPU_WEIGHT_32
+              MemWeight: $MEM_WEIGHT_32
               AppCpuReq: $APP_CPU_REQ_32
               AppMemReq: $APP_MEM_REQ_32
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1392,10 +1392,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_33
               CpuUtilMax: $CPU_UTIL_MAX_33
               MemUtilMax: $MEM_UTIL_MAX_33
-              LtcWeigh: $LTC_WEIGHT_33
-              ResWeigh: $RES_WEIGHT_33
-              CpuWeigh: $CPU_WEIGHT_33
-              MemWeigh: $MEM_WEIGHT_33
+              LtcWeight: $LTC_WEIGHT_33
+              ResWeight: $RES_WEIGHT_33
+              CpuWeight: $CPU_WEIGHT_33
+              MemWeight: $MEM_WEIGHT_33
               AppCpuReq: $APP_CPU_REQ_33
               AppMemReq: $APP_MEM_REQ_33
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1434,10 +1434,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_34
               CpuUtilMax: $CPU_UTIL_MAX_34
               MemUtilMax: $MEM_UTIL_MAX_34
-              LtcWeigh: $LTC_WEIGHT_34
-              ResWeigh: $RES_WEIGHT_34
-              CpuWeigh: $CPU_WEIGHT_34
-              MemWeigh: $MEM_WEIGHT_34
+              LtcWeight: $LTC_WEIGHT_34
+              ResWeight: $RES_WEIGHT_34
+              CpuWeight: $CPU_WEIGHT_34
+              MemWeight: $MEM_WEIGHT_34
               AppCpuReq: $APP_CPU_REQ_34
               AppMemReq: $APP_MEM_REQ_34
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1476,10 +1476,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_35
               CpuUtilMax: $CPU_UTIL_MAX_35
               MemUtilMax: $MEM_UTIL_MAX_35
-              LtcWeigh: $LTC_WEIGHT_35
-              ResWeigh: $RES_WEIGHT_35
-              CpuWeigh: $CPU_WEIGHT_35
-              MemWeigh: $MEM_WEIGHT_35
+              LtcWeight: $LTC_WEIGHT_35
+              ResWeight: $RES_WEIGHT_35
+              CpuWeight: $CPU_WEIGHT_35
+              MemWeight: $MEM_WEIGHT_35
               AppCpuReq: $APP_CPU_REQ_35
               AppMemReq: $APP_MEM_REQ_35
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1518,10 +1518,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_36
               CpuUtilMax: $CPU_UTIL_MAX_36
               MemUtilMax: $MEM_UTIL_MAX_36
-              LtcWeigh: $LTC_WEIGHT_36
-              ResWeigh: $RES_WEIGHT_36
-              CpuWeigh: $CPU_WEIGHT_36
-              MemWeigh: $MEM_WEIGHT_36
+              LtcWeight: $LTC_WEIGHT_36
+              ResWeight: $RES_WEIGHT_36
+              CpuWeight: $CPU_WEIGHT_36
+              MemWeight: $MEM_WEIGHT_36
               AppCpuReq: $APP_CPU_REQ_36
               AppMemReq: $APP_MEM_REQ_36
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1560,10 +1560,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_37
               CpuUtilMax: $CPU_UTIL_MAX_37
               MemUtilMax: $MEM_UTIL_MAX_37
-              LtcWeigh: $LTC_WEIGHT_37
-              ResWeigh: $RES_WEIGHT_37
-              CpuWeigh: $CPU_WEIGHT_37
-              MemWeigh: $MEM_WEIGHT_37
+              LtcWeight: $LTC_WEIGHT_37
+              ResWeight: $RES_WEIGHT_37
+              CpuWeight: $CPU_WEIGHT_37
+              MemWeight: $MEM_WEIGHT_37
               AppCpuReq: $APP_CPU_REQ_37
               AppMemReq: $APP_MEM_REQ_37
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1602,10 +1602,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_38
               CpuUtilMax: $CPU_UTIL_MAX_38
               MemUtilMax: $MEM_UTIL_MAX_38
-              LtcWeigh: $LTC_WEIGHT_38
-              ResWeigh: $RES_WEIGHT_38
-              CpuWeigh: $CPU_WEIGHT_38
-              MemWeigh: $MEM_WEIGHT_38
+              LtcWeight: $LTC_WEIGHT_38
+              ResWeight: $RES_WEIGHT_38
+              CpuWeight: $CPU_WEIGHT_38
+              MemWeight: $MEM_WEIGHT_38
               AppCpuReq: $APP_CPU_REQ_38
               AppMemReq: $APP_MEM_REQ_38
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1644,10 +1644,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_39
               CpuUtilMax: $CPU_UTIL_MAX_39
               MemUtilMax: $MEM_UTIL_MAX_39
-              LtcWeigh: $LTC_WEIGHT_39
-              ResWeigh: $RES_WEIGHT_39
-              CpuWeigh: $CPU_WEIGHT_39
-              MemWeigh: $MEM_WEIGHT_39
+              LtcWeight: $LTC_WEIGHT_39
+              ResWeight: $RES_WEIGHT_39
+              CpuWeight: $CPU_WEIGHT_39
+              MemWeight: $MEM_WEIGHT_39
               AppCpuReq: $APP_CPU_REQ_39
               AppMemReq: $APP_MEM_REQ_39
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1686,10 +1686,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_40
               CpuUtilMax: $CPU_UTIL_MAX_40
               MemUtilMax: $MEM_UTIL_MAX_40
-              LtcWeigh: $LTC_WEIGHT_40
-              ResWeigh: $RES_WEIGHT_40
-              CpuWeigh: $CPU_WEIGHT_40
-              MemWeigh: $MEM_WEIGHT_40
+              LtcWeight: $LTC_WEIGHT_40
+              ResWeight: $RES_WEIGHT_40
+              CpuWeight: $CPU_WEIGHT_40
+              MemWeight: $MEM_WEIGHT_40
               AppCpuReq: $APP_CPU_REQ_40
               AppMemReq: $APP_MEM_REQ_40
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1728,10 +1728,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_41
               CpuUtilMax: $CPU_UTIL_MAX_41
               MemUtilMax: $MEM_UTIL_MAX_41
-              LtcWeigh: $LTC_WEIGHT_41
-              ResWeigh: $RES_WEIGHT_41
-              CpuWeigh: $CPU_WEIGHT_41
-              MemWeigh: $MEM_WEIGHT_41
+              LtcWeight: $LTC_WEIGHT_41
+              ResWeight: $RES_WEIGHT_41
+              CpuWeight: $CPU_WEIGHT_41
+              MemWeight: $MEM_WEIGHT_41
               AppCpuReq: $APP_CPU_REQ_41
               AppMemReq: $APP_MEM_REQ_41
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1770,10 +1770,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_42
               CpuUtilMax: $CPU_UTIL_MAX_42
               MemUtilMax: $MEM_UTIL_MAX_42
-              LtcWeigh: $LTC_WEIGHT_42
-              ResWeigh: $RES_WEIGHT_42
-              CpuWeigh: $CPU_WEIGHT_42
-              MemWeigh: $MEM_WEIGHT_42
+              LtcWeight: $LTC_WEIGHT_42
+              ResWeight: $RES_WEIGHT_42
+              CpuWeight: $CPU_WEIGHT_42
+              MemWeight: $MEM_WEIGHT_42
               AppCpuReq: $APP_CPU_REQ_42
               AppMemReq: $APP_MEM_REQ_42
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1812,10 +1812,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_43
               CpuUtilMax: $CPU_UTIL_MAX_43
               MemUtilMax: $MEM_UTIL_MAX_43
-              LtcWeigh: $LTC_WEIGHT_43
-              ResWeigh: $RES_WEIGHT_43
-              CpuWeigh: $CPU_WEIGHT_43
-              MemWeigh: $MEM_WEIGHT_43
+              LtcWeight: $LTC_WEIGHT_43
+              ResWeight: $RES_WEIGHT_43
+              CpuWeight: $CPU_WEIGHT_43
+              MemWeight: $MEM_WEIGHT_43
               AppCpuReq: $APP_CPU_REQ_43
               AppMemReq: $APP_MEM_REQ_43
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1854,10 +1854,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_44
               CpuUtilMax: $CPU_UTIL_MAX_44
               MemUtilMax: $MEM_UTIL_MAX_44
-              LtcWeigh: $LTC_WEIGHT_44
-              ResWeigh: $RES_WEIGHT_44
-              CpuWeigh: $CPU_WEIGHT_44
-              MemWeigh: $MEM_WEIGHT_44
+              LtcWeight: $LTC_WEIGHT_44
+              ResWeight: $RES_WEIGHT_44
+              CpuWeight: $CPU_WEIGHT_44
+              MemWeight: $MEM_WEIGHT_44
               AppCpuReq: $APP_CPU_REQ_44
               AppMemReq: $APP_MEM_REQ_44
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1896,10 +1896,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_45
               CpuUtilMax: $CPU_UTIL_MAX_45
               MemUtilMax: $MEM_UTIL_MAX_45
-              LtcWeigh: $LTC_WEIGHT_45
-              ResWeigh: $RES_WEIGHT_45
-              CpuWeigh: $CPU_WEIGHT_45
-              MemWeigh: $MEM_WEIGHT_45
+              LtcWeight: $LTC_WEIGHT_45
+              ResWeight: $RES_WEIGHT_45
+              CpuWeight: $CPU_WEIGHT_45
+              MemWeight: $MEM_WEIGHT_45
               AppCpuReq: $APP_CPU_REQ_45
               AppMemReq: $APP_MEM_REQ_45
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1938,10 +1938,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_46
               CpuUtilMax: $CPU_UTIL_MAX_46
               MemUtilMax: $MEM_UTIL_MAX_46
-              LtcWeigh: $LTC_WEIGHT_46
-              ResWeigh: $RES_WEIGHT_46
-              CpuWeigh: $CPU_WEIGHT_46
-              MemWeigh: $MEM_WEIGHT_46
+              LtcWeight: $LTC_WEIGHT_46
+              ResWeight: $RES_WEIGHT_46
+              CpuWeight: $CPU_WEIGHT_46
+              MemWeight: $MEM_WEIGHT_46
               AppCpuReq: $APP_CPU_REQ_46
               AppMemReq: $APP_MEM_REQ_46
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -1980,10 +1980,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_47
               CpuUtilMax: $CPU_UTIL_MAX_47
               MemUtilMax: $MEM_UTIL_MAX_47
-              LtcWeigh: $LTC_WEIGHT_47
-              ResWeigh: $RES_WEIGHT_47
-              CpuWeigh: $CPU_WEIGHT_47
-              MemWeigh: $MEM_WEIGHT_47
+              LtcWeight: $LTC_WEIGHT_47
+              ResWeight: $RES_WEIGHT_47
+              CpuWeight: $CPU_WEIGHT_47
+              MemWeight: $MEM_WEIGHT_47
               AppCpuReq: $APP_CPU_REQ_47
               AppMemReq: $APP_MEM_REQ_47
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2022,10 +2022,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_48
               CpuUtilMax: $CPU_UTIL_MAX_48
               MemUtilMax: $MEM_UTIL_MAX_48
-              LtcWeigh: $LTC_WEIGHT_48
-              ResWeigh: $RES_WEIGHT_48
-              CpuWeigh: $CPU_WEIGHT_48
-              MemWeigh: $MEM_WEIGHT_48
+              LtcWeight: $LTC_WEIGHT_48
+              ResWeight: $RES_WEIGHT_48
+              CpuWeight: $CPU_WEIGHT_48
+              MemWeight: $MEM_WEIGHT_48
               AppCpuReq: $APP_CPU_REQ_48
               AppMemReq: $APP_MEM_REQ_48
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2064,10 +2064,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_49
               CpuUtilMax: $CPU_UTIL_MAX_49
               MemUtilMax: $MEM_UTIL_MAX_49
-              LtcWeigh: $LTC_WEIGHT_49
-              ResWeigh: $RES_WEIGHT_49
-              CpuWeigh: $CPU_WEIGHT_49
-              MemWeigh: $MEM_WEIGHT_49
+              LtcWeight: $LTC_WEIGHT_49
+              ResWeight: $RES_WEIGHT_49
+              CpuWeight: $CPU_WEIGHT_49
+              MemWeight: $MEM_WEIGHT_49
               AppCpuReq: $APP_CPU_REQ_49
               AppMemReq: $APP_MEM_REQ_49
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2106,10 +2106,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_50
               CpuUtilMax: $CPU_UTIL_MAX_50
               MemUtilMax: $MEM_UTIL_MAX_50
-              LtcWeigh: $LTC_WEIGHT_50
-              ResWeigh: $RES_WEIGHT_50
-              CpuWeigh: $CPU_WEIGHT_50
-              MemWeigh: $MEM_WEIGHT_50
+              LtcWeight: $LTC_WEIGHT_50
+              ResWeight: $RES_WEIGHT_50
+              CpuWeight: $CPU_WEIGHT_50
+              MemWeight: $MEM_WEIGHT_50
               AppCpuReq: $APP_CPU_REQ_50
               AppMemReq: $APP_MEM_REQ_50
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2148,10 +2148,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_51
               CpuUtilMax: $CPU_UTIL_MAX_51
               MemUtilMax: $MEM_UTIL_MAX_51
-              LtcWeigh: $LTC_WEIGHT_51
-              ResWeigh: $RES_WEIGHT_51
-              CpuWeigh: $CPU_WEIGHT_51
-              MemWeigh: $MEM_WEIGHT_51
+              LtcWeight: $LTC_WEIGHT_51
+              ResWeight: $RES_WEIGHT_51
+              CpuWeight: $CPU_WEIGHT_51
+              MemWeight: $MEM_WEIGHT_51
               AppCpuReq: $APP_CPU_REQ_51
               AppMemReq: $APP_MEM_REQ_51
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2190,10 +2190,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_52
               CpuUtilMax: $CPU_UTIL_MAX_52
               MemUtilMax: $MEM_UTIL_MAX_52
-              LtcWeigh: $LTC_WEIGHT_52
-              ResWeigh: $RES_WEIGHT_52
-              CpuWeigh: $CPU_WEIGHT_52
-              MemWeigh: $MEM_WEIGHT_52
+              LtcWeight: $LTC_WEIGHT_52
+              ResWeight: $RES_WEIGHT_52
+              CpuWeight: $CPU_WEIGHT_52
+              MemWeight: $MEM_WEIGHT_52
               AppCpuReq: $APP_CPU_REQ_52
               AppMemReq: $APP_MEM_REQ_52
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2232,10 +2232,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_53
               CpuUtilMax: $CPU_UTIL_MAX_53
               MemUtilMax: $MEM_UTIL_MAX_53
-              LtcWeigh: $LTC_WEIGHT_53
-              ResWeigh: $RES_WEIGHT_53
-              CpuWeigh: $CPU_WEIGHT_53
-              MemWeigh: $MEM_WEIGHT_53
+              LtcWeight: $LTC_WEIGHT_53
+              ResWeight: $RES_WEIGHT_53
+              CpuWeight: $CPU_WEIGHT_53
+              MemWeight: $MEM_WEIGHT_53
               AppCpuReq: $APP_CPU_REQ_53
               AppMemReq: $APP_MEM_REQ_53
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2274,10 +2274,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_54
               CpuUtilMax: $CPU_UTIL_MAX_54
               MemUtilMax: $MEM_UTIL_MAX_54
-              LtcWeigh: $LTC_WEIGHT_54
-              ResWeigh: $RES_WEIGHT_54
-              CpuWeigh: $CPU_WEIGHT_54
-              MemWeigh: $MEM_WEIGHT_54
+              LtcWeight: $LTC_WEIGHT_54
+              ResWeight: $RES_WEIGHT_54
+              CpuWeight: $CPU_WEIGHT_54
+              MemWeight: $MEM_WEIGHT_54
               AppCpuReq: $APP_CPU_REQ_54
               AppMemReq: $APP_MEM_REQ_54
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2316,10 +2316,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_55
               CpuUtilMax: $CPU_UTIL_MAX_55
               MemUtilMax: $MEM_UTIL_MAX_55
-              LtcWeigh: $LTC_WEIGHT_55
-              ResWeigh: $RES_WEIGHT_55
-              CpuWeigh: $CPU_WEIGHT_55
-              MemWeigh: $MEM_WEIGHT_55
+              LtcWeight: $LTC_WEIGHT_55
+              ResWeight: $RES_WEIGHT_55
+              CpuWeight: $CPU_WEIGHT_55
+              MemWeight: $MEM_WEIGHT_55
               AppCpuReq: $APP_CPU_REQ_55
               AppMemReq: $APP_MEM_REQ_55
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2358,10 +2358,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_56
               CpuUtilMax: $CPU_UTIL_MAX_56
               MemUtilMax: $MEM_UTIL_MAX_56
-              LtcWeigh: $LTC_WEIGHT_56
-              ResWeigh: $RES_WEIGHT_56
-              CpuWeigh: $CPU_WEIGHT_56
-              MemWeigh: $MEM_WEIGHT_56
+              LtcWeight: $LTC_WEIGHT_56
+              ResWeight: $RES_WEIGHT_56
+              CpuWeight: $CPU_WEIGHT_56
+              MemWeight: $MEM_WEIGHT_56
               AppCpuReq: $APP_CPU_REQ_56
               AppMemReq: $APP_MEM_REQ_56
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2400,10 +2400,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_57
               CpuUtilMax: $CPU_UTIL_MAX_57
               MemUtilMax: $MEM_UTIL_MAX_57
-              LtcWeigh: $LTC_WEIGHT_57
-              ResWeigh: $RES_WEIGHT_57
-              CpuWeigh: $CPU_WEIGHT_57
-              MemWeigh: $MEM_WEIGHT_57
+              LtcWeight: $LTC_WEIGHT_57
+              ResWeight: $RES_WEIGHT_57
+              CpuWeight: $CPU_WEIGHT_57
+              MemWeight: $MEM_WEIGHT_57
               AppCpuReq: $APP_CPU_REQ_57
               AppMemReq: $APP_MEM_REQ_57
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2442,10 +2442,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_58
               CpuUtilMax: $CPU_UTIL_MAX_58
               MemUtilMax: $MEM_UTIL_MAX_58
-              LtcWeigh: $LTC_WEIGHT_58
-              ResWeigh: $RES_WEIGHT_58
-              CpuWeigh: $CPU_WEIGHT_58
-              MemWeigh: $MEM_WEIGHT_58
+              LtcWeight: $LTC_WEIGHT_58
+              ResWeight: $RES_WEIGHT_58
+              CpuWeight: $CPU_WEIGHT_58
+              MemWeight: $MEM_WEIGHT_58
               AppCpuReq: $APP_CPU_REQ_58
               AppMemReq: $APP_MEM_REQ_58
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2484,10 +2484,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_59
               CpuUtilMax: $CPU_UTIL_MAX_59
               MemUtilMax: $MEM_UTIL_MAX_59
-              LtcWeigh: $LTC_WEIGHT_59
-              ResWeigh: $RES_WEIGHT_59
-              CpuWeigh: $CPU_WEIGHT_59
-              MemWeigh: $MEM_WEIGHT_59
+              LtcWeight: $LTC_WEIGHT_59
+              ResWeight: $RES_WEIGHT_59
+              CpuWeight: $CPU_WEIGHT_59
+              MemWeight: $MEM_WEIGHT_59
               AppCpuReq: $APP_CPU_REQ_59
               AppMemReq: $APP_MEM_REQ_59
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2526,10 +2526,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_60
               CpuUtilMax: $CPU_UTIL_MAX_60
               MemUtilMax: $MEM_UTIL_MAX_60
-              LtcWeigh: $LTC_WEIGHT_60
-              ResWeigh: $RES_WEIGHT_60
-              CpuWeigh: $CPU_WEIGHT_60
-              MemWeigh: $MEM_WEIGHT_60
+              LtcWeight: $LTC_WEIGHT_60
+              ResWeight: $RES_WEIGHT_60
+              CpuWeight: $CPU_WEIGHT_60
+              MemWeight: $MEM_WEIGHT_60
               AppCpuReq: $APP_CPU_REQ_60
               AppMemReq: $APP_MEM_REQ_60
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2568,10 +2568,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_61
               CpuUtilMax: $CPU_UTIL_MAX_61
               MemUtilMax: $MEM_UTIL_MAX_61
-              LtcWeigh: $LTC_WEIGHT_61
-              ResWeigh: $RES_WEIGHT_61
-              CpuWeigh: $CPU_WEIGHT_61
-              MemWeigh: $MEM_WEIGHT_61
+              LtcWeight: $LTC_WEIGHT_61
+              ResWeight: $RES_WEIGHT_61
+              CpuWeight: $CPU_WEIGHT_61
+              MemWeight: $MEM_WEIGHT_61
               AppCpuReq: $APP_CPU_REQ_61
               AppMemReq: $APP_MEM_REQ_61
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2610,10 +2610,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_62
               CpuUtilMax: $CPU_UTIL_MAX_62
               MemUtilMax: $MEM_UTIL_MAX_62
-              LtcWeigh: $LTC_WEIGHT_62
-              ResWeigh: $RES_WEIGHT_62
-              CpuWeigh: $CPU_WEIGHT_62
-              MemWeigh: $MEM_WEIGHT_62
+              LtcWeight: $LTC_WEIGHT_62
+              ResWeight: $RES_WEIGHT_62
+              CpuWeight: $CPU_WEIGHT_62
+              MemWeight: $MEM_WEIGHT_62
               AppCpuReq: $APP_CPU_REQ_62
               AppMemReq: $APP_MEM_REQ_62
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2652,10 +2652,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_63
               CpuUtilMax: $CPU_UTIL_MAX_63
               MemUtilMax: $MEM_UTIL_MAX_63
-              LtcWeigh: $LTC_WEIGHT_63
-              ResWeigh: $RES_WEIGHT_63
-              CpuWeigh: $CPU_WEIGHT_63
-              MemWeigh: $MEM_WEIGHT_63
+              LtcWeight: $LTC_WEIGHT_63
+              ResWeight: $RES_WEIGHT_63
+              CpuWeight: $CPU_WEIGHT_63
+              MemWeight: $MEM_WEIGHT_63
               AppCpuReq: $APP_CPU_REQ_63
               AppMemReq: $APP_MEM_REQ_63
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2694,10 +2694,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_64
               CpuUtilMax: $CPU_UTIL_MAX_64
               MemUtilMax: $MEM_UTIL_MAX_64
-              LtcWeigh: $LTC_WEIGHT_64
-              ResWeigh: $RES_WEIGHT_64
-              CpuWeigh: $CPU_WEIGHT_64
-              MemWeigh: $MEM_WEIGHT_64
+              LtcWeight: $LTC_WEIGHT_64
+              ResWeight: $RES_WEIGHT_64
+              CpuWeight: $CPU_WEIGHT_64
+              MemWeight: $MEM_WEIGHT_64
               AppCpuReq: $APP_CPU_REQ_64
               AppMemReq: $APP_MEM_REQ_64
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2736,10 +2736,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_65
               CpuUtilMax: $CPU_UTIL_MAX_65
               MemUtilMax: $MEM_UTIL_MAX_65
-              LtcWeigh: $LTC_WEIGHT_65
-              ResWeigh: $RES_WEIGHT_65
-              CpuWeigh: $CPU_WEIGHT_65
-              MemWeigh: $MEM_WEIGHT_65
+              LtcWeight: $LTC_WEIGHT_65
+              ResWeight: $RES_WEIGHT_65
+              CpuWeight: $CPU_WEIGHT_65
+              MemWeight: $MEM_WEIGHT_65
               AppCpuReq: $APP_CPU_REQ_65
               AppMemReq: $APP_MEM_REQ_65
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2778,10 +2778,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_66
               CpuUtilMax: $CPU_UTIL_MAX_66
               MemUtilMax: $MEM_UTIL_MAX_66
-              LtcWeigh: $LTC_WEIGHT_66
-              ResWeigh: $RES_WEIGHT_66
-              CpuWeigh: $CPU_WEIGHT_66
-              MemWeigh: $MEM_WEIGHT_66
+              LtcWeight: $LTC_WEIGHT_66
+              ResWeight: $RES_WEIGHT_66
+              CpuWeight: $CPU_WEIGHT_66
+              MemWeight: $MEM_WEIGHT_66
               AppCpuReq: $APP_CPU_REQ_66
               AppMemReq: $APP_MEM_REQ_66
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2820,10 +2820,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_67
               CpuUtilMax: $CPU_UTIL_MAX_67
               MemUtilMax: $MEM_UTIL_MAX_67
-              LtcWeigh: $LTC_WEIGHT_67
-              ResWeigh: $RES_WEIGHT_67
-              CpuWeigh: $CPU_WEIGHT_67
-              MemWeigh: $MEM_WEIGHT_67
+              LtcWeight: $LTC_WEIGHT_67
+              ResWeight: $RES_WEIGHT_67
+              CpuWeight: $CPU_WEIGHT_67
+              MemWeight: $MEM_WEIGHT_67
               AppCpuReq: $APP_CPU_REQ_67
               AppMemReq: $APP_MEM_REQ_67
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2862,10 +2862,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_68
               CpuUtilMax: $CPU_UTIL_MAX_68
               MemUtilMax: $MEM_UTIL_MAX_68
-              LtcWeigh: $LTC_WEIGHT_68
-              ResWeigh: $RES_WEIGHT_68
-              CpuWeigh: $CPU_WEIGHT_68
-              MemWeigh: $MEM_WEIGHT_68
+              LtcWeight: $LTC_WEIGHT_68
+              ResWeight: $RES_WEIGHT_68
+              CpuWeight: $CPU_WEIGHT_68
+              MemWeight: $MEM_WEIGHT_68
               AppCpuReq: $APP_CPU_REQ_68
               AppMemReq: $APP_MEM_REQ_68
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2904,10 +2904,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_69
               CpuUtilMax: $CPU_UTIL_MAX_69
               MemUtilMax: $MEM_UTIL_MAX_69
-              LtcWeigh: $LTC_WEIGHT_69
-              ResWeigh: $RES_WEIGHT_69
-              CpuWeigh: $CPU_WEIGHT_69
-              MemWeigh: $MEM_WEIGHT_69
+              LtcWeight: $LTC_WEIGHT_69
+              ResWeight: $RES_WEIGHT_69
+              CpuWeight: $CPU_WEIGHT_69
+              MemWeight: $MEM_WEIGHT_69
               AppCpuReq: $APP_CPU_REQ_69
               AppMemReq: $APP_MEM_REQ_69
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2946,10 +2946,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_70
               CpuUtilMax: $CPU_UTIL_MAX_70
               MemUtilMax: $MEM_UTIL_MAX_70
-              LtcWeigh: $LTC_WEIGHT_70
-              ResWeigh: $RES_WEIGHT_70
-              CpuWeigh: $CPU_WEIGHT_70
-              MemWeigh: $MEM_WEIGHT_70
+              LtcWeight: $LTC_WEIGHT_70
+              ResWeight: $RES_WEIGHT_70
+              CpuWeight: $CPU_WEIGHT_70
+              MemWeight: $MEM_WEIGHT_70
               AppCpuReq: $APP_CPU_REQ_70
               AppMemReq: $APP_MEM_REQ_70
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -2988,10 +2988,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_71
               CpuUtilMax: $CPU_UTIL_MAX_71
               MemUtilMax: $MEM_UTIL_MAX_71
-              LtcWeigh: $LTC_WEIGHT_71
-              ResWeigh: $RES_WEIGHT_71
-              CpuWeigh: $CPU_WEIGHT_71
-              MemWeigh: $MEM_WEIGHT_71
+              LtcWeight: $LTC_WEIGHT_71
+              ResWeight: $RES_WEIGHT_71
+              CpuWeight: $CPU_WEIGHT_71
+              MemWeight: $MEM_WEIGHT_71
               AppCpuReq: $APP_CPU_REQ_71
               AppMemReq: $APP_MEM_REQ_71
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3030,10 +3030,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_72
               CpuUtilMax: $CPU_UTIL_MAX_72
               MemUtilMax: $MEM_UTIL_MAX_72
-              LtcWeigh: $LTC_WEIGHT_72
-              ResWeigh: $RES_WEIGHT_72
-              CpuWeigh: $CPU_WEIGHT_72
-              MemWeigh: $MEM_WEIGHT_72
+              LtcWeight: $LTC_WEIGHT_72
+              ResWeight: $RES_WEIGHT_72
+              CpuWeight: $CPU_WEIGHT_72
+              MemWeight: $MEM_WEIGHT_72
               AppCpuReq: $APP_CPU_REQ_72
               AppMemReq: $APP_MEM_REQ_72
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3072,10 +3072,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_73
               CpuUtilMax: $CPU_UTIL_MAX_73
               MemUtilMax: $MEM_UTIL_MAX_73
-              LtcWeigh: $LTC_WEIGHT_73
-              ResWeigh: $RES_WEIGHT_73
-              CpuWeigh: $CPU_WEIGHT_73
-              MemWeigh: $MEM_WEIGHT_73
+              LtcWeight: $LTC_WEIGHT_73
+              ResWeight: $RES_WEIGHT_73
+              CpuWeight: $CPU_WEIGHT_73
+              MemWeight: $MEM_WEIGHT_73
               AppCpuReq: $APP_CPU_REQ_73
               AppMemReq: $APP_MEM_REQ_73
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3114,10 +3114,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_74
               CpuUtilMax: $CPU_UTIL_MAX_74
               MemUtilMax: $MEM_UTIL_MAX_74
-              LtcWeigh: $LTC_WEIGHT_74
-              ResWeigh: $RES_WEIGHT_74
-              CpuWeigh: $CPU_WEIGHT_74
-              MemWeigh: $MEM_WEIGHT_74
+              LtcWeight: $LTC_WEIGHT_74
+              ResWeight: $RES_WEIGHT_74
+              CpuWeight: $CPU_WEIGHT_74
+              MemWeight: $MEM_WEIGHT_74
               AppCpuReq: $APP_CPU_REQ_74
               AppMemReq: $APP_MEM_REQ_74
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3156,10 +3156,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_75
               CpuUtilMax: $CPU_UTIL_MAX_75
               MemUtilMax: $MEM_UTIL_MAX_75
-              LtcWeigh: $LTC_WEIGHT_75
-              ResWeigh: $RES_WEIGHT_75
-              CpuWeigh: $CPU_WEIGHT_75
-              MemWeigh: $MEM_WEIGHT_75
+              LtcWeight: $LTC_WEIGHT_75
+              ResWeight: $RES_WEIGHT_75
+              CpuWeight: $CPU_WEIGHT_75
+              MemWeight: $MEM_WEIGHT_75
               AppCpuReq: $APP_CPU_REQ_75
               AppMemReq: $APP_MEM_REQ_75
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3198,10 +3198,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_76
               CpuUtilMax: $CPU_UTIL_MAX_76
               MemUtilMax: $MEM_UTIL_MAX_76
-              LtcWeigh: $LTC_WEIGHT_76
-              ResWeigh: $RES_WEIGHT_76
-              CpuWeigh: $CPU_WEIGHT_76
-              MemWeigh: $MEM_WEIGHT_76
+              LtcWeight: $LTC_WEIGHT_76
+              ResWeight: $RES_WEIGHT_76
+              CpuWeight: $CPU_WEIGHT_76
+              MemWeight: $MEM_WEIGHT_76
               AppCpuReq: $APP_CPU_REQ_76
               AppMemReq: $APP_MEM_REQ_76
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3240,10 +3240,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_77
               CpuUtilMax: $CPU_UTIL_MAX_77
               MemUtilMax: $MEM_UTIL_MAX_77
-              LtcWeigh: $LTC_WEIGHT_77
-              ResWeigh: $RES_WEIGHT_77
-              CpuWeigh: $CPU_WEIGHT_77
-              MemWeigh: $MEM_WEIGHT_77
+              LtcWeight: $LTC_WEIGHT_77
+              ResWeight: $RES_WEIGHT_77
+              CpuWeight: $CPU_WEIGHT_77
+              MemWeight: $MEM_WEIGHT_77
               AppCpuReq: $APP_CPU_REQ_77
               AppMemReq: $APP_MEM_REQ_77
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3282,10 +3282,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_78
               CpuUtilMax: $CPU_UTIL_MAX_78
               MemUtilMax: $MEM_UTIL_MAX_78
-              LtcWeigh: $LTC_WEIGHT_78
-              ResWeigh: $RES_WEIGHT_78
-              CpuWeigh: $CPU_WEIGHT_78
-              MemWeigh: $MEM_WEIGHT_78
+              LtcWeight: $LTC_WEIGHT_78
+              ResWeight: $RES_WEIGHT_78
+              CpuWeight: $CPU_WEIGHT_78
+              MemWeight: $MEM_WEIGHT_78
               AppCpuReq: $APP_CPU_REQ_78
               AppMemReq: $APP_MEM_REQ_78
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3324,10 +3324,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_79
               CpuUtilMax: $CPU_UTIL_MAX_79
               MemUtilMax: $MEM_UTIL_MAX_79
-              LtcWeigh: $LTC_WEIGHT_79
-              ResWeigh: $RES_WEIGHT_79
-              CpuWeigh: $CPU_WEIGHT_79
-              MemWeigh: $MEM_WEIGHT_79
+              LtcWeight: $LTC_WEIGHT_79
+              ResWeight: $RES_WEIGHT_79
+              CpuWeight: $CPU_WEIGHT_79
+              MemWeight: $MEM_WEIGHT_79
               AppCpuReq: $APP_CPU_REQ_79
               AppMemReq: $APP_MEM_REQ_79
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3366,10 +3366,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_80
               CpuUtilMax: $CPU_UTIL_MAX_80
               MemUtilMax: $MEM_UTIL_MAX_80
-              LtcWeigh: $LTC_WEIGHT_80
-              ResWeigh: $RES_WEIGHT_80
-              CpuWeigh: $CPU_WEIGHT_80
-              MemWeigh: $MEM_WEIGHT_80
+              LtcWeight: $LTC_WEIGHT_80
+              ResWeight: $RES_WEIGHT_80
+              CpuWeight: $CPU_WEIGHT_80
+              MemWeight: $MEM_WEIGHT_80
               AppCpuReq: $APP_CPU_REQ_80
               AppMemReq: $APP_MEM_REQ_80
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3408,10 +3408,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_81
               CpuUtilMax: $CPU_UTIL_MAX_81
               MemUtilMax: $MEM_UTIL_MAX_81
-              LtcWeigh: $LTC_WEIGHT_81
-              ResWeigh: $RES_WEIGHT_81
-              CpuWeigh: $CPU_WEIGHT_81
-              MemWeigh: $MEM_WEIGHT_81
+              LtcWeight: $LTC_WEIGHT_81
+              ResWeight: $RES_WEIGHT_81
+              CpuWeight: $CPU_WEIGHT_81
+              MemWeight: $MEM_WEIGHT_81
               AppCpuReq: $APP_CPU_REQ_81
               AppMemReq: $APP_MEM_REQ_81
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3450,10 +3450,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_82
               CpuUtilMax: $CPU_UTIL_MAX_82
               MemUtilMax: $MEM_UTIL_MAX_82
-              LtcWeigh: $LTC_WEIGHT_82
-              ResWeigh: $RES_WEIGHT_82
-              CpuWeigh: $CPU_WEIGHT_82
-              MemWeigh: $MEM_WEIGHT_82
+              LtcWeight: $LTC_WEIGHT_82
+              ResWeight: $RES_WEIGHT_82
+              CpuWeight: $CPU_WEIGHT_82
+              MemWeight: $MEM_WEIGHT_82
               AppCpuReq: $APP_CPU_REQ_82
               AppMemReq: $APP_MEM_REQ_82
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3492,10 +3492,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_83
               CpuUtilMax: $CPU_UTIL_MAX_83
               MemUtilMax: $MEM_UTIL_MAX_83
-              LtcWeigh: $LTC_WEIGHT_83
-              ResWeigh: $RES_WEIGHT_83
-              CpuWeigh: $CPU_WEIGHT_83
-              MemWeigh: $MEM_WEIGHT_83
+              LtcWeight: $LTC_WEIGHT_83
+              ResWeight: $RES_WEIGHT_83
+              CpuWeight: $CPU_WEIGHT_83
+              MemWeight: $MEM_WEIGHT_83
               AppCpuReq: $APP_CPU_REQ_83
               AppMemReq: $APP_MEM_REQ_83
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3534,10 +3534,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_84
               CpuUtilMax: $CPU_UTIL_MAX_84
               MemUtilMax: $MEM_UTIL_MAX_84
-              LtcWeigh: $LTC_WEIGHT_84
-              ResWeigh: $RES_WEIGHT_84
-              CpuWeigh: $CPU_WEIGHT_84
-              MemWeigh: $MEM_WEIGHT_84
+              LtcWeight: $LTC_WEIGHT_84
+              ResWeight: $RES_WEIGHT_84
+              CpuWeight: $CPU_WEIGHT_84
+              MemWeight: $MEM_WEIGHT_84
               AppCpuReq: $APP_CPU_REQ_84
               AppMemReq: $APP_MEM_REQ_84
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3576,10 +3576,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_85
               CpuUtilMax: $CPU_UTIL_MAX_85
               MemUtilMax: $MEM_UTIL_MAX_85
-              LtcWeigh: $LTC_WEIGHT_85
-              ResWeigh: $RES_WEIGHT_85
-              CpuWeigh: $CPU_WEIGHT_85
-              MemWeigh: $MEM_WEIGHT_85
+              LtcWeight: $LTC_WEIGHT_85
+              ResWeight: $RES_WEIGHT_85
+              CpuWeight: $CPU_WEIGHT_85
+              MemWeight: $MEM_WEIGHT_85
               AppCpuReq: $APP_CPU_REQ_85
               AppMemReq: $APP_MEM_REQ_85
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3618,10 +3618,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_86
               CpuUtilMax: $CPU_UTIL_MAX_86
               MemUtilMax: $MEM_UTIL_MAX_86
-              LtcWeigh: $LTC_WEIGHT_86
-              ResWeigh: $RES_WEIGHT_86
-              CpuWeigh: $CPU_WEIGHT_86
-              MemWeigh: $MEM_WEIGHT_86
+              LtcWeight: $LTC_WEIGHT_86
+              ResWeight: $RES_WEIGHT_86
+              CpuWeight: $CPU_WEIGHT_86
+              MemWeight: $MEM_WEIGHT_86
               AppCpuReq: $APP_CPU_REQ_86
               AppMemReq: $APP_MEM_REQ_86
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3660,10 +3660,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_87
               CpuUtilMax: $CPU_UTIL_MAX_87
               MemUtilMax: $MEM_UTIL_MAX_87
-              LtcWeigh: $LTC_WEIGHT_87
-              ResWeigh: $RES_WEIGHT_87
-              CpuWeigh: $CPU_WEIGHT_87
-              MemWeigh: $MEM_WEIGHT_87
+              LtcWeight: $LTC_WEIGHT_87
+              ResWeight: $RES_WEIGHT_87
+              CpuWeight: $CPU_WEIGHT_87
+              MemWeight: $MEM_WEIGHT_87
               AppCpuReq: $APP_CPU_REQ_87
               AppMemReq: $APP_MEM_REQ_87
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3702,10 +3702,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_88
               CpuUtilMax: $CPU_UTIL_MAX_88
               MemUtilMax: $MEM_UTIL_MAX_88
-              LtcWeigh: $LTC_WEIGHT_88
-              ResWeigh: $RES_WEIGHT_88
-              CpuWeigh: $CPU_WEIGHT_88
-              MemWeigh: $MEM_WEIGHT_88
+              LtcWeight: $LTC_WEIGHT_88
+              ResWeight: $RES_WEIGHT_88
+              CpuWeight: $CPU_WEIGHT_88
+              MemWeight: $MEM_WEIGHT_88
               AppCpuReq: $APP_CPU_REQ_88
               AppMemReq: $APP_MEM_REQ_88
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3744,10 +3744,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_89
               CpuUtilMax: $CPU_UTIL_MAX_89
               MemUtilMax: $MEM_UTIL_MAX_89
-              LtcWeigh: $LTC_WEIGHT_89
-              ResWeigh: $RES_WEIGHT_89
-              CpuWeigh: $CPU_WEIGHT_89
-              MemWeigh: $MEM_WEIGHT_89
+              LtcWeight: $LTC_WEIGHT_89
+              ResWeight: $RES_WEIGHT_89
+              CpuWeight: $CPU_WEIGHT_89
+              MemWeight: $MEM_WEIGHT_89
               AppCpuReq: $APP_CPU_REQ_89
               AppMemReq: $APP_MEM_REQ_89
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3786,10 +3786,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_90
               CpuUtilMax: $CPU_UTIL_MAX_90
               MemUtilMax: $MEM_UTIL_MAX_90
-              LtcWeigh: $LTC_WEIGHT_90
-              ResWeigh: $RES_WEIGHT_90
-              CpuWeigh: $CPU_WEIGHT_90
-              MemWeigh: $MEM_WEIGHT_90
+              LtcWeight: $LTC_WEIGHT_90
+              ResWeight: $RES_WEIGHT_90
+              CpuWeight: $CPU_WEIGHT_90
+              MemWeight: $MEM_WEIGHT_90
               AppCpuReq: $APP_CPU_REQ_90
               AppMemReq: $APP_MEM_REQ_90
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3828,10 +3828,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_91
               CpuUtilMax: $CPU_UTIL_MAX_91
               MemUtilMax: $MEM_UTIL_MAX_91
-              LtcWeigh: $LTC_WEIGHT_91
-              ResWeigh: $RES_WEIGHT_91
-              CpuWeigh: $CPU_WEIGHT_91
-              MemWeigh: $MEM_WEIGHT_91
+              LtcWeight: $LTC_WEIGHT_91
+              ResWeight: $RES_WEIGHT_91
+              CpuWeight: $CPU_WEIGHT_91
+              MemWeight: $MEM_WEIGHT_91
               AppCpuReq: $APP_CPU_REQ_91
               AppMemReq: $APP_MEM_REQ_91
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3870,10 +3870,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_92
               CpuUtilMax: $CPU_UTIL_MAX_92
               MemUtilMax: $MEM_UTIL_MAX_92
-              LtcWeigh: $LTC_WEIGHT_92
-              ResWeigh: $RES_WEIGHT_92
-              CpuWeigh: $CPU_WEIGHT_92
-              MemWeigh: $MEM_WEIGHT_92
+              LtcWeight: $LTC_WEIGHT_92
+              ResWeight: $RES_WEIGHT_92
+              CpuWeight: $CPU_WEIGHT_92
+              MemWeight: $MEM_WEIGHT_92
               AppCpuReq: $APP_CPU_REQ_92
               AppMemReq: $APP_MEM_REQ_92
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3912,10 +3912,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_93
               CpuUtilMax: $CPU_UTIL_MAX_93
               MemUtilMax: $MEM_UTIL_MAX_93
-              LtcWeigh: $LTC_WEIGHT_93
-              ResWeigh: $RES_WEIGHT_93
-              CpuWeigh: $CPU_WEIGHT_93
-              MemWeigh: $MEM_WEIGHT_93
+              LtcWeight: $LTC_WEIGHT_93
+              ResWeight: $RES_WEIGHT_93
+              CpuWeight: $CPU_WEIGHT_93
+              MemWeight: $MEM_WEIGHT_93
               AppCpuReq: $APP_CPU_REQ_93
               AppMemReq: $APP_MEM_REQ_93
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3954,10 +3954,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_94
               CpuUtilMax: $CPU_UTIL_MAX_94
               MemUtilMax: $MEM_UTIL_MAX_94
-              LtcWeigh: $LTC_WEIGHT_94
-              ResWeigh: $RES_WEIGHT_94
-              CpuWeigh: $CPU_WEIGHT_94
-              MemWeigh: $MEM_WEIGHT_94
+              LtcWeight: $LTC_WEIGHT_94
+              ResWeight: $RES_WEIGHT_94
+              CpuWeight: $CPU_WEIGHT_94
+              MemWeight: $MEM_WEIGHT_94
               AppCpuReq: $APP_CPU_REQ_94
               AppMemReq: $APP_MEM_REQ_94
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -3996,10 +3996,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_95
               CpuUtilMax: $CPU_UTIL_MAX_95
               MemUtilMax: $MEM_UTIL_MAX_95
-              LtcWeigh: $LTC_WEIGHT_95
-              ResWeigh: $RES_WEIGHT_95
-              CpuWeigh: $CPU_WEIGHT_95
-              MemWeigh: $MEM_WEIGHT_95
+              LtcWeight: $LTC_WEIGHT_95
+              ResWeight: $RES_WEIGHT_95
+              CpuWeight: $CPU_WEIGHT_95
+              MemWeight: $MEM_WEIGHT_95
               AppCpuReq: $APP_CPU_REQ_95
               AppMemReq: $APP_MEM_REQ_95
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -4038,10 +4038,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_96
               CpuUtilMax: $CPU_UTIL_MAX_96
               MemUtilMax: $MEM_UTIL_MAX_96
-              LtcWeigh: $LTC_WEIGHT_96
-              ResWeigh: $RES_WEIGHT_96
-              CpuWeigh: $CPU_WEIGHT_96
-              MemWeigh: $MEM_WEIGHT_96
+              LtcWeight: $LTC_WEIGHT_96
+              ResWeight: $RES_WEIGHT_96
+              CpuWeight: $CPU_WEIGHT_96
+              MemWeight: $MEM_WEIGHT_96
               AppCpuReq: $APP_CPU_REQ_96
               AppMemReq: $APP_MEM_REQ_96
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -4080,10 +4080,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_97
               CpuUtilMax: $CPU_UTIL_MAX_97
               MemUtilMax: $MEM_UTIL_MAX_97
-              LtcWeigh: $LTC_WEIGHT_97
-              ResWeigh: $RES_WEIGHT_97
-              CpuWeigh: $CPU_WEIGHT_97
-              MemWeigh: $MEM_WEIGHT_97
+              LtcWeight: $LTC_WEIGHT_97
+              ResWeight: $RES_WEIGHT_97
+              CpuWeight: $CPU_WEIGHT_97
+              MemWeight: $MEM_WEIGHT_97
               AppCpuReq: $APP_CPU_REQ_97
               AppMemReq: $APP_MEM_REQ_97
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -4122,10 +4122,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_98
               CpuUtilMax: $CPU_UTIL_MAX_98
               MemUtilMax: $MEM_UTIL_MAX_98
-              LtcWeigh: $LTC_WEIGHT_98
-              ResWeigh: $RES_WEIGHT_98
-              CpuWeigh: $CPU_WEIGHT_98
-              MemWeigh: $MEM_WEIGHT_98
+              LtcWeight: $LTC_WEIGHT_98
+              ResWeight: $RES_WEIGHT_98
+              CpuWeight: $CPU_WEIGHT_98
+              MemWeight: $MEM_WEIGHT_98
               AppCpuReq: $APP_CPU_REQ_98
               AppMemReq: $APP_MEM_REQ_98
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -4164,10 +4164,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_99
               CpuUtilMax: $CPU_UTIL_MAX_99
               MemUtilMax: $MEM_UTIL_MAX_99
-              LtcWeigh: $LTC_WEIGHT_99
-              ResWeigh: $RES_WEIGHT_99
-              CpuWeigh: $CPU_WEIGHT_99
-              MemWeigh: $MEM_WEIGHT_99
+              LtcWeight: $LTC_WEIGHT_99
+              ResWeight: $RES_WEIGHT_99
+              CpuWeight: $CPU_WEIGHT_99
+              MemWeight: $MEM_WEIGHT_99
               AppCpuReq: $APP_CPU_REQ_99
               AppMemReq: $APP_MEM_REQ_99
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
@@ -4206,10 +4206,10 @@ Deployments:
               LatencyMax: $MAX_LATENCY_100
               CpuUtilMax: $CPU_UTIL_MAX_100
               MemUtilMax: $MEM_UTIL_MAX_100
-              LtcWeigh: $LTC_WEIGHT_100
-              ResWeigh: $RES_WEIGHT_100
-              CpuWeigh: $CPU_WEIGHT_100
-              MemWeigh: $MEM_WEIGHT_100
+              LtcWeight: $LTC_WEIGHT_100
+              ResWeight: $RES_WEIGHT_100
+              CpuWeight: $CPU_WEIGHT_100
+              MemWeight: $MEM_WEIGHT_100
               AppCpuReq: $APP_CPU_REQ_100
               AppMemReq: $APP_MEM_REQ_100
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
