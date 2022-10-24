@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 .history/
+notification_order
 
 /pkg/erc/bin/
 /pkg/erc/.idea/
@@ -14,6 +15,8 @@
 /pkg/lcm-workflow/.idea/
 /pkg/lcm-workflow/deployments/helm/*.tgz
 /pkg/lcm-workflow/samples/lcm-example/apps/*.tgz
+/pkg/lcm-workflow/samples/lcm-example/values.yaml
+/pkg/lcm-workflow/samples/lcm-example/values-no-clusters.yaml
 
 /pkg/nmt/bin/
 /pkg/nmt/.idea/
@@ -24,6 +27,7 @@
 /pkg/obs/deployments/helm/*.tgz
 
 /pkg/relocate-workflow/deployments/helm/*.tgz
+/pkg/relocate-workflow/temporal-migrate-workflow
 
 /pkg/ueransim-ho/.idea/
 /pkg/ueransim-ho/.history/
