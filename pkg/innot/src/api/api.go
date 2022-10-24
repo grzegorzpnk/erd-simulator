@@ -31,10 +31,14 @@ func NewRouter() *mux.Router {
 	failedUrl := resultsCollectionUrl + "/relocation-failed"
 	successfulUrl := resultsCollectionUrl + "/relocation-successful"
 	redundantUrl := resultsCollectionUrl + "/relocation-redundant"
+	skippedUrl := resultsCollectionUrl + "/relocation-skipped"
+	resetUrl := resultsCollectionUrl + "/reset"
 
 	router.HandleFunc(failedUrl, handler.relocationFailedHandler).Methods("POST")
 	router.HandleFunc(successfulUrl, handler.relocationSuccessfulHandler).Methods("POST")
 	router.HandleFunc(redundantUrl, handler.relocationRedundantHandler).Methods("POST")
+	router.HandleFunc(skippedUrl, handler.relocationSkippedHandler).Methods("POST")
+	router.HandleFunc(resetUrl, handler.resetCounterHandler).Methods("POST")
 	router.HandleFunc(resultsCollectionUrl, handler.getResultsHandler).Methods("GET")
 
 	return router

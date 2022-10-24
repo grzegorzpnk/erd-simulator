@@ -207,6 +207,22 @@ func (h *apiHandler) relocationRedundantHandler(w http.ResponseWriter, r *http.R
 	w.WriteHeader(http.StatusAccepted)
 }
 
+func (h *apiHandler) relocationSkippedHandler(w http.ResponseWriter, r *http.Request) {
+
+	h.resClient.Results.IncSkipped()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+}
+
+func (h *apiHandler) resetCounterHandler(w http.ResponseWriter, r *http.Request) {
+
+	h.resClient.Results.ResetCounter()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+}
+
 func (h *apiHandler) getResultsHandler(w http.ResponseWriter, r *http.Request) {
 
 	subs := h.resClient.Results
