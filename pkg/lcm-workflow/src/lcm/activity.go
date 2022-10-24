@@ -123,6 +123,12 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) 
 		appCpuReq = 0.0
 	}
 
+	resWeight, err := strconv.ParseFloat(migParam.GetParamByKey("resourcesWeight"), 64)
+	if err != nil {
+		log.Printf("Could not parse resourcesWeight[%v] into float", migParam.GetParamByKey("resourcesWeight"))
+		appCpuReq = 0.0
+	}
+
 	cpuWeight, err := strconv.ParseFloat(migParam.GetParamByKey("cpuUtilizationWeight"), 64)
 	if err != nil {
 		log.Printf("Could not parse cpuUtilizationWeight[%v] into float", migParam.GetParamByKey("cpuUtilizationWeight"))
@@ -153,6 +159,7 @@ func GenerateSmartPlacementIntent(ctx context.Context, migParam WorkflowParams) 
 				},
 				ParametersWeights: spi.Weights{
 					LatencyWeight:        latWeight,
+					ResourcesWeight:      resWeight,
 					CpuUtilizationWeight: cpuWeight,
 					MemUtilizationWeight: memWeight,
 				},

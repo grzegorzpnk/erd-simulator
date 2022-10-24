@@ -19,13 +19,15 @@ import (
 func NewRouter(mockClient interface{}) *mux.Router {
 	//const baseURL string = "/projects/{project}/composite-apps/{compositeApp}/{compositeAppVersion}/deployment-intent-groups/{deploymentIntentGroup}/smartPlacementIntents"
 	const baseURL string = "/erc/smart-placement-intents"
+	const spiURL string = baseURL + "/optimal-mec"
 	r := mux.NewRouter().PathPrefix("/v2").Subrouter()
 	c := module.NewClient()
 	h := intentHandler{
 		client: setClient(c.SmartPlacementIntent, mockClient).(module.SmartPlacementIntentManager),
 	}
 
-	r.HandleFunc(baseURL+"/optimal-mec", h.handleSmartPlacementIntent).Methods("POST")
+	r.HandleFunc(spiURL+"/heuristic", h.handleSmartPlacementIntentHeuristic).Methods("POST")
+	r.HandleFunc(spiURL+"/optimal", h.handleSmartPlacementIntentOptimal).Methods("POST")
 
 	return r
 }

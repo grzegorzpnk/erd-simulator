@@ -12,7 +12,7 @@ config:
   clusterProvider: "edge-provider"
   timestamp: 5
   obs:
-    endpoint: "http://10.254.185.42"
+    endpoint: "http://10.254.185.44"
     port: "32138"
 
 

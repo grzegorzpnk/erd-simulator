@@ -27,7 +27,7 @@ type intentHandler struct {
 
 var ErJSONFile = "./json-schemas/intent.json"
 
-func (h intentHandler) handleSmartPlacementIntent(w http.ResponseWriter, r *http.Request) {
+func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)
@@ -35,7 +35,33 @@ func (h intentHandler) handleSmartPlacementIntent(w http.ResponseWriter, r *http
 		return
 	}
 
-	mec, err := h.client.ServeSmartPlacementIntent(i)
+	mec, err := h.client.ServeSmartPlacementIntentHeuristic(i)
+	if err != nil {
+		//handleError(w, map[string]string{}, err, i)
+		// EXPERIMENTS: remove later
+		http.Post("http://10.254.185.44:32137/v1/results/relocation-failed", "application/json", bytes.NewBuffer([]byte{}))
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	body := ResponseBody{
+		Provider: mec.Identity.Provider,
+		Cluster:  mec.Identity.Cluster,
+	}
+	// EXPERIMENTS: remove later
+	http.Post("http://10.254.185.44:32137/v1/results/relocation-successful", "application/json", bytes.NewBuffer([]byte{}))
+	sendResponse(w, body, http.StatusOK)
+}
+
+func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, r *http.Request) {
+	var i model.SmartPlacementIntent
+
+	isValid := validateRequestBody(w, r, &i, ErJSONFile)
+	if !isValid {
+		return
+	}
+
+	mec, err := h.client.ServeSmartPlacementIntentOptimal(i)
 	if err != nil {
 		//handleError(w, map[string]string{}, err, i)
 		// EXPERIMENTS: remove later

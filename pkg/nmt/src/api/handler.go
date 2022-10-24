@@ -238,11 +238,12 @@ func (h *apiHandler) getEdgesHandler(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
+	response := make([]model.MecIdentity, 0)
 
 	for i := range h.graphClient.MecHosts {
-		json.NewEncoder(w).Encode(h.graphClient.MecHosts[i])
+		response = append(response, h.graphClient.MecHosts[i].Identity)
 	}
-
+	json.NewEncoder(w).Encode(response)
 }
 
 func (h *apiHandler) updateClusterCPUResources(w http.ResponseWriter, r *http.Request) {

@@ -27,7 +27,7 @@ AppPlacementIntent: collectd-placement-intent
 
 # Workflow Intent
 WfIntentName: test-workflow-intent
-WfClientEndpointName: 10.254.185.42
+WfClientEndpointName: 10.254.185.44
 WfClientEndpointPort: 32522
 WfClientName: lcm_workflowclient
 WfID: test-workflow-1

@@ -33,12 +33,11 @@ func NewIntentClient() *SmartPlacementIntentClient {
 
 // SmartPlacementIntentManager a manager is an interface for exposing the client's functionalities.
 type SmartPlacementIntentManager interface {
-	ServeSmartPlacementIntent(intent model.SmartPlacementIntent) (model.MecHost, error)
+	ServeSmartPlacementIntentHeuristic(intent model.SmartPlacementIntent) (model.MecHost, error)
+	ServeSmartPlacementIntentOptimal(intent model.SmartPlacementIntent) (model.MecHost, error)
 }
 
-// ServeSmartPlacementIntent TODO: not ready.
-// TODO: Consider that mecs need to be in the same region
-func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.SmartPlacementIntent) (model.MecHost, error) {
+func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentHeuristic(intent model.SmartPlacementIntent) (model.MecHost, error) {
 	var err error
 	var sp SearchParams
 	var bestMecHost model.MecHost
@@ -51,6 +50,102 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntent(intent model.Smar
 
 	// Get all MEC Hosts associated with given Cell ID
 	sp.currentMECs, err = tc.GetMecHostsByCellId(tc.CurrentCell)
+
+	// Check if any cluster is a valid candidate, if yes -> try to find optimal cluster
+	sp, err = FindCandidates(tc, sp, intent)
+	if err != nil {
+		log.Errorf("Could not serve Smart Placement Intent: %v", err)
+		return model.MecHost{}, err
+	}
+
+	// Try to find the optimal cluster.
+	bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
+	if err != nil {
+		// save information about checked clusters -> no need to check single cluster twice
+		sp.checkedMECs = append(sp.checkedMECs, sp.currentMECs...)
+		// currentMECs list will be evaluated based on valid neighbours
+		sp.currentMECs = []model.MecHost{}
+		// candidateMecs list will be evaluated based on new currentMECs list
+		sp.candidateMECs = []model.MecHost{}
+		// flag which indicates, if we should search further
+		//	* search until best cluster is found OR
+		//	* until there are any clusters on the evalNeighMECs list
+		checkFurther = true
+	}
+
+	for checkFurther {
+		checkFurther = false
+		if len(sp.evalNeighMECs) == 0 {
+			// If evalNeighMECs list is empty -> there are not any clusters to check (search failed).
+			reason := "no valid neighbours to consider"
+			err := errors.New(reason)
+			log.Warnf("[RESULT] Could not find optimal cluster: %v", reason)
+			return model.MecHost{}, err
+		}
+
+		log.Infof("EvalNeighList: %v", sp.evalNeighMECs)
+		for _, mec := range sp.evalNeighMECs {
+			mec, err = tc.GetMecNeighbours(mec)
+			if err != nil {
+				log.Warnf("Could not proceed %v neighbours. Reason: %v", mec.BuildClusterEmcoFQDN(), err)
+				continue
+			}
+
+			for _, neigh := range mec.Neighbours {
+				if skip := checkIfSkip(*neigh, sp.checkedMECs); skip {
+					// If MEC Host already checked -> just skip
+					continue
+				}
+				if skip := checkIfSkip(*neigh, sp.currentMECs); skip {
+					// If MEC Host is in the current search space -> just skip
+					continue
+				}
+				if skip := checkCoverageZone(*neigh, sp.checkedMECs[0]); skip {
+					// If we are there, checkedMECs[0] exists. Skip neighbour if it's outside coverage zone [region]
+					continue
+				}
+				sp.currentMECs = append(sp.currentMECs, *neigh)
+			}
+		}
+		// Delete old clusters from evalNeighMECs list -> later add new if any exists
+		sp.evalNeighMECs = []model.MecHost{}
+
+		sp, err = FindCandidates(tc, sp, intent)
+		if err != nil {
+			log.Errorf("Could not serve Smart Placement Intent: %v", err)
+			return model.MecHost{}, err
+		}
+
+		bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
+		if err != nil {
+			sp.checkedMECs = append(sp.checkedMECs, sp.currentMECs...)
+			sp.currentMECs = []model.MecHost{}
+			sp.candidateMECs = []model.MecHost{}
+			checkFurther = true
+		} else {
+			// if error is nil -> best MEC Host is found. Just return.
+			return bestMecHost, err
+		}
+	}
+
+	return bestMecHost, err
+}
+
+func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent model.SmartPlacementIntent) (model.MecHost, error) {
+	var err error
+	var sp SearchParams
+	var bestMecHost model.MecHost
+	var checkFurther bool
+
+	tc := topology.NewTopologyClient()
+	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
+
+	log.Infof("Smart Placement Intent: %+v", intent)
+
+	// Evaluate what coverage zone we are considering (based on region)
+	temp, err := tc.GetMecHostsByCellId(tc.CurrentCell)
+
+	sp.currentMECs, err = tc.GetMecHostsByRegion(temp[0].Identity.Location.Region)
 
 	// Check if any cluster is a valid candidate, if yes -> try to find optimal cluster
 	sp, err = FindCandidates(tc, sp, intent)
@@ -204,7 +299,6 @@ func latencyOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 }
 
 // resourcesOk checks if resource constraints specified in intent (i) are met
-// TODO: consider also current application requests
 func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 	cpuUtilization := mec.GetCpuUtilization()
 	memUtilization := mec.GetMemUtilization()
@@ -231,8 +325,6 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 	}
 }
 
-// FindOptimalCluster TODO: implement algorithm to find the optimal cluster among mecHosts (candidates)
-// This is old dummy implementation.. Here we check constraints for the second time (its redundant -> remove)
 func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementIntent) (model.MecHost, error) {
 	log.Infof("Looking for optimal cluster...")
 
@@ -257,8 +349,6 @@ func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementInt
 	return bestMecHost, nil
 }
 
-// ComputeObjectiveValue TODO: implement function to calculate the objective function
-// TODO: Remember that MEC cost should be considered
 func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) float64 {
 	var staticCost int
 	switch mec.Identity.Location.Type {
@@ -277,7 +367,7 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) floa
 
 	nLat, nCpu, nMem := NormalizeMecParameters(cl, mec)
 
-	return float64(staticCost) * (pw.LatencyWeight*nLat + pw.CpuUtilizationWeight*nCpu + pw.MemUtilizationWeight*nMem)
+	return pw.LatencyWeight*nLat + pw.ResourcesWeight*(pw.CpuUtilizationWeight*nCpu+pw.MemUtilizationWeight*nMem)*float64(staticCost)
 }
 
 // NormalizeMecParameters TODO: find the best way to normalize all the values

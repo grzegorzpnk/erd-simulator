@@ -123,15 +123,7 @@ func (mc *MockClient) GetMockedLatencyMs(sNode, tNode interface{}) (float64, err
 				log.Errorf("[LTC] error: %v", err)
 				return -1, err
 			}
-			// increase latency based on mec level
-			//levelDiff := math.Abs(float64(source.Identity.Location.Level - target.Identity.Location.Level))
-			//if levelDiff != 0 {
-			//	latency += 30
-			//} else if source.Identity.Location.Level == 1 {
-			//	latency += 50
-			//} else if source.Identity.Location.Level == 2 {
-			//	latency += 100
-			//}
+
 			levelDiff := float64(source.Identity.Location.Level - target.Identity.Location.Level)
 
 			switch levelDiff {

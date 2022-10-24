@@ -9,7 +9,7 @@ notificationService:
   type: NodePort
   port: 8585
   nodePort: 32140
-  addr: 10.254.185.42
+  addr: 10.254.185.44
 
 replicaCount: 1
 

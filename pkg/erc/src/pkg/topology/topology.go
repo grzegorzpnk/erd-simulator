@@ -61,6 +61,40 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	return mhs, nil
 }
 
+func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
+	var mhs []model.MecHost
+	var tempMhs, mhsIdentity []model.MecIdentity
+
+	url := c.buildGetAllMecHostsUrl()
+
+	respBody, err := getHTTPRespBody(url)
+
+	if err := json.Unmarshal(respBody, &tempMhs); err != nil {
+		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
+		return []model.MecHost{}, err
+	}
+
+	if len(tempMhs) <= 0 {
+		err = errors.New(fmt.Sprintf("no mec hosts found for given region: %v\n.", region))
+		return []model.MecHost{}, err
+	} else {
+		// filter by region
+		for _, cl := range tempMhs {
+			if cl.Location.Region == region {
+				mhsIdentity = append(mhsIdentity, cl)
+			}
+		}
+		log.Infof("Got CLUSTERS[%+v] for REGION=[%v] ", mhsIdentity, region)
+	}
+
+	for _, mhi := range mhsIdentity {
+		mh := model.MecHost{Identity: mhi}
+		mhs = append(mhs, mh)
+	}
+
+	return mhs, nil
+}
+
 // GetMecNeighbours calls topology server to get neighbours list for given MecHost
 func (c *Client) GetMecNeighbours(mec model.MecHost) (model.MecHost, error) {
 	var mhsIdentity []model.MecIdentity
@@ -184,6 +218,16 @@ func (c *Client) buildGetResourcesUrl(resType model.MecInfo, mec model.MecHost) 
 	endpoint += "/" + string(resType)
 
 	return endpoint, nil
+}
+
+func (c *Client) buildGetAllMecHostsUrl() string {
+	var endpoint string
+
+	endpoint += c.TopologyEndpoint
+	endpoint += ApiBase
+	endpoint += ApiCollectionMecHosts
+
+	return endpoint
 }
 
 // buildGetShortestPathLatencyBased returns topology endpoint to get MEC latency between MecHost and given CellId

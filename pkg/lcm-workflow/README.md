@@ -84,7 +84,7 @@ spec:
           memUtilizationWeight: "0.25"
           innotUrl: {{ .InnotUrl }}
           plcControllerUrl: "http://10.254.185.44:32137/v1/plc-ctrl"
-          rClientName: "10.254.185.42"
+          rClientName: "10.254.185.44"
           rClientPort: "30102"
           rWfClientName: "relocate_workflowclient"
 ```

@@ -46,11 +46,11 @@ function setRequests() {
 
 function run() {
 
-declare -a vars=("TARGET_CLUSTER_" "MAX_LATENCY_" "CPU_UTIL_MAX_" "MEM_UTIL_MAX_" "LTC_WEIGHT_" "CPU_WEIGHT_" "MEM_WEIGHT_" "APP_CPU_REQ_" "APP_MEM_REQ_")
+declare -a vars=("TARGET_CLUSTER_" "MAX_LATENCY_" "CPU_UTIL_MAX_" "MEM_UTIL_MAX_" "LTC_WEIGHT_" "RES_WEIGHT_" "CPU_WEIGHT_" "MEM_WEIGHT_" "APP_CPU_REQ_" "APP_MEM_REQ_")
 
 for app in "${apps[@]}"; do
-    targetCluster=${clusters[$index]}
-    index=$(expr $(($RANDOM % (${#clusters[@]}))))
+#    targetCluster=${clusters[$index]}
+#    index=$(expr $(($RANDOM % (${#clusters[@]}))))
     cpu_req=$(expr $((125 + $RANDOM % 175)))
     mem_req=$(expr $((100 + $RANDOM % 150)))
     mem_req_bytes=$(mebibytesToBytes "$mem_req")
@@ -61,7 +61,7 @@ for app in "${apps[@]}"; do
     for var in "${vars[@]}"; do
       temp="$var$app"
       if [[ $var == "TARGET_CLUSTER_" ]]; then
-        export "$temp"="$targetCluster"
+        export "$temp"="\$TARGET_CLUSTER_$app"
       elif [[ $var == "MAX_LATENCY_" ]]; then
         export "$temp"="$(generateMaxLatency)"
       elif [[ $var == "CPU_UTIL_MAX_" ]]; then
@@ -69,11 +69,13 @@ for app in "${apps[@]}"; do
       elif [[ $var == "MEM_UTIL_MAX_" ]]; then
         export "$temp"="$(generateMaxResUtil)"
       elif [[ $var == "LTC_WEIGHT_" ]]; then
-        export "$temp"=0.34
+        export "$temp"=0.5
+      elif [[ $var == "RES_WEIGHT_" ]]; then
+        export "$temp"=0.5
       elif [[ $var == "CPU_WEIGHT_" ]]; then
-        export "$temp"=0.33
+        export "$temp"=0.5
       elif [[ $var == "MEM_WEIGHT_" ]]; then
-        export "$temp"=0.33
+        export "$temp"=0.5
       elif [[ $var == "APP_CPU_REQ_" ]]; then
         export "$temp"=$cpu_req_unit
       elif [[ $var == "APP_MEM_REQ_" ]]; then
@@ -81,7 +83,7 @@ for app in "${apps[@]}"; do
       fi
     done
   done
-  envsubst < ./emco-manifests-v2/values-template.yaml >./emco-manifests-v2/values.yaml
+  envsubst < ./emco-manifests-v2/values-template.yaml >./emco-manifests-v2/values-no-clusters.yaml
 }
 
 declare -a apps=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"

@@ -34,7 +34,8 @@ type Constraints struct {
 }
 
 type Weights struct {
-	LatencyWeight        float64
-	CpuUtilizationWeight float64
-	MemUtilizationWeight float64
+	LatencyWeight        float64 `json:"latencyWeight"`
+	ResourcesWeight      float64 `json:"resourcesWeight"`
+	CpuUtilizationWeight float64 `json:"cpuUtilizationWeight"`
+	MemUtilizationWeight float64 `json:"memUtilizationWeight"`
 }
