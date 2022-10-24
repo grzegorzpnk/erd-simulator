@@ -1,8 +1,8 @@
-helm --kubeconfig ~/.kube/core.config uninstall relocate-worker
-helm --kubeconfig ~/.kube/core.config uninstall relocate-client
-helm --kubeconfig ~/.kube/core.config uninstall lcm-worker
-helm --kubeconfig ~/.kube/core.config uninstall lcm-client
-helm --kubeconfig ~/.kube/core.config uninstall erc
-helm --kubeconfig ~/.kube/core.config uninstall obs
-helm --kubeconfig ~/.kube/core.config uninstall nmt
-helm --kubeconfig ~/.kube/core.config uninstall innot
+#!/bin/bash
+
+declare -a SERVICES=("relocate-worker" "relocate-client" "lcm-worker" "lcm-client" "erc" "obs" "nmt" "innot")
+
+for svc in "${SERVICES[@]}";
+do
+  helm --kubeconfig ~/.kube/core.config uninstall relocate-worker $svc
+done

@@ -2,9 +2,8 @@
 
 dirs=("erc" "innot" "lcm-workflow" "relocate-workflow" "obs" "nmt")
 
-# shellcheck disable=SC2068
-for dir in ${dirs[@]}; do
-  cd pkg/"$dir"
+for dir in "${dirs[@]}"; do
+  cd ./pkg/"$dir" || exit
   ./deploy.sh
   cd ../..
 done

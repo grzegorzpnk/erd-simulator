@@ -1,3 +1,8 @@
+#!/bin/bash
+
+INNOT_ENDPOINT=10.254.185.44
+INNOT_PORT=32137
+
 declare -a notifyList=()
 declare -a temp=()
 
@@ -23,7 +28,7 @@ fi
 
 for subId in "${notifyList[@]}";
 do
-    curl -X POST -d {} http://10.254.185.44:32137/v1/intermediate-notifier/subscriptions/$subId/handle
+    curl -X POST -d {} http://$INNOT_ENDPOINT:$INNOT_PORT/v1/intermediate-notifier/subscriptions/$subId/handle
     echo "Sent notification to subscriber[$subId]"
     echo "Sleep 15s"
     sleep 15
