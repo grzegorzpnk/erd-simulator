@@ -5,7 +5,11 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
+	"context"
+	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 var graph *mec_topology.Graph
@@ -31,7 +35,8 @@ func main() {
 		graph.AddLink(link)
 	*/
 	//gorutines to update cluster resources and network metrics
-	go graph.NetworkMetricsUpdate()
+	//go graph.NetworkMetricsUpdate()
+	graph.NetworkMetricsUpdate(false)
 	go graph.ClustersResourcesUpdate()
 
 	httpRouter := api.NewRouter(graph)
@@ -41,6 +46,16 @@ func main() {
 		Addr:    ":" + config.GetConfiguration().ServicePort,
 	}
 
-	log.Fatalln(httpServer.ListenAndServe())
+	connectionsClose := make(chan struct{})
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt)
+		<-c
+		httpServer.Shutdown(context.Background())
+		close(connectionsClose)
+	}()
+
+	err := httpServer.ListenAndServe()
+	log.Fatalln(fmt.Sprintf("[SERVER] HTTP server returned error: %s", err))
 
 }
