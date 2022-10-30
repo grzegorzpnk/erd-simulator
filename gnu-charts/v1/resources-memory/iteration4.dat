@@ -1,0 +1,6 @@
+#	local-zone  zone    international
+O-lb    54.51   48.78   75.6
+O-lat   66.12   48.78   15.6
+O-hyb   64.39   47.64   28.3
+H-hyb-if    62.76   45.94   42.4
+H-hyb   64.47   48.6    24.8
