@@ -13,11 +13,10 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"time"
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(42)
 
 	ddb.InitDummyDb()
 

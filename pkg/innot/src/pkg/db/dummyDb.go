@@ -23,6 +23,7 @@ type Subscriber struct {
 	Endpoint     types.ClientListenerUri
 	AmfEventType types.AmfEventType
 	CurrentCell  types.CellId
+	UserPath     []types.CellId
 	BodyRequest  types.AmfEventSubscription
 }
 
@@ -38,6 +39,16 @@ func (ddb *subscriptionDb) GetItems() map[SubscriptionId]Subscriber {
 
 func (ddb *subscriptionDb) UpdateItem(id SubscriptionId, sub Subscriber) {
 	ddb.db[id] = sub
+}
+
+func (ddb *subscriptionDb) GetUserPaths() map[SubscriptionId][]types.CellId {
+	var output = map[SubscriptionId][]types.CellId{}
+
+	subscribers := ddb.GetItems()
+	for key, val := range subscribers {
+		output[key] = val.UserPath
+	}
+	return output
 }
 
 // newDummyDb creates new Database and returns instance of that DB

@@ -35,7 +35,7 @@ func (h *apiHandler) subscribeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Infof("GOT BODY: %v", body)
+	//log.Infof("GOT BODY: %v", body)
 
 	if body == (types.AmfEventSubscription{}) {
 		w.Header().Set("Content-Type", "application/json")
@@ -52,7 +52,7 @@ func (h *apiHandler) subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	sub := db.Subscriber{
 		Endpoint:     types.ClientListenerUri(endpoint),
 		AmfEventType: eventType,
-		//BodyRequest:  body,
+		UserPath:     []types.CellId{},
 	}
 
 	_, err = db.DummyDB.PutItem(sub)
@@ -139,6 +139,20 @@ func (h *apiHandler) unsubscribeByEndpointHandler(w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
+func (h *apiHandler) handleGetUsersPaths(w http.ResponseWriter, r *http.Request) {
+
+	up := db.DummyDB.GetUserPaths()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	err := json.NewEncoder(w).Encode(up)
+	if err != nil {
+		log.Error("[API] Error encoding.")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func (h *apiHandler) handleSubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
@@ -173,62 +187,6 @@ func (h *apiHandler) getAllSubscriptionsHandler(w http.ResponseWriter, r *http.R
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	err := json.NewEncoder(w).Encode(subs)
-	if err != nil {
-		log.Error("[API] Error encoding.")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// Results collection handlers
-
-func (h *apiHandler) relocationFailedHandler(w http.ResponseWriter, r *http.Request) {
-
-	h.resClient.Results.IncFailed()
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-}
-
-func (h *apiHandler) relocationSuccessfulHandler(w http.ResponseWriter, r *http.Request) {
-
-	h.resClient.Results.IncSuccessful()
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-}
-
-func (h *apiHandler) relocationRedundantHandler(w http.ResponseWriter, r *http.Request) {
-
-	h.resClient.Results.IncRedundant()
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-}
-
-func (h *apiHandler) relocationSkippedHandler(w http.ResponseWriter, r *http.Request) {
-
-	h.resClient.Results.IncSkipped()
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-}
-
-func (h *apiHandler) resetCounterHandler(w http.ResponseWriter, r *http.Request) {
-
-	h.resClient.Results.ResetCounter()
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-}
-
-func (h *apiHandler) getResultsHandler(w http.ResponseWriter, r *http.Request) {
-
-	subs := h.resClient.Results
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	err := json.NewEncoder(w).Encode(subs)
 	if err != nil {
 		log.Error("[API] Error encoding.")
