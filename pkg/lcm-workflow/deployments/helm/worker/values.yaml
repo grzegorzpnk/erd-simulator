@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-temporalServerIp: "10.254.185.42"
+temporalServerIp: "10.254.185.50"
 temporalServerPort: "30199"
 
 notificationService:

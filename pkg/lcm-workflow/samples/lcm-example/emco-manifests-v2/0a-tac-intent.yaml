@@ -26,7 +26,7 @@ spec:
       activityOptions:
         all-activities:
           startToCloseTimeout: 6000000000000
-          heartbeatTimeout: 5000000000000
+          heartbeatTimeout: 6000000000000
           retryPolicy:
             initialInterval: 10
             maximumAttempts: 1

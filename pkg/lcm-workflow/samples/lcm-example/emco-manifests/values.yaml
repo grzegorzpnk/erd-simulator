@@ -40,7 +40,7 @@ WfEmcoOrchStatus: 10.254.185.42:30416
 InnotUrl: "http://10.254.185.44:32137/v1/intermediate-notifier/subscribe"
 
 # Temporal server
-TemporalServerIP: 10.254.185.42
+TemporalServerIP: 10.254.185.50
 TemporalServerPort: 30124
 
 HostIP: 10.254.185.42

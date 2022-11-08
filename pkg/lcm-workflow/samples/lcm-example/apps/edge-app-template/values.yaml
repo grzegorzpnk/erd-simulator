@@ -1,70 +1,75 @@
-# Default values for collectd.
+# Default values for edge-app-template.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
 ingress:
   enabled: false
-image:
-  repository: opnfv/barometer-collectd
-  tag: latest
-  pullPolicy: IfNotPresent
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
 resources:
   requests:
     cpu: $REQUESTS_CPU
     memory: $REQUESTS_MEM
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
 
-#serviceAccountName: cmk-serviceaccount
+nodeSelector: {}
 
-# Uncomment the following tolerations and/or nodeSelector to select the node collectd to be deployed
-#tolerations:
-#  - operator: "Exists"
-#nodeSelector:
-#  vcmts: "true"
+tolerations: []
 
-# Uncomment the following to set environment, command and args for the collectd container
-#env:
-#- name: CMK_PROC_FS
-#  value: "/host/proc"
-#command:
-#- "/bin/bash"
-#- "-c"
-#args: [ "/opt/bin/cmk isolate --conf-dir=/etc/cmk --pool=infra /script/collectd.sh" ]
-
-# all the files under the directory resource will be mount into the directory specified by 'configMountPath' inside the container.
-# Besides that, users can specify any mount by using the 'volumeMounts' and 'volumes'.
-configMountPath: /opt/collectd/etc
-volumeMounts:
-- name: proc
-  mountPath: /mnt/proc
-  readOnly: true
-- name: root
-  mountPath: /hostfs
-  readOnly: true
-- name: etc
-  mountPath: /mnt/etc
-  readOnly: true
-- name: run
-  mountPath: /var/run/docker.sock
-
-volumes:
-- name: proc
-  hostPath:
-    path: /proc
-- name: root
-  hostPath:
-    path: /
-- name: etc
-  hostPath:
-    path: /etc
-- name: run
-  hostPath:
-    path: /var/run/docker.sock
-
-collectd_prometheus:
-  service:
-    type: ClusterIP
-    port: 9103
-    targetPort: 9103
-    selector:
-      app: collectd
-      collector: collectd
+affinity: {}
