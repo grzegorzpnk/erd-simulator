@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-temporalServer: 10.254.185.42
+temporalServer: 10.254.185.50
 
 replicaCount: 1
 

@@ -131,7 +131,7 @@ This chart allows you to customize its installation. The table below shows the p
 | `gnb.amf.n2if.IpAddress` | The IP address of the AMF’s N2 interface. | `10.100.50.249` |
 | `gnb.amf.n2if.port` | AMF NGAP port number. | `10.100.50.249` |
 | `gnb.amf.service.ngap.enabled` | If `true` then a Kubernetes service will be used to access the AMF NGAP service instead of accessing directly the AMF’s N2 interface. `gnb.amf.n2if.IpAddress` must be set to the name of the service or IP address of a node where AMF is deployed. | `false` |
-| `gnb.configuration` | The UERANSIM gNB [configuration](https://github.com/aligungr/UERANSIM/wiki/Configuration#gnb-configuration) in plain text. | Check [values.yaml](./values.yaml) |
+| `gnb.configuration` | The UERANSIM gNB [configuration](https://github.com/aligungr/UERANSIM/wiki/Configuration#gnb-configuration) in plain text. | Check [values.yaml](values.yaml) |
 | `gnb.podAnnotations` | Pod annotations. | `{}`|
 | `gnb.imagePullSecrets` | Image pull secrets. | `[]`|
 | `gnb.podSecurityContext` | Pod secutity context. | `[]`|
@@ -154,7 +154,7 @@ This chart allows you to customize its installation. The table below shows the p
 | `ue.volume.mount` | The path to the folder where configuration files should be mounted on the UE POD. | `/ueransim/config` |
 | `ue.command` | The command to be executed to run the UERANSIM UE. | `"../build/nr-ue -c ./ue-config.yaml"` |
 | `ue.script` | A script to be executed after running the UERANSIM UE. It may be used to periodically generate traffic for example. | `""` |
-| `ue.configuration` | The UERANSIM UE [configuration](https://github.com/aligungr/UERANSIM/wiki/Configuration#ue-configuration) in plain text. | Check [values.yaml](./values.yaml) |
+| `ue.configuration` | The UERANSIM UE [configuration](https://github.com/aligungr/UERANSIM/wiki/Configuration#ue-configuration) in plain text. | Check [values.yaml](values.yaml) |
 
 ## Reference
  - https://github.com/aligungr/UERANSIM/wiki/
