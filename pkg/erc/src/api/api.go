@@ -26,8 +26,9 @@ func NewRouter(mockClient interface{}) *mux.Router {
 		client: setClient(c.SmartPlacementIntent, mockClient).(module.SmartPlacementIntentManager),
 	}
 
-	r.HandleFunc(spiURL+"/heuristic", h.handleSmartPlacementIntentHeuristic).Methods("POST")
 	r.HandleFunc(spiURL+"/optimal", h.handleSmartPlacementIntentOptimal).Methods("POST")
+	r.HandleFunc(spiURL+"/heuristic", h.handleSmartPlacementIntentHeuristic).Methods("POST")
+	r.HandleFunc(spiURL+"/heuristic-if", h.handleSmartPlacementIntentHeuristicIf).Methods("POST")
 
 	return r
 }

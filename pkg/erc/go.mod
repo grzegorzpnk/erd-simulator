@@ -1,4 +1,4 @@
-module "10.254.188.33/matyspi5/erd/pkg/erc"
+module 10.254.188.33/matyspi5/erd/pkg/erc
 
 require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
@@ -11,6 +11,7 @@ require (
 	gitlab.com/project-emco/core/emco-base/src/orchestrator v0.0.0-00010101000000-000000000000
 	gitlab.com/project-emco/core/emco-base/src/rsync v0.0.0-00010101000000-000000000000
 	google.golang.org/grpc v1.43.0
+	k8s.io/apimachinery v0.23.3 // indirect
 )
 
 replace (

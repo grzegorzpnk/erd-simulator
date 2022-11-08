@@ -34,11 +34,11 @@ func NewIntentClient() *SmartPlacementIntentClient {
 
 // SmartPlacementIntentManager a manager is an interface for exposing the client's functionalities.
 type SmartPlacementIntentManager interface {
-	ServeSmartPlacementIntentHeuristic(intent model.SmartPlacementIntent) (model.MecHost, error)
+	ServeSmartPlacementIntentHeuristic(checkIfClause bool, intent model.SmartPlacementIntent) (model.MecHost, error)
 	ServeSmartPlacementIntentOptimal(intent model.SmartPlacementIntent) (model.MecHost, error)
 }
 
-func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentHeuristic(intent model.SmartPlacementIntent) (model.MecHost, error) {
+func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentHeuristic(checkIfClause bool, intent model.SmartPlacementIntent) (model.MecHost, error) {
 	var err error
 	var sp SearchParams
 	var bestMecHost model.MecHost
@@ -49,13 +49,15 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentHeuristic(intent m
 
 	log.Infof("Smart Placement Intent: %+v", intent)
 
-	skip, err := checkIfCurrentClusterOk(*tc, intent)
-	if err != nil {
-		log.Warnf("Can't skip current cluster. Reason: %v", err)
-	}
+	if checkIfClause {
+		skip, err := checkIfCurrentClusterOk(*tc, intent)
+		if err != nil {
+			log.Warnf("Can't skip current cluster. Reason: %v", err)
+		}
 
-	if skip {
-		return model.MecHost{}, errs.ERR_CLUSTER_OK
+		if skip {
+			return model.MecHost{}, errs.ERR_CLUSTER_OK
+		}
 	}
 
 	// Get all MEC Hosts associated with given Cell ID
@@ -145,21 +147,11 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 	var err error
 	var sp SearchParams
 	var bestMecHost model.MecHost
-	var checkFurther bool
 
 	tc := topology.NewTopologyClient()
 	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
 
 	log.Infof("Smart Placement Intent: %+v", intent)
-
-	skip, err := checkIfCurrentClusterOk(*tc, intent)
-	if err != nil {
-		log.Warnf("Can't skip current cluster. Reason: %v", err)
-	}
-
-	if skip {
-		return model.MecHost{}, errs.ERR_CLUSTER_OK
-	}
 
 	// Evaluate what coverage zone we are considering (based on region)
 	temp, err := tc.GetMecHostsByCellId(tc.CurrentCell)
@@ -176,74 +168,13 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 	// Try to find the optimal cluster.
 	bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
 	if err != nil {
-		// save information about checked clusters -> no need to check single cluster twice
-		sp.checkedMECs = append(sp.checkedMECs, sp.currentMECs...)
-		// currentMECs list will be evaluated based on valid neighbours
-		sp.currentMECs = []model.MecHost{}
-		// candidateMecs list will be evaluated based on new currentMECs list
-		sp.candidateMECs = []model.MecHost{}
-		// flag which indicates, if we should search further
-		//	* search until best cluster is found OR
-		//	* until there are any clusters on the evalNeighMECs list
-		checkFurther = true
+		log.Warnf(" Could not find optimal cluster for given APP[%v]", intent.Spec.AppName)
+		return model.MecHost{}, err
+	} else {
+		log.Infof("Found optimal cluster[%v] for given APP[%v]", bestMecHost.Identity.Cluster, intent.Spec.AppName)
+		return bestMecHost, nil
 	}
 
-	for checkFurther {
-		checkFurther = false
-		if len(sp.evalNeighMECs) == 0 {
-			// If evalNeighMECs list is empty -> there are not any clusters to check (search failed).
-			reason := "no valid neighbours to consider"
-			err := errors.New(reason)
-			log.Warnf("[RESULT] Could not find optimal cluster: %v", reason)
-			return model.MecHost{}, err
-		}
-
-		log.Infof("EvalNeighList: %v", sp.evalNeighMECs)
-		for _, mec := range sp.evalNeighMECs {
-			mec, err = tc.GetMecNeighbours(mec)
-			if err != nil {
-				log.Warnf("Could not proceed %v neighbours. Reason: %v", mec.BuildClusterEmcoFQDN(), err)
-				continue
-			}
-
-			for _, neigh := range mec.Neighbours {
-				if skip := checkIfSkip(*neigh, sp.checkedMECs); skip {
-					// If MEC Host already checked -> just skip
-					continue
-				}
-				if skip := checkIfSkip(*neigh, sp.currentMECs); skip {
-					// If MEC Host is in the current search space -> just skip
-					continue
-				}
-				if skip := checkCoverageZone(*neigh, sp.checkedMECs[0]); skip {
-					// If we are there, checkedMECs[0] exists. Skip neighbour if it's outside coverage zone [region]
-					continue
-				}
-				sp.currentMECs = append(sp.currentMECs, *neigh)
-			}
-		}
-		// Delete old clusters from evalNeighMECs list -> later add new if any exists
-		sp.evalNeighMECs = []model.MecHost{}
-
-		sp, err = FindCandidates(tc, sp, intent)
-		if err != nil {
-			log.Errorf("Could not serve Smart Placement Intent: %v", err)
-			return model.MecHost{}, err
-		}
-
-		bestMecHost, err = FindOptimalCluster(sp.candidateMECs, intent)
-		if err != nil {
-			sp.checkedMECs = append(sp.checkedMECs, sp.currentMECs...)
-			sp.currentMECs = []model.MecHost{}
-			sp.candidateMECs = []model.MecHost{}
-			checkFurther = true
-		} else {
-			// if error is nil -> best MEC Host is found. Just return.
-			return bestMecHost, err
-		}
-	}
-
-	return bestMecHost, err
 }
 
 func checkIfCurrentClusterOk(tc topology.Client, i model.SmartPlacementIntent) (bool, error) {
@@ -256,6 +187,9 @@ func checkIfCurrentClusterOk(tc topology.Client, i model.SmartPlacementIntent) (
 	if err != nil {
 		return false, err
 	}
+
+	latency, err := tc.GetShortestPath(i.Spec.SmartPlacementIntentData.TargetCell, mecHost)
+	mecHost.Resources.Latency = latency
 
 	if resourcesOk(i, mecHost) && latencyOk(i, mecHost) {
 		log.Infof("Current mecHost[%v+%v] is OK. Skipping", i.CurrentPlacement.Provider, i.CurrentPlacement.Cluster)
@@ -338,10 +272,19 @@ func latencyOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 
 // resourcesOk checks if resource constraints specified in intent (i) are met
 func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
-	cpuUtilization := mec.GetCpuUtilization()
-	memUtilization := mec.GetMemUtilization()
-	cpuMax := i.Spec.SmartPlacementIntentData.ConstraintsList.CpuUtilizationMax
-	memMax := i.Spec.SmartPlacementIntentData.ConstraintsList.MemUtilizationMax
+	var cpuUtilization, memUtilization float64
+	if i.CurrentPlacement.Provider == mec.Identity.Provider && i.CurrentPlacement.Cluster == mec.Identity.Cluster {
+		// If we consider the current cluster, we don't need to assume app requirements
+		// because this application is already placed on this mec.
+		cpuUtilization = 100 * (mec.GetCpuUsed()) / mec.GetCpuAllocatable()
+		memUtilization = 100 * (mec.GetMemUsed()) / mec.GetMemAllocatable()
+	} else {
+		cpuUtilization = 100 * (mec.GetCpuUsed() + i.Spec.SmartPlacementIntentData.AppCpuReq) / mec.GetCpuAllocatable()
+		memUtilization = 100 * (mec.GetMemUsed() + i.Spec.SmartPlacementIntentData.AppMemReq) / mec.GetMemAllocatable()
+	}
+
+	cpuMax := i.Spec.SmartPlacementIntentData.ConstraintsList.CpuUtilizationMax // 80
+	memMax := i.Spec.SmartPlacementIntentData.ConstraintsList.MemUtilizationMax // 80
 	cpuMecAvaliable := mec.GetCpuAllocatable() - mec.GetCpuUsed()
 	memMecAvaliable := mec.GetMemAllocatable() - mec.GetMemUsed()
 
@@ -388,14 +331,14 @@ func FindOptimalCluster(mecHosts []model.MecHost, intent model.SmartPlacementInt
 }
 
 func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) float64 {
-	var staticCost int
+	var staticCost float64
 	switch mec.Identity.Location.Type {
 	case 0:
-		staticCost = 3
+		staticCost = 1.0
 	case 1:
-		staticCost = 2
+		staticCost = 0.66667
 	case 2:
-		staticCost = 1
+		staticCost = 0.33333
 	default:
 		log.Warnf("[INTENT] MEC Type[%v] should not be considered: static-cost[%v].", mec.Identity.Location.Type, 404)
 		staticCost = 404
@@ -409,6 +352,9 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) floa
 }
 
 // NormalizeMecParameters TODO: find the best way to normalize all the values
+// TODO: For now consider 30ms as the maximum latency to normalize the value.
+// TODO: For now consider 100% as maximum Utilization
 func NormalizeMecParameters(cl model.Constraints, mec model.MecHost) (float64, float64, float64) {
-	return mec.GetLatency() / cl.LatencyMax, mec.GetCpuUtilization() / cl.CpuUtilizationMax, mec.GetMemUtilization() / cl.MemUtilizationMax
+	//			[0.33 0.66 1]	0.8									0.8
+	return mec.GetLatency() / 30, mec.GetCpuUtilization() / 100, mec.GetMemUtilization() / 100
 }
