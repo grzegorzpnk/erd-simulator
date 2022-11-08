@@ -1,0 +1,2204 @@
+HostIP: 10.254.185.42
+RsyncPort: 30431
+TemporalServerIP: 10.254.185.50
+TemporalServerPort: 30124
+ProjectName: edge-project
+AdminCloud: edge-cloud
+Controllers:
+- Name: tac
+  Port: 30465
+  Anchor: controllers
+  Priority: 1
+  Type: action
+Deployments:
+- CaName: edge-app-ca-1
+  ProfileName: edge-app-profile-1
+  DigName: edge-app-dig-1
+  GpiName: edge-app-gp-1
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-1
+    AppFile: ../apps/edge-app-1-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec13
+    Workflows:
+    - WfIntentName: edge-wf-intent-1
+      WfDescription: LCM workflow intent-1
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-1
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.672
+        AppMemReq: 6.30194176e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-2
+  ProfileName: edge-app-profile-2
+  DigName: edge-app-dig-2
+  GpiName: edge-app-gp-2
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-2
+    AppFile: ../apps/edge-app-2-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec25
+    Workflows:
+    - WfIntentName: edge-wf-intent-2
+      WfDescription: LCM workflow intent-2
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-2
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.713
+        AppMemReq: 6.25999872e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-3
+  ProfileName: edge-app-profile-3
+  DigName: edge-app-dig-3
+  GpiName: edge-app-gp-3
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-3
+    AppFile: ../apps/edge-app-3-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec20
+    Workflows:
+    - WfIntentName: edge-wf-intent-3
+      WfDescription: LCM workflow intent-3
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-3
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.618
+        AppMemReq: 9.437184e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-4
+  ProfileName: edge-app-profile-4
+  DigName: edge-app-dig-4
+  GpiName: edge-app-gp-4
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-4
+    AppFile: ../apps/edge-app-4-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec19
+    Workflows:
+    - WfIntentName: edge-wf-intent-4
+      WfDescription: LCM workflow intent-4
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-4
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.825
+        AppMemReq: 6.54311424e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-5
+  ProfileName: edge-app-profile-5
+  DigName: edge-app-dig-5
+  GpiName: edge-app-gp-5
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-5
+    AppFile: ../apps/edge-app-5-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec19
+    Workflows:
+    - WfIntentName: edge-wf-intent-5
+      WfDescription: LCM workflow intent-5
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-5
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.682
+        AppMemReq: 6.61651456e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-6
+  ProfileName: edge-app-profile-6
+  DigName: edge-app-dig-6
+  GpiName: edge-app-gp-6
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-6
+    AppFile: ../apps/edge-app-6-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec5
+    Workflows:
+    - WfIntentName: edge-wf-intent-6
+      WfDescription: LCM workflow intent-6
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-6
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.788
+        AppMemReq: 6.40679936e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-7
+  ProfileName: edge-app-profile-7
+  DigName: edge-app-dig-7
+  GpiName: edge-app-gp-7
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-7
+    AppFile: ../apps/edge-app-7-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec21
+    Workflows:
+    - WfIntentName: edge-wf-intent-7
+      WfDescription: LCM workflow intent-7
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-7
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.559
+        AppMemReq: 9.51058432e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-8
+  ProfileName: edge-app-profile-8
+  DigName: edge-app-dig-8
+  GpiName: edge-app-gp-8
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-8
+    AppFile: ../apps/edge-app-8-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec21
+    Workflows:
+    - WfIntentName: edge-wf-intent-8
+      WfDescription: LCM workflow intent-8
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-8
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.524
+        AppMemReq: 6.93108736e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-9
+  ProfileName: edge-app-profile-9
+  DigName: edge-app-dig-9
+  GpiName: edge-app-gp-9
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-9
+    AppFile: ../apps/edge-app-9-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec1
+    Workflows:
+    - WfIntentName: edge-wf-intent-9
+      WfDescription: LCM workflow intent-9
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-9
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.946
+        AppMemReq: 7.25614592e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-10
+  ProfileName: edge-app-profile-10
+  DigName: edge-app-dig-10
+  GpiName: edge-app-gp-10
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-10
+    AppFile: ../apps/edge-app-10-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec7
+    Workflows:
+    - WfIntentName: edge-wf-intent-10
+      WfDescription: LCM workflow intent-10
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-10
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.996
+        AppMemReq: 8.2313216e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-11
+  ProfileName: edge-app-profile-11
+  DigName: edge-app-dig-11
+  GpiName: edge-app-gp-11
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-11
+    AppFile: ../apps/edge-app-11-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec26
+    Workflows:
+    - WfIntentName: edge-wf-intent-11
+      WfDescription: LCM workflow intent-11
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-11
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.784
+        AppMemReq: 7.15128832e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-12
+  ProfileName: edge-app-profile-12
+  DigName: edge-app-dig-12
+  GpiName: edge-app-gp-12
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-12
+    AppFile: ../apps/edge-app-12-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec3
+    Workflows:
+    - WfIntentName: edge-wf-intent-12
+      WfDescription: LCM workflow intent-12
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-12
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.895
+        AppMemReq: 9.31135488e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-13
+  ProfileName: edge-app-profile-13
+  DigName: edge-app-dig-13
+  GpiName: edge-app-gp-13
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-13
+    AppFile: ../apps/edge-app-13-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec23
+    Workflows:
+    - WfIntentName: edge-wf-intent-13
+      WfDescription: LCM workflow intent-13
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-13
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.69
+        AppMemReq: 6.57457152e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-14
+  ProfileName: edge-app-profile-14
+  DigName: edge-app-dig-14
+  GpiName: edge-app-gp-14
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-14
+    AppFile: ../apps/edge-app-14-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec24
+    Workflows:
+    - WfIntentName: edge-wf-intent-14
+      WfDescription: LCM workflow intent-14
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-14
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.651
+        AppMemReq: 6.64797184e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-15
+  ProfileName: edge-app-profile-15
+  DigName: edge-app-dig-15
+  GpiName: edge-app-gp-15
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-15
+    AppFile: ../apps/edge-app-15-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec3
+    Workflows:
+    - WfIntentName: edge-wf-intent-15
+      WfDescription: LCM workflow intent-15
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-15
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.81
+        AppMemReq: 9.82515712e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-16
+  ProfileName: edge-app-profile-16
+  DigName: edge-app-dig-16
+  GpiName: edge-app-gp-16
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-16
+    AppFile: ../apps/edge-app-16-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec3
+    Workflows:
+    - WfIntentName: edge-wf-intent-16
+      WfDescription: LCM workflow intent-16
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-16
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.858
+        AppMemReq: 7.99014912e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-17
+  ProfileName: edge-app-profile-17
+  DigName: edge-app-dig-17
+  GpiName: edge-app-gp-17
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-17
+    AppFile: ../apps/edge-app-17-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec20
+    Workflows:
+    - WfIntentName: edge-wf-intent-17
+      WfDescription: LCM workflow intent-17
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-17
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.709
+        AppMemReq: 6.96254464e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-18
+  ProfileName: edge-app-profile-18
+  DigName: edge-app-dig-18
+  GpiName: edge-app-gp-18
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-18
+    AppFile: ../apps/edge-app-18-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec14
+    Workflows:
+    - WfIntentName: edge-wf-intent-18
+      WfDescription: LCM workflow intent-18
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-18
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.667
+        AppMemReq: 7.32954624e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-19
+  ProfileName: edge-app-profile-19
+  DigName: edge-app-dig-19
+  GpiName: edge-app-gp-19
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-19
+    AppFile: ../apps/edge-app-19-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec7
+    Workflows:
+    - WfIntentName: edge-wf-intent-19
+      WfDescription: LCM workflow intent-19
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-19
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.871
+        AppMemReq: 6.7108864e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-20
+  ProfileName: edge-app-profile-20
+  DigName: edge-app-dig-20
+  GpiName: edge-app-gp-20
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-20
+    AppFile: ../apps/edge-app-20-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec17
+    Workflows:
+    - WfIntentName: edge-wf-intent-20
+      WfDescription: LCM workflow intent-20
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-20
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.688
+        AppMemReq: 6.78428672e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-21
+  ProfileName: edge-app-profile-21
+  DigName: edge-app-dig-21
+  GpiName: edge-app-gp-21
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-21
+    AppFile: ../apps/edge-app-21-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec15
+    Workflows:
+    - WfIntentName: edge-wf-intent-21
+      WfDescription: LCM workflow intent-21
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-21
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.777
+        AppMemReq: 8.15792128e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-22
+  ProfileName: edge-app-profile-22
+  DigName: edge-app-dig-22
+  GpiName: edge-app-gp-22
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-22
+    AppFile: ../apps/edge-app-22-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec22
+    Workflows:
+    - WfIntentName: edge-wf-intent-22
+      WfDescription: LCM workflow intent-22
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-22
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.603
+        AppMemReq: 9.16455424e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-23
+  ProfileName: edge-app-profile-23
+  DigName: edge-app-dig-23
+  GpiName: edge-app-gp-23
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-23
+    AppFile: ../apps/edge-app-23-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec15
+    Workflows:
+    - WfIntentName: edge-wf-intent-23
+      WfDescription: LCM workflow intent-23
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-23
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.704
+        AppMemReq: 5.96639744e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-24
+  ProfileName: edge-app-profile-24
+  DigName: edge-app-dig-24
+  GpiName: edge-app-gp-24
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-24
+    AppFile: ../apps/edge-app-24-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec14
+    Workflows:
+    - WfIntentName: edge-wf-intent-24
+      WfDescription: LCM workflow intent-24
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-24
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.707
+        AppMemReq: 7.340032e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-25
+  ProfileName: edge-app-profile-25
+  DigName: edge-app-dig-25
+  GpiName: edge-app-gp-25
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-25
+    AppFile: ../apps/edge-app-25-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec7
+    Workflows:
+    - WfIntentName: edge-wf-intent-25
+      WfDescription: LCM workflow intent-25
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-25
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.903
+        AppMemReq: 9.8566144e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-26
+  ProfileName: edge-app-profile-26
+  DigName: edge-app-dig-26
+  GpiName: edge-app-gp-26
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-26
+    AppFile: ../apps/edge-app-26-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec22
+    Workflows:
+    - WfIntentName: edge-wf-intent-26
+      WfDescription: LCM workflow intent-26
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-26
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.716
+        AppMemReq: 7.50780416e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-27
+  ProfileName: edge-app-profile-27
+  DigName: edge-app-dig-27
+  GpiName: edge-app-gp-27
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-27
+    AppFile: ../apps/edge-app-27-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec25
+    Workflows:
+    - WfIntentName: edge-wf-intent-27
+      WfDescription: LCM workflow intent-27
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-27
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.628
+        AppMemReq: 6.77380096e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-28
+  ProfileName: edge-app-profile-28
+  DigName: edge-app-dig-28
+  GpiName: edge-app-gp-28
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-28
+    AppFile: ../apps/edge-app-28-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec7
+    Workflows:
+    - WfIntentName: edge-wf-intent-28
+      WfDescription: LCM workflow intent-28
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-28
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.684
+        AppMemReq: 6.72137216e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-29
+  ProfileName: edge-app-profile-29
+  DigName: edge-app-dig-29
+  GpiName: edge-app-gp-29
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-29
+    AppFile: ../apps/edge-app-29-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec13
+    Workflows:
+    - WfIntentName: edge-wf-intent-29
+      WfDescription: LCM workflow intent-29
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-29
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.692
+        AppMemReq: 7.9691776e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-30
+  ProfileName: edge-app-profile-30
+  DigName: edge-app-dig-30
+  GpiName: edge-app-gp-30
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-30
+    AppFile: ../apps/edge-app-30-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec4
+    Workflows:
+    - WfIntentName: edge-wf-intent-30
+      WfDescription: LCM workflow intent-30
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-30
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.857
+        AppMemReq: 9.63641344e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-31
+  ProfileName: edge-app-profile-31
+  DigName: edge-app-dig-31
+  GpiName: edge-app-gp-31
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-31
+    AppFile: ../apps/edge-app-31-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec3
+    Workflows:
+    - WfIntentName: edge-wf-intent-31
+      WfDescription: LCM workflow intent-31
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-31
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.756
+        AppMemReq: 9.14358272e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-32
+  ProfileName: edge-app-profile-32
+  DigName: edge-app-dig-32
+  GpiName: edge-app-gp-32
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-32
+    AppFile: ../apps/edge-app-32-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec18
+    Workflows:
+    - WfIntentName: edge-wf-intent-32
+      WfDescription: LCM workflow intent-32
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-32
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.611
+        AppMemReq: 7.5497472e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-33
+  ProfileName: edge-app-profile-33
+  DigName: edge-app-dig-33
+  GpiName: edge-app-gp-33
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-33
+    AppFile: ../apps/edge-app-33-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec1
+    Workflows:
+    - WfIntentName: edge-wf-intent-33
+      WfDescription: LCM workflow intent-33
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-33
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.875
+        AppMemReq: 8.71366656e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-34
+  ProfileName: edge-app-profile-34
+  DigName: edge-app-dig-34
+  GpiName: edge-app-gp-34
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-34
+    AppFile: ../apps/edge-app-34-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec6
+    Workflows:
+    - WfIntentName: edge-wf-intent-34
+      WfDescription: LCM workflow intent-34
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-34
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.856
+        AppMemReq: 9.74127104e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-35
+  ProfileName: edge-app-profile-35
+  DigName: edge-app-dig-35
+  GpiName: edge-app-gp-35
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-35
+    AppFile: ../apps/edge-app-35-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec11
+    Workflows:
+    - WfIntentName: edge-wf-intent-35
+      WfDescription: LCM workflow intent-35
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-35
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.569
+        AppMemReq: 6.80525824e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-36
+  ProfileName: edge-app-profile-36
+  DigName: edge-app-dig-36
+  GpiName: edge-app-gp-36
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-36
+    AppFile: ../apps/edge-app-36-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec5
+    Workflows:
+    - WfIntentName: edge-wf-intent-36
+      WfDescription: LCM workflow intent-36
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-36
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.897
+        AppMemReq: 5.28482304e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-37
+  ProfileName: edge-app-profile-37
+  DigName: edge-app-dig-37
+  GpiName: edge-app-gp-37
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-37
+    AppFile: ../apps/edge-app-37-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec23
+    Workflows:
+    - WfIntentName: edge-wf-intent-37
+      WfDescription: LCM workflow intent-37
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-37
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.598
+        AppMemReq: 9.81467136e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-38
+  ProfileName: edge-app-profile-38
+  DigName: edge-app-dig-38
+  GpiName: edge-app-gp-38
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-38
+    AppFile: ../apps/edge-app-38-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec16
+    Workflows:
+    - WfIntentName: edge-wf-intent-38
+      WfDescription: LCM workflow intent-38
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-38
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.534
+        AppMemReq: 5.73571072e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-39
+  ProfileName: edge-app-profile-39
+  DigName: edge-app-dig-39
+  GpiName: edge-app-gp-39
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-39
+    AppFile: ../apps/edge-app-39-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec7
+    Workflows:
+    - WfIntentName: edge-wf-intent-39
+      WfDescription: LCM workflow intent-39
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-39
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.852
+        AppMemReq: 7.36100352e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-40
+  ProfileName: edge-app-profile-40
+  DigName: edge-app-dig-40
+  GpiName: edge-app-gp-40
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-40
+    AppFile: ../apps/edge-app-40-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec16
+    Workflows:
+    - WfIntentName: edge-wf-intent-40
+      WfDescription: LCM workflow intent-40
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-40
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.882
+        AppMemReq: 5.99785472e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-41
+  ProfileName: edge-app-profile-41
+  DigName: edge-app-dig-41
+  GpiName: edge-app-gp-41
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-41
+    AppFile: ../apps/edge-app-41-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec12
+    Workflows:
+    - WfIntentName: edge-wf-intent-41
+      WfDescription: LCM workflow intent-41
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-41
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.87
+        AppMemReq: 7.92723456e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-42
+  ProfileName: edge-app-profile-42
+  DigName: edge-app-dig-42
+  GpiName: edge-app-gp-42
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-42
+    AppFile: ../apps/edge-app-42-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec4
+    Workflows:
+    - WfIntentName: edge-wf-intent-42
+      WfDescription: LCM workflow intent-42
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-42
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.967
+        AppMemReq: 8.29423616e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-43
+  ProfileName: edge-app-profile-43
+  DigName: edge-app-dig-43
+  GpiName: edge-app-gp-43
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-43
+    AppFile: ../apps/edge-app-43-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec5
+    Workflows:
+    - WfIntentName: edge-wf-intent-43
+      WfDescription: LCM workflow intent-43
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-43
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.588
+        AppMemReq: 7.11983104e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-44
+  ProfileName: edge-app-profile-44
+  DigName: edge-app-dig-44
+  GpiName: edge-app-gp-44
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-44
+    AppFile: ../apps/edge-app-44-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec24
+    Workflows:
+    - WfIntentName: edge-wf-intent-44
+      WfDescription: LCM workflow intent-44
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-44
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.6
+        AppMemReq: 7.30857472e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-45
+  ProfileName: edge-app-profile-45
+  DigName: edge-app-dig-45
+  GpiName: edge-app-gp-45
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-45
+    AppFile: ../apps/edge-app-45-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec3
+    Workflows:
+    - WfIntentName: edge-wf-intent-45
+      WfDescription: LCM workflow intent-45
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-45
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.786
+        AppMemReq: 1.019215872e+09
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-46
+  ProfileName: edge-app-profile-46
+  DigName: edge-app-dig-46
+  GpiName: edge-app-gp-46
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-46
+    AppFile: ../apps/edge-app-46-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec6
+    Workflows:
+    - WfIntentName: edge-wf-intent-46
+      WfDescription: LCM workflow intent-46
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-46
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.609
+        AppMemReq: 6.8681728e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-47
+  ProfileName: edge-app-profile-47
+  DigName: edge-app-dig-47
+  GpiName: edge-app-gp-47
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-47
+    AppFile: ../apps/edge-app-47-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec18
+    Workflows:
+    - WfIntentName: edge-wf-intent-47
+      WfDescription: LCM workflow intent-47
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-47
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.859
+        AppMemReq: 5.83008256e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-48
+  ProfileName: edge-app-profile-48
+  DigName: edge-app-dig-48
+  GpiName: edge-app-gp-48
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-48
+    AppFile: ../apps/edge-app-48-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec4
+    Workflows:
+    - WfIntentName: edge-wf-intent-48
+      WfDescription: LCM workflow intent-48
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-48
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 30
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.503
+        AppMemReq: 7.06740224e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-49
+  ProfileName: edge-app-profile-49
+  DigName: edge-app-dig-49
+  GpiName: edge-app-gp-49
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-49
+    AppFile: ../apps/edge-app-49-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec6
+    Workflows:
+    - WfIntentName: edge-wf-intent-49
+      WfDescription: LCM workflow intent-49
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-49
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 15
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.555
+        AppMemReq: 1.023410176e+09
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+- CaName: edge-app-ca-50
+  ProfileName: edge-app-profile-50
+  DigName: edge-app-dig-50
+  GpiName: edge-app-gp-50
+  tacIntent: tac-intent
+  Apps:
+  - Name: edge-app-50
+    AppFile: ../apps/edge-app-50-0.1.0.tgz
+    ProfileFile: ../apps/edge-app-profile.tar.gz
+    PlacementClusters:
+    - Provider: edge-provider
+      Clusters:
+      - mec11
+    Workflows:
+    - WfIntentName: edge-wf-intent-50
+      WfDescription: LCM workflow intent-50
+      WfType: lcm
+      HookType: post-install
+      WfClientEndpointName: 10.254.185.44
+      WfClientEndpointPort: 32522
+      WfClientName: lcm_workflowclient
+      WfID: edge-wf-50
+      WfTaskQueue: LCM_TASK_Q
+      WfEmcoClm: http://10.254.185.42:30461
+      WfEmcoOrch: http://10.254.185.42:30415
+      WfEmcoOrchStatus: 10.254.185.42:30416
+      WfEmcoMgr: http://10.254.185.42:30495
+      Params:
+        LatencyMax: 10
+        CpuUtilMax: 80
+        MemUtilMax: 80
+        LtcWeight: 0.5
+        ResWeight: 0.5
+        CpuWeight: 0.5
+        MemWeight: 0.5
+        AppCpuReq: 0.819
+        AppMemReq: 8.2313216e+08
+        InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
+        PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+        RelocateClientName: 10.254.185.44
+        RelocateClientPort: 32523
+        RelocateWfName: relocate_workflowclient
+Providers:
+- Name: edge-provider
+  Clusters:
+  - Name: mec1
+    Label: mec1-label
+    Reference: mec1-ref
+    KubeConfig: ../cfg/mec1.config
+  - Name: mec3
+    Label: mec3-label
+    Reference: mec3-ref
+    KubeConfig: ../cfg/mec3.config
+  - Name: mec4
+    Label: mec4-label
+    Reference: mec4-ref
+    KubeConfig: ../cfg/mec4.config
+  - Name: mec5
+    Label: mec5-label
+    Reference: mec5-ref
+    KubeConfig: ../cfg/mec5.config
+  - Name: mec6
+    Label: mec6-label
+    Reference: mec6-ref
+    KubeConfig: ../cfg/mec6.config
+  - Name: mec7
+    Label: mec7-label
+    Reference: mec7-ref
+    KubeConfig: ../cfg/mec7.config
+  - Name: mec11
+    Label: mec11-label
+    Reference: mec11-ref
+    KubeConfig: ../cfg/mec11.config
+  - Name: mec12
+    Label: mec12-label
+    Reference: mec12-ref
+    KubeConfig: ../cfg/mec12.config
+  - Name: mec13
+    Label: mec13-label
+    Reference: mec13-ref
+    KubeConfig: ../cfg/mec13.config
+  - Name: mec14
+    Label: mec14-label
+    Reference: mec14-ref
+    KubeConfig: ../cfg/mec14.config
+  - Name: mec15
+    Label: mec15-label
+    Reference: mec15-ref
+    KubeConfig: ../cfg/mec15.config
+  - Name: mec16
+    Label: mec16-label
+    Reference: mec16-ref
+    KubeConfig: ../cfg/mec16.config
+  - Name: mec17
+    Label: mec17-label
+    Reference: mec17-ref
+    KubeConfig: ../cfg/mec17.config
+  - Name: mec18
+    Label: mec18-label
+    Reference: mec18-ref
+    KubeConfig: ../cfg/mec18.config
+  - Name: mec19
+    Label: mec19-label
+    Reference: mec19-ref
+    KubeConfig: ../cfg/mec19.config
+  - Name: mec20
+    Label: mec20-label
+    Reference: mec20-ref
+    KubeConfig: ../cfg/mec20.config
+  - Name: mec21
+    Label: mec21-label
+    Reference: mec21-ref
+    KubeConfig: ../cfg/mec21.config
+  - Name: mec22
+    Label: mec22-label
+    Reference: mec22-ref
+    KubeConfig: ../cfg/mec22.config
+  - Name: mec23
+    Label: mec23-label
+    Reference: mec23-ref
+    KubeConfig: ../cfg/mec23.config
+  - Name: mec24
+    Label: mec24-label
+    Reference: mec24-ref
+    KubeConfig: ../cfg/mec24.config
+  - Name: mec25
+    Label: mec25-label
+    Reference: mec25-ref
+    KubeConfig: ../cfg/mec25.config
+  - Name: mec26
+    Label: mec26-label
+    Reference: mec26-ref
+    KubeConfig: ../cfg/mec26.config
