@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 )
 
 //prereqquesties types and function
@@ -242,6 +243,41 @@ func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Reques
 
 	for i := range h.graphClient.MecHosts {
 		response = append(response, h.graphClient.MecHosts[i].Identity)
+	}
+	json.NewEncoder(w).Encode(response)
+}
+
+// Handler for EXPERIMENTS purposes
+func (h *apiHandler) getAllMecHostsWithMetricsHandler(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	response := make([]string, 0)
+	realMecs := []string{"mec1", "mec3", "mec4", "mec5", "mec6", "mec7", "mec11", "mec12", "mec13", "mec14", "mec15", "mec16", "mec17", "mec18",
+		"mec19", "mec20", "mec21", "mec22", "mec23", "mec24", "mec25", "mec26"}
+	for i := range h.graphClient.MecHosts {
+		mec := *h.graphClient.MecHosts[i]
+
+		mecExists := false
+		for _, mh := range realMecs {
+			if mec.Identity.Cluster == mh {
+				mecExists = true
+				break
+			}
+		}
+		if !mecExists {
+			continue
+		}
+
+		mecDescription := "null,null,"
+		mecDescription += mec.Identity.Cluster + ","
+		mecDescription += strconv.FormatFloat(mec.CpuResources.Used, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.CpuResources.Allocatable, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.CpuResources.Utilization, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.MemoryResources.Used, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.MemoryResources.Allocatable, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.MemoryResources.Utilization, 'f', 1, 64)
+
+		response = append(response, mecDescription)
 	}
 	json.NewEncoder(w).Encode(response)
 }

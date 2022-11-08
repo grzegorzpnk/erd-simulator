@@ -128,11 +128,11 @@ func (g *Graph) NetworkMetricsUpdate(fetchLatencyFromObserver bool) {
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
 
 	if !fetchLatencyFromObserver {
-		rand.Seed(4)
+		rand.Seed(42)
 		//update cell-mecs latencies - this is kept by MEC hosts
 		for i, v := range g.MecHosts {
 			for k, _ := range v.SupportingCells {
-				latency := 8 + 2*rand.Float64()
+				latency := 4 + 2*rand.Float64()
 				g.MecHosts[i].SupportingCells[k].Latency = latency
 			}
 		}
@@ -185,7 +185,7 @@ func (g *Graph) NetworkMetricsUpdate(fetchLatencyFromObserver bool) {
 }
 
 func generateLatency(sNode, tNode interface{}) (float64, error) {
-	rand.Seed(4)
+	rand.Seed(42)
 	var latency float64
 
 	// copied from observer. Ofc inhere it's impossible to provider cell-id, but
@@ -228,16 +228,16 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					} else {
 						if (source.Identity.Cluster == "mec17" || source.Identity.Cluster == "mec18") && (target.Identity.Cluster == "mec19" || target.Identity.Cluster == "mec20") ||
 							(target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18") && (source.Identity.Cluster == "mec19" || source.Identity.Cluster == "mec20") {
-							latency = 2.8
+							latency = 5.0 // 2.8
 						} else {
-							latency = 4.0
+							latency = 5.0 // 4.0
 						}
 					}
 				} else if source.Identity.Location.Level == 1 {
 					if source.Identity.Location.Zone == target.Identity.Location.Zone {
 						latency = 1.0 // Latency between clusters at N+1-level in the same Zone
 					} else {
-						latency = 2.8 // TODO: is it ok? Not included on the model
+						latency = 5.0 // 2.0
 					}
 				} else if source.Identity.Location.Level == 2 {
 					if source.Identity.Location.Region == target.Identity.Location.Region {
@@ -249,7 +249,7 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 			case 1:
 				if source.Identity.Location.Level == 2 {
 					if target.Identity.Cluster == "mec6" || target.Identity.Cluster == "mec7" {
-						latency = 0.2 // TODO: for now it's 0.2 but consider random value <0, 0.2>
+						latency = 3
 					} else {
 						latency = 2.8
 					}
@@ -263,12 +263,12 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					} else {
 						latency = 4
 					}
-					latency += 4 // DPI time for level N+1
+					latency += 6 // DPI time for level N+1
 				}
 			case -1:
 				if source.Identity.Location.Level == 1 {
 					if source.Identity.Cluster == "mec6" || source.Identity.Cluster == "mec7" {
-						latency = 0.2 // TODO: for now it's 0.2 but consider random value <0, 0.2>
+						latency = 3
 					} else {
 						latency = 4
 					}
@@ -282,7 +282,7 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					} else {
 						latency = 4
 					}
-					latency += 4 // DPI time for level N+1
+					latency += 6 // DPI time for level N+1
 				}
 			case 2, -2:
 				// unsupported, no direct links
