@@ -48,14 +48,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.672
               AppMemReq: 630194176
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -90,14 +90,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.713
               AppMemReq: 625999872
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -132,14 +132,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.618
               AppMemReq: 943718400
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -174,14 +174,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.825
               AppMemReq: 654311424
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -216,14 +216,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.682
               AppMemReq: 661651456
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -258,14 +258,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.788
               AppMemReq: 640679936
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -300,14 +300,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.559
               AppMemReq: 951058432
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -342,14 +342,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.524
               AppMemReq: 693108736
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -384,14 +384,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.946
               AppMemReq: 725614592
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -426,14 +426,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.996
               AppMemReq: 823132160
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -468,14 +468,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.784
               AppMemReq: 715128832
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -510,14 +510,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.895
               AppMemReq: 931135488
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -552,14 +552,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.690
               AppMemReq: 657457152
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -594,14 +594,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.651
               AppMemReq: 664797184
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -636,14 +636,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.810
               AppMemReq: 982515712
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -678,14 +678,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.858
               AppMemReq: 799014912
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -720,14 +720,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.709
               AppMemReq: 696254464
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -762,14 +762,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.667
               AppMemReq: 732954624
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -804,14 +804,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.871
               AppMemReq: 671088640
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -846,14 +846,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.688
               AppMemReq: 678428672
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -888,14 +888,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.777
               AppMemReq: 815792128
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -930,14 +930,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.603
               AppMemReq: 916455424
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -972,14 +972,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.704
               AppMemReq: 596639744
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1014,14 +1014,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.707
               AppMemReq: 734003200
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1056,14 +1056,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.903
               AppMemReq: 985661440
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1098,14 +1098,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.716
               AppMemReq: 750780416
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1140,14 +1140,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.628
               AppMemReq: 677380096
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1182,14 +1182,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.684
               AppMemReq: 672137216
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1224,14 +1224,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.692
               AppMemReq: 796917760
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1266,14 +1266,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.857
               AppMemReq: 963641344
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1308,14 +1308,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.756
               AppMemReq: 914358272
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1350,14 +1350,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.611
               AppMemReq: 754974720
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1392,14 +1392,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.875
               AppMemReq: 871366656
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1434,14 +1434,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.856
               AppMemReq: 974127104
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1476,14 +1476,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.569
               AppMemReq: 680525824
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1518,14 +1518,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.897
               AppMemReq: 528482304
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1560,14 +1560,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.598
               AppMemReq: 981467136
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1602,14 +1602,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.534
               AppMemReq: 573571072
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1644,14 +1644,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.852
               AppMemReq: 736100352
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1686,14 +1686,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.882
               AppMemReq: 599785472
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1728,14 +1728,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.870
               AppMemReq: 792723456
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1770,14 +1770,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.967
               AppMemReq: 829423616
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1812,14 +1812,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.588
               AppMemReq: 711983104
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1854,14 +1854,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.600
               AppMemReq: 730857472
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1896,14 +1896,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.786
               AppMemReq: 1019215872
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1938,14 +1938,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.609
               AppMemReq: 686817280
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1980,14 +1980,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.859
               AppMemReq: 583008256
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2022,14 +2022,14 @@ Deployments:
               LatencyMax: 30
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.503
               AppMemReq: 706740224
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2064,14 +2064,14 @@ Deployments:
               LatencyMax: 15
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.555
               AppMemReq: 1023410176
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2106,14 +2106,14 @@ Deployments:
               LatencyMax: 10
               CpuUtilMax: 80
               MemUtilMax: 80
-              LtcWeight: 0.5
-              ResWeight: 0.5
+              LtcWeight: 0.0
+              ResWeight: 1.0
               CpuWeight: 0.5
               MemWeight: 0.5
               AppCpuReq: 0.819
               AppMemReq: 823132160
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient

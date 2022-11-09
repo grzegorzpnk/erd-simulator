@@ -15,7 +15,7 @@ notification_order
 /pkg/lcm-workflow/.idea/
 /pkg/lcm-workflow/deployments/helm/*.tgz
 /pkg/lcm-workflow/samples/lcm-example/apps/*.tgz
-/pkg/lcm-workflow/samples/lcm-example/emco-manifests-v2/values.yaml
+/pkg/lcm-workflow/samples/lcm-example/emco-manifests-v2/values-v3.0.8.yaml
 /pkg/lcm-workflow/samples/lcm-example/emco-manifests-v2/values-no-clusters.yaml
 
 /pkg/nmt/bin/

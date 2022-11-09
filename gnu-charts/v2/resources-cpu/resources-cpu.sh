@@ -25,9 +25,9 @@ set bmargin 6
 set ylabel "Edge Server CPU Utilization [%]" font 'Helvetica,20'
 
 plot newhistogram "M=1", \
-       'iteration1.dat' using 2:xticlabels(1) title "cg" linecolor rgb "black", \
-                                 '' using 3:xticlabels(1) title "v2x" linecolor rgb "dark-gray", \
-                                 '' using 4:xticlabels(1) title "uav" linecolor rgb "light-gray", \
+       'iteration1.dat' using 2:xticlabels(1) title "local-zone" linecolor rgb "black", \
+                                 '' using 3:xticlabels(1) title "zone" linecolor rgb "dark-gray", \
+                                 '' using 4:xticlabels(1) title "international" linecolor rgb "light-gray", \
      newhistogram "M=2", \
        'iteration2.dat' using 2:xticlabels(1) title "" linecolor rgb "black", \
                                  '' using 3:xticlabels(1) title "" linecolor rgb "dark-gray", \

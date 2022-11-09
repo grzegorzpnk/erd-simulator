@@ -55,7 +55,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_1
               AppMemReq: $APP_MEM_REQ_1
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -97,7 +97,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_2
               AppMemReq: $APP_MEM_REQ_2
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -139,7 +139,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_3
               AppMemReq: $APP_MEM_REQ_3
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -181,7 +181,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_4
               AppMemReq: $APP_MEM_REQ_4
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -223,7 +223,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_5
               AppMemReq: $APP_MEM_REQ_5
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -265,7 +265,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_6
               AppMemReq: $APP_MEM_REQ_6
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -307,7 +307,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_7
               AppMemReq: $APP_MEM_REQ_7
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -349,7 +349,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_8
               AppMemReq: $APP_MEM_REQ_8
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -391,7 +391,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_9
               AppMemReq: $APP_MEM_REQ_9
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -433,7 +433,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_10
               AppMemReq: $APP_MEM_REQ_10
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -475,7 +475,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_11
               AppMemReq: $APP_MEM_REQ_11
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -517,7 +517,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_12
               AppMemReq: $APP_MEM_REQ_12
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -559,7 +559,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_13
               AppMemReq: $APP_MEM_REQ_13
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -601,7 +601,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_14
               AppMemReq: $APP_MEM_REQ_14
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -643,7 +643,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_15
               AppMemReq: $APP_MEM_REQ_15
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -685,7 +685,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_16
               AppMemReq: $APP_MEM_REQ_16
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -727,7 +727,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_17
               AppMemReq: $APP_MEM_REQ_17
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -769,7 +769,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_18
               AppMemReq: $APP_MEM_REQ_18
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -811,7 +811,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_19
               AppMemReq: $APP_MEM_REQ_19
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -853,7 +853,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_20
               AppMemReq: $APP_MEM_REQ_20
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -895,7 +895,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_21
               AppMemReq: $APP_MEM_REQ_21
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -937,7 +937,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_22
               AppMemReq: $APP_MEM_REQ_22
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -979,7 +979,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_23
               AppMemReq: $APP_MEM_REQ_23
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1021,7 +1021,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_24
               AppMemReq: $APP_MEM_REQ_24
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1063,7 +1063,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_25
               AppMemReq: $APP_MEM_REQ_25
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1105,7 +1105,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_26
               AppMemReq: $APP_MEM_REQ_26
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1147,7 +1147,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_27
               AppMemReq: $APP_MEM_REQ_27
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1189,7 +1189,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_28
               AppMemReq: $APP_MEM_REQ_28
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1231,7 +1231,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_29
               AppMemReq: $APP_MEM_REQ_29
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1273,7 +1273,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_30
               AppMemReq: $APP_MEM_REQ_30
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1315,7 +1315,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_31
               AppMemReq: $APP_MEM_REQ_31
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1357,7 +1357,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_32
               AppMemReq: $APP_MEM_REQ_32
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1399,7 +1399,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_33
               AppMemReq: $APP_MEM_REQ_33
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1441,7 +1441,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_34
               AppMemReq: $APP_MEM_REQ_34
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1483,7 +1483,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_35
               AppMemReq: $APP_MEM_REQ_35
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1525,7 +1525,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_36
               AppMemReq: $APP_MEM_REQ_36
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1567,7 +1567,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_37
               AppMemReq: $APP_MEM_REQ_37
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1609,7 +1609,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_38
               AppMemReq: $APP_MEM_REQ_38
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1651,7 +1651,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_39
               AppMemReq: $APP_MEM_REQ_39
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1693,7 +1693,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_40
               AppMemReq: $APP_MEM_REQ_40
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1735,7 +1735,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_41
               AppMemReq: $APP_MEM_REQ_41
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1777,7 +1777,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_42
               AppMemReq: $APP_MEM_REQ_42
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1819,7 +1819,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_43
               AppMemReq: $APP_MEM_REQ_43
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1861,7 +1861,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_44
               AppMemReq: $APP_MEM_REQ_44
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1903,7 +1903,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_45
               AppMemReq: $APP_MEM_REQ_45
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1945,7 +1945,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_46
               AppMemReq: $APP_MEM_REQ_46
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -1987,7 +1987,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_47
               AppMemReq: $APP_MEM_REQ_47
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2029,7 +2029,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_48
               AppMemReq: $APP_MEM_REQ_48
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2071,7 +2071,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_49
               AppMemReq: $APP_MEM_REQ_49
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2113,7 +2113,7 @@ Deployments:
               AppCpuReq: $APP_CPU_REQ_50
               AppMemReq: $APP_MEM_REQ_50
               InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
               RelocateClientName: 10.254.185.44
               RelocateClientPort: 32523
               RelocateWfName: relocate_workflowclient
@@ -2155,7 +2155,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_51
 #              AppMemReq: $APP_MEM_REQ_51
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2197,7 +2197,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_52
 #              AppMemReq: $APP_MEM_REQ_52
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2239,7 +2239,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_53
 #              AppMemReq: $APP_MEM_REQ_53
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2281,7 +2281,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_54
 #              AppMemReq: $APP_MEM_REQ_54
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2323,7 +2323,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_55
 #              AppMemReq: $APP_MEM_REQ_55
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2365,7 +2365,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_56
 #              AppMemReq: $APP_MEM_REQ_56
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2407,7 +2407,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_57
 #              AppMemReq: $APP_MEM_REQ_57
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2449,7 +2449,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_58
 #              AppMemReq: $APP_MEM_REQ_58
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2491,7 +2491,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_59
 #              AppMemReq: $APP_MEM_REQ_59
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2533,7 +2533,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_60
 #              AppMemReq: $APP_MEM_REQ_60
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2575,7 +2575,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_61
 #              AppMemReq: $APP_MEM_REQ_61
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2617,7 +2617,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_62
 #              AppMemReq: $APP_MEM_REQ_62
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2659,7 +2659,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_63
 #              AppMemReq: $APP_MEM_REQ_63
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2701,7 +2701,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_64
 #              AppMemReq: $APP_MEM_REQ_64
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2743,7 +2743,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_65
 #              AppMemReq: $APP_MEM_REQ_65
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2785,7 +2785,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_66
 #              AppMemReq: $APP_MEM_REQ_66
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2827,7 +2827,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_67
 #              AppMemReq: $APP_MEM_REQ_67
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2869,7 +2869,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_68
 #              AppMemReq: $APP_MEM_REQ_68
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2911,7 +2911,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_69
 #              AppMemReq: $APP_MEM_REQ_69
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2953,7 +2953,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_70
 #              AppMemReq: $APP_MEM_REQ_70
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -2995,7 +2995,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_71
 #              AppMemReq: $APP_MEM_REQ_71
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3037,7 +3037,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_72
 #              AppMemReq: $APP_MEM_REQ_72
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3079,7 +3079,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_73
 #              AppMemReq: $APP_MEM_REQ_73
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3121,7 +3121,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_74
 #              AppMemReq: $APP_MEM_REQ_74
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3163,7 +3163,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_75
 #              AppMemReq: $APP_MEM_REQ_75
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3205,7 +3205,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_76
 #              AppMemReq: $APP_MEM_REQ_76
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3247,7 +3247,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_77
 #              AppMemReq: $APP_MEM_REQ_77
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3289,7 +3289,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_78
 #              AppMemReq: $APP_MEM_REQ_78
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3331,7 +3331,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_79
 #              AppMemReq: $APP_MEM_REQ_79
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3373,7 +3373,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_80
 #              AppMemReq: $APP_MEM_REQ_80
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3415,7 +3415,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_81
 #              AppMemReq: $APP_MEM_REQ_81
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3457,7 +3457,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_82
 #              AppMemReq: $APP_MEM_REQ_82
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3499,7 +3499,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_83
 #              AppMemReq: $APP_MEM_REQ_83
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3541,7 +3541,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_84
 #              AppMemReq: $APP_MEM_REQ_84
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3583,7 +3583,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_85
 #              AppMemReq: $APP_MEM_REQ_85
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3625,7 +3625,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_86
 #              AppMemReq: $APP_MEM_REQ_86
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3667,7 +3667,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_87
 #              AppMemReq: $APP_MEM_REQ_87
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3709,7 +3709,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_88
 #              AppMemReq: $APP_MEM_REQ_88
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3751,7 +3751,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_89
 #              AppMemReq: $APP_MEM_REQ_89
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3793,7 +3793,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_90
 #              AppMemReq: $APP_MEM_REQ_90
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3835,7 +3835,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_91
 #              AppMemReq: $APP_MEM_REQ_91
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3877,7 +3877,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_92
 #              AppMemReq: $APP_MEM_REQ_92
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3919,7 +3919,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_93
 #              AppMemReq: $APP_MEM_REQ_93
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -3961,7 +3961,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_94
 #              AppMemReq: $APP_MEM_REQ_94
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -4003,7 +4003,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_95
 #              AppMemReq: $APP_MEM_REQ_95
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -4045,7 +4045,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_96
 #              AppMemReq: $APP_MEM_REQ_96
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -4087,7 +4087,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_97
 #              AppMemReq: $APP_MEM_REQ_97
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -4129,7 +4129,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_98
 #              AppMemReq: $APP_MEM_REQ_98
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -4171,7 +4171,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_99
 #              AppMemReq: $APP_MEM_REQ_99
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
@@ -4213,7 +4213,7 @@ Deployments:
 #              AppCpuReq: $APP_CPU_REQ_100
 #              AppMemReq: $APP_MEM_REQ_100
 #              InnotUrl: http://10.254.185.44:32137/v1/intermediate-notifier/subscribe
-#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/heuristic
+#              PlcControllerUrl: http://10.254.185.44:32147/v2/erc/smart-placement-intents/optimal-mec/optimal
 #              RelocateClientName: 10.254.185.44
 #              RelocateClientPort: 32523
 #              RelocateWfName: relocate_workflowclient
