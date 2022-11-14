@@ -1,9 +1,9 @@
 #	cg	v2x	uav
-O-lb    0	0	0
-O-lat   4	0	0
-O-hyb   4	0	0
-H-hyb-if    0	0	0
-H-hyb   4	0	0
+O-LoadBalancing    0	0	0
+O-Latency   4	0	0
+O-Hybrid   4	0	0
+EAR-Heuristic    0	0	0
+H-Hybrid   4	0	0
 
 
 

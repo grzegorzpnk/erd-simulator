@@ -1,7 +1,0 @@
-summary: 
-	latency <10, 30> [ms]	
-	apps 50 -> [16: 30ms], [17, 15ms], [17, 10ms]
-	maxUtilization 80 [%]
-	type: optimal
-	objective: lb
-

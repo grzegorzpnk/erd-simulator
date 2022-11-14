@@ -176,7 +176,7 @@
    transform="matrix(0,1,1,0,33.1852,2.2)"><tspan
      id="tspan102"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001">O-lb</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001">O-LoadBalancing</tspan></text>
 </g><path
          id="path106"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -188,7 +188,7 @@
    transform="matrix(0,1,1,0,44.1852,2.2)"><tspan
      id="tspan110"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-lat</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-Latency</tspan></text>
 </g><path
          id="path114"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -200,7 +200,7 @@
    transform="matrix(0,1,1,0,55.1352,2.2)"><tspan
      id="tspan118"
      y="0"
-     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-hyb</tspan></text>
+     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-Hybrid</tspan></text>
 </g><path
          id="path122"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -212,7 +212,7 @@
    transform="matrix(0,1,1,0,66.1352,2.2)"><tspan
      id="tspan126"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">H-hyb-if</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">EAR-Heuristic</tspan></text>
 </g><path
          id="path130"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -224,7 +224,7 @@
    transform="matrix(0,1,1,0,77.1352,2.2)"><tspan
      id="tspan134"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105">H-hyb</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105">H-Hybrid</tspan></text>
 </g><path
          id="path138"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -236,7 +236,7 @@
    transform="matrix(0,1,1,0,99.1352,2.2)"><tspan
      id="tspan142"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001">O-lb</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001">O-LoadBalancing</tspan></text>
 </g><path
          id="path146"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -248,7 +248,7 @@
    transform="matrix(0,1,1,0,110.085,2.2)"><tspan
      id="tspan150"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-lat</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-Latency</tspan></text>
 </g><path
          id="path154"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -260,7 +260,7 @@
    transform="matrix(0,1,1,0,121.085,2.2)"><tspan
      id="tspan158"
      y="0"
-     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-hyb</tspan></text>
+     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-Hybrid</tspan></text>
 </g><path
          id="path162"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -272,7 +272,7 @@
    transform="matrix(0,1,1,0,132.085,2.2)"><tspan
      id="tspan166"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">H-hyb-if</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">EAR-Heuristic</tspan></text>
 </g><path
          id="path170"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -284,7 +284,7 @@
    transform="matrix(0,1,1,0,143.085,2.2)"><tspan
      id="tspan174"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105">H-hyb</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105">H-Hybrid</tspan></text>
 </g><path
          id="path178"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -296,7 +296,7 @@
    transform="matrix(0,1,1,0,165.035,2.2)"><tspan
      id="tspan182"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001">O-lb</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001">O-LoadBalancing</tspan></text>
 </g><path
          id="path186"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -308,7 +308,7 @@
    transform="matrix(0,1,1,0,176.035,2.2)"><tspan
      id="tspan190"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-lat</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-Latency</tspan></text>
 </g><path
          id="path194"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -320,7 +320,7 @@
    transform="matrix(0,1,1,0,187.035,2.2)"><tspan
      id="tspan198"
      y="0"
-     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-hyb</tspan></text>
+     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-Hybrid</tspan></text>
 </g><path
          id="path202"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -332,7 +332,7 @@
    transform="matrix(0,1,1,0,198.035,2.2)"><tspan
      id="tspan206"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">H-hyb-if</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">EAR-Heuristic</tspan></text>
 </g><path
          id="path210"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -344,7 +344,7 @@
    transform="matrix(0,1,1,0,209.035,2.2)"><tspan
      id="tspan214"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105">H-hyb</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105">H-Hybrid</tspan></text>
 </g><path
          id="path218"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -356,7 +356,7 @@
    transform="matrix(0,1,1,0,230.985,2.2)"><tspan
      id="tspan222"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001">O-lb</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001">O-LoadBalancing</tspan></text>
 </g><path
          id="path226"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -368,7 +368,7 @@
    transform="matrix(0,1,1,0,241.985,2.2)"><tspan
      id="tspan230"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-lat</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-Latency</tspan></text>
 </g><path
          id="path234"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -380,7 +380,7 @@
    transform="matrix(0,1,1,0,252.985,2.2)"><tspan
      id="tspan238"
      y="0"
-     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-hyb</tspan></text>
+     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-Hybrid</tspan></text>
 </g><path
          id="path242"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -392,7 +392,7 @@
    transform="matrix(0,1,1,0,263.985,2.2)"><tspan
      id="tspan246"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">H-hyb-if</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">EAR-Heuristic</tspan></text>
 </g><path
          id="path250"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -404,7 +404,7 @@
    transform="matrix(0,1,1,0,274.935,2.2)"><tspan
      id="tspan254"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105">H-hyb</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105">H-Hybrid</tspan></text>
 </g><path
          id="path258"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -416,7 +416,7 @@
    transform="matrix(0,1,1,0,296.935,2.2)"><tspan
      id="tspan262"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001">O-lb</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001">O-LoadBalancing</tspan></text>
 </g><path
          id="path266"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -428,7 +428,7 @@
    transform="matrix(0,1,1,0,307.935,2.2)"><tspan
      id="tspan270"
      y="0"
-     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-lat</tspan></text>
+     x="0 4.2789998 6.1104999 7.3315001 10.3895">O-Latency</tspan></text>
 </g><path
          id="path274"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -440,7 +440,7 @@
    transform="matrix(0,1,1,0,318.935,2.2)"><tspan
      id="tspan278"
      y="0"
-     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-hyb</tspan></text>
+     x="0 4.2789998 6.1104999 9.1684999 11.9185">O-Hybrid</tspan></text>
 </g><path
          id="path282"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -452,7 +452,7 @@
    transform="matrix(0,1,1,0,329.885,2.2)"><tspan
      id="tspan286"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">H-hyb-if</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105 14.6685 16.5 17.721001">EAR-Heuristic</tspan></text>
 </g><path
          id="path290"
          style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"
@@ -464,7 +464,7 @@
    transform="matrix(0,1,1,0,340.885,2.2)"><tspan
      id="tspan294"
      y="0"
-     x="0 3.971 5.8024998 8.8605003 11.6105">H-hyb</tspan></text>
+     x="0 3.971 5.8024998 8.8605003 11.6105">H-Hybrid</tspan></text>
 </g><path
          id="path298"
          style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.8;stroke-dasharray:none;stroke-opacity:1"

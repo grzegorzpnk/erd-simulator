@@ -1,9 +1,9 @@
 #	local-zone  zone    international
-O-lb    62.48  46.82   28.3
-O-lat   63.05   51.78   9
-O-hyb   60.66 49.88   27.5
-H-hyb-if    56.59    55.84   28.9
-H-hyb   61.64   48.6    26.7
+O-LoadBalancing    62.48  46.82   28.3
+O-Latency   63.05   51.78   9
+O-Hybrid   60.66 49.88   27.5
+EAR-Heuristic    56.59    55.84   28.9
+H-Hybrid   61.64   48.6    26.7
 
 
 

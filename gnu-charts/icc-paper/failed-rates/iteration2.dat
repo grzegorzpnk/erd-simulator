@@ -1,0 +1,6 @@
+#	cg	v2x	uav conf    x
+O-LoadBalancing    0.0	0.0	0.0 0.000   6
+O-Latency   13.8	2.0	0.0 4.240   7
+O-Hybrid   4.0	0.0	0.0 1.550   8
+EAR-Heuristic    2.8	0.0	0.0 2.292   9
+H-Hybrid   2.5	0.0	0.0 1.342   10

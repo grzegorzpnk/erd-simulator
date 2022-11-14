@@ -73,127 +73,127 @@
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M110.9,716.0 L110.9,705.5 M110.9,21.1 L110.9,31.6  '/>	<g transform="translate(115.4,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-LoadBalancing</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M147.4,716.0 L147.4,705.5 M147.4,21.1 L147.4,31.6  '/>	<g transform="translate(151.9,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lat</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Latency</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M184.0,716.0 L184.0,705.5 M184.0,21.1 L184.0,31.6  '/>	<g transform="translate(188.5,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M220.5,716.0 L220.5,705.5 M220.5,21.1 L220.5,31.6  '/>	<g transform="translate(225.0,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb-if</tspan></text>
+		<text><tspan font-family="Helvetica" >EAR-Heuristic</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M257.1,716.0 L257.1,705.5 M257.1,21.1 L257.1,31.6  '/>	<g transform="translate(261.6,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >H-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M330.2,716.0 L330.2,705.5 M330.2,21.1 L330.2,31.6  '/>	<g transform="translate(334.7,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-LoadBalancing</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M366.7,716.0 L366.7,705.5 M366.7,21.1 L366.7,31.6  '/>	<g transform="translate(371.2,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lat</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Latency</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M403.3,716.0 L403.3,705.5 M403.3,21.1 L403.3,31.6  '/>	<g transform="translate(407.8,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M439.8,716.0 L439.8,705.5 M439.8,21.1 L439.8,31.6  '/>	<g transform="translate(444.3,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb-if</tspan></text>
+		<text><tspan font-family="Helvetica" >EAR-Heuristic</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M476.4,716.0 L476.4,705.5 M476.4,21.1 L476.4,31.6  '/>	<g transform="translate(480.9,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >H-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M549.5,716.0 L549.5,705.5 M549.5,21.1 L549.5,31.6  '/>	<g transform="translate(554.0,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-LoadBalancing</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M586.0,716.0 L586.0,705.5 M586.0,21.1 L586.0,31.6  '/>	<g transform="translate(590.5,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lat</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Latency</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M622.6,716.0 L622.6,705.5 M622.6,21.1 L622.6,31.6  '/>	<g transform="translate(627.1,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M659.1,716.0 L659.1,705.5 M659.1,21.1 L659.1,31.6  '/>	<g transform="translate(663.6,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb-if</tspan></text>
+		<text><tspan font-family="Helvetica" >EAR-Heuristic</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M695.7,716.0 L695.7,705.5 M695.7,21.1 L695.7,31.6  '/>	<g transform="translate(700.2,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >H-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M768.8,716.0 L768.8,705.5 M768.8,21.1 L768.8,31.6  '/>	<g transform="translate(773.3,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-LoadBalancing</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M805.3,716.0 L805.3,705.5 M805.3,21.1 L805.3,31.6  '/>	<g transform="translate(809.8,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lat</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Latency</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M841.9,716.0 L841.9,705.5 M841.9,21.1 L841.9,31.6  '/>	<g transform="translate(846.4,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M878.4,716.0 L878.4,705.5 M878.4,21.1 L878.4,31.6  '/>	<g transform="translate(882.9,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb-if</tspan></text>
+		<text><tspan font-family="Helvetica" >EAR-Heuristic</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M915.0,716.0 L915.0,705.5 M915.0,21.1 L915.0,31.6  '/>	<g transform="translate(919.5,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >H-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M988.1,716.0 L988.1,705.5 M988.1,21.1 L988.1,31.6  '/>	<g transform="translate(992.6,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-LoadBalancing</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M1024.6,716.0 L1024.6,705.5 M1024.6,21.1 L1024.6,31.6  '/>	<g transform="translate(1029.1,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-lat</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Latency</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M1061.2,716.0 L1061.2,705.5 M1061.2,21.1 L1061.2,31.6  '/>	<g transform="translate(1065.7,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >O-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >O-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M1097.7,716.0 L1097.7,705.5 M1097.7,21.1 L1097.7,31.6  '/>	<g transform="translate(1102.2,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb-if</tspan></text>
+		<text><tspan font-family="Helvetica" >EAR-Heuristic</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<path stroke='black'  d='M1134.3,716.0 L1134.3,705.5 M1134.3,21.1 L1134.3,31.6  '/>	<g transform="translate(1138.8,799.3) rotate(-90)" stroke="none" fill="black" font-family="Helvetica" font-size="14.00"  text-anchor="start">
-		<text><tspan font-family="Helvetica" >H-hyb</tspan></text>
+		<text><tspan font-family="Helvetica" >H-Hybrid</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
