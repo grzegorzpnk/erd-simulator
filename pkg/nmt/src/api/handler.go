@@ -4,7 +4,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/djikstra"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"encoding/json"
 	"fmt"
@@ -217,7 +216,7 @@ func (h *apiHandler) getMECNeighbours(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *apiHandler) createEdgeHandler(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) createLinkHandler(w http.ResponseWriter, r *http.Request) {
 	//todo: validate body of REST POST
 	w.Header().Set("Content-Type", "application/json")
 
@@ -280,75 +279,4 @@ func (h *apiHandler) getAllMecHostsWithMetricsHandler(w http.ResponseWriter, r *
 		response = append(response, mecDescription)
 	}
 	json.NewEncoder(w).Encode(response)
-}
-
-func (h *apiHandler) updateClusterCPUResources(w http.ResponseWriter, r *http.Request) {
-
-	w.Header().Set("Content-Type", "application/json")
-
-	params := mux.Vars(r)
-	cluster, _ := params["cluster"]
-	provider, _ := params["provider"]
-
-	mecHost := model.MecHost{}
-	mecHost.Identity.Cluster = cluster
-	mecHost.Identity.Provider = provider
-
-	var clusterMetrics metrics.ClusterResources
-	_ = json.NewDecoder(r.Body).Decode(&clusterMetrics)
-
-	if h.graphClient.CheckGraphContainsVertex(mecHost) {
-		h.graphClient.GetMecHost(cluster, provider).CpuResources.UpdateClusterMetrics(clusterMetrics)
-		w.WriteHeader(http.StatusOK)
-		log.Infof("Client updates cluster metrics for vertex ID: %v\n", cluster)
-	} else {
-		err := fmt.Errorf("Vertex %v not updated beacuse it's not exist", cluster)
-		log.Errorf(err.Error())
-		w.WriteHeader(http.StatusConflict)
-	}
-}
-
-func (h *apiHandler) getClusterCPUResources(w http.ResponseWriter, r *http.Request) {
-
-	w.Header().Set("Content-Type", "application/json")
-
-	params := mux.Vars(r)
-	cluster, _ := params["cluster"]
-	provider, _ := params["provider"]
-	mecHost := model.MecHost{}
-	mecHost.Identity.Cluster = cluster
-	mecHost.Identity.Provider = provider
-
-	if h.graphClient.CheckGraphContainsVertex(mecHost) {
-		json.NewEncoder(w).Encode(h.graphClient.GetMecHost(cluster, provider).CpuResources)
-		w.WriteHeader(http.StatusOK)
-	} else {
-		err := fmt.Errorf("Vertex %v not not exist", cluster)
-		log.Errorf(err.Error())
-		w.WriteHeader(http.StatusConflict)
-	}
-}
-
-func updateEdgeMetrics(w http.ResponseWriter, r *http.Request) {
-
-	/*	w.Header().Set("Content-Type", "application/json")
-
-		params := mux.Vars(r)
-		idSource, _ := strconv.Atoi(params["IdSource"])
-		idTarget, _ := strconv.Atoi(params["IdTarget"])
-		var edgeMetrics NetworkMetrics
-		_ = json.NewDecoder(r.Body).Decode(&edgeMetrics)
-	*/
-
-	//sprawdz czy istnieje dany link i go pobierz
-	//update danych na łaczu
-	/*if exist(graph.MecHosts, id) {
-		graph.getVertex(id).VertexMetrics.updateClusterResourcesMetrics(clusterMetrics)
-		w.WriteHeader(http.StatusOK)
-		log.Infof("Client updates cluster metrics for vertex ID: %v\n", params["cluster"])
-	} else {
-		err := fmt.Errorf("Vertex %v not updated beacuse it's not exist", id)
-		log.Errorf(err.Error())
-		w.WriteHeader(http.StatusConflict)
-	}*/
 }

@@ -2,7 +2,7 @@ package mec_topology
 
 import "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 
-func (g *Graph) CheckGraphContainsVertex(mecHost model.MecHost) bool {
+/*func (g *Graph) CheckGraphContainsVertex(mecHost model.MecHost) bool {
 
 	for _, v := range g.MecHosts {
 		if mecHost.Identity.Cluster == v.Identity.Cluster &&
@@ -12,6 +12,7 @@ func (g *Graph) CheckGraphContainsVertex(mecHost model.MecHost) bool {
 	}
 	return false
 }
+*/
 
 // this func checks in bidirectional way
 func (g *Graph) CheckAlreadExistLink(k model.Edge) bool {
