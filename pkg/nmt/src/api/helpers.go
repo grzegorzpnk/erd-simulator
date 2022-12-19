@@ -18,8 +18,3 @@ type ShortestPathResult struct {
 	latencyResults float64
 	path           []string
 }
-
-func (g) CheckGraphContainsVertex() bool {
-
-	return false
-}
