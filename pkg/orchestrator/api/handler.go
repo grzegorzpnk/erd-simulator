@@ -4,15 +4,15 @@ import (
 	"net/http"
 )
 
-//prereqquesties types and function
-type apiHandler struct {
-}
+type apiHandler struct{}
 
-func (h *apiHandler) SetClients() {
-}
+func (h *apiHandler) SetClients() {}
 
 //main functions
-
 func (h *apiHandler) relocateApp(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (h *apiHandler) instantiateApps(w http.ResponseWriter, r *http.Request) {
 
 }

@@ -270,10 +270,10 @@ func (h *apiHandler) getAllMecHostsWithMetricsHandler(w http.ResponseWriter, r *
 		mecDescription := "null,null,"
 		mecDescription += mec.Identity.Cluster + ","
 		mecDescription += strconv.FormatFloat(mec.CpuResources.Used, 'f', 1, 64) + ","
-		mecDescription += strconv.FormatFloat(mec.CpuResources.Allocatable, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.CpuResources.Capacity, 'f', 1, 64) + ","
 		mecDescription += strconv.FormatFloat(mec.CpuResources.Utilization, 'f', 1, 64) + ","
 		mecDescription += strconv.FormatFloat(mec.MemoryResources.Used, 'f', 1, 64) + ","
-		mecDescription += strconv.FormatFloat(mec.MemoryResources.Allocatable, 'f', 1, 64) + ","
+		mecDescription += strconv.FormatFloat(mec.MemoryResources.Capacity, 'f', 1, 64) + ","
 		mecDescription += strconv.FormatFloat(mec.MemoryResources.Utilization, 'f', 1, 64)
 
 		response = append(response, mecDescription)

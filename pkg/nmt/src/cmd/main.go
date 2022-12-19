@@ -16,20 +16,16 @@ var graph *mec_topology.Graph
 
 func main() {
 	log.Infof("[SERVER] Starting NMT server. Port: %v", config.GetConfiguration().ServicePort)
-	log.Infof("[SERVER] OBS endpoint: %v", config.GetConfiguration().ClusterControllerEndpoint)
 
 	graph = &mec_topology.Graph{}
-	//	initializingGraph()
+	readGraphConfig()
 
-	graph.ReadTopologyConfigFile("mecTopology.json")
-	graph.ReadMECConnectionFile("mecLinks.json")
-	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
-
+	//need to be refactored for simulator
 	graph.NetworkMetricsUpdate(false)
-	go graph.ClustersResourcesUpdate()
+
+	//start NMT server
 
 	httpRouter := api.NewRouter(graph)
-
 	httpServer := &http.Server{
 		Handler: httpRouter,
 		Addr:    ":" + config.GetConfiguration().ServicePort,
@@ -46,5 +42,13 @@ func main() {
 
 	err := httpServer.ListenAndServe()
 	log.Fatalln(fmt.Sprintf("[SERVER] HTTP server returned error: %s", err))
+
+}
+
+func readGraphConfig() {
+
+	graph.ReadTopologyConfigFile("mecTopology.json")
+	graph.ReadMECConnectionFile("mecLinks.json")
+	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
 }

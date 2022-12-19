@@ -16,7 +16,8 @@ func NewRouter() *mux.Router {
 	baseUrl := ""
 
 	//Setters:
-	r.HandleFunc(baseUrl+"/topology/mecHost", handler.relocateApp).Methods("POST")
+	r.HandleFunc(baseUrl+"/orchestrator/relocate", handler.relocateApp).Methods("POST")
+	r.HandleFunc(baseUrl+"/orchestrator/instantiate", handler.instantiateApps).Methods("POST")
 
 	return r
 

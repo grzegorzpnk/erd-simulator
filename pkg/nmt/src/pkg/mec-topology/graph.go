@@ -91,38 +91,6 @@ func (g *Graph) PrintGraph() {
 
 }
 
-//ClustersResourcesUpdate is a gorutine function
-func (g *Graph) ClustersResourcesUpdate() {
-
-	endpoint := config.GetConfiguration().ClusterControllerEndpoint
-
-	for {
-		// update metrics for MEC Clusters
-		for _, v := range g.MecHosts {
-
-			clusterCPUURL := metrics.BuildCpuUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
-			clusterMemoryURL := metrics.BuildMemoryUrl(v.Identity.Cluster, v.Identity.Provider, endpoint)
-			//	log.Infof("update for cluster %v\n", v.Identity.Cluster)
-			//	log.Infof("cpu latest update:")
-			cpuCr, err := metrics.GetClusterMetrics(clusterCPUURL)
-			if err != nil {
-				log.Errorf(err.Error())
-			}
-			//	log.Infof("memory latest update:")
-			memoryCr, err := metrics.GetClusterMetrics(clusterMemoryURL)
-			if err != nil {
-				log.Errorf(err.Error())
-			}
-
-			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).CpuResources.UpdateClusterMetrics(cpuCr)
-			g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).MemoryResources.UpdateClusterMetrics(memoryCr)
-			//	log.Infof("Controller updates cluster metrics for Mec Host: %v\n", v.Identity.Cluster)
-
-		}
-		time.Sleep(1 * time.Second)
-	}
-}
-
 func (g *Graph) NetworkMetricsUpdate(fetchLatencyFromObserver bool) {
 
 	endpoint := config.GetConfiguration().ClusterControllerEndpoint
