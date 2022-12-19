@@ -1,5 +1,0 @@
----
-# instantiate logical cloud
-version: emco/v2
-resourceContext:
-  anchor: projects/{{.ProjectName}}/logical-clouds/{{.AdminCloud}}/instantiate

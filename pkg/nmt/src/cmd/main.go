@@ -25,17 +25,6 @@ func main() {
 	graph.ReadMECConnectionFile("mecLinks.json")
 	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
-	/*	var link model.Edge
-		link.SourceVertexName = "mec12"
-		link.TargetVertexName = "mec13"
-		link.TargetVertexProviderName = "edge-provider"
-		link.SourceVertexProviderName = "edge-provider"
-		link.EdgeMetrics.Latency = 12.32
-
-		graph.AddLink(link)
-	*/
-	//gorutines to update cluster resources and network metrics
-	//go graph.NetworkMetricsUpdate()
 	graph.NetworkMetricsUpdate(false)
 	go graph.ClustersResourcesUpdate()
 

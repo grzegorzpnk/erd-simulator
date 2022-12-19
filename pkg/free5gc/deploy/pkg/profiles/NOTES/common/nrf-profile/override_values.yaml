@@ -1,3 +1,0 @@
-#mongodb:
-#  persistence:
-#    mountPath: /dev/vda1/bitnami/mongodb/data/db
