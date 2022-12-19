@@ -9,7 +9,6 @@ import (
 	"os"
 )
 
-// readConfigFile reads the specified smsConfig file to setup some env variables
 func (g *Graph) ReadTopologyConfigFile(file string) {
 	f, err := os.Open(file)
 	if err != nil {

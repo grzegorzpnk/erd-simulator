@@ -12,7 +12,8 @@ type MecHost struct {
 	CpuResources    metrics.ClusterResources `json:"cpu_resources,omitempty"`
 	MemoryResources metrics.ClusterResources `json:"memory_resources,omitempty"`
 	Neighbours      []MecIdentity
-	SupportingCells []Cell `json:"supporting_cells"`
+	SupportingCells []Cell   `json:"supporting_cells"`
+	MECApps         []MECApp `json:"mec_apps,omitempty"`
 }
 
 const (
@@ -50,6 +51,10 @@ type Cell struct {
 	Id        string  `json:"id"`
 	Latency   float64 `json:"latency"`
 	LocalZone string  `json:"local-zone,omitempty"`
+}
+
+type MECApp struct {
+	Id string `json:"id"`
 }
 
 func (m *MecHost) GetCell(cellId string) *Cell {
