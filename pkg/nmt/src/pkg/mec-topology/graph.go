@@ -7,6 +7,7 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"errors"
 	"math/rand"
+	"strconv"
 
 	"fmt"
 	"time"
@@ -27,6 +28,40 @@ func (g *Graph) GetMecHost(clusterName, clusterProvider string) *model.MecHost {
 		}
 	}
 	return nil
+}
+
+//TOBE tested
+func (g *Graph) CheckEnoughResources(app model.MECApp, clusterName string) bool {
+
+	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
+	availableCPU := g.GetMecHost(clusterName, "orange").CpuResources.Capacity - g.GetMecHost(clusterName, "orange").CpuResources.Used
+	availableMem := g.GetMecHost(clusterName, "orange").MemoryResources.Capacity - g.GetMecHost(clusterName, "orange").MemoryResources.Used
+	if !(app.Requirements.RequestedCPU < (availableCPU * tau)) {
+		return false
+	}
+	if !(app.Requirements.RequestedMEMORY < (availableMem * tau)) {
+		return false
+	}
+
+	return true
+}
+
+//TOBE tested
+func (g *Graph) InstantiateApp(app model.MECApp, clusterName string) {
+
+	//add app to list
+	g.GetMecHost(clusterName, "orange").MECApps = append(g.GetMecHost(clusterName, "orange").MECApps, app)
+
+	//update resources on mec host
+
+	//update used resources
+	g.GetMecHost(clusterName, "orange").CpuResources.Used += app.Requirements.RequestedCPU
+	g.GetMecHost(clusterName, "orange").MemoryResources.Used += app.Requirements.RequestedMEMORY
+
+	//update utilization
+	g.GetMecHost(clusterName, "orange").CpuResources.Utilization = g.GetMecHost(clusterName, "orange").CpuResources.Used / g.GetMecHost(clusterName, "orange").CpuResources.Capacity
+	g.GetMecHost(clusterName, "orange").MemoryResources.Utilization = g.GetMecHost(clusterName, "orange").MemoryResources.Used / g.GetMecHost(clusterName, "orange").MemoryResources.Capacity
+
 }
 
 func (g *Graph) GetCell(cellId string) *model.Cell {

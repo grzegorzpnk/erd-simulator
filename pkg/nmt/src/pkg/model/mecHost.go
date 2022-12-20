@@ -53,10 +53,6 @@ type Cell struct {
 	LocalZone string  `json:"local-zone,omitempty"`
 }
 
-type MECApp struct {
-	Id string `json:"id"`
-}
-
 func (m *MecHost) GetCell(cellId string) *Cell {
 
 	for i, v := range m.SupportingCells {

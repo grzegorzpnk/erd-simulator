@@ -16,7 +16,7 @@ type Configuration struct {
 	ServicePort               string `json:"service-port"`
 	ClusterControllerEndpoint string `json:"cluster-controller-endpoint"`
 	EdgeProvider              string `json:"edge-provider"`
-	Timestamp                 int    `json:"timestamp"`
+	Tau                       string `json:"tau"`
 }
 
 //type ClusterSet struct {
@@ -56,8 +56,9 @@ func defaultConfiguration() *Configuration {
 		ServicePort:               "8080",
 		ClusterControllerEndpoint: "http://10.254.185.50:32138/",
 		EdgeProvider:              "orange",
-		Timestamp:                 5,
+		Tau:                       "0.8",
 	}
+
 }
 
 // GetConfiguration returns the configuration for the app.
