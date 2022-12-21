@@ -80,7 +80,7 @@ func (mec *MecHost) CheckMECsupportsCell(cellId string) bool {
 func (mec *MecHost) CheckEnoughResources(app MECApp) bool {
 
 	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
-	availableCPU := mec.CpuResources.Capacity - mec.CpuResources.Used
+	availableCPU := (mec.CpuResources.Capacity - mec.CpuResources.Used)
 	availableMem := mec.MemoryResources.Capacity - mec.MemoryResources.Used
 	if !(app.Requirements.RequestedCPU < (availableCPU * tau)) {
 		return false

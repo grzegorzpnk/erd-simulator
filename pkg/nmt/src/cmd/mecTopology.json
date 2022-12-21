@@ -1,7 +1,7 @@
 [
   { "identity":
     {
-      "provider": "edge-provider",
+      "provider": "orange",
       "cluster": "mec12",
       "location": {
        "type": 0,
@@ -13,7 +13,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec13",
     "location": {
       "type": 0,
@@ -25,7 +25,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec14",
     "location": {
       "type": 0,
@@ -37,7 +37,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec11",
     "location": {
       "type": 0,
@@ -49,7 +49,7 @@
   },
   { "identity":
 {
-  "provider": "edge-provider",
+  "provider": "orange",
   "cluster": "mec16",
   "location": {
     "type": 0,
@@ -61,7 +61,7 @@
 },
   { "identity":
 {
-  "provider": "edge-provider",
+  "provider": "orange",
   "cluster": "mec17",
   "location": {
     "type": 0,
@@ -73,7 +73,7 @@
 },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec18",
     "location": {
       "type": 0,
@@ -85,7 +85,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec15",
     "location": {
       "type": 0,
@@ -97,7 +97,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec20",
     "location": {
       "type": 0,
@@ -109,7 +109,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec21",
     "location": {
       "type": 0,
@@ -121,7 +121,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec22",
     "location": {
       "type": 0,
@@ -133,7 +133,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec19",
     "location": {
       "type": 0,
@@ -145,7 +145,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec24",
     "location": {
       "type": 0,
@@ -157,7 +157,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec25",
     "location": {
       "type": 0,
@@ -169,7 +169,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec26",
     "location": {
       "type": 0,
@@ -181,7 +181,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec23",
     "location": {
       "type": 0,
@@ -193,7 +193,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec28",
     "location": {
       "type": 0,
@@ -205,7 +205,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec29",
     "location": {
       "type": 0,
@@ -217,7 +217,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec30",
     "location": {
       "type": 0,
@@ -229,7 +229,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec27",
     "location": {
       "type": 0,
@@ -241,7 +241,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec32",
     "location": {
       "type": 0,
@@ -253,7 +253,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec33",
     "location": {
       "type": 0,
@@ -265,7 +265,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec34",
     "location": {
       "type": 0,
@@ -277,7 +277,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec35",
     "location": {
       "type": 0,
@@ -289,7 +289,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec31",
     "location": {
       "type": 0,
@@ -301,7 +301,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec3",
     "location": {
       "type": 1,
@@ -313,7 +313,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec4",
     "location": {
       "type": 1,
@@ -325,7 +325,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec5",
     "location": {
       "type": 1,
@@ -337,7 +337,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec6",
     "location": {
       "type": 1,
@@ -349,7 +349,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec7",
     "location": {
       "type": 1,
@@ -361,7 +361,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec8",
     "location": {
       "type": 1,
@@ -373,7 +373,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec9",
     "location": {
       "type": 1,
@@ -385,7 +385,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec10",
     "location": {
       "type": 1,
@@ -397,7 +397,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec1",
     "location": {
       "type": 2,
@@ -409,7 +409,7 @@
   },
   { "identity":
   {
-    "provider": "edge-provider",
+    "provider": "orange",
     "cluster": "mec2",
     "location": {
       "type": 2,
