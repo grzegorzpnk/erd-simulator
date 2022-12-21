@@ -13,5 +13,5 @@ data:
       "service-port":"{{ .Values.config.servicePort }}",
       "cluster-controller-endpoint" : "{{ .Values.config.obs.endpoint }}:{{ .Values.config.obs.port }}",
       "edge-provider":"{{ .Values.config.clusterProvider }}",
-      "timestamp": {{ .Values.config.timestamp }}
+      "tau":"{{ .Values.config.tau }}"
     }

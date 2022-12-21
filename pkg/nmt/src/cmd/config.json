@@ -1,6 +1,6 @@
 {
   "service-port":"8282",
   "cluster-controller-endpoint" : "http://10.254.185.44:32138",
-  "edge-provider" : "edge-provider",
+  "edge-provider" : "orange",
   "tau" : "0.8"
 }

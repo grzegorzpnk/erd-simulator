@@ -34,6 +34,32 @@ func (g *Graph) ReadTopologyConfigFile(file string) {
 	}
 }
 
+func (g *Graph) AssigneCapacityToClusters() {
+
+	for _, v := range g.MecHosts {
+
+		if v.Identity.Location.Level == 0 {
+			v.MemoryResources.Capacity = 4
+			v.CpuResources.Capacity = 4
+		}
+		if v.Identity.Location.Level == 1 {
+			v.MemoryResources.Capacity = 8
+			v.CpuResources.Capacity = 8
+		}
+		if v.Identity.Location.Level == 2 {
+			v.MemoryResources.Capacity = 12
+			v.CpuResources.Capacity = 12
+		}
+
+		v.CpuResources.Utilization = 0
+		v.CpuResources.Used = 0
+		v.MemoryResources.Utilization = 0
+		v.MemoryResources.Used = 0
+
+	}
+
+}
+
 // readConfigFile reads the specified smsConfig file to setup some env variables
 func (g *Graph) ReadMECConnectionFile(file string) {
 	f, err := os.Open(file)

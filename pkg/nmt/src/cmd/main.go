@@ -18,10 +18,10 @@ func main() {
 	log.Infof("[SERVER] Starting NMT server. Port: %v", config.GetConfiguration().ServicePort)
 
 	graph = &mec_topology.Graph{}
-	readGraphConfig()
+	readMECNetworkTopologyConfig()
 
 	//need to be refactored for simulator
-	graph.NetworkMetricsUpdate(false)
+	//	graph.NetworkMetricsUpdate(false)
 
 	//start NMT server
 
@@ -45,10 +45,11 @@ func main() {
 
 }
 
-func readGraphConfig() {
+func readMECNetworkTopologyConfig() {
 
 	graph.ReadTopologyConfigFile("mecTopology.json")
-	graph.ReadMECConnectionFile("mecLinks.json")
-	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
+	graph.AssigneCapacityToClusters()
+	//graph.ReadMECConnectionFile("mecLinks.json")
+	//graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
 }

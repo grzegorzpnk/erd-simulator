@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: pmatysiaq/nmt
+  repository: grzegorzpnk/nmt
   pullPolicy: Always
   tag: "latest"
 
@@ -9,8 +9,8 @@ workingDir: "/nmt"
 command: "./nmt"
 config:
   servicePort: 8282
-  clusterProvider: "edge-provider"
-  timestamp: 5
+  clusterProvider: "orange"
+  tau: 0.8
   obs:
     endpoint: "http://10.254.185.44"
     port: "32138"
