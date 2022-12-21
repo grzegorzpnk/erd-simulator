@@ -1,6 +1,6 @@
 #!/bin/bash
 
-helm --kubeconfig ~/.kube/core.config uninstall nmt
+helm --kubeconfig ~/.kube/config uninstall nmt
 
 sleep 1
 
