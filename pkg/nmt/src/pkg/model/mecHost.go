@@ -1,7 +1,9 @@
 package model
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
+	"strconv"
 )
 
 type MecInfo string
@@ -73,4 +75,75 @@ func (mec *MecHost) CheckMECsupportsCell(cellId string) bool {
 		}
 	}
 	return false
+}
+
+func (mec *MecHost) CheckEnoughResources(app MECApp) bool {
+
+	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
+	availableCPU := mec.CpuResources.Capacity - mec.CpuResources.Used
+	availableMem := mec.MemoryResources.Capacity - mec.MemoryResources.Used
+	if !(app.Requirements.RequestedCPU < (availableCPU * tau)) {
+		return false
+	}
+	if !(app.Requirements.RequestedMEMORY < (availableMem * tau)) {
+		return false
+	}
+
+	return true
+}
+
+func (mec *MecHost) InstantiateApp(app MECApp) {
+
+	//add app to list
+	mec.MECApps = append(mec.MECApps, app)
+
+	//update resources on mec host
+
+	//update used resources
+	mec.CpuResources.Used += app.Requirements.RequestedCPU
+	mec.MemoryResources.Used += app.Requirements.RequestedMEMORY
+
+	//update utilization
+	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
+	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
+
+}
+
+//TOBE tested
+func (mec *MecHost) CheckAppExists(app MECApp) bool {
+
+	for _, v := range mec.MECApps {
+		if v.Id == app.Id {
+			return true
+		}
+	}
+	return false
+}
+
+//TOBE tested
+func (mec *MecHost) UninstallApp(app MECApp) {
+
+	//delete app to list
+	var initialID int
+
+	//check id where the app is in slice
+	for i, v := range mec.MECApps {
+		if v.Id == app.Id {
+			initialID = i
+		}
+	}
+
+	//delete given app
+	mec.MECApps[initialID] = (mec.MECApps[len(mec.MECApps)-1])
+	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
+
+	//update resources on mec host
+	//update used resources
+	mec.CpuResources.Used -= app.Requirements.RequestedCPU
+	mec.MemoryResources.Used -= app.Requirements.RequestedMEMORY
+
+	//update utilization
+	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
+	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
+
 }

@@ -33,8 +33,10 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 
 	// Communication with Orchestrator
 
-	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/application", handler.deployApplication).Methods("GET")
-	//r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/application", handler.relocateApplication).Methods("GET")
+	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/application", handler.InstantiateApplication).Methods("POST")
+	//maybe there is no need to
+	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/application", handler.DeleteApplication).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/mecHosts/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application", handler.RelocateApplication).Methods("POST")
 
 	return r
 
