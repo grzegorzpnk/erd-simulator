@@ -1,14 +1,11 @@
 package mec_topology
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"errors"
 	"fmt"
 	"math/rand"
-	"time"
 )
 
 type Graph struct {
@@ -90,65 +87,29 @@ func (g *Graph) PrintGraph() {
 
 }
 
-func (g *Graph) NetworkMetricsUpdate(fetchLatencyFromObserver bool) {
+func (g *Graph) NetworkMetricsUpdate() {
 
-	endpoint := config.GetConfiguration().ClusterControllerEndpoint
-
-	if !fetchLatencyFromObserver {
-		rand.Seed(42)
-		//update cell-mecs latencies - this is kept by MEC hosts
-		for i, v := range g.MecHosts {
-			for k, _ := range v.SupportingCells {
-				latency := 4 + 2*rand.Float64()
-				g.MecHosts[i].SupportingCells[k].Latency = latency
-			}
-		}
-
-		// update metrics for MEC Clusters
-		for d, b := range g.Edges {
-			source := g.GetMecHost(b.SourceVertexName, b.SourceVertexProviderName)
-			target := g.GetMecHost(b.TargetVertexName, b.TargetVertexProviderName)
-			latency, err := generateLatency(*source, *target)
-			if err != nil {
-				log.Errorf(err.Error())
-			} else {
-				g.Edges[d].EdgeMetrics.Latency = latency
-			}
-		}
-	} else {
-		for {
-
-			//update cell-mecs latencies - this is kept by MEC hosts
-			for i, v := range g.MecHosts {
-				for k, c := range v.SupportingCells {
-					cellLatenyUrl := metrics.BuildCellLatencyURL(endpoint, c.Id, v.Identity.Cluster, v.Identity.Provider)
-					latency, err := metrics.GetLatency(cellLatenyUrl)
-					if err != nil {
-						log.Errorf(err.Error())
-					} else {
-						g.MecHosts[i].SupportingCells[k].Latency = latency
-					}
-				}
-			}
-
-			//update mecs-mecs latencies - this is kept by Edges
-
-			// update metrics for MEC Clusters
-			for d, b := range g.Edges {
-
-				mecLatenyUrl := metrics.BuildMECLatencyURL(endpoint, b.TargetVertexName, b.TargetVertexProviderName, b.SourceVertexName, b.SourceVertexProviderName)
-				latency, err := metrics.GetLatency(mecLatenyUrl)
-				if err != nil {
-					log.Errorf(err.Error())
-				} else {
-					g.Edges[d].EdgeMetrics.Latency = latency
-				}
-
-			}
-
-			time.Sleep(10 * time.Second)
+	rand.Seed(42)
+	//update cell-mecs latencies - this is kept by MEC hosts
+	for i, v := range g.MecHosts {
+		for k, _ := range v.SupportingCells {
+			latency := 4 + 2*rand.Float64()
+			g.MecHosts[i].SupportingCells[k].Latency = latency
 		}
 	}
+
+	// update metrics for MEC Clusters
+	for d, b := range g.Edges {
+		source := g.GetMecHost(b.SourceVertexName, b.SourceVertexProviderName)
+		target := g.GetMecHost(b.TargetVertexName, b.TargetVertexProviderName)
+		latency, err := generateLatency(*source, *target)
+		if err != nil {
+			log.Errorf(err.Error())
+		} else {
+			g.Edges[d].EdgeMetrics.Latency = latency
+		}
+	}
+
 }
 
 func generateLatency(sNode, tNode interface{}) (float64, error) {

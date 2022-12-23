@@ -20,8 +20,11 @@ func main() {
 	graph = &mec_topology.Graph{}
 	readMECNetworkTopologyConfig()
 
-	//need to be refactored for simulator
-	//	graph.NetworkMetricsUpdate(false)
+	// setup clusters resources
+	graph.AssigneCapacityToClusters()
+
+	// TODO: setup latency on links - to be included if we already created links !
+	// graph.NetworkMetricsUpdate()
 
 	//start NMT server
 
@@ -48,7 +51,6 @@ func main() {
 func readMECNetworkTopologyConfig() {
 
 	graph.ReadTopologyConfigFile("mecTopology.json")
-	graph.AssigneCapacityToClusters()
 	//graph.ReadMECConnectionFile("mecLinks.json")
 	//graph.ReadNetworkTopologyConfigFile("networkTopology.json")
 
