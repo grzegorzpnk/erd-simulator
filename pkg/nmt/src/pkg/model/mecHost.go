@@ -134,8 +134,12 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	}
 
 	//delete given app
-	mec.MECApps[initialID] = (mec.MECApps[len(mec.MECApps)-1])
+	mec.MECApps[initialID] = mec.MECApps[len(mec.MECApps)-1]
 	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
+
+	if len(mec.MECApps) == 0 {
+		mec.MECApps = nil
+	}
 
 	//update resources on mec host
 	//update used resources

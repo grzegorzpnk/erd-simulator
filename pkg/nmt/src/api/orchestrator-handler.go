@@ -77,8 +77,14 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 	_ = json.NewDecoder(r.Body).Decode(&mecApp)
 	log.Infof("Client tries to RELOCATE mecApp ID: %v from MEC Host: %v to new MEC Host: %v \n", mecApp.Id, oldMecHost.Identity.Cluster, newMecHost.Identity.Cluster)
 
-	//instantiate
+	if !(oldMecHost.CheckAppExists(mecApp)) {
+		err := fmt.Errorf("Mec App %v,cannot be relocated beacuse it does not exists at source cluster", mecApp.Id)
+		log.Errorf(err.Error())
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
 
+	//instantiate
 	if !(newMecHost.CheckEnoughResources(mecApp)) {
 		err := fmt.Errorf("Mec App %v,cannot be instantiated beacuse of not enough resources", mecApp.Id)
 		log.Errorf(err.Error())
@@ -86,18 +92,8 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 		return
 	} else {
 		newMecHost.InstantiateApp(mecApp)
-		w.WriteHeader(http.StatusOK)
-	}
-
-	//delete app from old cluster
-
-	if !(oldMecHost.CheckAppExists(mecApp)) {
-		err := fmt.Errorf("Mec App %v,cannot be deleted beacuse it does not exists", mecApp.Id)
-		log.Errorf(err.Error())
-		w.WriteHeader(http.StatusConflict)
-	} else {
 		oldMecHost.UninstallApp(mecApp)
 		w.WriteHeader(http.StatusOK)
+		log.Infof("App relocated succesfully ! \n")
 	}
-
 }

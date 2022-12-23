@@ -249,10 +249,14 @@ func (h *apiHandler) getAllMecHostsHandler(w http.ResponseWriter, r *http.Reques
 func (h *apiHandler) getAllMecApps(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
-	response := make([]model.MECApp, 0)
+	response := make([]*model.MecHost, 0)
 
-	for i := range h.graphClient.MecHosts {
-		response = append(response, h.graphClient.MecHosts[i].MECApps...)
+	for i, v := range h.graphClient.MecHosts {
+
+		if v.MECApps != nil {
+			response = append(response, h.graphClient.MecHosts[i])
+			//response = append(response, h.graphClient.MecHosts[i].MECApps[j])
+		}
 	}
 	json.NewEncoder(w).Encode(response)
 }
