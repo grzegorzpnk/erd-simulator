@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"math/rand"
 	"net/http"
+	"strconv"
 )
 
 func (h *apiHandler) InstantiateApplication(w http.ResponseWriter, r *http.Request) {
@@ -99,8 +100,7 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-/*
-func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) model.InputYaml {
+func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) {
 
 	var mhs []*model.MecHost
 
@@ -115,11 +115,11 @@ func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Requ
 		cells = generateRandomCells()
 
 		search = false
-		for index, edgeApp := range in.Deployments {
-			cmh, err := findCanidateMec(tc, edgeApp.Apps[0].Workflows[0].Params, cells[index+1], mhsT)
+		for index, edgeApp := range h.graphClient.Application {
+			cmh, err := findCanidateMec(edgeApp, cells[index+1], mhsT)
 			if err != nil {
 				search = true
-				fmt.Printf("Could not find candidate mec for App[%v]. Search failed.\n", edgeApp.Apps[0].Name)
+				fmt.Printf("Could not find candidate mec for App[%v]. Search failed.\n", edgeApp.Id)
 				break
 			} else {
 				fmt.Printf("Found candidate mec: %v\n", cmh)
@@ -130,8 +130,39 @@ func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Requ
 	}
 	printCellsInfo(cells)
 
-	return in
-}*/
+	//instantiate
+}
+
+func findCanidateMec(app *model.MECApp, cell int, mhs []*model.MecHost) (model.MecHost, error) {
+	candidates := []model.MecHost{}
+
+	for index, mh := range mhs {
+		latency, _ := ShortestPath(model.CellId(strconv.Itoa(cell)), mh)
+
+		mhs[index].Resources.Latency = latency
+	}
+
+	for _, mh := range mhs {
+		if resourcesOk(app, mh) && latencyOk(app, mh) {
+			candidates = append(candidates, mh)
+			// We need to prioritize N+1 and N+2 level clusters
+			if mh.Identity.Cluster == "mec1" {
+				candidates = append(candidates, mh)
+				candidates = append(candidates, mh)
+				candidates = append(candidates, mh)
+			} else if mh.Identity.Cluster == "mec3" || mh.Identity.Cluster == "mec4" || mh.Identity.Cluster == "mec5" ||
+				mh.Identity.Cluster == "mec6" || mh.Identity.Cluster == "mec7" {
+				candidates = append(candidates, mh)
+				candidates = append(candidates, mh)
+			}
+		} else {
+		}
+	}
+	if len(candidates) <= 0 {
+		return model.MecHost{}, errors.New("no candidates found")
+	}
+	return candidates[rand.Intn(len(candidates))], nil
+}
 
 func generateRandomCells() map[int]int {
 	var cells map[int]int = map[int]int{}

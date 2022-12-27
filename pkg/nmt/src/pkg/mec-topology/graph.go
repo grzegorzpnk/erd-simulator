@@ -12,6 +12,7 @@ type Graph struct {
 	MecHosts     []*model.MecHost
 	Edges        []*model.Edge
 	NetworkCells []*model.Cell
+	Application  []*model.MECApp
 }
 
 func (g *Graph) GetMecHost(clusterName, clusterProvider string) *model.MecHost {
