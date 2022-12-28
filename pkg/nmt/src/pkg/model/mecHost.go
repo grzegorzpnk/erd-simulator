@@ -16,6 +16,7 @@ type MecHost struct {
 	Neighbours      []MecIdentity
 	SupportingCells []Cell   `json:"supporting_cells"`
 	MECApps         []MECApp `json:"mec_apps,omitempty"`
+	TmpLatency      float64
 }
 
 const (
@@ -150,4 +151,20 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
 	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
 
+}
+
+func (mec *MecHost) GetCpuUsed() float64 {
+	return mec.CpuResources.Used
+}
+
+func (mec *MecHost) GetMemoryUsed() float64 {
+	return mec.MemoryResources.Used
+}
+
+func (mec *MecHost) GetCpuCapacity() float64 {
+	return mec.CpuResources.Capacity
+}
+
+func (mec *MecHost) GetMemoryCapacity() float64 {
+	return mec.MemoryResources.Capacity
 }

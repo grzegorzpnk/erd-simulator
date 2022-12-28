@@ -79,6 +79,7 @@ func generateInitialClusters(tc *topology.Client, in model.InputYaml) model.Inpu
 			in.Deployments[index].Apps[0].PlacementClusters[0].Clusters = []string{cmh.Identity.Cluster}
 		}
 	}
+
 	printCellsInfo(cells)
 
 	return in

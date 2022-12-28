@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"math/rand"
 	"net/http"
 	"strconv"
 )
@@ -102,21 +101,34 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 
 func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) {
 
-	var mhs []*model.MecHost
+	w.Header().Set("Content-Type", "application/json")
+	//params := mux.Vars(r)
 
-	mhs = h.graphClient.MecHosts
+	//TODO: h.graphClient.declareApplications(params["app-number"])
 
-	var mhsT = make([]*model.MecHost, len(mhs))
+	var mecHostSource []model.MecHost
 	var cells = map[int]int{}
+
+	//PREREQUESTIES
+	//in order not to work on real clusters ( cause we need to update resources, etc for looking for initial configutration)
+	for _, v := range h.graphClient.MecHosts {
+		mecHostSource = append(mecHostSource, *v)
+	}
+	//another copy for each serach iteration ( if one search will fail, wee need to repeat on still fresh data)
+	var mecHostsSourcesTmp = make([]model.MecHost, len(mecHostSource))
+
+	var cnt = 0
 	search := true
 	for search {
 		fmt.Println("[DEBUG] Starting search.")
-		copy(mhsT, mhs)
+		cnt++
+		copy(mecHostsSourcesTmp, mecHostSource)
 		cells = generateRandomCells()
 
 		search = false
 		for index, edgeApp := range h.graphClient.Application {
-			cmh, err := findCanidateMec(edgeApp, cells[index+1], mhsT)
+			startCell := h.graphClient.GetCell(strconv.Itoa(cells[index+1]))
+			cmh, err := findCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, &h.graphClient)
 			if err != nil {
 				search = true
 				fmt.Printf("Could not find candidate mec for App[%v]. Search failed.\n", edgeApp.Id)
@@ -124,101 +136,14 @@ func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Requ
 			} else {
 				fmt.Printf("Found candidate mec: %v\n", cmh)
 			}
-			mhsT = updateMecResourcesInfo(mhsT, cmh, edgeApp.Apps[0].Workflows[0].Params)
-			in.Deployments[index].Apps[0].PlacementClusters[0].Clusters = []string{cmh.Identity.Cluster}
+			mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
+			edgeApp.ClusterId = cmh.Identity.Cluster
 		}
 	}
 	printCellsInfo(cells)
+	fmt.Println("Found after %v iterations", cnt)
+	w.WriteHeader(http.StatusOK)
 
-	//instantiate
-}
+	//TODO: instantiate apps
 
-func findCanidateMec(app *model.MECApp, cell int, mhs []*model.MecHost) (model.MecHost, error) {
-	candidates := []model.MecHost{}
-
-	for index, mh := range mhs {
-		latency, _ := ShortestPath(model.CellId(strconv.Itoa(cell)), mh)
-
-		mhs[index].Resources.Latency = latency
-	}
-
-	for _, mh := range mhs {
-		if resourcesOk(app, mh) && latencyOk(app, mh) {
-			candidates = append(candidates, mh)
-			// We need to prioritize N+1 and N+2 level clusters
-			if mh.Identity.Cluster == "mec1" {
-				candidates = append(candidates, mh)
-				candidates = append(candidates, mh)
-				candidates = append(candidates, mh)
-			} else if mh.Identity.Cluster == "mec3" || mh.Identity.Cluster == "mec4" || mh.Identity.Cluster == "mec5" ||
-				mh.Identity.Cluster == "mec6" || mh.Identity.Cluster == "mec7" {
-				candidates = append(candidates, mh)
-				candidates = append(candidates, mh)
-			}
-		} else {
-		}
-	}
-	if len(candidates) <= 0 {
-		return model.MecHost{}, errors.New("no candidates found")
-	}
-	return candidates[rand.Intn(len(candidates))], nil
-}
-
-func generateRandomCells() map[int]int {
-	var cells map[int]int = map[int]int{}
-	for i := 1; i <= 50; i++ {
-		cells[i] = rand.Intn(42) + 1
-	}
-	return cells
-}
-
-/*// latencyOk checks if latency constraints specified in intent (i) are met
-func latencyOk(eap model.EdgeAppParams, mec model.MecHost) bool {
-	latency := mec.GetLatency()
-	latencyMax := eap.LatencyMax
-
-	if mec.GetLatency() < 0 {
-		return false
-	} else if latencyMax > latency {
-		return true
-	} else {
-		return false
-	}
-}
-
-// resourcesOk checks if resource constraints specified in intent (i) are met
-func resourcesOk(eap model.EdgeAppParams, mec model.MecHost) bool {
-	var cpuUtilization, memUtilization float64
-
-	cpuUtilization = 100 * (mec.GetCpuUsed() + eap.AppCPUReq) / mec.GetCpuAllocatable()
-	memUtilization = 100 * (mec.GetMemUsed() + eap.AppMemReq) / mec.GetMemAllocatable()
-
-	cpuMax := eap.CPUUtilMax // 80
-	memMax := eap.MemUtilMax // 80
-	cpuMecAvaliable := mec.GetCpuAllocatable() - mec.GetCpuUsed()
-	memMecAvaliable := mec.GetMemAllocatable() - mec.GetMemUsed()
-
-	if cpuUtilization < 0 || memUtilization < 0 {
-		return false
-	} else if cpuMecAvaliable < eap.AppCPUReq {
-		return false
-	} else if memMecAvaliable < eap.AppMemReq {
-		return false
-	} else if cpuMax >= cpuUtilization && memMax >= memUtilization {
-		//log.Warnf("[RES-CHECK][DEBUG] Resources OK!")
-		return true
-	} else {
-		//log.Warnf("[RES-CHECK][DEBUG] Resources not OK :/")
-		return false
-	}
-}
-*/
-func printCellsInfo(val interface{}) {
-	jsonCells, err := json.Marshal(val)
-	if err != nil {
-		log.Errorf("Marshal err: %v", err)
-	}
-
-	fmt.Println("----- CELLS -----")
-	fmt.Println(string(jsonCells))
 }
