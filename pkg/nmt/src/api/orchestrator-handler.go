@@ -102,9 +102,11 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
-	//params := mux.Vars(r)
+	params := mux.Vars(r)
 
-	//TODO: h.graphClient.declareApplications(params["app-number"])
+	appNumber := params["app-number"]
+
+	h.graphClient.DeclareApplications(appNumber)
 
 	var mecHostSource []model.MecHost
 	var cells = map[int]int{}
