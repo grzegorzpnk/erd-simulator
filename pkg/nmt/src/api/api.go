@@ -32,12 +32,14 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/neighbours", handler.getMECNeighbours).Methods("GET")
 
 	// Communication with Orchestrator
-	r.HandleFunc(baseUrl+"/topology/mecHosts/application", handler.getAllMecApps).Methods("GET")
+	r.HandleFunc(baseUrl+"/topology/application", handler.getAllMecApps).Methods("GET")
+	r.HandleFunc(baseUrl+"/topology/mecHosts/application", handler.getAllMecHostsWithApps).Methods("GET")
 	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/application", handler.InstantiateApplication).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/removeApplication", handler.DeleteApplication).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/mecHosts/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application", handler.RelocateApplication).Methods("POST")
-	r.HandleFunc(baseUrl+"/topology/mecHosts/declare-apps/{applications}", handler.OnboardApplications).Methods("POST")
-	r.HandleFunc(baseUrl+"/topology/mecHosts/initial-placement", handler.GenerateInitialClusters).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/declare-apps/{applications}", handler.DefineApplications).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/initial-placement-generator", handler.GenerateInitialClusters).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/instantiateAll", handler.InstantiateAllDefinedApps).Methods("POST")
 
 	return r
 

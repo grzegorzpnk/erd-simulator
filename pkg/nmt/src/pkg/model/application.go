@@ -1,8 +1,10 @@
 package model
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	"fmt"
 	"math/rand"
+	"strconv"
 )
 
 type MECApp struct {
@@ -19,12 +21,11 @@ type RequestedResources struct {
 
 func (app *MECApp) GeneratreResourceRequirements() {
 
-	//rand.Seed(time.Now().UnixNano())
+	minRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMin, 64)
+	maxRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMax, 64)
 
-	// Generate a random number between 100 and 200
-
-	app.Requirements.RequestedCPU = 100.00 + rand.Float64()*101.00
-	app.Requirements.RequestedMEMORY = 100 + rand.Float64()*101.00
+	app.Requirements.RequestedCPU = minRes + rand.Float64()*(maxRes-minRes)
+	app.Requirements.RequestedMEMORY = minRes + rand.Float64()*(maxRes-minRes)
 
 }
 

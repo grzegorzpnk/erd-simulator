@@ -11,6 +11,8 @@ config:
   servicePort: 8282
   clusterProvider: "orange"
   tau: 0.8
+  res-min: 500
+  res-max: 1000
   obs:
     endpoint: "http://10.254.185.44"
     port: "32138"

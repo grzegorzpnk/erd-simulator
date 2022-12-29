@@ -17,12 +17,9 @@ type Configuration struct {
 	ClusterControllerEndpoint string `json:"cluster-controller-endpoint"`
 	EdgeProvider              string `json:"edge-provider"`
 	Tau                       string `json:"tau"`
+	ResMin                    string `json:"res-min"`
+	ResMax                    string `json:"res-max"`
 }
-
-//type ClusterSet struct {
-//	Provider string   `json:"clusters-provider"`
-//	Clusters []string `json:"clusters"`
-//}
 
 // Config is the structure that stores the configuration
 var gConfig *Configuration
@@ -57,6 +54,8 @@ func defaultConfiguration() *Configuration {
 		ClusterControllerEndpoint: "http://10.254.185.50:32138/",
 		EdgeProvider:              "orange",
 		Tau:                       "0.8",
+		ResMin:                    "500",
+		ResMax:                    "1000",
 	}
 
 }

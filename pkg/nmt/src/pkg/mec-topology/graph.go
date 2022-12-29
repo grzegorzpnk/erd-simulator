@@ -229,9 +229,6 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 
 func (g *Graph) DeclareApplications(count string) {
 
-	g.Application = nil
-	//todo:consider if we should also delete apps from list at each meach hosts - unisntall
-
 	//we have defined three types of application, with a requirements os 10, 15 and 25 ms, 1/3 for each type
 	cnt, _ := strconv.Atoi(count)
 	v2x, drones, video := cnt/3, cnt/3, cnt/3
@@ -273,5 +270,74 @@ func (g *Graph) DeclareApplications(count string) {
 	for i := 0; i < len(g.Application); i++ {
 		g.Application[i].PrintApplication()
 	}
+
+}
+
+//func to instanitate all apps from application's declaration lists
+func (g *Graph) InstantiateAllDefinedApps() {
+
+	for _, v := range g.Application {
+		mecHost := g.GetMecHost(v.ClusterId, "orange")
+		mecHost.InstantiateApp(*v)
+	}
+}
+
+func (g *Graph) UninstallAllApps() {
+
+	//uninstall on MEC Hosts
+	for _, v := range g.MecHosts {
+		if len(v.MECApps) != 0 {
+			v.MECApps = nil
+		}
+	}
+	//todo: clear resources
+}
+
+func (g *Graph) DeleteAllDeclaredApps() {
+
+	g.Application = nil
+}
+
+func (g *Graph) FindInitialClusters() bool {
+
+	var mecHostSource []model.MecHost
+	var cells = map[int]int{}
+
+	//PREREQUESTIES
+	//in order not to work on real clusters ( cause we need to update resources, etc for looking for initial configutration)
+	for _, v := range g.MecHosts {
+		mecHostSource = append(mecHostSource, *v)
+	}
+	//another copy for each serach iteration ( if one search will fail, wee need to repeat on still fresh data)
+	var mecHostsSourcesTmp = make([]model.MecHost, len(mecHostSource))
+
+	var cnt = 0
+	search := true
+	for search {
+		fmt.Println("[DEBUG] Starting search.")
+		cnt++
+		if cnt > 5 {
+			fmt.Printf("Cannot identify initial clusters!\n")
+			return false
+		}
+		copy(mecHostsSourcesTmp, mecHostSource)
+		cells = generateRandomCellsForUsers(len(g.Application), *g)
+
+		search = false
+		for index, edgeApp := range g.Application {
+			startCell := g.GetCell(strconv.Itoa(cells[index+1]))
+			cmh, err := findCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, g)
+			if err != nil {
+				search = true
+				fmt.Printf("Could not find candidate mec for App[%v]. Search failed.\n", edgeApp.Id)
+				break
+			}
+			mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
+			edgeApp.ClusterId = cmh.Identity.Cluster
+		}
+	}
+
+	fmt.Printf("Found after %v iterations", cnt)
+	return true
 
 }

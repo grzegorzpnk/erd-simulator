@@ -96,7 +96,6 @@ func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 
 		}
 	}
-
 }
 
 func (g *Graph) AssigneCapacityToClusters() {

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
-	"strconv"
 )
 
 func (h *apiHandler) InstantiateApplication(w http.ResponseWriter, r *http.Request) {
@@ -99,67 +98,37 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) DefineApplications(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Content-Type", "application/json")
-	/*params := mux.Vars(r)
-	appNumber := params["app-number"]
-	h.graphClient.DeclareApplications(appNumber)*/
-
-	var mecHostSource []model.MecHost
-	var cells = map[int]int{}
-
-	//PREREQUESTIES
-	//in order not to work on real clusters ( cause we need to update resources, etc for looking for initial configutration)
-	for _, v := range h.graphClient.MecHosts {
-		mecHostSource = append(mecHostSource, *v)
-	}
-	//another copy for each serach iteration ( if one search will fail, wee need to repeat on still fresh data)
-	var mecHostsSourcesTmp = make([]model.MecHost, len(mecHostSource))
-
-	var cnt = 0
-	search := true
-	for search {
-		fmt.Println("[DEBUG] Starting search.")
-		cnt++
-		if cnt > 5 {
-			fmt.Printf("Cannot identify initial clusters!\n")
-			w.WriteHeader(http.StatusGone)
-			return
-		}
-		copy(mecHostsSourcesTmp, mecHostSource)
-		cells = generateRandomCells()
-
-		search = false
-		for index, edgeApp := range h.graphClient.Application {
-			startCell := h.graphClient.GetCell(strconv.Itoa(cells[index+1]))
-			cmh, err := findCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, &h.graphClient)
-			if err != nil {
-				search = true
-				fmt.Printf("Could not find candidate mec for App[%v]. Search failed.\n", edgeApp.Id)
-				break
-			}
-			mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
-			edgeApp.ClusterId = cmh.Identity.Cluster
-		}
-	}
-
-	fmt.Printf("Found after %v iterations", cnt)
-	w.WriteHeader(http.StatusOK)
-
-	fmt.Printf("Apps with clusters:\n")
-	for i := 0; i < len(h.graphClient.Application); i++ {
-		h.graphClient.Application[i].PrintApplication()
-	}
-
-	//TODO: instantiate apps
-
-}
-
-func (h *apiHandler) OnboardApplications(w http.ResponseWriter, r *http.Request) {
-
+	h.graphClient.DeleteAllDeclaredApps()
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	h.graphClient.DeclareApplications(params["applications"])
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+
+	status := h.graphClient.FindInitialClusters()
+	if status == true {
+		w.WriteHeader(http.StatusOK)
+		fmt.Printf("Apps with clusters:\n")
+		for i := 0; i < len(h.graphClient.Application); i++ {
+			h.graphClient.Application[i].PrintApplication()
+		}
+	} else {
+		w.WriteHeader(http.StatusGone)
+		log.Errorf("Cannot find clsuters for declared apps\n")
+	}
+}
+
+func (h *apiHandler) InstantiateAllDefinedApps(w http.ResponseWriter, r *http.Request) {
+	//todo clear resources during uninstall
+	h.graphClient.UninstallAllApps()
+	w.Header().Set("Content-Type", "application/json")
+	h.graphClient.InstantiateAllDefinedApps()
+	w.WriteHeader(http.StatusOK)
+}
+

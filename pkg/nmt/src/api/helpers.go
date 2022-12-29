@@ -1,17 +1,12 @@
 package api
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/djikstra"
 	mec_topology "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"encoding/json"
-	"errors"
-	"log"
-	"math/rand"
-	"strconv"
-
 	"fmt"
+	"log"
 )
 
 func containsAnyEdge(vertex model.MecHost) bool {
@@ -53,7 +48,8 @@ func ShortestPath(startCell *model.Cell, destCluster *model.MecHost, graph *mec_
 		}
 
 		var inputGraph djikstra.InputGraph
-		inputGraph.Graph = make([]djikstra.InputData, 200)
+		//max 1000 MEC HOSTS
+		inputGraph.Graph = make([]djikstra.InputData, 1000)
 
 		//add all mec hosts to temp graph todo: should be only subset of graph nodes
 		for i, v := range graph.Edges {
@@ -89,111 +85,8 @@ func ShortestPath(startCell *model.Cell, destCluster *model.MecHost, graph *mec_
 			}
 		}
 
-		/*for i, v := range results {
-
-			if v.latencyResults == min {
-				fmt.Printf("final path is: %v\n", results[i].path)
-			}
-		}*/
-
 	}
 	return min
-}
-
-func updateMecResourcesInfo(mhs []model.MecHost, cmh model.MecHost, app model.MECApp) []model.MecHost {
-	cmh.CpuResources.Used += app.Requirements.RequestedCPU
-	cmh.MemoryResources.Used += app.Requirements.RequestedMEMORY
-	cmh.CpuResources.Utilization = 100 * (cmh.CpuResources.Used / cmh.CpuResources.Capacity)
-	cmh.MemoryResources.Utilization = 100 * (cmh.MemoryResources.Used / cmh.MemoryResources.Capacity)
-
-	for index, mh := range mhs {
-		if mh.Identity.Provider == cmh.Identity.Provider && mh.Identity.Cluster == cmh.Identity.Cluster {
-			mhs[index] = cmh
-			break
-		}
-	}
-
-	return mhs
-}
-
-func findCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, graph *mec_topology.Graph) (model.MecHost, error) {
-	candidates := []model.MecHost{}
-
-	for index, mh := range mhs {
-		latency := ShortestPath(cell, &mh, graph)
-		mhs[index].TmpLatency = latency
-	}
-
-	for _, mh := range mhs {
-		if resourcesOk(app, mh) && latencyOk(app, mh) {
-			candidates = append(candidates, mh)
-			// We need to prioritize N+1 and N+2 level clusters
-			if mh.Identity.Location.Level == 2 {
-				candidates = append(candidates, mh)
-				candidates = append(candidates, mh)
-				candidates = append(candidates, mh)
-			} else if mh.Identity.Location.Level == 1 {
-				candidates = append(candidates, mh)
-				candidates = append(candidates, mh)
-			}
-		} else {
-		}
-	}
-	if len(candidates) <= 0 {
-		return model.MecHost{}, errors.New("no candidates found")
-	}
-	return candidates[rand.Intn(len(candidates))], nil
-}
-
-// latencyOk checks if latency constraints specified in intent (i) are met
-func latencyOk(app model.MECApp, mec model.MecHost) bool {
-	latency := mec.TmpLatency
-	latencyMax := app.Requirements.RequestedCPU
-
-	if mec.TmpLatency < 0 {
-		return false
-	} else if latencyMax > latency {
-		return true
-	} else {
-		return false
-	}
-}
-
-// resourcesOk checks if resource constraints specified in intent (i) are met
-func resourcesOk(app model.MECApp, mec model.MecHost) bool {
-	var cpuUtilization, memUtilization float64
-
-	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
-
-	cpuUtilization = 100 * (mec.GetCpuUsed() + app.Requirements.RequestedCPU) / mec.GetCpuCapacity()
-	memUtilization = 100 * (mec.GetMemoryUsed() + app.Requirements.RequestedMEMORY) / mec.GetMemoryCapacity()
-
-	cpuMax := mec.CpuResources.Capacity * tau    // 80
-	memMax := mec.MemoryResources.Capacity * tau // 80
-	cpuMecAvaliable := mec.GetCpuCapacity() - mec.GetCpuUsed()
-	memMecAvaliable := mec.GetMemoryCapacity() - mec.GetMemoryUsed()
-
-	if cpuUtilization < 0 || memUtilization < 0 {
-		return false
-	} else if cpuMecAvaliable < app.Requirements.RequestedCPU {
-		return false
-	} else if memMecAvaliable < app.Requirements.RequestedMEMORY {
-		return false
-	} else if cpuMax >= cpuUtilization && memMax >= memUtilization {
-		//log.Warnf("[RES-CHECK][DEBUG] Resources OK!")
-		return true
-	} else {
-		//log.Warnf("[RES-CHECK][DEBUG] Resources not OK :/")
-		return false
-	}
-}
-
-func generateRandomCells() map[int]int {
-	var cells map[int]int = map[int]int{}
-	for i := 1; i <= 50; i++ {
-		cells[i] = rand.Intn(42) + 1
-	}
-	return cells
 }
 
 func printCellsInfo(val interface{}) {
