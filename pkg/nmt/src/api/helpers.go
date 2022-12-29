@@ -40,7 +40,7 @@ func ShortestPath(startCell *model.Cell, destCluster *model.MecHost, graph *mec_
 	//check if they are direct neighbours, if so the latency is just between start and stop node
 	if destCluster.CheckMECsupportsCell(startCell.Id) {
 		min = destCluster.GetCell(startCell.Id).Latency
-		fmt.Printf("direct nodes, latency between cell: %v and mec: [%v+%v], is: %v", startCell.Id, destCluster.Identity.Provider, destCluster.Identity.Cluster, destCluster.GetCell(startCell.Id).Latency)
+		//fmt.Printf("direct nodes, latency between cell: %v and mec: [%v+%v], is: %v", startCell.Id, destCluster.Identity.Provider, destCluster.Identity.Cluster, destCluster.GetCell(startCell.Id).Latency)
 
 	} else {
 		// if not, we have to calculate path between all MEC clusters that are in the same local zone as cell, to the target cluster, the final latency is a sum of the calculated one + between started mec and cell
@@ -89,12 +89,12 @@ func ShortestPath(startCell *model.Cell, destCluster *model.MecHost, graph *mec_
 			}
 		}
 
-		for i, v := range results {
+		/*for i, v := range results {
 
 			if v.latencyResults == min {
 				fmt.Printf("final path is: %v\n", results[i].path)
 			}
-		}
+		}*/
 
 	}
 	return min

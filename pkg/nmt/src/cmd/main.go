@@ -19,14 +19,26 @@ func main() {
 
 	graph = &mec_topology.Graph{}
 	readMECNetworkTopologyConfig()
-
 	// setup clusters resources
 	graph.AssigneCapacityToClusters()
 
 	// TODO: setup latency on links - to be included if we already created links !
-	// graph.NetworkMetricsUpdate()
+	graph.NetworkMetricsUpdate()
 
 	//start NMT server
+	startNMTserver()
+
+}
+
+func readMECNetworkTopologyConfig() {
+
+	graph.ReadTopologyConfigFile("mecTopology.json")
+	graph.ReadMECConnectionFile("mecLinks.json")
+	graph.ReadNetworkTopologyConfigFile("networkTopology.json")
+
+}
+
+func startNMTserver() {
 
 	httpRouter := api.NewRouter(graph)
 	httpServer := &http.Server{
@@ -45,13 +57,4 @@ func main() {
 
 	err := httpServer.ListenAndServe()
 	log.Fatalln(fmt.Sprintf("[SERVER] HTTP server returned error: %s", err))
-
-}
-
-func readMECNetworkTopologyConfig() {
-
-	graph.ReadTopologyConfigFile("mecTopology.json")
-	//graph.ReadMECConnectionFile("mecLinks.json")
-	//graph.ReadNetworkTopologyConfigFile("networkTopology.json")
-
 }

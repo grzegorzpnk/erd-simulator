@@ -229,6 +229,9 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 
 func (g *Graph) DeclareApplications(count string) {
 
+	g.Application = nil
+	//todo:consider if we should also delete apps from list at each meach hosts - unisntall
+
 	//we have defined three types of application, with a requirements os 10, 15 and 25 ms, 1/3 for each type
 	cnt, _ := strconv.Atoi(count)
 	v2x, drones, video := cnt/3, cnt/3, cnt/3
@@ -242,28 +245,33 @@ func (g *Graph) DeclareApplications(count string) {
 		v2x++
 	}
 
-	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video", cnt, v2x, drones, video)
+	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", cnt, v2x, drones, video)
 
 	for i := 0; i < v2x; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 10
+		app.GeneratreResourceRequirements()
 		g.Application = append(g.Application, &app)
 	}
 	for i := v2x; i < v2x+drones; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 15
+		app.GeneratreResourceRequirements()
+		g.Application = append(g.Application, &app)
 	}
 	for i := v2x + drones; i < v2x+drones+video; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 25
+		app.GeneratreResourceRequirements()
 		g.Application = append(g.Application, &app)
 	}
 
-	/*	for i,v := range
-		fmt.Println()
-	*/
+	fmt.Printf("Apps without clusters:\n")
+	for i := 0; i < len(g.Application); i++ {
+		g.Application[i].PrintApplication()
+	}
 
 }

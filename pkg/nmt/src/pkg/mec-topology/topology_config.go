@@ -104,16 +104,16 @@ func (g *Graph) AssigneCapacityToClusters() {
 	for _, v := range g.MecHosts {
 
 		if v.Identity.Location.Level == 0 {
-			v.MemoryResources.Capacity = 4
-			v.CpuResources.Capacity = 4
+			v.MemoryResources.Capacity = 4000
+			v.CpuResources.Capacity = 4000
 		}
 		if v.Identity.Location.Level == 1 {
-			v.MemoryResources.Capacity = 8
-			v.CpuResources.Capacity = 8
+			v.MemoryResources.Capacity = 8000
+			v.CpuResources.Capacity = 8000
 		}
 		if v.Identity.Location.Level == 2 {
-			v.MemoryResources.Capacity = 12
-			v.CpuResources.Capacity = 12
+			v.MemoryResources.Capacity = 12000
+			v.CpuResources.Capacity = 12000
 		}
 
 		v.CpuResources.Utilization = 0
