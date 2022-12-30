@@ -57,4 +57,5 @@ func startNMTserver() {
 
 	err := httpServer.ListenAndServe()
 	log.Fatalln(fmt.Sprintf("[SERVER] HTTP server returned error: %s", err))
+
 }

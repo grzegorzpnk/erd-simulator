@@ -125,7 +125,7 @@ func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Requ
 }
 
 func (h *apiHandler) InstantiateAllDefinedApps(w http.ResponseWriter, r *http.Request) {
-	//todo clear resources during uninstall
+
 	h.graphClient.UninstallAllApps()
 	w.Header().Set("Content-Type", "application/json")
 	h.graphClient.InstantiateAllDefinedApps()

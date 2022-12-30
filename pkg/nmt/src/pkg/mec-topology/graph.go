@@ -287,10 +287,11 @@ func (g *Graph) UninstallAllApps() {
 	//uninstall on MEC Hosts
 	for _, v := range g.MecHosts {
 		if len(v.MECApps) != 0 {
-			v.MECApps = nil
+			for _, x := range v.MECApps {
+				v.UninstallApp(x)
+			}
 		}
 	}
-	//todo: clear resources
 }
 
 func (g *Graph) DeleteAllDeclaredApps() {
