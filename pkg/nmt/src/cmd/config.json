@@ -4,5 +4,6 @@
   "edge-provider" : "orange",
   "tau" : "0.8",
   "res-min" : "500",
-  "res-max": "1000"
+  "res-max": "1000",
+  "max-cell-number" : "42"
 }

@@ -1,10 +1,10 @@
 package mec_topology
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/api"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"errors"
+	"fmt"
 	"math/rand"
 	"strconv"
 )
@@ -40,11 +40,19 @@ func (g *Graph) CheckAlreadExistLink(k model.Edge) bool {
 
 }
 
-func findCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, graph *Graph) (model.MecHost, error) {
+func FindCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, graph *Graph) (model.MecHost, error) {
 	candidates := []model.MecHost{}
 
+	fmt.Printf("Looking for MEC Candidates for:    ")
+	app.PrintApplication()
+
 	for index, mh := range mhs {
-		latency := api.ShortestPath(cell, &mh, graph)
+		latency, err := graph.ShortestPath(cell, &mh)
+		if err != nil {
+			err := "Find MEC Candidate has failed due to '0' value shortest path"
+			fmt.Printf(err)
+			return model.MecHost{}, errors.New(err)
+		}
 		mhs[index].TmpLatency = latency
 	}
 
@@ -65,6 +73,10 @@ func findCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, gr
 	}
 	if len(candidates) <= 0 {
 		return model.MecHost{}, errors.New("no candidates found")
+	}
+	fmt.Printf("Total number of candidates: %v\n", len(candidates))
+	for i, _ := range candidates {
+		fmt.Println(candidates[i].Identity.Cluster)
 	}
 	return candidates[rand.Intn(len(candidates))], nil
 }
@@ -88,7 +100,7 @@ func updateMecResourcesInfo(mhs []model.MecHost, cmh model.MecHost, app model.ME
 // latencyOk checks if latency constraints specified in intent (i) are met
 func latencyOk(app model.MECApp, mec model.MecHost) bool {
 	latency := mec.TmpLatency
-	latencyMax := app.Requirements.RequestedCPU
+	latencyMax := app.Requirements.RequestedLatency
 
 	if mec.TmpLatency < 0 {
 		return false
@@ -128,10 +140,16 @@ func resourcesOk(app model.MECApp, mec model.MecHost) bool {
 	}
 }
 
-func generateRandomCellsForUsers(usersNumber int, graph Graph) map[int]int {
+func GenerateRandomCellsForUsers(usersNumber int, graph Graph) map[int]int {
 	var cells map[int]int = map[int]int{}
+	max, _ := strconv.Atoi(config.GetConfiguration().MaxCellNumber)
 	for i := 1; i <= usersNumber; i++ {
-		cells[i] = rand.Intn(len(graph.NetworkCells)) + 1
+		cells[i] = rand.Intn(max) + 1
 	}
 	return cells
+}
+
+type ShortestPathResult struct {
+	latencyResults float64
+	path           []string
 }

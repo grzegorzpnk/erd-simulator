@@ -9,8 +9,9 @@ import (
 
 type MECApp struct {
 	Id           string             `json:"id"`
-	Requirements RequestedResources `json:"requirements"`
 	ClusterId    string             `json:"clusterId"`
+	UserLocation string             `json:"userLocation"`
+	Requirements RequestedResources `json:"requirements"`
 }
 
 type RequestedResources struct {
@@ -31,6 +32,6 @@ func (app *MECApp) GeneratreResourceRequirements() {
 
 func (app *MECApp) PrintApplication() {
 
-	fmt.Printf("Application ID: %v, app clusterID: %v, requirements: CPU: %v, Memory: %v, Latency: %v \n", app.Id, app.ClusterId, app.Requirements.RequestedCPU, app.Requirements.RequestedMEMORY, app.Requirements.RequestedLatency)
+	fmt.Printf("Application ID: %v, app clusterID: %v, UE Location at cell no:%v, requirements: CPU: %v, Memory: %v, Latency: %v \n", app.Id, app.ClusterId, app.UserLocation, app.Requirements.RequestedCPU, app.Requirements.RequestedMEMORY, app.Requirements.RequestedLatency)
 
 }

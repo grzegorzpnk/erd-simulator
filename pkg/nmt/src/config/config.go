@@ -17,8 +17,11 @@ type Configuration struct {
 	ClusterControllerEndpoint string `json:"cluster-controller-endpoint"`
 	EdgeProvider              string `json:"edge-provider"`
 	Tau                       string `json:"tau"`
-	ResMin                    string `json:"res-min"`
-	ResMax                    string `json:"res-max"`
+
+	//values for initial placement controller
+	ResMin        string `json:"res-min"`
+	ResMax        string `json:"res-max"`
+	MaxCellNumber string `json:"max-cell-number"` //this value specify the range to generate initial cells between 0 - MaxCellNumber
 }
 
 // Config is the structure that stores the configuration
@@ -56,6 +59,7 @@ func defaultConfiguration() *Configuration {
 		Tau:                       "0.8",
 		ResMin:                    "500",
 		ResMax:                    "1000",
+		MaxCellNumber:             "42",
 	}
 
 }

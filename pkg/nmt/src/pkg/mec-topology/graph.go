@@ -1,6 +1,7 @@
 package mec_topology
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/djikstra"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"errors"
@@ -322,23 +323,92 @@ func (g *Graph) FindInitialClusters() bool {
 			return false
 		}
 		copy(mecHostsSourcesTmp, mecHostSource)
-		cells = generateRandomCellsForUsers(len(g.Application), *g)
+		cells = GenerateRandomCellsForUsers(len(g.Application), *g)
 
 		search = false
 		for index, edgeApp := range g.Application {
 			startCell := g.GetCell(strconv.Itoa(cells[index+1]))
-			cmh, err := findCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, g)
+			cmh, err := FindCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, g)
 			if err != nil {
 				search = true
-				fmt.Printf("Could not find candidate mec for App[%v]. Search failed.\n", edgeApp.Id)
+				fmt.Printf("Could not find candidate mec for App[%v] due to: %v\n", edgeApp.Id, err.Error())
 				break
 			}
 			mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
 			edgeApp.ClusterId = cmh.Identity.Cluster
+			edgeApp.UserLocation = startCell.Id
 		}
 	}
 
 	fmt.Printf("Found after %v iterations", cnt)
 	return true
 
+}
+
+func (g *Graph) ShortestPath(startCell *model.Cell, destCluster *model.MecHost) (float64, error) {
+
+	var min float64
+
+	if destCluster == nil {
+		log.Fatalln("destination MEC host not recognized!")
+		err := "cannot find destination mec, shortest path finds failed"
+		return 0, errors.New(err)
+
+	}
+	//check if they are direct neighbours, if so the latency is just between start and stop node
+	if destCluster.CheckMECsupportsCell(startCell.Id) {
+		min = destCluster.GetCell(startCell.Id).Latency
+		log.Infof("direct nodes, latency between cell: %v and mec: [%v+%v], is: %v", startCell.Id, destCluster.Identity.Provider, destCluster.Identity.Cluster, destCluster.GetCell(startCell.Id).Latency)
+
+	} else {
+		// if not, we have to calculate path between all MEC clusters that are in the same local zone as cell, to the target cluster, the final latency is a sum of the calculated one + between started mec and cell
+		var startClusters []model.MecHost
+
+		for _, v := range g.MecHosts {
+			if v.Identity.Location.LocalZone == startCell.LocalZone {
+				startClusters = append(startClusters, *v)
+			}
+		}
+
+		var inputGraph djikstra.InputGraph
+		//max 1000 MEC HOSTS
+		inputGraph.Graph = make([]djikstra.InputData, 1000)
+
+		//add all mec hosts to temp graph todo: should be only subset of graph nodes
+		for i, v := range g.Edges {
+			inputGraph.Graph[i].Source = v.SourceVertexName
+			inputGraph.Graph[i].Destination = v.TargetVertexName
+			inputGraph.Graph[i].Weight = v.EdgeMetrics.Latency
+		}
+		itemGraph := djikstra.CreateGraph(inputGraph)
+
+		//calculate shortest path between all []startClusters and stopNode, where startClusters is a list of cluster directly associated with cell
+		results := make([]ShortestPathResult, 0)
+
+		for _, v := range startClusters {
+
+			startNd := djikstra.Node{v.Identity.Cluster}
+			stopNd := djikstra.Node{destCluster.Identity.Cluster}
+
+			var resultTmp ShortestPathResult
+			resultTmp.path, resultTmp.latencyResults = djikstra.GetShortestPath(&startNd, &stopNd, itemGraph)
+
+			//add latency between cell and start MEC host
+			resultTmp.latencyResults += g.GetMecHost(v.Identity.Cluster, v.Identity.Provider).GetCell(startCell.Id).Latency
+
+			results = append(results, resultTmp)
+
+		}
+
+		//find minimal value
+		min = results[0].latencyResults
+		for _, v := range results {
+			if v.latencyResults < min {
+				min = v.latencyResults
+			}
+		}
+
+		log.Infof("indirect nodes, latency between cell: %v and mec: [%v], is: %v", startCell.Id, destCluster.Identity.Cluster, min)
+	}
+	return min, nil
 }

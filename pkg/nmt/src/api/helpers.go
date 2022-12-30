@@ -1,8 +1,6 @@
 package api
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/djikstra"
-	mec_topology "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"encoding/json"
 	"fmt"
@@ -19,11 +17,11 @@ func containsAnyEdge(vertex model.MecHost) bool {
 
 }
 
-type ShortestPathResult struct {
+/*type ShortestPathResult struct {
 	latencyResults float64
 	path           []string
-}
-
+}*/
+/*
 func ShortestPath(startCell *model.Cell, destCluster *model.MecHost, graph *mec_topology.Graph) float64 {
 
 	var min float64
@@ -88,7 +86,7 @@ func ShortestPath(startCell *model.Cell, destCluster *model.MecHost, graph *mec_
 	}
 	return min
 }
-
+*/
 func printCellsInfo(val interface{}) {
 	jsonCells, err := json.Marshal(val)
 	if err != nil {

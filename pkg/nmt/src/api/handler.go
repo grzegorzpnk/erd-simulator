@@ -50,7 +50,7 @@ func (h *apiHandler) getMecHostHandler(w http.ResponseWriter, r *http.Request) {
 	for i, v := range h.graphClient.MecHosts {
 		if v.Identity.Cluster == params["cluster"] &&
 			v.Identity.Provider == params["provider"] {
-			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].Identity)
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i])
 			break
 		}
 	}
@@ -106,10 +106,14 @@ func (h *apiHandler) shortestPathHandler(w http.ResponseWriter, r *http.Request)
 	destCluster := h.graphClient.GetMecHost(cName, cProvider)
 	startCell := h.graphClient.GetCell(cell)
 
-	min := ShortestPath(startCell, destCluster, &h.graphClient)
+	min, err := h.graphClient.ShortestPath(startCell, destCluster)
 
+	if err != nil {
+		w.WriteHeader(http.StatusGone)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(min)
-	log.Infof("indirect nodes, latency between cell: %v and mec: [%v+%v], is: %v", startCell.Id, cProvider, cName, min)
 
 }
 
