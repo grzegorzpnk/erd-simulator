@@ -117,11 +117,9 @@ func resourcesOk(app model.MECApp, mec model.MecHost) bool {
 
 	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
 
-	cpuUtilization = 100 * (mec.GetCpuUsed() + app.Requirements.RequestedCPU) / mec.GetCpuCapacity()
-	memUtilization = 100 * (mec.GetMemoryUsed() + app.Requirements.RequestedMEMORY) / mec.GetMemoryCapacity()
+	cpuUtilization = (mec.GetCpuUsed() + app.Requirements.RequestedCPU) / mec.GetCpuCapacity()
+	memUtilization = (mec.GetMemoryUsed() + app.Requirements.RequestedMEMORY) / mec.GetMemoryCapacity()
 
-	cpuMax := mec.CpuResources.Capacity * tau    // 80
-	memMax := mec.MemoryResources.Capacity * tau // 80
 	cpuMecAvaliable := mec.GetCpuCapacity() - mec.GetCpuUsed()
 	memMecAvaliable := mec.GetMemoryCapacity() - mec.GetMemoryUsed()
 
@@ -131,7 +129,7 @@ func resourcesOk(app model.MECApp, mec model.MecHost) bool {
 		return false
 	} else if memMecAvaliable < app.Requirements.RequestedMEMORY {
 		return false
-	} else if cpuMax >= cpuUtilization && memMax >= memUtilization {
+	} else if cpuUtilization <= tau && memUtilization <= tau {
 		//log.Warnf("[RES-CHECK][DEBUG] Resources OK!")
 		return true
 	} else {

@@ -109,6 +109,7 @@ func (h *apiHandler) DefineApplications(w http.ResponseWriter, r *http.Request) 
 
 func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Request) {
 
+	h.graphClient.UninstallAllApps()
 	w.Header().Set("Content-Type", "application/json")
 
 	status := h.graphClient.FindInitialClusters()
@@ -131,4 +132,3 @@ func (h *apiHandler) InstantiateAllDefinedApps(w http.ResponseWriter, r *http.Re
 	h.graphClient.InstantiateAllDefinedApps()
 	w.WriteHeader(http.StatusOK)
 }
-

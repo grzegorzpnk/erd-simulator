@@ -2,6 +2,7 @@ package model
 
 import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
+	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
 	"strconv"
 )
@@ -108,6 +109,8 @@ func (mec *MecHost) InstantiateApp(app MECApp) {
 	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
 	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
 
+	log.Infof("App: %v instantiated on cluster: %v", app.Id, app.ClusterId)
+
 }
 
 //TOBE tested
@@ -150,6 +153,8 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	//update utilization
 	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
 	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
+
+	log.Infof("App: %v UNinstalled from cluster: %v", app.Id, app.ClusterId)
 
 }
 
