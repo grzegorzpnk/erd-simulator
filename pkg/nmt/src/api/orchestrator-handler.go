@@ -31,8 +31,13 @@ func (h *apiHandler) InstantiateApplication(w http.ResponseWriter, r *http.Reque
 		log.Errorf(err.Error())
 		w.WriteHeader(http.StatusConflict)
 	} else {
-		mecHost.InstantiateApp(mecApp)
-		w.WriteHeader(http.StatusOK)
+		err := mecHost.InstantiateApp(mecApp)
+		if err != nil {
+			log.Errorf("Error has been raised: ", err)
+			w.WriteHeader(http.StatusConflict)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
 	}
 }
 
@@ -91,7 +96,12 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 		w.WriteHeader(http.StatusConflict)
 		return
 	} else {
-		newMecHost.InstantiateApp(mecApp)
+		err := newMecHost.InstantiateApp(mecApp)
+		if err != nil {
+			log.Errorf("Error has been raised: ", err)
+			w.WriteHeader(http.StatusConflict)
+			return
+		}
 		oldMecHost.UninstallApp(mecApp)
 		w.WriteHeader(http.StatusOK)
 		log.Infof("App relocated succesfully ! \n")
@@ -129,6 +139,44 @@ func (h *apiHandler) InstantiateAllDefinedApps(w http.ResponseWriter, r *http.Re
 
 	h.graphClient.UninstallAllApps()
 	w.Header().Set("Content-Type", "application/json")
-	h.graphClient.InstantiateAllDefinedApps()
+	err := h.graphClient.InstantiateAllDefinedApps()
+	if err != nil {
+		log.Errorf("Error has been raised: ", err)
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *apiHandler) Prerequesties(w http.ResponseWriter, r *http.Request) {
+
+	h.graphClient.DeleteAllDeclaredApps()
+	h.graphClient.UninstallAllApps()
+
+	//declare
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	h.graphClient.DeclareApplications(params["applications"])
+
+	//find candidates mec and assign
+	status := h.graphClient.FindInitialClusters()
+	if status == true {
+		fmt.Printf("Apps with clusters:\n")
+		for i := 0; i < len(h.graphClient.Application); i++ {
+			h.graphClient.Application[i].PrintApplication()
+		}
+	} else {
+		w.WriteHeader(http.StatusConflict)
+		log.Errorf("Cannot find clsuters for declared apps\n")
+		return
+	}
+
+	err := h.graphClient.InstantiateAllDefinedApps()
+	if err != nil {
+		log.Errorf("Error has been raised: ", err)
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+
 }

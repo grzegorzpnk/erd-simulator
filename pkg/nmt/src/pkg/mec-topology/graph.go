@@ -275,12 +275,17 @@ func (g *Graph) DeclareApplications(count string) {
 }
 
 //func to instanitate all apps from application's declaration lists
-func (g *Graph) InstantiateAllDefinedApps() {
+func (g *Graph) InstantiateAllDefinedApps() error {
 
 	for _, v := range g.Application {
+
 		mecHost := g.GetMecHost(v.ClusterId, "orange")
-		mecHost.InstantiateApp(*v)
+		err := mecHost.InstantiateApp(*v)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func (g *Graph) UninstallAllApps() {

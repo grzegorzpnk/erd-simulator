@@ -4,6 +4,7 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/metrics"
+	"errors"
 	"strconv"
 )
 
@@ -82,7 +83,7 @@ func (mec *MecHost) CheckMECsupportsCell(cellId string) bool {
 func (mec *MecHost) CheckEnoughResources(app MECApp) bool {
 
 	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
-	availableCPU := (mec.CpuResources.Capacity - mec.CpuResources.Used)
+	availableCPU := mec.CpuResources.Capacity - mec.CpuResources.Used
 	availableMem := mec.MemoryResources.Capacity - mec.MemoryResources.Used
 	if !(app.Requirements.RequestedCPU < (availableCPU * tau)) {
 		return false
@@ -94,7 +95,14 @@ func (mec *MecHost) CheckEnoughResources(app MECApp) bool {
 	return true
 }
 
-func (mec *MecHost) InstantiateApp(app MECApp) {
+func (mec *MecHost) InstantiateApp(app MECApp) error {
+
+	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
+	if (mec.CpuResources.Used+app.Requirements.RequestedCPU)/mec.CpuResources.Capacity > tau ||
+		(mec.MemoryResources.Used+app.Requirements.RequestedMEMORY)/mec.MemoryResources.Capacity > tau {
+		err := "Cannot initialize app %v on cluster %v, due to overload!!"
+		return errors.New(err)
+	}
 
 	//add app to list
 	mec.MECApps = append(mec.MECApps, app)
@@ -110,6 +118,7 @@ func (mec *MecHost) InstantiateApp(app MECApp) {
 	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
 
 	log.Infof("App: %v instantiated on cluster: %v", app.Id, app.ClusterId)
+	return nil
 
 }
 
