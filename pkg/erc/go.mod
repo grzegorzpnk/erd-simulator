@@ -1,4 +1,4 @@
-module "10.254.188.33/matyspi5/erd/pkg/erc"
+module 10.254.188.33/matyspi5/erd/pkg/erc
 
 require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1

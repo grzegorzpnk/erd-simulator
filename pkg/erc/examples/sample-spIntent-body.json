@@ -1,24 +1,30 @@
 {
   "metadata": {
-    "name": "test-smart-intent",
-    "description": "",
+    "name": "sample-er-intent",
+    "description": "Edge Relocation Intent for sample app",
     "userData1": "",
-    "userData2": ""
+    "UserData2": ""
+  },
+  "currentPlacement": {
+    "provider": "edge-provider",
+    "cluster": "mec3"
   },
   "spec": {
-    "app": "test-app",
+    "app": "edge-app-1",
     "smartPlacementIntentData": {
-      "targetCell":"00000020",
-      "priorityLevel": 1,
-      "constraintsList":{
-        "latencyMax":13,
-        "cpuUtilizationMax":25,
-        "memUtilizationMax":10
+      "targetCell": "4",
+      "appCpuReq": 0.5,
+      "appMemReq": 524300000,
+      "constraintsList": {
+        "latencyMax": 15,
+        "cpuUtilizationMax": 80,
+        "memUtilizationMax": 80
       },
-      "parametersWeights":{
-        "latencyWeight":0.34,
-        "cpuUtilizationWeight":0.33,
-        "memUtilizationWeight":0.33
+      "parametersWeights": {
+        "latencyWeight": 0.5,
+        "resourcesWeight": 0.5,
+        "cpuUtilizationWeight": 0.5,
+        "memUtilizationWeight": 0.5
       }
     }
   }

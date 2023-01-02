@@ -18,11 +18,14 @@ const (
 	ApiGetShortestPath    = "/shortest-path"
 )
 
+// Client is a Topology Client, which is aware of Topology Endpoint
+// It's created per request, so topology client is aware of Current UE Cell ID
 type Client struct {
 	TopologyEndpoint string
 	CurrentCell      model.CellId
 }
 
+// NewTopologyClient creates and returns Topology Client
 func NewTopologyClient() *Client {
 	return &Client{
 		TopologyEndpoint: config.GetConfiguration().TopologyEndpoint,
@@ -30,6 +33,7 @@ func NewTopologyClient() *Client {
 	}
 }
 
+// GetMecHostsByCellId gets a list of Mec Hosts related with current UE location (Cell ID)
 func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	var mhs []model.MecHost
 	var mhsIdentity []model.MecIdentity
@@ -50,7 +54,7 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 		err = errors.New(fmt.Sprintf("no mec hosts found for given cell: %v\n.", id))
 		return []model.MecHost{}, err
 	} else {
-		log.Infof("Got CLUSTERS[%+v] for CELL_ID=[%v] ", mhsIdentity, id)
+		log.Infof("For CELL_ID=[%v] got CLUSTERS[%+v]", mhsIdentity, id)
 	}
 
 	for _, mhi := range mhsIdentity {
@@ -61,6 +65,7 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 	return mhs, nil
 }
 
+// GetMecHost gets a single MEC Host with provider+cluster identifier
 func (c *Client) GetMecHost(provider, cluster string) (model.MecHost, error) {
 	var mh model.MecHost
 	var mhIdentity model.MecIdentity
@@ -82,6 +87,8 @@ func (c *Client) GetMecHost(provider, cluster string) (model.MecHost, error) {
 	return mh, nil
 }
 
+// GetMecHostsByRegion gets all MEC Hosts, filters the by region and returns such list
+// TODO: Consider to implement filtering logic on the Topology side (new endpoint)
 func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
 	var mhs []model.MecHost
 	var tempMhs, mhsIdentity []model.MecIdentity
@@ -105,7 +112,7 @@ func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
 				mhsIdentity = append(mhsIdentity, cl)
 			}
 		}
-		log.Infof("Got CLUSTERS[%+v] for REGION=[%v] ", mhsIdentity, region)
+		log.Infof("For REGION=[%v] got CLUSTERS[%+v]", mhsIdentity, region)
 	}
 
 	for _, mhi := range mhsIdentity {
@@ -116,7 +123,7 @@ func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
 	return mhs, nil
 }
 
-// GetMecNeighbours calls topology server to get neighbours list for given MecHost
+// GetMecNeighbours gets a neighbours list for given Mec Host (mec)
 func (c *Client) GetMecNeighbours(mec model.MecHost) (model.MecHost, error) {
 	var mhsIdentity []model.MecIdentity
 
@@ -145,8 +152,8 @@ func (c *Client) GetMecNeighbours(mec model.MecHost) (model.MecHost, error) {
 	return mec, nil
 }
 
-// CollectResourcesInfo calls topology server for MecHost information such as latency,
-// cpu utilization and memory utilization.
+// CollectResourcesInfo gets information such as latency, cpu utilization and memory utilization.
+// This information are related with given MEC Host (mec) and are saved locally. Returns MEC Host object with updated information.
 func (c *Client) CollectResourcesInfo(mec model.MecHost) (model.MecHost, error) {
 
 	cpu, err := c.GetMecResource(model.MecCpu, mec)
@@ -165,7 +172,8 @@ func (c *Client) CollectResourcesInfo(mec model.MecHost) (model.MecHost, error) 
 	return mec, err
 }
 
-// GetMecResource is single method to get MecInfo (cpu | memory) from topology server
+// GetMecResource gets and returns information about CPU / Memory resources for given MEC Host
+// resType acceptable values are: "cpu" and "memory"
 func (c *Client) GetMecResource(resType model.MecInfo, mec model.MecHost) (model.MecResInfo, error) {
 	var val model.MecResInfo
 
@@ -187,7 +195,8 @@ func (c *Client) GetMecResource(resType model.MecInfo, mec model.MecHost) (model
 	return val, nil
 }
 
-// GetShortestPath returns minimum latency for given MEC Hosts.
+// GetShortestPath gets and returns the minimum possible e2e latency for given MEC Hosts.
+// E2E latency is considered between Cell (e.g. gNB) and MEC Host (application)
 func (c *Client) GetShortestPath(cell model.CellId, mec model.MecHost) (float64, error) {
 	var val float64
 
@@ -224,7 +233,6 @@ func (c *Client) buildGetMecHostsByCellIdUrl(id model.CellId) (string, error) {
 }
 
 // buildGetResourcesUrl returns topology endpoint to get MecHost resources (cpu | memory)
-// e.g. /topology/mec/{mec-name}{/cpu | /memory}
 func (c *Client) buildGetResourcesUrl(resType model.MecInfo, mec model.MecHost) (string, error) {
 	var endpoint string
 
@@ -241,6 +249,7 @@ func (c *Client) buildGetResourcesUrl(resType model.MecInfo, mec model.MecHost) 
 	return endpoint, nil
 }
 
+// buildGetAllMecHostsUrl returns topology endpoint to get all avaliable MEC Host
 func (c *Client) buildGetAllMecHostsUrl() string {
 	var endpoint string
 
@@ -251,6 +260,7 @@ func (c *Client) buildGetAllMecHostsUrl() string {
 	return endpoint
 }
 
+// buildGetMecHostUrl returns topology endpoint to get a single MEC Host, represented as provider+cluster
 func (c *Client) buildGetMecHostUrl(provider, cluster string) (string, error) {
 	var endpoint string
 
@@ -265,7 +275,6 @@ func (c *Client) buildGetMecHostUrl(provider, cluster string) (string, error) {
 }
 
 // buildGetShortestPathLatencyBased returns topology endpoint to get MEC latency between MecHost and given CellId
-// e.g. /topology/cell/{cell-id}/mec/{mec-name}/latency
 func (c *Client) buildGetShortestPathLatencyBased(mec model.MecHost, cell model.CellId) (string, error) {
 	var endpoint string
 
@@ -288,7 +297,6 @@ func (c *Client) buildGetShortestPathLatencyBased(mec model.MecHost, cell model.
 }
 
 // buildGetNeighboursUrl returns topology endpoint to get given MecHost neighbours
-// e.g. /topology/mec/{mec-name}/neighbours
 func (c *Client) buildGetNeighboursUrl(mec model.MecHost) (string, error) {
 	var endpoint string
 

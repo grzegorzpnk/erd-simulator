@@ -1,22 +1,18 @@
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2022 Intel Corporation
-
-// Package model contains the data model necessary for the implementations.
-// In this example, SmartPlacementIntent
 package model
 
 type CellId string
 
-type Cluster struct {
+// CurrentPlacement represents where the application is currently instantiated
+type CurrentPlacement struct {
 	Provider string `json:"provider"`
 	Cluster  string `json:"cluster"`
 }
 
-// SmartPlacementIntent defines the high level structure of a network chain document
+// SmartPlacementIntent defines the Intent to perform Smart Placement for giver application
 type SmartPlacementIntent struct {
-	Metadata         Metadata `json:"metadata,omitempty"`
-	CurrentPlacement Cluster
-	Spec             SmartPlacementIntentSpec `json:"spec,omitempty"`
+	Metadata         Metadata                 `json:"metadata"`
+	CurrentPlacement CurrentPlacement         `json:"currentPlacement"`
+	Spec             SmartPlacementIntentSpec `json:"spec"`
 }
 
 type Metadata struct {
@@ -52,7 +48,6 @@ type Weights struct {
 	MemUtilizationWeight float64 `json:"memUtilizationWeight"`
 }
 
-// SmartPlacementIntentKey is the key structure that is used in the database
 type SmartPlacementIntentKey struct {
 	Project               string `json:"project"`
 	CompositeApp          string `json:"compositeApp"`

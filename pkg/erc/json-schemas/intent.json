@@ -4,6 +4,9 @@
   "properties": {
     "metadata": {
       "type": "object",
+      "required": [
+        "name"
+      ],
       "properties": {
         "name": {
           "description": "Name of the SmartPlacementIntent",
@@ -26,10 +29,27 @@
           "type": "string",
           "maxLength": 512
         }
-      },
+      }
+    },
+    "currentPlacement": {
+      "type": "object",
       "required": [
-        "name"
-      ]
+        "provider",
+        "cluster"
+      ],
+      "properties": {
+        "provider": {
+          "description": "Name of the SmartPlacementIntent",
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$"
+        },
+        "cluster": {
+          "description": "Description for the SmartPlacementIntent",
+          "type": "string",
+          "maxLength": 256
+        }
+      }
     },
     "spec": {
       "type": "object",
@@ -40,25 +60,29 @@
       "properties": {
         "app": {
           "type": "string",
-          "maxLength": 63,
           "pattern": "^[a-z0-9-]+$"
         },
         "smartPlacementIntentIntentData": {
           "type": "object",
           "required": [
             "targetCell",
-            "priorityLevel"
+            "appCpuReq",
+            "appMemReq",
+            "constraintsList"
           ],
           "properties": {
             "targetCell": {
               "description": "Cell Id for which optimal cluster will be found",
               "type": "string",
-              "maxLength": 63,
               "pattern": "^[a-z0-9-]+$"
             },
-            "priorityLevel": {
-              "description": "Application priority level: low, normal, important, critical",
-              "type": "string"
+            "appCpuReq": {
+              "description": "CPU requested by given application",
+              "type": "number"
+            },
+            "appMemReq": {
+              "description": "Memory requested by given application",
+              "type": "number"
             },
             "constraintsList": {
               "description": "Constraints for optimal cluster, including latency, cpu and memory utilization",
