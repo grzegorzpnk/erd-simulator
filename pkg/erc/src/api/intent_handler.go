@@ -6,7 +6,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
 	"encoding/json"
 	"fmt"
-	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/logutils"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/validation"
 	"io"
@@ -165,9 +164,10 @@ func sendResponse(w http.ResponseWriter, v interface{}, status int) {
 	}
 }
 
-// handleError matches the error with the API errors and
+/*// handleError matches the error with the API errors and
 // sends the appropriate message and status to the client
 func handleError(w http.ResponseWriter, params map[string]string, err error, mod interface{}) {
 	apiErr := apierror.HandleErrors(params, err, mod, apiErrors)
 	http.Error(w, apiErr.Message, apiErr.Status)
 }
+*/

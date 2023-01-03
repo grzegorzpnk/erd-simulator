@@ -21,6 +21,7 @@
         "memUtilizationMax": 80
       },
       "parametersWeights": {
+        "//comment":  "LatencyWeight*nLat + ResourcesWeight*(CpuUtilizationWeight*nCpu+MemUtilizationWeight*nMem)*staticCost",
         "latencyWeight": 0.5,
         "resourcesWeight": 0.5,
         "cpuUtilizationWeight": 0.5,
