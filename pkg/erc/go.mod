@@ -4,13 +4,9 @@ require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
-	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.18.1
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
 	gitlab.com/project-emco/core/emco-base/src/orchestrator v0.0.0-00010101000000-000000000000
-	gitlab.com/project-emco/core/emco-base/src/rsync v0.0.0-00010101000000-000000000000
-	google.golang.org/grpc v1.43.0
 )
 
 replace (
