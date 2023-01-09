@@ -1,4 +1,4 @@
-FROM nicolaka/netshoot
+FROM ubuntu:20.04
 
 WORKDIR /erc
 
