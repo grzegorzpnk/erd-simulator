@@ -27,6 +27,7 @@ type Client struct {
 
 // NewTopologyClient creates and returns Topology Client
 func NewTopologyClient() *Client {
+	fmt.Printf("TE end: ", config.GetConfiguration().TopologyEndpoint)
 	return &Client{
 		TopologyEndpoint: config.GetConfiguration().TopologyEndpoint,
 		CurrentCell:      "",

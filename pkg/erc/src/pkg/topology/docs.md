@@ -28,7 +28,7 @@ type MecIdentity struct {
 // MecResInfo contains information about MEC Host (eg. Cpu, Memory)
 type MecResInfo struct {
 	Used        float64 `json:"used"`        // How many cpu/memory used (value)
-	Allocatable float64 `json:"allocatable"` // How many cpu/memory available (value)
+	Capacity    float64 `json:"capacity"` // How many cpu/memory available (value)
 	Utilization float64 `json:"utilization"` // How much is cpu/memory utilized (percentage)
 }
 
@@ -118,9 +118,9 @@ a. [GET] `MEC Hosts` (MecIdentity) list associated with given `cell-id` (as []Me
 /topology/mec/{mec-name}/neighbour/{mec-neighbour}/latency
 ```
 
-d. [GET] `CPU` struct for given `MEC Hosts` (used, allocatable, utilization)
+d. [GET] `CPU` struct for given `MEC Hosts` (used, capacity, utilization)
 
-~~Single endpoint for all CPU information~~ (or consider endpoint for each: used, allocatable, utilization):
+~~Single endpoint for all CPU information~~ (or consider endpoint for each: used, capacity, utilization):
 
 ```go
 // eg. mec-name=provider1+mec1
@@ -130,9 +130,9 @@ d. [GET] `CPU` struct for given `MEC Hosts` (used, allocatable, utilization)
 /topology/mec/{mec-name}/cpu
 ```
 
-e. [GET] `MEMORY` struct for given `MEC Host` (used, allocatable, utilization)
+e. [GET] `MEMORY` struct for given `MEC Host` (used, capacity, utilization)
 
-~~Single endpoint for all MEMORY information~~ (or consider endpoint for each: used, allocatable, utilization):
+~~Single endpoint for all MEMORY information~~ (or consider endpoint for each: used, capacity, utilization):
 
 ```go
 // eg. mec-name=provider1+mec1

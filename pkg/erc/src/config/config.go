@@ -55,7 +55,7 @@ func defaultConfiguration() *Configuration {
 	return &Configuration{
 		PluginDir:        cwd,
 		ServicePort:      "8686",
-		TopologyEndpoint: "",
+		TopologyEndpoint: "dupa",
 	}
 }
 

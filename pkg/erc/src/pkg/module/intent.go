@@ -296,17 +296,17 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 	if i.CurrentPlacement.Provider == mec.Identity.Provider && i.CurrentPlacement.Cluster == mec.Identity.Cluster {
 		// If we consider the current cluster, we don't need to assume app requirements
 		// because this application is already placed on this mec.
-		cpuUtilization = 100 * (mec.GetCpuUsed()) / mec.GetCpuAllocatable()
-		memUtilization = 100 * (mec.GetMemUsed()) / mec.GetMemAllocatable()
+		cpuUtilization = 100 * (mec.GetCpuUsed()) / mec.GetCpuCapacity()
+		memUtilization = 100 * (mec.GetMemUsed()) / mec.GetMemCapacity()
 	} else {
-		cpuUtilization = 100 * (mec.GetCpuUsed() + i.Spec.SmartPlacementIntentData.AppCpuReq) / mec.GetCpuAllocatable()
-		memUtilization = 100 * (mec.GetMemUsed() + i.Spec.SmartPlacementIntentData.AppMemReq) / mec.GetMemAllocatable()
+		cpuUtilization = 100 * (mec.GetCpuUsed() + i.Spec.SmartPlacementIntentData.AppCpuReq) / mec.GetCpuCapacity()
+		memUtilization = 100 * (mec.GetMemUsed() + i.Spec.SmartPlacementIntentData.AppMemReq) / mec.GetMemCapacity()
 	}
 
 	cpuMax := i.Spec.SmartPlacementIntentData.ConstraintsList.CpuUtilizationMax // 80
 	memMax := i.Spec.SmartPlacementIntentData.ConstraintsList.MemUtilizationMax // 80
-	cpuMecAvaliable := mec.GetCpuAllocatable() - mec.GetCpuUsed()
-	memMecAvaliable := mec.GetMemAllocatable() - mec.GetMemUsed()
+	cpuMecAvaliable := mec.GetCpuCapacity() - mec.GetCpuUsed()
+	memMecAvaliable := mec.GetMemCapacity() - mec.GetMemUsed()
 
 	if cpuUtilization < 0 || memUtilization < 0 {
 		//log.Warnf("[RES-CHECK][DEBUG] cpuUtilization[%v], memUtilization[%v]", cpuUtilization, memUtilization)

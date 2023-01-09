@@ -27,7 +27,7 @@ type MecIdentity struct {
 // MecResInfo contains information about MEC Host resource defined using MecInfo
 type MecResInfo struct {
 	Used        float64 `json:"used"`        // How many cpu/memory used (value)
-	Allocatable float64 `json:"allocatable"` // How many cpu/memory available (value)
+	Capacity    float64 `json:"capacity"`    // How many cpu/memory available (value)
 	Utilization float64 `json:"utilization"` // How much is cpu/memory utilized (percentage)
 }
 
@@ -75,8 +75,8 @@ func (mh *MecHost) GetCpuUsed() float64 {
 	return mh.Resources.Cpu.Used
 }
 
-func (mh *MecHost) GetCpuAllocatable() float64 {
-	return mh.Resources.Cpu.Allocatable
+func (mh *MecHost) GetCpuCapacity() float64 {
+	return mh.Resources.Cpu.Capacity
 }
 
 func (mh *MecHost) GetCpuUtilization() float64 {
@@ -91,8 +91,8 @@ func (mh *MecHost) GetMemUsed() float64 {
 	return mh.Resources.Memory.Used
 }
 
-func (mh *MecHost) GetMemAllocatable() float64 {
-	return mh.Resources.Memory.Allocatable
+func (mh *MecHost) GetMemCapacity() float64 {
+	return mh.Resources.Memory.Capacity
 }
 
 func (mh *MecHost) GetMemUtilization() float64 {

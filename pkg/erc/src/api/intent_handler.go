@@ -24,6 +24,8 @@ type intentHandler struct {
 
 var ErJSONFile = "./json-schemas/intent.json"
 
+//var ErJSONFile = "./../../json-schemas/intent.json"
+
 func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
