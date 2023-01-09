@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: pmatysiaq/erc
+  repository: grzegorzpnk/erc
   pullPolicy: Always
   tag: "latest"
 
