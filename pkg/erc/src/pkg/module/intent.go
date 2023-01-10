@@ -344,6 +344,7 @@ func FindOptimalCluster(mecs []model.MecHost, intent model.SmartPlacementIntent)
 	var bestCost float64 = math.Inf(1)
 	for _, mec := range mecs {
 		currentCost := ComputeObjectiveValue(intent, mec)
+		log.Infof("MEC: %v, cost: %v", mec.Identity.Cluster, currentCost)
 		if currentCost < bestCost {
 			bestMec = mec
 			bestCost = currentCost
