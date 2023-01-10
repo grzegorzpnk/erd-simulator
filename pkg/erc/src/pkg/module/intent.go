@@ -272,7 +272,7 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 		// TODO: we can specify more restrictions for the candidate MEC Hosts: for example consider only specific level/region
 		sp.candidateMECs = append(sp.candidateMECs, mec)
 	}
-	log.Infof("Candidates list: %v", sp.candidateMECs)
+	//log.Infof("Candidates list: %v", sp.candidateMECs)
 	return sp, nil
 }
 
@@ -331,7 +331,7 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 // FindOptimalCluster iterates over candidate MEC Hosts (mecs), and based on the computed cost, it selects the best one
 // Returns the best (cheapest) MEC Host if found, error otherwise (mecs list is empty)
 func FindOptimalCluster(mecs []model.MecHost, intent model.SmartPlacementIntent) (model.MecHost, error) {
-	log.Infof("Looking for optimal cluster...")
+	log.Infof("Looking for optimal cluster... Cost is:")
 
 	if len(mecs) <= 0 {
 		reason := "mecs list is empty"
