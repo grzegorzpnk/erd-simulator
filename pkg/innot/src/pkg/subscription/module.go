@@ -4,33 +4,17 @@ import (
 	log "10.254.188.33/matyspi5/erd/pkg/innot/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/db"
 	"10.254.188.33/matyspi5/erd/pkg/innot/src/pkg/types"
-	"math"
-	"strconv"
-	"strings"
-
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
-	"io/ioutil"
+	"math"
 	"math/rand"
 	"net/http"
+	"strconv"
 )
 
 type counter float64
-
-func normalizeCellId(cellStr string) (int, error) {
-	// e.g. get["000000020"] -> return[2]
-	if strings.HasSuffix(cellStr, "0") {
-		cellStr = cellStr[:len(cellStr)-1]
-	}
-	cell, err := strconv.Atoi(cellStr)
-	if err != nil {
-		log.Errorf("Could not parse CELL_ID[%v] to integer value", cellStr)
-		return -1, err
-	}
-	return cell, nil
-}
 
 // ServeSubscription method is invoked (as goroutine) when new db.Subscriber is created
 // It will request notification from AMF (once per second) and if conditions are met, the notification to the MEO
@@ -55,39 +39,6 @@ func ServeSubscription(id db.SubscriptionId) {
 		db.DummyDB.UpdateItem(id, sub)
 		sendCellIdCellNotification(sub.Endpoint, types.CellId(strconv.Itoa(newCell)), id)
 
-	} else if sub.AmfEventType == types.ACCESSTYPEREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.COMMUNICATIONFAILUREREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.CONNECTIVITYSTATEREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.PRESENCEINAOIREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.REACHABILITYREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.REGISTRATIONSTATEREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.SUBSCRIBEDDATAREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.SUBSCRIPTIONIDADDITION {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.SUBSCRIPTIONIDCHANGE {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.TIMEZONEREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
-	} else if sub.AmfEventType == types.UESINAREAREPORT {
-		log.Infof("[SUBSCRIPTION][ID=%v] Event Type %s is not implemented. Aborting...", id, sub.AmfEventType)
-		return
 	} else {
 		log.Errorf("[SUBSCRIPTION] Event Type %s doesn't exist!", sub.AmfEventType)
 		err = errors.New(fmt.Sprintf("[SUBSCRIPTION] Exiting! Event Type %s doesn't exist!", sub.AmfEventType))
@@ -95,34 +46,6 @@ func ServeSubscription(id db.SubscriptionId) {
 		return
 	}
 
-}
-
-//getNotification requests notification from AMF and returns the response body
-func getNotification(sub db.Subscriber, amfEndpoint string, id db.SubscriptionId) (types.AmfCreatedEventSubscription, error) {
-	var respBody types.AmfCreatedEventSubscription
-
-	subBody := types.AmfCreateEventSubscription{
-		Subscription:      sub.BodyRequest,
-		SupportedFeatures: nil,
-	}
-	reqBody, err := json.Marshal(subBody)
-
-	resp, err := http.Post(amfEndpoint, "application/json", bytes.NewBuffer(reqBody))
-	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("Could not get notification for: EventType: %s, AMF endpoint: %s",
-			sub.AmfEventType, sub.Endpoint))
-		return types.AmfCreatedEventSubscription{}, err
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	err = json.Unmarshal(body, &respBody)
-	if err != nil {
-		err = errors.Wrap(err, "Failed to unmarshal body")
-		log.Errorf("[SUBSCRIPTION][ID=%v] Error: %v", id, err)
-		return types.AmfCreatedEventSubscription{}, err
-	}
-	return respBody, nil
 }
 
 // sendCellIdCellNotification will send notification to the types.ClientListenerUri that types.CellId changed.
@@ -181,19 +104,6 @@ func (c *counter) logWaitingForNotification(id db.SubscriptionId, et types.AmfEv
 		*c++
 	}
 }
-
-//func generateTargetCellId(id db.SubscriptionId, sub db.Subscriber) (db.Subscriber, int) {
-//	if sub.CurrentCell == "" {
-//		initialState := initialPlacementStateMachine[id]
-//		sub.CurrentCell = types.CellId(strconv.Itoa(initialState))
-//	}
-//
-//	possibleStates := cellStateMachine[sub.CurrentCell]
-//	nextState := possibleStates[rand.Intn(len(possibleStates)-1)]
-//	log.Infof("[DEBUG] Candidate cells for CELL[%v] are [%v] chosen [%v]", sub.CurrentCell, possibleStates, nextState)
-//	sub.CurrentCell = types.CellId(strconv.Itoa(nextState))
-//	return sub, nextState
-//}
 
 // TODO: Try to make a path unique. Don't allow users to visit the same cell twice.
 func generateTargetCellId(id db.SubscriptionId, sub db.Subscriber) (db.Subscriber, int) {

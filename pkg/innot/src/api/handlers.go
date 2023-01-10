@@ -164,11 +164,6 @@ func (h *apiHandler) handleSubscriptionHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	//sub, err := db.DummyDB.GetItemByKey(db.SubscriptionId(subId))
-	//if err != nil {
-	//	http.Error(w, fmt.Sprintf("Couldn't find subciption for subscription-id[%v]", subIdStr), http.StatusNoContent)
-	//}
-
 	subscription.ServeSubscription(db.SubscriptionId(subId))
 
 	w.Header().Set("Content-Type", "application/json")
