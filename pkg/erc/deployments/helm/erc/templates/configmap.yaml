@@ -12,5 +12,6 @@ data:
     {
       "plugin-dir": "cwd",
       "service-port": "{{ .Values.config.servicePort }}",
-      "mec-topology-endpoint": "{{ .Values.config.topologyEndpoint }}"
+      "mec-topology-endpoint": "{{ .Values.config.topologyEndpoint }}",
+      "tau": "80"
     }
