@@ -262,7 +262,7 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 			log.Warnf("Could not collect MEC resources. Error: %v", err)
 		}
 
-		log.Infof("Current MEC is: %+v", mec)
+		log.Infof("Current MEC is: %+v: %v", mec.Identity.Cluster, mec.Resources)
 
 		if !resourcesOk(i, mec) {
 			//log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
