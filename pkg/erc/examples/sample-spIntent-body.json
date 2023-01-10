@@ -16,9 +16,7 @@
       "appCpuReq": 0.5,
       "appMemReq": 524300000,
       "constraintsList": {
-        "latencyMax": 15,
-        "cpuUtilizationMax": 80,
-        "memUtilizationMax": 80
+        "latencyMax": 15
       },
       "parametersWeights": {
         "//comment":  "LatencyWeight*nLat + ResourcesWeight*(CpuUtilizationWeight*nCpu+MemUtilizationWeight*nMem)*staticCost",

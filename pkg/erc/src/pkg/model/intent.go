@@ -36,9 +36,7 @@ type SmartPlacementIntentStruct struct {
 }
 
 type Constraints struct {
-	LatencyMax        float64 `json:"latencyMax"`
-	CpuUtilizationMax float64 `json:"cpuUtilizationMax"`
-	MemUtilizationMax float64 `json:"memUtilizationMax"`
+	LatencyMax float64 `json:"latencyMax"`
 }
 
 type Weights struct {

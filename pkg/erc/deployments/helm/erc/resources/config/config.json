@@ -1,6 +1,5 @@
 {
-    "database-type": "mongo",
-    "database-ip": "emco-mongo",
     "etcd-ip": "emco-etcd",
-    "service-port": "8686"
+    "service-port": "8686",
+    "tau": "80"
 }

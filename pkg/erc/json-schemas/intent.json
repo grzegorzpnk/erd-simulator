@@ -88,18 +88,10 @@
               "description": "Constraints for optimal cluster, including latency, cpu and memory utilization",
               "type": "object",
               "required": [
-                "latencyMax",
-                "cpuUtilizationMax",
-                "memUtilizationMax"
+                "latencyMax"
               ],
               "properties": {
                 "latencyMax": {
-                  "type": "number"
-                },
-                "cpuUtilizationMax": {
-                  "type": "number"
-                },
-                "memUtilizationMax": {
                   "type": "number"
                 }
               }

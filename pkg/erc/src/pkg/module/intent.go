@@ -1,12 +1,14 @@
 package module
 
 import (
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/errs"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
 	"github.com/pkg/errors"
 	"math"
+	"strconv"
 )
 
 // SmartPlacementIntentClient implements the SmartPlacementIntentManager.
@@ -303,8 +305,8 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 		memUtilization = 100 * (mec.GetMemUsed() + i.Spec.SmartPlacementIntentData.AppMemReq) / mec.GetMemCapacity()
 	}
 
-	cpuMax := i.Spec.SmartPlacementIntentData.ConstraintsList.CpuUtilizationMax // 80
-	memMax := i.Spec.SmartPlacementIntentData.ConstraintsList.MemUtilizationMax // 80
+	cpuMax, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64) //80
+	memMax, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64) // 80
 	cpuMecAvaliable := mec.GetCpuCapacity() - mec.GetCpuUsed()
 	memMecAvaliable := mec.GetMemCapacity() - mec.GetMemUsed()
 
