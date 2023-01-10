@@ -13,8 +13,8 @@
     "app": "edge-app-1",
     "smartPlacementIntentData": {
       "targetCell": "4",
-      "appCpuReq": 0.5,
-      "appMemReq": 524300000,
+      "appCpuReq": 4000,
+      "appMemReq": 4000,
       "constraintsList": {
         "latencyMax": 15
       },

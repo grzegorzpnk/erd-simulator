@@ -22,6 +22,7 @@ type intentHandler struct {
 	client module.SmartPlacementIntentManager
 }
 
+//replace below if you are running locally
 var ErJSONFile = "./json-schemas/intent.json"
 
 //var ErJSONFile = "./../../json-schemas/intent.json"
@@ -105,6 +106,7 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 		sendResponse(w, msg, http.StatusInternalServerError)
 		return
 	} else {
+		//todo: replace with asking nmt instead of taking data from intent
 		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
 			sendResponse(w, "Relocation redundant. Skipping...", http.StatusNotModified)
 			return
