@@ -17,7 +17,11 @@ func main() {
 
 	var simuClient *model.SimuClient
 
-	simuClient.fetchAppsFromNMT()
+	err := simuClient.FetchAppsFromNMT()
+	if err != nil {
+		log.Errorf(err.Error())
+	}
+
 	startSIMUserver(simuClient)
 
 }

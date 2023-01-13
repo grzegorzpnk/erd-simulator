@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"simu/src/config"
+	log "simu/src/logger"
 )
 
 type SimuClient struct {
@@ -28,9 +29,27 @@ func (app *MECApp) PrintApplication() {
 
 }
 
-func (simuCLient *SimuClient) fetchAppsFromNMT() {
+func (simuCLient *SimuClient) FetchAppsFromNMT() error {
 
-	buildNMTendpoint()
+	url := buildNMTendpoint()
+
+	apps, err := GetAppsFromNMT(url)
+	if err != nil {
+		log.Errorf(err)
+		return error(err)
+	}
+
+	simuCLient.setApps(apps)
+	return nil
+}
+
+func GetAppsFromNMT(string url) {
+
+}
+
+func (simuCLient *SimuClient) setApps(apps []MECApp) {
+	simuCLient.apps = apps
+
 }
 
 func buildNMTendpoint() string {
@@ -39,3 +58,5 @@ func buildNMTendpoint() string {
 
 	return url
 }
+
+
