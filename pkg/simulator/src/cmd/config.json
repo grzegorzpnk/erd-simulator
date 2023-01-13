@@ -1,9 +1,4 @@
 {
   "service-port":"8282",
-  "cluster-controller-endpoint" : "http://10.254.185.44:32138",
-  "edge-provider" : "orange",
-  "tau" : "0.8",
-  "res-min" : "500",
-  "res-max": "1000",
-  "max-cell-number" : "42"
+  "nmt-endpoint" : "http://10.254.185.44:32139"
 }

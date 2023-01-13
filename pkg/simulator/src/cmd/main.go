@@ -15,14 +15,14 @@ import (
 func main() {
 	log.Infof("[SERVER] Starting SIMU server. Port: %v", config.GetConfiguration().ServicePort)
 
-	//start SIMU server
-	startSIMUserver()
+	var simuClient *model.SimuClient
+
+	simuClient.fetchAppsFromNMT()
+	startSIMUserver(simuClient)
 
 }
 
-func startSIMUserver() {
-
-	var simuClient *model.SimuClient
+func startSIMUserver(simuClient *model.SimuClient) {
 
 	httpRouter := api.NewRouter(simuClient)
 	httpServer := &http.Server{

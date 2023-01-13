@@ -2,9 +2,7 @@ package model
 
 import (
 	"fmt"
-	"math/rand"
 	"simu/src/config"
-	"strconv"
 )
 
 type SimuClient struct {
@@ -24,18 +22,20 @@ type RequestedResources struct {
 	RequestedLatency float64 `json:"requestedLatency"`
 }
 
-func (app *MECApp) GeneratreResourceRequirements() {
-
-	minRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMin, 64)
-	maxRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMax, 64)
-
-	app.Requirements.RequestedCPU = minRes + rand.Float64()*(maxRes-minRes)
-	app.Requirements.RequestedMEMORY = minRes + rand.Float64()*(maxRes-minRes)
-
-}
-
 func (app *MECApp) PrintApplication() {
 
 	fmt.Printf("Application ID: %v, app clusterID: %v, UE Location at cell no:%v, requirements: CPU: %v, Memory: %v, Latency: %v \n", app.Id, app.ClusterId, app.UserLocation, app.Requirements.RequestedCPU, app.Requirements.RequestedMEMORY, app.Requirements.RequestedLatency)
 
+}
+
+func (simuCLient *SimuClient) fetchAppsFromNMT() {
+
+	buildNMTendpoint()
+}
+
+func buildNMTendpoint() string {
+	url := config.GetConfiguration().NMTEndpoint
+	url += "topology/application"
+
+	return url
 }

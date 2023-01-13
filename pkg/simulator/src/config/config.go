@@ -13,15 +13,8 @@ import (
 // Configuration loads up all the values that are used to configure
 // backend implementations
 type Configuration struct {
-	ServicePort               string `json:"service-port"`
-	ClusterControllerEndpoint string `json:"cluster-controller-endpoint"`
-	EdgeProvider              string `json:"edge-provider"`
-	Tau                       string `json:"tau"`
-
-	//values for initial placement controller
-	ResMin        string `json:"res-min"`
-	ResMax        string `json:"res-max"`
-	MaxCellNumber string `json:"max-cell-number"` //this value specify the range to generate initial cells between 0 - MaxCellNumber
+	ServicePort string `json:"service-port"`
+	NMTEndpoint string `json:"nmt-endpoint"`
 }
 
 // Config is the structure that stores the configuration
@@ -53,13 +46,8 @@ func readConfigFile(file string) (*Configuration, error) {
 func defaultConfiguration() *Configuration {
 
 	return &Configuration{
-		ServicePort:               "8080",
-		ClusterControllerEndpoint: "http://10.254.185.50:32138/",
-		EdgeProvider:              "orange",
-		Tau:                       "0.8",
-		ResMin:                    "500",
-		ResMax:                    "1000",
-		MaxCellNumber:             "42",
+		ServicePort: "8989",
+		NMTEndpoint: "http://10.254.185.104:32139/",
 	}
 
 }
