@@ -1,13 +1,16 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"simu/src/config"
 	log "simu/src/logger"
 )
 
 type SimuClient struct {
-	apps []MECApp `json:"apps"`
+	Apps []MECApp `json:"apps"`
 }
 
 type MECApp struct {
@@ -15,6 +18,7 @@ type MECApp struct {
 	ClusterId    string             `json:"clusterId"`
 	UserLocation string             `json:"userLocation"`
 	Requirements RequestedResources `json:"requirements"`
+	UserPath     []string           `json:"userPath,omitempty""`
 }
 
 type RequestedResources struct {
@@ -29,27 +33,41 @@ func (app *MECApp) PrintApplication() {
 
 }
 
-func (simuCLient *SimuClient) FetchAppsFromNMT() error {
+func (simuCl *SimuClient) FetchAppsFromNMT() error {
 
 	url := buildNMTendpoint()
 
 	apps, err := GetAppsFromNMT(url)
 	if err != nil {
-		log.Errorf(err)
-		return error(err)
+		return err
 	}
 
-	simuCLient.setApps(apps)
+	simuCl.setApps(apps)
 	return nil
 }
 
-func GetAppsFromNMT(string url) {
+func GetAppsFromNMT(endpoint string) ([]MECApp, error) {
+
+	resp, err := http.Get(endpoint)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//Convert the body to type string
+	var apps []MECApp
+	json.Unmarshal(body, &apps)
+
+	return apps, nil
 
 }
 
-func (simuCLient *SimuClient) setApps(apps []MECApp) {
-	simuCLient.apps = apps
-
+func (simuCl *SimuClient) setApps(apps []MECApp) {
+	simuCl.Apps = apps
 }
 
 func buildNMTendpoint() string {
@@ -59,4 +77,12 @@ func buildNMTendpoint() string {
 	return url
 }
 
+func (simuCl *SimuClient) GetApps(id string) *MECApp {
 
+	for i, v := range simuCl.Apps {
+		if v.Id == id {
+			return &simuCl.Apps[i]
+		}
+	}
+	return nil
+}

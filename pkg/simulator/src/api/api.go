@@ -17,7 +17,8 @@ func NewRouter(simuClient *model.SimuClient) *mux.Router {
 	baseUrl := ""
 
 	//Create infrastructure:
-	r.HandleFunc(baseUrl+"/simu/mecHost", handler.createMecHostHandler).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/experiment/{mobility-number}", handler.conductExperiment).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/users", handler.getUsers).Methods("GET")
 
 	return r
 
