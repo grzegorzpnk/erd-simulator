@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 	"simu/src/pkg/model"
 	"strconv"
@@ -28,21 +29,33 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	experimentsNumber, _ := strconv.Atoi(params["mobility-number"])
 
+	var weights model.Weights
+	_ = json.NewDecoder(r.Body).Decode(&weights)
+
 	for i := 0; i < experimentsNumber; i++ {
 
 		//generate number of user to move
 		id := h.generateUserToMove()
 
-		// select new position for selected user
-		h.generateTargetCellId(id)
-
-		//update New Target Cell At user list (application list)
+		// select new position for selected user and add new position to UserPath
+		app := h.SimuClient.GetApps(id)
+		h.generateTargetCellId(*app)
 
 		//create smart placement intent
 
+		spi, err := GenerateSmartPlacementIntent(*app, weights)
+		if err != nil {
+			log.Fatal("Cannot generate SPI: %v", err.Error())
+		}
+
 		//send request to ERC to select new position
+		cluster, err := CallPlacementController(spi)
+		if err != nil {
+			log.Fatal("Call Placement ctrl has failed : %v", err.Error())
+		}
 
 		//generate request to orchestrator
+		sendRelocationRequest(*app, cluster)
 
 		//send POST to orchestrator
 

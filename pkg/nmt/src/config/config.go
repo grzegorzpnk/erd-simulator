@@ -53,13 +53,12 @@ func readConfigFile(file string) (*Configuration, error) {
 func defaultConfiguration() *Configuration {
 
 	return &Configuration{
-		ServicePort:               "8080",
-		ClusterControllerEndpoint: "http://10.254.185.50:32138/",
-		EdgeProvider:              "orange",
-		Tau:                       "0.8",
-		ResMin:                    "500",
-		ResMax:                    "1000",
-		MaxCellNumber:             "42",
+		ServicePort:   "8080",
+		EdgeProvider:  "orange",
+		Tau:           "0.8",
+		ResMin:        "500",
+		ResMax:        "1000",
+		MaxCellNumber: "42",
 	}
 
 }

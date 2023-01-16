@@ -13,10 +13,7 @@ config:
   tau: 0.8
   res-min: 500
   res-max: 1000
-  obs:
-    endpoint: "http://10.254.185.44"
-    port: "32138"
-
+  max-cell-number: 42
 
 podAnnotations: {}
 podSecurityContext: {}

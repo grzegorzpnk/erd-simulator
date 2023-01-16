@@ -8,14 +8,9 @@ image:
 workingDir: "/simu"
 command: "./simu"
 config:
-  servicePort: 8888
-  nmt:
-    endpoint: "http://10.254.185.44"
-    port: "32138"
-  erc:
-    endpoint: "http://10.254.185.44"
-    port: "32138"
-
+  servicePort: 8484
+  nmt_endpoint: "http://10.254.185.44:32137"
+  erc_endpoint: "http://10.254.185.111:32139"
 
 podAnnotations: {}
 podSecurityContext: {}
@@ -23,8 +18,8 @@ securityContext: {}
 
 service:
   type: NodePort
-  port: 8888
-  nodePort: 32138
+  port: 8484
+  nodePort: 32144
 
 resources: {}
 

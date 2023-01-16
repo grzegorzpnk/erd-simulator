@@ -3,6 +3,7 @@ package api
 import (
 	"math/rand"
 	log "simu/src/logger"
+	"simu/src/pkg/model"
 	"strconv"
 )
 
@@ -12,11 +13,11 @@ func (h *apiHandler) generateUserToMove() string {
 }
 
 // TODO: Try to make a path unique. Don't allow users to visit the same cell twice.
-func (h *apiHandler) generateTargetCellId(id string) int {
+func (h *apiHandler) generateTargetCellId(app model.MECApp) int {
 
 	var nextState int
 
-	user := h.SimuClient.GetApps(id)
+	user := app
 
 	possibleStates := cellStateMachine[user.UserLocation]
 	for {

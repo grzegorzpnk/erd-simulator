@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "nmt.fullname" . }}
+  name: {{ include "simu.fullname" . }}
   labels:
-    {{- include "nmt.labels" . | nindent 4 }}
+    {{- include "simu.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "nmt.selectorLabels" . | nindent 6 }}
+      {{- include "simu.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "nmt.selectorLabels" . | nindent 8 }}
+        {{- include "simu.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -50,4 +50,4 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: nmt-cm
+            name: simu-cm
