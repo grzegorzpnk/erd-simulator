@@ -111,3 +111,31 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 
 	return b, nil
 }
+
+func sendRelocationRequest(app model.MECApp, newCluster) error {
+
+	//
+	///orchestrator/relocate/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application"
+
+	orchestratorEndpoint := buildOrchestratorURL()
+
+	data := []interface{}{app, mecHost}
+
+	responseBody, err := postHttpRespBody(orchestratorEndpoint, data)
+	if err != nil {
+		log.Printf("[ERROR] Orchestrator returned error: %v. Relocation for APP[%v] failed.", err, app.Id)
+		return err
+	} else {
+		log.Printf("[ERROR] Orchestrator returned confirmation: %v. Relocation for APP[%v] done.", responseBody, app.Id)
+		return nil
+	}
+}
+
+func buildOrchestratorURL() string {
+
+	url := config.GetConfiguration().NMTEndpoint
+	url += "/v1//topology/orchestrator/relocation"
+
+	return url
+
+}

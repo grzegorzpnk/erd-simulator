@@ -417,3 +417,19 @@ func (g *Graph) ShortestPath(startCell *model.Cell, destCluster *model.MecHost) 
 	}
 	return min, nil
 }
+
+func (g *Graph) UpdateAppCluster(app model.MECApp, destCluster *model.MecHost) error {
+
+	for i, v := range g.Application {
+
+		if v.Id == app.Id {
+			g.Application[i].ClusterId = destCluster.Identity.Cluster
+			g.Application[i].UserLocation = app.UserLocation
+			return nil
+		}
+	}
+
+	err := errors.New("Cannot find app on declaration list!")
+	return err
+
+}

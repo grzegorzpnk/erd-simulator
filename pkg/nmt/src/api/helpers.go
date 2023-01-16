@@ -96,3 +96,8 @@ func printCellsInfo(val interface{}) {
 	fmt.Println("----- CELLS -----")
 	fmt.Println(string(jsonCells))
 }
+
+type Cluster struct {
+	Provider string `json:"provider"`
+	Cluster  string `json:"cluster"`
+}

@@ -63,6 +63,7 @@ func (h *apiHandler) DeleteApplication(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
 func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -104,6 +105,59 @@ func (h *apiHandler) RelocateApplication(w http.ResponseWriter, r *http.Request)
 		}
 		oldMecHost.UninstallApp(mecApp)
 		w.WriteHeader(http.StatusOK)
+		log.Infof("App relocated succesfully ! \n")
+	}
+}*/
+
+func (h *apiHandler) RelocateApplication2(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	var oldMecHost, newMecHost *model.MecHost
+	oldMecHost = h.graphClient.GetMecHost(params["old-cluster"], "orange")
+	newMecHost = h.graphClient.GetMecHost(params["new-cluster"], "orange")
+
+	if oldMecHost.Identity.Cluster == newMecHost.Identity.Cluster {
+		log.Infof("Application already on cluster - redundant relocation")
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+
+	var mecApp model.MECApp
+	_ = json.NewDecoder(r.Body).Decode(&mecApp)
+	log.Infof("Client tries to RELOCATE mecApp ID: %v from MEC Host: %v to new MEC Host: %v \n", mecApp.Id, oldMecHost.Identity.Cluster, newMecHost.Identity.Cluster)
+
+	if !(oldMecHost.CheckAppExists(mecApp)) {
+		err := fmt.Errorf("Mec App %v,cannot be relocated beacuse it does not exists at source cluster", mecApp.Id)
+		log.Errorf(err.Error())
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+
+	//instantiate
+	if !(newMecHost.CheckEnoughResources(mecApp)) {
+		err := fmt.Errorf("Mec App %v,cannot be instantiated beacuse of not enough resources", mecApp.Id)
+		log.Errorf(err.Error())
+		w.WriteHeader(http.StatusConflict)
+		return
+	} else {
+		err := newMecHost.InstantiateApp(mecApp)
+		if err != nil {
+			log.Errorf("Error has been raised: ", err)
+			w.WriteHeader(http.StatusConflict)
+			return
+		}
+		oldMecHost.UninstallApp(mecApp)
+		w.WriteHeader(http.StatusOK)
+
+		//todo: riski point? how to handle if app will be relocated and not  find on a list?
+		//update app clister on declaration list and ue positioning
+		err2 := h.graphClient.UpdateAppCluster(mecApp, newMecHost)
+		if err2 != nil {
+			log.Errorf("Cannot find app on declaration list! cannot update cluster! %v", err.Error())
+		}
+
 		log.Infof("App relocated succesfully ! \n")
 	}
 }

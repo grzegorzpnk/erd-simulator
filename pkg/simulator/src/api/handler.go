@@ -55,11 +55,14 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		}
 
 		//generate request to orchestrator
-		sendRelocationRequest(*app, cluster)
+		err := sendRelocationRequest(*app, cluster)
+		if err != nil {
+			log.Fatal("Cannot relocate app! Error: %v", err.Error())
+		}
 
 		//send POST to orchestrator
 
-		//update user list internally
+		//update cluster in app list internally
 
 	}
 	w.WriteHeader(http.StatusOK)

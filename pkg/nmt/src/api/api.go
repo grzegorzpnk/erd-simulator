@@ -36,7 +36,10 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/mecHosts/application", handler.getAllMecHostsWithApps).Methods("GET")
 	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/application", handler.InstantiateApplication).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/removeApplication", handler.DeleteApplication).Methods("POST")
-	r.HandleFunc(baseUrl+"/topology/mecHosts/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application", handler.RelocateApplication).Methods("POST")
+	r.HandleFunc(baseUrl+"/orchestrator/relocate/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application", handler.RelocateApplication2).Methods("POST")
+	//NEW testing functionalisites:
+	//r.HandleFunc(baseUrl+"/topology/orchestrator/relocation", handler.RelocateApplication2).Methods("POST")
+
 	r.HandleFunc(baseUrl+"/topology/declare-apps/{applications}", handler.DefineApplications).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/initial-placement-generator", handler.GenerateInitialClusters).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/instantiate-all", handler.InstantiateAllDefinedApps).Methods("POST")
