@@ -149,7 +149,6 @@ func (h *apiHandler) RelocateApplication2(w http.ResponseWriter, r *http.Request
 			return
 		}
 		oldMecHost.UninstallApp(mecApp)
-		w.WriteHeader(http.StatusOK)
 
 		//todo: riski point? how to handle if app will be relocated and not  find on a list?
 		//update app clister on declaration list and ue positioning
@@ -158,6 +157,7 @@ func (h *apiHandler) RelocateApplication2(w http.ResponseWriter, r *http.Request
 			log.Errorf("Cannot find app on declaration list! cannot update cluster! %v", err.Error())
 		}
 
+		w.WriteHeader(http.StatusOK)
 		log.Infof("App relocated succesfully ! \n")
 	}
 }

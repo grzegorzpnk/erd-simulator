@@ -18,7 +18,11 @@ func NewRouter(simuClient *model.SimuClient) *mux.Router {
 
 	//Create infrastructure:
 	r.HandleFunc(baseUrl+"/simu/experiment/{mobility-number}", handler.conductExperiment).Methods("POST")
+
+	//test API
 	r.HandleFunc(baseUrl+"/simu/users", handler.getUsers).Methods("GET")
+	//temporary function to check if the list of declared apps fetch from NMT == list updated in simu
+	r.HandleFunc(baseUrl+"/simu/compareLists", handler.CompareLists).Methods("GET")
 
 	return r
 
