@@ -72,7 +72,7 @@ func (simuCl *SimuClient) setApps(apps []MECApp) {
 
 func buildNMTendpoint() string {
 	url := config.GetConfiguration().NMTEndpoint
-	url += "topology/application"
+	url += "/v1/topology/application"
 
 	return url
 }

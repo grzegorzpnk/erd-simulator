@@ -5,8 +5,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	mec_topology "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
-
-	//"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
 	"context"
 	"fmt"
 	"net/http"

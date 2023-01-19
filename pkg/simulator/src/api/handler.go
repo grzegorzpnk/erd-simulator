@@ -39,7 +39,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		// select new position for selected user and add new position to UserPath
 		app := h.SimuClient.GetApps(id)
-		h.generateTargetCellId(*app)
+		h.generateTargetCellId(app)
 
 		//create smart placement intent
 

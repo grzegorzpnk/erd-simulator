@@ -49,7 +49,7 @@ func defaultConfiguration() *Configuration {
 	return &Configuration{
 		ServicePort: "8989",
 		NMTEndpoint: "http://10.254.185.104:32139/",
-		ERCEndpoint: "http://10.254.185.111:32137/",
+		ERCEndpoint: "http://10.254.185.111:32147/",
 	}
 
 }

@@ -22,7 +22,7 @@ func NewRouter(simuClient *model.SimuClient) *mux.Router {
 	//test API
 	r.HandleFunc(baseUrl+"/simu/users", handler.getUsers).Methods("GET")
 	//temporary function to check if the list of declared apps fetch from NMT == list updated in simu
-	r.HandleFunc(baseUrl+"/simu/compareLists", handler.CompareLists).Methods("GET")
+	//r.HandleFunc(baseUrl+"/simu/compareLists", handler.CompareLists).Methods("GET")
 
 	return r
 

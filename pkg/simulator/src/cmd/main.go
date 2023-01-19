@@ -15,7 +15,8 @@ import (
 func main() {
 	log.Infof("[SERVER] Starting SIMU server. Port: %v", config.GetConfiguration().ServicePort)
 
-	var simuClient *model.SimuClient
+	//var simuClient *model.SimuClient
+	simuClient := &model.SimuClient{}
 
 	err := simuClient.FetchAppsFromNMT()
 	if err != nil {

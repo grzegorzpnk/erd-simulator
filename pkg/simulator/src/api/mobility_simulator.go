@@ -5,15 +5,17 @@ import (
 	log "simu/src/logger"
 	"simu/src/pkg/model"
 	"strconv"
+	"time"
 )
 
 func (h *apiHandler) generateUserToMove() string {
 
+	rand.Seed(time.Now().UnixNano())
 	return strconv.Itoa(rand.Intn(len(h.SimuClient.Apps)) + 1)
 }
 
 // TODO: Try to make a path unique. Don't allow users to visit the same cell twice.
-func (h *apiHandler) generateTargetCellId(app model.MECApp) int {
+func (h *apiHandler) generateTargetCellId(app *model.MECApp) int {
 
 	var nextState int
 
@@ -25,7 +27,8 @@ func (h *apiHandler) generateTargetCellId(app model.MECApp) int {
 		if len(user.UserPath) < 2 {
 			break
 		}
-		if strconv.Itoa(nextState) == user.UserPath[len(user.UserPath)-2] {
+		//todo: check if this is correct
+		if strconv.Itoa(nextState) == user.UserPath[len(user.UserPath)-1] {
 			log.Warnf("[DEBUG] Chosen previous cell. Skipping...")
 			continue
 		}

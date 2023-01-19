@@ -244,7 +244,7 @@ func (g *Graph) DeclareApplications(count string) {
 	}
 
 	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", cnt, v2x, drones, video)
-
+	//todo: values should be parametrized, not hardcoded!
 	for i := 0; i < v2x; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
@@ -311,7 +311,7 @@ func (g *Graph) FindInitialClusters() bool {
 	var cells = map[int]int{}
 
 	//PREREQUESTIES
-	//in order not to work on real clusters ( cause we need to update resources, etc for looking for initial configutration)
+	//in order to work on copied list of clusters ( cause we need to update resources in process of initial finidng placement)
 	for _, v := range g.MecHosts {
 		mecHostSource = append(mecHostSource, *v)
 	}
