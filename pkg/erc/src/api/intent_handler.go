@@ -108,7 +108,7 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 	} else {
 		//todo: replace with asking nmt instead of taking data from intent
 		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
-			sendResponse(w, "Relocation redundant. Skipping...", http.StatusNotModified)
+			sendResponse(w, "Relocation redundant. Skipping...", http.StatusOK)
 			return
 		} else {
 			body := ResponseBody{
