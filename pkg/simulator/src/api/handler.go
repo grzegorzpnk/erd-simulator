@@ -36,9 +36,9 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 	for i := 0; i < experimentsNumber; i++ {
 
-		log.Infof("Experiment numer: %v", i+1)
+		//log.Infof("Experiment numer: %v", i+1)
 
-		experimentN := "[EXPERIMENT" + strconv.Itoa(i+1) + "]"
+		experimentN := "[EXPERIMENT " + strconv.Itoa(i+1) + "] "
 		//generate number of user to move
 		id := h.generateUserToMove()
 
@@ -59,19 +59,23 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Errorf("Call Placement ctrl has failed : %v", err.Error())
 		}
-		log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
 
-		//generate request to orchestrator
-		err2 := sendRelocationRequest(*app, *cluster)
-		if err2 != nil {
-			log.Errorf("Cannot relocate app! Error: %v", err2.Error())
+		if cluster.Cluster == app.ClusterId {
+			log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
 		} else {
-			log.Infof(experimentN + "Application has been relocated in nmt")
+			log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+
+			//generate request to orchestrator
+			err2 := sendRelocationRequest(*app, *cluster)
+			if err2 != nil {
+				log.Errorf("Cannot relocate app! Error: %v", err2.Error())
+			} else {
+				log.Infof(experimentN + "Application has been relocated in nmt")
+			}
+
+			//update cluster in app list internallyt
+			app.ClusterId = cluster.Cluster
 		}
-
-		//update cluster in app list internallyt
-		app.ClusterId = cluster.Cluster
-
 	}
 	w.WriteHeader(http.StatusOK)
 }
