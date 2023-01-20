@@ -11,9 +11,9 @@ config:
   servicePort: 8282
   clusterProvider: "orange"
   tau: 0.8
-  res-min: 500
-  res-max: 1000
-  max-cell-number: 42
+  res_min: 500
+  res_max: 1000
+  max_cell_number: 42
 
 podAnnotations: {}
 podSecurityContext: {}
