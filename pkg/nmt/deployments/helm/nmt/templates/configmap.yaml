@@ -11,7 +11,9 @@ data:
   config.json: |
     {
       "service-port":"{{ .Values.config.servicePort }}",
-      "cluster-controller-endpoint" : "{{ .Values.config.obs.endpoint }}:{{ .Values.config.obs.port }}",
       "edge-provider":"{{ .Values.config.clusterProvider }}",
-      "tau":"{{ .Values.config.tau }}"
+      "tau":"{{ .Values.config.tau }}",
+      "res-min" : {{.Values.config.res_min}},
+      "res-max": {{.Values.config.res_max}},
+      "max-cell-number" : {{.Values.config.max_cell_number}}
     }
