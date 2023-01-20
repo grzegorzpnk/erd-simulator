@@ -117,7 +117,7 @@ func (mec *MecHost) InstantiateApp(app MECApp) error {
 	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
 	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
 
-	log.Infof("App: %v instantiated on cluster: %v", app.Id, app.ClusterId)
+	log.Infof("App: %v instantiated on cluster: %v", app.Id, mec.Identity.Cluster)
 	return nil
 
 }

@@ -3,8 +3,8 @@ package api
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
+	log "simu/src/logger"
 	"simu/src/pkg/model"
 	"strconv"
 )
@@ -31,33 +31,42 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 	var weights model.Weights
 	_ = json.NewDecoder(r.Body).Decode(&weights)
+	log.Infof("")
+	log.Infof("Started new experiment, with %v relocations", experimentsNumber)
 
 	for i := 0; i < experimentsNumber; i++ {
 
+		log.Infof("Experiment numer: %v", i+1)
+
+		experimentN := "[EXPERIMENT" + strconv.Itoa(i+1) + "]"
 		//generate number of user to move
 		id := h.generateUserToMove()
 
 		// select new position for selected user and add new position to UserPath
 		app := h.SimuClient.GetApps(id)
 		h.generateTargetCellId(app)
+		log.Infof(experimentN+"User(app) with ID: %v moved FROM cell: %v, towards cell: %v", app.Id, app.UserPath[len(app.UserPath)-1], app.UserLocation)
 
 		//create smart placement intent
 
 		spi, err := GenerateSmartPlacementIntent(*app, weights)
 		if err != nil {
-			log.Fatal("Cannot generate SPI: %v", err.Error())
+			log.Errorf("Cannot generate SPI: %v", err.Error())
 		}
 
 		//send request to ERC to select new position
 		cluster, err := CallPlacementController(spi)
 		if err != nil {
-			log.Fatal("Call Placement ctrl has failed : %v", err.Error())
+			log.Errorf("Call Placement ctrl has failed : %v", err.Error())
 		}
+		log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
 
 		//generate request to orchestrator
 		err2 := sendRelocationRequest(*app, *cluster)
 		if err2 != nil {
-			log.Fatal("Cannot relocate app! Error: %v", err2.Error())
+			log.Errorf("Cannot relocate app! Error: %v", err2.Error())
+		} else {
+			log.Infof(experimentN + "Application has been relocated in nmt")
 		}
 
 		//update cluster in app list internallyt

@@ -34,8 +34,7 @@ func (h *apiHandler) generateTargetCellId(app *model.MECApp) int {
 		}
 		break
 	}
-
-	log.Infof("[DEBUG] Candidate cells for CELL[%v] are [%v] chosen [%v]", user.UserLocation, possibleStates, nextState)
+	//log.Infof("User(app) with ID: %v moved FROM cell: %v, towards cell: %v", user.Id, user.UserLocation, nextState)
 	user.UserLocation = strconv.Itoa(nextState)
 	user.UserPath = append(user.UserPath, user.UserLocation)
 	return nextState

@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"simu/src/config"
+	log "simu/src/logger"
 	"simu/src/pkg/model"
 )
 
 func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (model.SmartPlacementIntent, error) {
-	log.Printf("GenerateSmartPlacementIntent: activity start\n")
+	//log.Printf("GenerateSmartPlacementIntent: activity start\n")
 
 	targetAppName := app.Id
 
@@ -44,13 +44,13 @@ func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (mode
 			},
 		},
 	}
-	log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
+	//log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
 
 	return spIntent, nil
 }
 
 func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster, error) {
-	log.Printf("CallPlacementController: function start\n")
+	//	log.Printf("CallPlacementController: function start\n")
 	var resp model.Cluster
 
 	plcCtrlUrl := buildPlcCtrlURL()
@@ -58,20 +58,20 @@ func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster,
 
 	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
 	if err != nil {
-		log.Printf("[ERROR] Placement Controller returned error: %v. Relocation for APP[%v] failed.", err, intent.Metadata.Name)
+		log.Errorf("[ERROR] Placement Controller returned error: %v. Relocation for APP[%v] failed.", err, intent.Metadata.Name)
 		return nil, err
 	}
 
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		log.Printf("error occured while unmarshaling: %v. Resp body: %v", err, string(responseBody))
+		log.Errorf("error occured while unmarshaling: %v. Resp body: %v", err, string(responseBody))
 		return nil, err
 	}
 
 	var cluster model.Cluster
 	cluster = resp
 
-	log.Printf("CallPlacementController: Optimal cluster = provider{%v}, cluster={%v}.\n", resp.Provider, resp.Cluster)
+	//log.Infof("New cluster for app: cluster={%v}.", resp.Cluster)
 
 	return &cluster, nil
 }
@@ -93,7 +93,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		log.Fatalf("Could not make post request. reason: %v\n", err)
+		log.Errorf("Could not make post request. reason: %v\n", err)
 	}
 	defer resp.Body.Close()
 
@@ -116,12 +116,12 @@ func sendRelocationRequest(app model.MECApp, newCluster model.Cluster) error {
 
 	orchestratorEndpoint := buildOrchestratorURL(app, newCluster)
 
-	responseBody, err := postHttpRespBody(orchestratorEndpoint, app)
+	_, err := postHttpRespBody(orchestratorEndpoint, app)
 	if err != nil {
-		log.Printf("[ERROR] Orchestrator returned error: %v. Relocation for APP[%v] failed.", err, app.Id)
+		log.Errorf("[ERROR] Orchestrator returned error: %v. Relocation for APP[%v] failed.", err, app.Id)
 		return err
 	} else {
-		log.Printf("[ERROR] Orchestrator returned confirmation: %v. Relocation for APP[%v] done.", responseBody, app.Id)
+		//	log.Infof("Orchestrator returned confirmation: %v. Relocation for APP[%v] done.", responseBody, app.Id)
 		return nil
 	}
 }

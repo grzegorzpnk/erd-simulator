@@ -42,17 +42,12 @@ func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter
 		sendResponse(w, msg, http.StatusInternalServerError)
 		return
 	} else {
-		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
-			sendResponse(w, "Relocation redundant. Skipping...", http.StatusNotModified)
-			return
-		} else {
-			body := ResponseBody{
-				Provider: mec.Identity.Provider,
-				Cluster:  mec.Identity.Cluster,
-			}
-
-			sendResponse(w, body, http.StatusOK)
+		body := ResponseBody{
+			Provider: mec.Identity.Provider,
+			Cluster:  mec.Identity.Cluster,
 		}
+
+		sendResponse(w, body, http.StatusOK)
 	}
 }
 
@@ -77,17 +72,12 @@ func (h intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWri
 		sendResponse(w, msg, http.StatusInternalServerError)
 		return
 	} else {
-		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
-			sendResponse(w, "Relocation redundant. Skipping...", http.StatusNotModified)
-			return
-		} else {
-			body := ResponseBody{
-				Provider: mec.Identity.Provider,
-				Cluster:  mec.Identity.Cluster,
-			}
-
-			sendResponse(w, body, http.StatusOK)
+		body := ResponseBody{
+			Provider: mec.Identity.Provider,
+			Cluster:  mec.Identity.Cluster,
 		}
+
+		sendResponse(w, body, http.StatusOK)
 	}
 }
 
@@ -106,18 +96,12 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 		sendResponse(w, msg, http.StatusInternalServerError)
 		return
 	} else {
-		//todo: replace with asking nmt instead of taking data from intent
-		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
-			sendResponse(w, "Relocation redundant. Skipping...", http.StatusOK)
-			return
-		} else {
-			body := ResponseBody{
-				Provider: mec.Identity.Provider,
-				Cluster:  mec.Identity.Cluster,
-			}
-
-			sendResponse(w, body, http.StatusOK)
+		body := ResponseBody{
+			Provider: mec.Identity.Provider,
+			Cluster:  mec.Identity.Cluster,
 		}
+
+		sendResponse(w, body, http.StatusOK)
 	}
 }
 
