@@ -21,6 +21,8 @@ func main() {
 	err := simuClient.FetchAppsFromNMT()
 	if err != nil {
 		log.Errorf(err.Error())
+	} else {
+		log.Infof("Initial app list fetched from NMT")
 	}
 
 	startSIMUserver(simuClient)

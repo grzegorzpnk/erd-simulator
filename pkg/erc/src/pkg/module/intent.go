@@ -160,6 +160,8 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 	tc := topology.NewTopologyClient()
 	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
 
+	log.Infof("\n\nReceived request about finding new cluster for app: %v located at Cluster: %v, that moves towards cell: %v\n", intent.Spec.AppName, intent.CurrentPlacement.Cluster, intent.Spec.SmartPlacementIntentData.TargetCell)
+
 	log.Infof("Smart Placement Intent: %+v", intent)
 
 	// Evaluate what coverage zone we are considering (based on region)

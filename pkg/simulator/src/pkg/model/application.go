@@ -57,6 +57,7 @@ func GetAppsFromNMT(endpoint string) ([]MECApp, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalln(err)
+		return nil, err
 	}
 	//Convert the body to type string
 	var apps []MECApp
