@@ -43,6 +43,7 @@ func (simuCl *SimuClient) FetchAppsFromNMT() error {
 	}
 
 	simuCl.setApps(apps)
+	simuCl.setPath()
 	return nil
 }
 
@@ -69,6 +70,15 @@ func GetAppsFromNMT(endpoint string) ([]MECApp, error) {
 
 func (simuCl *SimuClient) setApps(apps []MECApp) {
 	simuCl.Apps = apps
+}
+
+func (simuCl *SimuClient) setPath() {
+
+	for i, _ := range simuCl.Apps {
+		simuCl.Apps[i].UserPath = append(simuCl.Apps[i].UserPath, simuCl.Apps[i].UserLocation)
+		//v.UserPath = append(v.UserPath, v.UserLocation)
+	}
+
 }
 
 func buildNMTendpoint() string {
