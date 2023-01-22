@@ -127,6 +127,8 @@ func (h *apiHandler) RelocateApplication2(w http.ResponseWriter, r *http.Request
 	var mecApp model.MECApp
 	_ = json.NewDecoder(r.Body).Decode(&mecApp)
 	log.Infof("Client tries to RELOCATE mecApp ID: %v from MEC Host: %v to new MEC Host: %v \n", mecApp.Id, oldMecHost.Identity.Cluster, newMecHost.Identity.Cluster)
+	log.Infof("Old mec resources: %v, %v", oldMecHost.CpuResources, oldMecHost.MemoryResources)
+	log.Infof("New mec resources: %v, %v", newMecHost.CpuResources, newMecHost.MemoryResources)
 
 	if !(oldMecHost.CheckAppExists(mecApp)) {
 		err := fmt.Errorf("Mec App %v,cannot be relocated beacuse it does not exists at source cluster", mecApp.Id)
@@ -159,6 +161,8 @@ func (h *apiHandler) RelocateApplication2(w http.ResponseWriter, r *http.Request
 
 		w.WriteHeader(http.StatusOK)
 		log.Infof("App relocated succesfully ! \n")
+		log.Infof("Old mec resources: %v, %v", oldMecHost.CpuResources, oldMecHost.MemoryResources)
+		log.Infof("New mec resources: %v, %v", newMecHost.CpuResources, newMecHost.MemoryResources)
 	}
 }
 

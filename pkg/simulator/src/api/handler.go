@@ -40,12 +40,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		experimentN := "[EXPERIMENT " + strconv.Itoa(i+1) + "] "
 		//generate number of user to move
-		id := h.generateUserToMove()
+		//id := h.generateUserToMove()
+		id := "10"
 
 		// select new position for selected user and add new position to UserPath
 		app := h.SimuClient.GetApps(id)
 		h.generateTargetCellId(app)
-		log.Infof(experimentN+"User(app) with ID: %v moved FROM cell: %v, towards cell: %v", app.Id, app.UserPath[len(app.UserPath)-2], app.UserLocation)
+		log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
 
 		//create smart placement intent
 
