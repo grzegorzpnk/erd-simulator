@@ -23,6 +23,33 @@ func NewRouter(mockClient interface{}) *mux.Router {
 	r.HandleFunc(spiURL+"/heuristic", h.handleSmartPlacementIntentHeuristic).Methods("POST")
 	r.HandleFunc(spiURL+"/ear-heuristic", h.handleSmartPlacementIntentEarHeuristic).Methods("POST")
 
+	//RESULTS
+	resultsCollectionUrl := "/results"
+	failedUrl := resultsCollectionUrl + "/relocation-failed/inc/{type}"
+	successfulUrl := resultsCollectionUrl + "/relocation-successful/inc/{type}"
+	redundantUrl := resultsCollectionUrl + "/relocation-redundant/inc/{type}"
+	skippedUrl := resultsCollectionUrl + "/relocation-skipped/inc/{type}"
+	resetUrl := resultsCollectionUrl + "/reset"
+
+	failedTimeUrl := resultsCollectionUrl + "/relocation-failed/time"
+	successfulTimeUrl := resultsCollectionUrl + "/relocation-successful/time"
+	redundantTimeUrl := resultsCollectionUrl + "/relocation-redundant/time"
+	skippedTimeUrl := resultsCollectionUrl + "/relocation-skipped/time"
+
+	r.HandleFunc(failedUrl, h.relocationFailedHandler).Methods("POST")
+	r.HandleFunc(successfulUrl, h.relocationSuccessfulHandler).Methods("POST")
+	r.HandleFunc(redundantUrl, h.relocationRedundantHandler).Methods("POST")
+	r.HandleFunc(skippedUrl, h.relocationSkippedHandler).Methods("POST")
+
+	r.HandleFunc(failedTimeUrl, h.failedTimeHandler).Methods("POST")
+	r.HandleFunc(successfulTimeUrl, h.successfulTimeHandler).Methods("POST")
+	r.HandleFunc(redundantTimeUrl, h.redundantTimeHandler).Methods("POST")
+	r.HandleFunc(skippedTimeUrl, h.skippedTimeHandler).Methods("POST")
+
+	r.HandleFunc(resetUrl, h.resetHandler).Methods("POST")
+	r.HandleFunc(resultsCollectionUrl, h.getResultsHandler).Methods("GET")
+	r.HandleFunc(resultsCollectionUrl+"/csv", h.getResultsCSVHandler).Methods("GET")
+
 	return r
 }
 
