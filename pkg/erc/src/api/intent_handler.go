@@ -6,7 +6,6 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/results"
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
@@ -14,6 +13,7 @@ import (
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/validation"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -40,19 +40,42 @@ func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter
 		return
 	}
 
+	//measure time of searching for best cluster
+	startTime := time.Now()
 	mec, err := h.client.ServeSmartPlacementIntentHeuristic(false, i)
+	elapsedTime := time.Since(startTime)
 
 	if err != nil {
-		msg := fmt.Sprintf("Search failed. Reason: %v", err.Error())
-		sendResponse(w, msg, http.StatusInternalServerError)
+		// EXPERIMENTS: remove later
+		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
+			sendResponse(w, err.Error(), http.StatusNoContent)
+			return
+		}
+		// EXPERIMENTS: remove later
+		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
-		body := ResponseBody{
-			Provider: mec.Identity.Provider,
-			Cluster:  mec.Identity.Cluster,
-		}
+		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
 
-		sendResponse(w, body, http.StatusOK)
+			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
+
+			sendResponse(w, "redundant cluster.. skipped..", http.StatusNoContent)
+		} else {
+
+			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
+
+			body := ResponseBody{
+				Provider: mec.Identity.Provider,
+				Cluster:  mec.Identity.Cluster,
+			}
+			sendResponse(w, body, http.StatusOK)
+		}
 	}
 }
 
@@ -64,25 +87,42 @@ func (h intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWri
 		return
 	}
 
+	//measure time of searching for best cluster
+	startTime := time.Now()
 	mec, err := h.client.ServeSmartPlacementIntentHeuristic(true, i)
+	elapsedTime := time.Since(startTime)
 
 	if err != nil {
+		// EXPERIMENTS: remove later
 		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
-			msg := fmt.Sprintf("Skipping search. Reason: current cluster meets the requirements[%+v].", i.CurrentPlacement)
-			sendResponse(w, msg, http.StatusNotModified)
+			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
+			sendResponse(w, err.Error(), http.StatusNoContent)
 			return
 		}
-
-		msg := fmt.Sprintf("Search failed. Reason: %v", err.Error())
-		sendResponse(w, msg, http.StatusInternalServerError)
+		// EXPERIMENTS: remove later
+		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
-		body := ResponseBody{
-			Provider: mec.Identity.Provider,
-			Cluster:  mec.Identity.Cluster,
-		}
+		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
 
-		sendResponse(w, body, http.StatusOK)
+			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
+
+			sendResponse(w, "redundant cluster.. skipped..", http.StatusNoContent)
+		} else {
+
+			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
+
+			body := ResponseBody{
+				Provider: mec.Identity.Provider,
+				Cluster:  mec.Identity.Cluster,
+			}
+			sendResponse(w, body, http.StatusOK)
+		}
 	}
 }
 
@@ -98,68 +138,33 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 	startTime := time.Now()
 	mec, err := h.client.ServeSmartPlacementIntentOptimal(i)
 	elapsedTime := time.Since(startTime)
-	respBody, err2 := json.Marshal(elapsedTime)
-	if err2 != nil {
-		log.Warnf("Could not unmarshal: %v. error: %v", elapsedTime, err2)
-	}
 
+	//let's find out what type of searching it was: succesfull, failed, redundant or if-skipped
 	if err != nil {
 		// EXPERIMENTS: remove later
 		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
-			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-skipped/inc/%v",
-				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
-			http.Post("http://10.254.185.44:32137/v1/results/relocation-skipped/time", "application/json", bytes.NewBuffer(respBody))
+			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
 			sendResponse(w, err.Error(), http.StatusNoContent)
 			return
 		}
 		// EXPERIMENTS: remove later
-		http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-failed/inc/%v",
-			i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
-		http.Post("http://10.254.185.44:32137/v1/results/relocation-failed/time", "application/json", bytes.NewBuffer(respBody))
+		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
 		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
-			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-redundant/inc/%v",
-				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
-			http.Post("http://10.254.185.44:32137/v1/results/relocation-redundant/time", "application/json", bytes.NewBuffer(respBody))
-			sendResponse(w, "Relocation redundant. Skipping...", http.StatusNoContent)
-			return
-		} else {
-			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-successful/inc/%v",
-				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
-			http.Post("http://10.254.185.44:32137/v1/results/relocation-successful/time", "application/json", bytes.NewBuffer(respBody))
-			body := ResponseBody{
-				Provider: mec.Identity.Provider,
-				Cluster:  mec.Identity.Cluster,
-			}
-			sendResponse(w, body, http.StatusOK)
-		}
-	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////
+			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
 
-	//let's find out what type of searching it was: succesfull, failed, redundant or if-skipped
-	if err != nil {
-		msg := fmt.Sprintf("Search has returned failed. Reason: %v", err.Error())
-		sendResponse(w, msg, http.StatusInternalServerError)
-		return
-	} else {
-		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
-
-			h.resultClient.Results.IncRedundant(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)
-
-			/*http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-redundant/inc/%v",
-					i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
-				http.Post("http://10.254.185.44:32137/v1/results/relocation-redundant/time", "application/json", bytes.NewBuffer(respBody))
-				sendResponse(w, "Relocation redundant. Skipping...", http.StatusNoContent)
-				return
-			}*/
+			sendResponse(w, "redundant cluster.. skipped..", http.StatusNoContent)
 		} else {
 
-			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-successful/inc/%v",
-				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
-			http.Post("http://10.254.185.44:32137/v1/results/relocation-successful/time", "application/json", bytes.NewBuffer(respBody))
+			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
+
 			body := ResponseBody{
 				Provider: mec.Identity.Provider,
 				Cluster:  mec.Identity.Cluster,
@@ -200,6 +205,67 @@ func validateRequestBody(w http.ResponseWriter, r *http.Request, v interface{}, 
 	}
 
 	return true
+}
+
+func (h *intentHandler) resetHandler(w http.ResponseWriter, r *http.Request) {
+
+	h.resultClient.Results.Reset()
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+}
+
+func (h *intentHandler) getResultsHandler(w http.ResponseWriter, r *http.Request) {
+
+	subs := h.resultClient.Results
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err := json.NewEncoder(w).Encode(subs)
+	if err != nil {
+		log.Error("[API] Error encoding.")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *intentHandler) getResultsCSVHandler(w http.ResponseWriter, r *http.Request) {
+	var body []string
+	subs := h.resultClient.Results
+
+	body = append(body, "strategy,objective,experiment,iteration,edge_relocation_cg,search_successful_cg,search_failed_cg,search_skipped_cg,edge_relocation_v2x,search_successful_v2x,search_failed_v2x,search_skipped_v2x,edge_relocation_uav,search_successful_uav,search_failed_uav,search_skipped_uav")
+
+	body = append(body, fmt.Sprintf("null,null,null,null,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v",
+		subs.Successful["10"], subs.Successful["10"]+subs.Redundant["10"], subs.Failed["10"], subs.Skipped["10"],
+		subs.Successful["15"], subs.Successful["15"]+subs.Redundant["15"], subs.Failed["15"], subs.Skipped["15"],
+		subs.Successful["30"], subs.Successful["30"]+subs.Redundant["30"], subs.Failed["30"], subs.Skipped["30"]))
+
+	body = append(body, ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
+
+	var times string
+	for _, t := range subs.EvalTimes.Failed {
+		times += strconv.Itoa(t) + ","
+	}
+	for _, t := range subs.EvalTimes.Successful {
+		times += strconv.Itoa(t) + ","
+	}
+	for _, t := range subs.EvalTimes.Redundant {
+		times += strconv.Itoa(t) + ","
+	}
+	for _, t := range subs.EvalTimes.Skipped {
+		times += strconv.Itoa(t) + ","
+	}
+
+	body = append(body, "strategy,objective,experiment,iteration,times[ms]")
+	body = append(body, fmt.Sprintf("null,null,null,null,%v", times))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err := json.NewEncoder(w).Encode(body)
+	if err != nil {
+		log.Error("[API] Error encoding.")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // sendResponse sends an HTTP response to the client with the provided status
