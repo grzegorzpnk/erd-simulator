@@ -1,9 +1,12 @@
 package api
 
 import (
+	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/errs"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/module"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/results"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/apierror"
@@ -11,6 +14,7 @@ import (
 	"gitlab.com/project-emco/core/emco-base/src/orchestrator/pkg/infra/validation"
 	"io"
 	"net/http"
+	"time"
 )
 
 type ResponseBody struct {
@@ -19,7 +23,8 @@ type ResponseBody struct {
 }
 
 type intentHandler struct {
-	client module.SmartPlacementIntentManager
+	client       module.SmartPlacementIntentManager
+	resultClient *results.Client
 }
 
 //replace below if you are running locally
@@ -89,19 +94,78 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 		return
 	}
 
+	//measure time of searching for best cluster
+	startTime := time.Now()
 	mec, err := h.client.ServeSmartPlacementIntentOptimal(i)
+	elapsedTime := time.Since(startTime)
+	respBody, err2 := json.Marshal(elapsedTime)
+	if err2 != nil {
+		log.Warnf("Could not unmarshal: %v. error: %v", elapsedTime, err2)
+	}
 
 	if err != nil {
-		msg := fmt.Sprintf("Search failed. Reason: %v", err.Error())
+		// EXPERIMENTS: remove later
+		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-skipped/inc/%v",
+				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
+			http.Post("http://10.254.185.44:32137/v1/results/relocation-skipped/time", "application/json", bytes.NewBuffer(respBody))
+			sendResponse(w, err.Error(), http.StatusNoContent)
+			return
+		}
+		// EXPERIMENTS: remove later
+		http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-failed/inc/%v",
+			i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
+		http.Post("http://10.254.185.44:32137/v1/results/relocation-failed/time", "application/json", bytes.NewBuffer(respBody))
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	} else {
+		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
+			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-redundant/inc/%v",
+				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
+			http.Post("http://10.254.185.44:32137/v1/results/relocation-redundant/time", "application/json", bytes.NewBuffer(respBody))
+			sendResponse(w, "Relocation redundant. Skipping...", http.StatusNoContent)
+			return
+		} else {
+			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-successful/inc/%v",
+				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
+			http.Post("http://10.254.185.44:32137/v1/results/relocation-successful/time", "application/json", bytes.NewBuffer(respBody))
+			body := ResponseBody{
+				Provider: mec.Identity.Provider,
+				Cluster:  mec.Identity.Cluster,
+			}
+			sendResponse(w, body, http.StatusOK)
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//let's find out what type of searching it was: succesfull, failed, redundant or if-skipped
+	if err != nil {
+		msg := fmt.Sprintf("Search has returned failed. Reason: %v", err.Error())
 		sendResponse(w, msg, http.StatusInternalServerError)
 		return
 	} else {
-		body := ResponseBody{
-			Provider: mec.Identity.Provider,
-			Cluster:  mec.Identity.Cluster,
-		}
+		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
 
-		sendResponse(w, body, http.StatusOK)
+			h.resultClient.Results.IncRedundant(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)
+
+			/*http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-redundant/inc/%v",
+					i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
+				http.Post("http://10.254.185.44:32137/v1/results/relocation-redundant/time", "application/json", bytes.NewBuffer(respBody))
+				sendResponse(w, "Relocation redundant. Skipping...", http.StatusNoContent)
+				return
+			}*/
+		} else {
+
+			http.Post(fmt.Sprintf("http://10.254.185.44:32137/v1/results/relocation-successful/inc/%v",
+				i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax), "application/json", bytes.NewBuffer([]byte{}))
+			http.Post("http://10.254.185.44:32137/v1/results/relocation-successful/time", "application/json", bytes.NewBuffer(respBody))
+			body := ResponseBody{
+				Provider: mec.Identity.Provider,
+				Cluster:  mec.Identity.Cluster,
+			}
+			sendResponse(w, body, http.StatusOK)
+		}
 	}
 }
 

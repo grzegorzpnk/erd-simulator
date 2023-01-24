@@ -4,6 +4,7 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/api"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/results"
 	"context"
 	"github.com/gorilla/handlers"
 	"math/rand"
@@ -33,7 +34,10 @@ func serve() error {
 	p := config.GetConfiguration().ServicePort
 	log.Infof("Starting Smart Placement Controller. Port: %v.", p)
 
-	r := api.NewRouter(nil)
+	var result *results.Client
+	result = results.NewClient()
+
+	r := api.NewRouter(nil, result)
 	h := handlers.LoggingHandler(os.Stdout, r)
 	server := &http.Server{
 		Handler: h,
