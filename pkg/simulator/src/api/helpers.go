@@ -71,8 +71,6 @@ func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster,
 	var cluster model.Cluster
 	cluster = resp
 
-	//log.Infof("New cluster for app: cluster={%v}.", resp.Cluster)
-
 	return &cluster, nil
 }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dirs=("erc" "innot" "lcm-workflow" "relocate-workflow" "obs" "nmt")
+dirs=("erc" "nmt" "simulator")
 
 for dir in "${dirs[@]}"; do
   cd ./pkg/"$dir" || exit

@@ -191,6 +191,8 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 // checkIfCurrentClusterOk checks if current MEC Host meets all requirements specified in the SmartPlacementIntent.
 // Returns `true` if current MEC Host meets all the requirements, `false` otherwise.
 func checkIfCurrentClusterOk(tc topology.Client, i model.SmartPlacementIntent) (bool, error) {
+
+	//todo: currently old cluster is taken from intent, that means it should be properly updated at simu part ( hanlder.go), but it was not tested, so maybe more safe would be to take this data from NMT since, NMT already knows cluster per app
 	mec, err := tc.GetMecHost(i.CurrentPlacement.Provider, i.CurrentPlacement.Cluster)
 	if err != nil {
 		return false, err

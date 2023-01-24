@@ -154,21 +154,22 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
+
+		body := ResponseBody{
+			Provider: mec.Identity.Provider,
+			Cluster:  mec.Identity.Cluster,
+		}
+
 		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
 
 			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
+			sendResponse(w, "redundant cluster.. skipped..", http.StatusOK)
 
-			sendResponse(w, "redundant cluster.. skipped..", http.StatusNoContent)
 		} else {
 
 			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
-
-			body := ResponseBody{
-				Provider: mec.Identity.Provider,
-				Cluster:  mec.Identity.Cluster,
-			}
 			sendResponse(w, body, http.StatusOK)
 		}
 	}

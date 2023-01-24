@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a SERVICES=("relocate-worker" "relocate-client" "lcm-worker" "lcm-client" "erc" "obs" "nmt" "innot")
+declare -a SERVICES=("nmt" "erc" "simu")
 
 for svc in "${SERVICES[@]}";
 do

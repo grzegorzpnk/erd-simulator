@@ -57,26 +57,32 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		//send request to ERC to select new position
 		cluster, err := CallPlacementController(spi)
+
 		if err != nil {
-			log.Errorf("Call Placement ctrl has failed : %v", err.Error())
+			log.Errorf("Call Placement ctrl has returned status : %v", err.Error())
+			log.Errorf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+			continue
 		}
 
 		if cluster.Cluster == app.ClusterId {
 			log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+			continue
+		}
+
+		log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+
+		//generate request to orchestrator
+		err2 := sendRelocationRequest(*app, *cluster)
+		if err2 != nil {
+			log.Errorf("Cannot relocate app! Error: %v", err2.Error())
 		} else {
-			log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+			log.Infof(experimentN + "Application has been relocated in nmt")
 
-			//generate request to orchestrator
-			err2 := sendRelocationRequest(*app, *cluster)
-			if err2 != nil {
-				log.Errorf("Cannot relocate app! Error: %v", err2.Error())
-			} else {
-				log.Infof(experimentN + "Application has been relocated in nmt")
-			}
-
-			//update cluster in app list internallyt
+			//update cluster in internal app list
 			app.ClusterId = cluster.Cluster
 		}
+
 	}
+
 	w.WriteHeader(http.StatusOK)
 }
