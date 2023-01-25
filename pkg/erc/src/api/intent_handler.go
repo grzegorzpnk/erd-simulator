@@ -146,12 +146,14 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
 			sendResponse(w, err.Error(), http.StatusNoContent)
+			log.Warnf("Current cluster is still enough..")
 			return
 		}
 		// EXPERIMENTS: remove later
 		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
+		log.Warnf("Cannot find better cluster..")
 		return
 	} else {
 
@@ -164,13 +166,16 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 
 			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
-			sendResponse(w, "redundant cluster.. skipped..", http.StatusOK)
+			sendResponse(w, body, http.StatusOK)
+			log.Infof("Redundant cluster selected")
 
 		} else {
 
 			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
 			sendResponse(w, body, http.StatusOK)
+			log.Infof("cluster selected succesfully ")
+
 		}
 	}
 }

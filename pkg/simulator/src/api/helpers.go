@@ -58,13 +58,13 @@ func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster,
 
 	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
 	if err != nil {
-		log.Errorf("[ERROR] Placement Controller returned error: %v. Relocation for APP[%v] failed.", err, intent.Metadata.Name)
+		log.Warnf("[ERROR] Placement Controller returned status: %v. Relocation for APP[%v] not done.", err, intent.Metadata.Name)
 		return nil, err
 	}
 
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		log.Errorf("error occured while unmarshaling: %v. Resp body: %v", err, string(responseBody))
+		log.Warnf("error occured while unmarshaling: %v. Resp body: %v", err, string(responseBody))
 		return nil, err
 	}
 
