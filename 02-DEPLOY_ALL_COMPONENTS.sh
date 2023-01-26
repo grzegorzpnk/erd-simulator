@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dirs=("erc" "nmt" "simulator")
+dirs=("erc" "nmt" )
 
 for dir in "${dirs[@]}"; do
   cd ./pkg/"$dir" || exit
