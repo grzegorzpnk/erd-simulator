@@ -59,8 +59,8 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		cluster, err := CallPlacementController(spi)
 
 		if err != nil {
-			log.Errorf("Call Placement ctrl has returned status : %v", err.Error())
-			log.Errorf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+			log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
+			log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
 			continue
 		}
 
