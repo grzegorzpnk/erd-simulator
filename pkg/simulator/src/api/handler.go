@@ -31,6 +31,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	//take initial topology and apps from NMT - done
 	h.SimuClient.FetchAppsFromNMT()
 	//todo: reset results status at ERC before starting new expe
+	resetResultsAtNMT()
 
 	//check type of experiment
 	//take statistics every M repetition

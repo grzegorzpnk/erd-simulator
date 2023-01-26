@@ -124,6 +124,21 @@ func sendRelocationRequest(app model.MECApp, newCluster model.Cluster) error {
 	}
 }
 
+func resetResultsAtNMT() error {
+
+	url := config.GetConfiguration().ERCEndpoint
+	url += "/v2/erc/results/reset"
+
+	_, err := postHttpRespBody(url, nil)
+	if err != nil {
+		log.Errorf("[ERROR] ERC returned error: %v ", err)
+		return err
+	} else {
+		return nil
+	}
+
+}
+
 func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {
 	//orchestrator/relocate/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application"
 
