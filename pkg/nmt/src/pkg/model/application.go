@@ -21,12 +21,20 @@ type RequestedResources struct {
 }
 
 func (app *MECApp) GeneratreResourceRequirements() {
+	//
+	////todo set precision of float 64 in order to reduce the computation
+	//minRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMin, 64)
+	//maxRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMax, 64)
+	//rand.Float64()
+	//
+	//app.Requirements.RequestedCPU = minRes + rand.Float64()*(maxRes-minRes)
+	//app.Requirements.RequestedMEMORY = minRes + rand.Float64()*(maxRes-minRes)
 
-	minRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMin, 64)
-	maxRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMax, 64)
+	minRes, _ := strconv.Atoi(config.GetConfiguration().ResMin)
+	maxRes, _ := strconv.Atoi(config.GetConfiguration().ResMax)
 
-	app.Requirements.RequestedCPU = minRes + rand.Float64()*(maxRes-minRes)
-	app.Requirements.RequestedMEMORY = minRes + rand.Float64()*(maxRes-minRes)
+	app.Requirements.RequestedCPU = float64(minRes + rand.Intn(maxRes-minRes))
+	app.Requirements.RequestedMEMORY = float64(minRes + rand.Intn(maxRes-minRes))
 
 }
 

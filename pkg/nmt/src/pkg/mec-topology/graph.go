@@ -290,6 +290,7 @@ func (g *Graph) InstantiateAllDefinedApps() error {
 
 func (g *Graph) UninstallAllApps() {
 
+	//todo: I think this function does not uninstall apps, but jus a copy of apps !
 	//uninstall on MEC Hosts
 	for _, v := range g.MecHosts {
 		if len(v.MECApps) != 0 {

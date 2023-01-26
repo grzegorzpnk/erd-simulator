@@ -221,7 +221,7 @@ func (h *intentHandler) resetHandler(w http.ResponseWriter, r *http.Request) {
 
 	h.resultClient.Results.Reset()
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *intentHandler) getResultsHandler(w http.ResponseWriter, r *http.Request) {

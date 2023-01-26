@@ -152,12 +152,23 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 
 	if len(mec.MECApps) == 0 {
 		mec.MECApps = nil
+		mec.CpuResources.Used = 0
+		mec.MemoryResources.Used = 0
 	}
 
 	//update resources on mec host
 	//update used resources
 	mec.CpuResources.Used -= app.Requirements.RequestedCPU
 	mec.MemoryResources.Used -= app.Requirements.RequestedMEMORY
+
+	//introduced this as a bug fixing
+	if mec.CpuResources.Used < 0 {
+		mec.CpuResources.Used = 0
+	}
+
+	if mec.MemoryResources.Used < 0 {
+		mec.MemoryResources.Used = 0
+	}
 
 	//update utilization
 	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity

@@ -18,12 +18,12 @@ func main() {
 	//var simuClient *model.SimuClient
 	simuClient := &model.SimuClient{}
 
-	err := simuClient.FetchAppsFromNMT()
-	if err != nil {
-		log.Errorf(err.Error())
-	} else {
-		log.Infof("Initial app list fetched from NMT")
-	}
+	/*	err := simuClient.FetchAppsFromNMT()
+		if err != nil {
+			log.Errorf(err.Error())
+		} else {
+			log.Infof("Initial app list fetched from NMT")
+		}*/
 
 	startSIMUserver(simuClient)
 

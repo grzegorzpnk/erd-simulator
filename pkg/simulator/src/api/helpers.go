@@ -95,7 +95,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
 		getErr := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n",
 			resp.Status, url)
 		fmt.Fprintf(os.Stderr, getErr.Error())
