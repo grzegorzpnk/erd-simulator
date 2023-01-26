@@ -27,7 +27,7 @@ func NewRouter(mockClient interface{}, resultClient *results.Client) *mux.Router
 
 	// API which will be used to collect information about experiments
 
-	r.HandleFunc("/erc/results/reset", h.resetHandler).Methods("GET")
+	r.HandleFunc("/erc/results/reset", h.resetHandler).Methods("POST")
 	r.HandleFunc("/erc/results", h.getResultsHandler).Methods("GET")
 	r.HandleFunc("/erc/results/csv", h.getResultsCSVHandler).Methods("GET")
 

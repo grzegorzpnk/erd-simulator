@@ -161,7 +161,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
 
 	log.Infof("\n\nReceived request about finding new cluster for app: %v located at Cluster: %v, that moves towards cell: %v\n", intent.Spec.AppName, intent.CurrentPlacement.Cluster, intent.Spec.SmartPlacementIntentData.TargetCell)
-
+	log.Infof("Searching Type: Optimal")
 	log.Infof("Smart Placement Intent: %+v", intent)
 
 	// Evaluate what coverage zone we are considering (based on region)
@@ -242,7 +242,7 @@ func checkCoverageZone(sMec, tMec model.MecHost) bool {
 // If all constraints for given MEC Host are met, it's appended to the SearchParams.candidateMECs list
 // Returns (updated SearchParams struct, error)
 func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacementIntent) (SearchParams, error) {
-	log.Infof("Looking for candidates...")
+	log.Infof("Among all clusters in Searching Area let's identify those that fulfill latency, resources and max load constraints")
 	for _, mec := range sp.currentMECs {
 		// Shortest path is a sum of latency on all the links -> from targetCell to the candidate MEC Host
 		latency, err := tc.GetShortestPath(tc.CurrentCell, mec)
@@ -266,12 +266,12 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 			log.Warnf("Could not collect MEC resources. Error: %v", err)
 		}
 
-		log.Infof("Current MEC is: %+v: %v", mec.Identity.Cluster, mec.Resources)
-
 		if !resourcesOk(i, mec) {
 			//log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
 			continue
 		}
+
+		log.Infof("Identified possible MEC: %+v: %v", mec.Identity.Cluster, mec.Resources)
 
 		// TODO: we can specify more restrictions for the candidate MEC Hosts: for example consider only specific level/region
 		sp.candidateMECs = append(sp.candidateMECs, mec)
@@ -335,10 +335,10 @@ func resourcesOk(i model.SmartPlacementIntent, mec model.MecHost) bool {
 // FindOptimalCluster iterates over candidate MEC Hosts (mecs), and based on the computed cost, it selects the best one
 // Returns the best (cheapest) MEC Host if found, error otherwise (mecs list is empty)
 func FindOptimalCluster(mecs []model.MecHost, intent model.SmartPlacementIntent) (model.MecHost, error) {
-	log.Infof("Looking for optimal cluster... Cost is:")
+	log.Infof("Looking for optimal cluster among clusters that fulfilled constaraints... Cost is:")
 
 	if len(mecs) <= 0 {
-		reason := "mecs list is empty"
+		reason := "candidate MECs list is empty"
 		err := errors.New(reason)
 		log.Warnf("[RESULT] Could not find optimal cluster: %v", reason)
 		return model.MecHost{}, err

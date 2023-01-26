@@ -26,6 +26,15 @@ func (h *apiHandler) getUsers(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	//at the beggining let's synchro latest placement at nmt
+	//todo: run initial placement generator in NMT
+	//take initial topology and apps from NMT - done
+	h.SimuClient.FetchAppsFromNMT()
+	//todo: reset results status at ERC before starting new expe
+
+	//check type of experiment
+	//take statistics every M repetition
+
 	params := mux.Vars(r)
 	experimentsNumber, _ := strconv.Atoi(params["mobility-number"])
 
@@ -40,8 +49,8 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		experimentN := "[EXPERIMENT " + strconv.Itoa(i+1) + "] "
 		//generate number of user to move
-		//id := h.generateUserToMove()
-		id := "10"
+		id := h.generateUserToMove()
+		//id := "10"
 
 		// select new position for selected user and add new position to UserPath
 		app := h.SimuClient.GetApps(id)

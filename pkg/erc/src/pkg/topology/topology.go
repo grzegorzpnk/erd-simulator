@@ -55,6 +55,7 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 		err = errors.New(fmt.Sprintf("no mec hosts found for given cell: %v\n.", id))
 		return []model.MecHost{}, err
 	} else {
+		log.Infof("Looking for first reference ( City - Level) cluster")
 		for i := 0; i < len(mhsIdentity); i++ {
 			log.Infof("For CELL_ID=[%v] got CLUSTERS[%+v]", id, mhsIdentity[i].Cluster)
 		}
@@ -116,6 +117,7 @@ func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
 			}
 		}
 
+		log.Infof("Looking for all MEC Hosts for the same searching zone as a new user location")
 		for i := 0; i < len(mhsIdentity); i++ {
 			log.Infof("For REGION=[%v] got CLUSTERS[%+v]", region, mhsIdentity[i].Cluster)
 		}
