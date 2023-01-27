@@ -124,7 +124,7 @@ func sendRelocationRequest(app model.MECApp, newCluster model.Cluster) error {
 	}
 }
 
-func resetResultsAtNMT() error {
+func resetResultsAtERC() error {
 
 	url := config.GetConfiguration().ERCEndpoint
 	url += "/v2/erc/results/reset"
@@ -137,6 +137,21 @@ func resetResultsAtNMT() error {
 		return nil
 	}
 
+}
+
+func GenerateInitialAppPlacementAtNMT(appQuantity string) error {
+
+	url := config.GetConfiguration().NMTEndpoint
+	url += "/v1/topology/prerequesties/"
+	url += appQuantity
+
+	_, err := postHttpRespBody(url, nil)
+	if err != nil {
+		log.Errorf("[ERROR] NMT returned error: %v ", err)
+		return err
+	}
+
+	return nil
 }
 
 func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {

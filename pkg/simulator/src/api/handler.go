@@ -28,11 +28,20 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 	//at the beggining let's synchro latest placement at nmt
 	//todo: run initial placement generator in NMT
+	appNumber := "50"
+	err := GenerateInitialAppPlacementAtNMT(appNumber)
+	if err != nil {
+		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", appNumber)
+	}
 	//take initial topology and apps from NMT - done
 
-	err := h.SimuClient.FetchAppsFromNMT()
-	if err != nil {
-		log.Errorf("Cannot fetch current app list from NMT. Error: %v", err.Error())
+	err2 := h.SimuClient.FetchAppsFromNMT()
+	if err2 != nil {
+		log.Errorf("Cannot fetch current app list from NMT. Error: %v", err2.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
@@ -40,13 +49,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//todo: reset results status at ERC before starting new expe
-	err2 := resetResultsAtNMT()
-	if err2 != nil {
-		log.Errorf("Cannot reset the results at NMT. Error: %v", err.Error())
+	err3 := resetResultsAtERC()
+	if err3 != nil {
+		log.Errorf("Cannot reset the results at NMT. Error: %v", err3.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		log.Infof("Results cleared -> statistics ready for a new ones!")
+		log.Infof("Results module ready -> cache cleared at NMT")
 	}
 
 	//check type of experiment

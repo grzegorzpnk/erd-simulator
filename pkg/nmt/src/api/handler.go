@@ -211,6 +211,16 @@ func (h *apiHandler) getAllMecApps(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(response)
+
+	/*for _,v := range h.graphClient.MecHosts{
+
+		for _, a := range v.MECApps{
+
+			response = append (response, a)
+		}
+
+	}*/
+
 }
 
 // Handler for EXPERIMENTS purposes
