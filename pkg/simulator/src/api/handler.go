@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
@@ -26,16 +25,28 @@ func (h *apiHandler) getUsers(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	var intent ExperimentIntent
+
+	err0 := json.NewDecoder(r.Body).Decode(&intent)
+	if err0 != nil {
+		log.Errorf("Cannot parse experiment intent. Error: %v", err0.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	experimentNumber, _ := strconv.Atoi(intent.experimentsNumber)
+	log.Infof("Started new experiment, with %v relocations", experimentNumber)
+
 	//at the beggining let's synchro latest placement at nmt
 	//todo: run initial placement generator in NMT
-	appNumber := "50"
-	err := GenerateInitialAppPlacementAtNMT(appNumber)
+
+	err := GenerateInitialAppPlacementAtNMT(intent.AppNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", appNumber)
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", intent.AppNumber)
 	}
 	//take initial topology and apps from NMT - done
 
@@ -61,15 +72,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	//check type of experiment
 	//take statistics every M repetition
 
-	params := mux.Vars(r)
-	experimentsNumber, _ := strconv.Atoi(params["mobility-number"])
-
-	var weights model.Weights
-	_ = json.NewDecoder(r.Body).Decode(&weights)
-	log.Infof("")
-	log.Infof("Started new experiment, with %v relocations", experimentsNumber)
-
-	for i := 0; i < experimentsNumber; i++ {
+	for i := 0; i < experimentNumber; i++ {
 
 		//log.Infof("Experiment numer: %v", i+1)
 
@@ -85,7 +88,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		//create smart placement intent
 
-		spi, err := GenerateSmartPlacementIntent(*app, weights)
+		spi, err := GenerateSmartPlacementIntent(*app, intent.weights)
 		if err != nil {
 			log.Errorf("Cannot generate SPI: %v", err.Error())
 		}
@@ -118,6 +121,8 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
+
+	//todo: get results from nmt and return as a response
 
 	w.WriteHeader(http.StatusOK)
 }

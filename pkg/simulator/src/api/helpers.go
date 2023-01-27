@@ -49,6 +49,13 @@ func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (mode
 	return spIntent, nil
 }
 
+type ExperimentIntent struct {
+	experimentsNumber string        `json:"experiments-number"`
+	AppNumber         string        `json:"app-number"`
+	ExperimentType    string        `json:"experiment-type"`
+	weights           model.Weights `json:"weights"`
+}
+
 func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster, error) {
 	//	log.Printf("CallPlacementController: function start\n")
 	var resp model.Cluster
