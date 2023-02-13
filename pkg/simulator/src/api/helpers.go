@@ -50,17 +50,17 @@ func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (mode
 }
 
 type ExperimentIntent struct {
-	experimentsNumber string        `json:"experiments-number"`
+	ExperimentsNumber string        `json:"experiments-number"`
 	AppNumber         string        `json:"app-number"`
 	ExperimentType    string        `json:"experiment-type"`
-	weights           model.Weights `json:"weights"`
+	Weights           model.Weights `json:"Weights"`
 }
 
-func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster, error) {
+func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
 	//	log.Printf("CallPlacementController: function start\n")
 	var resp model.Cluster
 
-	plcCtrlUrl := buildPlcCtrlURL()
+	plcCtrlUrl := buildPlcCtrlURL(experimentType)
 	data := intent
 
 	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
@@ -81,10 +81,11 @@ func CallPlacementController(intent model.SmartPlacementIntent) (*model.Cluster,
 	return &cluster, nil
 }
 
-func buildPlcCtrlURL() string {
+func buildPlcCtrlURL(experimentType string) string {
 
 	url := config.GetConfiguration().ERCEndpoint
-	url += "/v2/erc/smart-placement-intents/optimal-mec/optimal"
+	url += "/v2/erc/smart-placement-intents/optimal-mec/"
+	url += experimentType
 
 	return url
 

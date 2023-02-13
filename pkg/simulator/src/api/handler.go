@@ -34,8 +34,9 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	experimentNumber, _ := strconv.Atoi(intent.experimentsNumber)
-	log.Infof("Started new experiment, with %v relocations", experimentNumber)
+	experimentType := intent.ExperimentType
+	experimentNumber, _ := strconv.Atoi(intent.ExperimentsNumber)
+	log.Infof("Started new experiment: %v, with %v relocations", experimentType, experimentNumber)
 
 	//at the beggining let's synchro latest placement at nmt
 	//todo: run initial placement generator in NMT
@@ -78,7 +79,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		experimentN := "[EXPERIMENT " + strconv.Itoa(i+1) + "] "
 		//generate number of user to move
-		id := h.generateUserToMove()
+		id := h.generateUserToMove() //USER==APP
 		//id := "10"
 
 		// select new position for selected user and add new position to UserPath
@@ -88,13 +89,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		//create smart placement intent
 
-		spi, err := GenerateSmartPlacementIntent(*app, intent.weights)
+		spi, err := GenerateSmartPlacementIntent(*app, intent.Weights)
 		if err != nil {
 			log.Errorf("Cannot generate SPI: %v", err.Error())
 		}
 
 		//send request to ERC to select new position
-		cluster, err := CallPlacementController(spi)
+		cluster, err := CallPlacementController(spi, experimentType)
 
 		if err != nil {
 			log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
@@ -123,6 +124,8 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//todo: get results from nmt and return as a response
+	//Fetch stats from ERC
+	//process results
 
 	w.WriteHeader(http.StatusOK)
 }
