@@ -40,6 +40,7 @@ func (g *Graph) CheckAlreadExistLink(k model.Edge) bool {
 
 }
 
+//todo: please see that we are looking for ANY cluster defined in whole config file, while cells are limited by some parameter in config.json
 func FindCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, graph *Graph) (model.MecHost, error) {
 	candidates := []model.MecHost{}
 
@@ -140,6 +141,7 @@ func resourcesOk(app model.MECApp, mec model.MecHost) bool {
 
 func GenerateRandomCellsForUsers(usersNumber int, graph Graph) map[int]int {
 	var cells map[int]int = map[int]int{}
+	//todo: GP: MaxCellNumber has been introduced artificailly, cause initially, at networkTopology.json file we have defined 60 network cells, but in experiment we explored only one coverage zone, so we limitated cells only to this one coverage zone
 	max, _ := strconv.Atoi(config.GetConfiguration().MaxCellNumber)
 	for i := 1; i <= usersNumber; i++ {
 		cells[i] = rand.Intn(max) + 1

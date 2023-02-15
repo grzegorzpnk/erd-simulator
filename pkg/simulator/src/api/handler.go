@@ -129,3 +129,21 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+// type res
+// exp_type
+// iter
+// type erc_result
+// type topo_result
+
+//type T struct {
+//	ExperimentsNumber string `json:"experiments-number"`
+//	AppNumber         string `json:"app-number"`
+//	ExperimentType    string `json:"experiment-type"`
+//	Weights           struct {
+//		LatencyWeight        float64 `json:"latencyWeight"`
+//		ResourcesWeight      float64 `json:"resourcesWeight"`
+//		CpuUtilizationWeight float64 `json:"cpuUtilizationWeight"`
+//		MemUtilizationWeight float64 `json:"memUtilizationWeight"`
+//	} `json:"Weights"`
+//}

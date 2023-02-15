@@ -244,6 +244,19 @@ func (h *intentHandler) getResultsCSVHandler(w http.ResponseWriter, r *http.Requ
 
 	body = append(body, "strategy,objective,experiment,iteration,edge_relocation_cg,search_successful_cg,search_failed_cg,search_skipped_cg,edge_relocation_v2x,search_successful_v2x,search_failed_v2x,search_skipped_v2x,edge_relocation_uav,search_successful_uav,search_failed_uav,search_skipped_uav")
 
+	/*	{
+			"experiments-number": "250",
+			"app-number": "50",
+			"experiment-type": "optimal",
+			"Weights": {
+				"latencyWeight": 0.5,
+				"resourcesWeight": 0.5,
+				"cpuUtilizationWeight": 0.5,
+				"memUtilizationWeight": 0.5
+		}
+		}
+	*/
+
 	body = append(body, fmt.Sprintf("null,null,null,null,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v",
 		subs.Successful["10"], subs.Successful["10"]+subs.Redundant["10"], subs.Failed["10"], subs.Skipped["10"],
 		subs.Successful["15"], subs.Successful["15"]+subs.Redundant["15"], subs.Failed["15"], subs.Skipped["15"],
