@@ -173,3 +173,28 @@ func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {
 	return url
 
 }
+
+func getHttpRespBody(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		getErr := fmt.Errorf("HTTP GET failed for URL %s.\nError: %s\n",
+			url, err)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		getErr := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n",
+			resp.Status, url)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return b, nil
+}

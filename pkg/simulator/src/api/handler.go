@@ -3,22 +3,41 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
 	"strconv"
 )
 
 type apiHandler struct {
-	SimuClient model.SimuClient
+	SimuClient   model.SimuClient
+	ResultClient results.Client
 }
 
-func (h *apiHandler) SetClients(simulatotClient model.SimuClient) {
-	h.SimuClient = simulatotClient
+func (h *apiHandler) SetClients(sClient model.SimuClient, rClient results.Client) {
+	h.SimuClient = sClient
+	h.ResultClient = rClient
 }
 
 func (h *apiHandler) getUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(h.SimuClient.Apps)
+	w.WriteHeader(http.StatusOK)
+}
+
+// getAllResults
+func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	respBody := h.ResultClient.GetResults()
+
+	err := json.NewEncoder(w).Encode(respBody)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -124,26 +143,46 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//todo: get results from nmt and return as a response
-	//Fetch stats from ERC
-	//process results
+
+	var ercResults results.ErdResults
+	var topoResults results.TopoResults
+
+	strategy := results.StrOptimal
+	objective := results.ObjHybrid
+
+	ercUrl := config.GetConfiguration().ERCEndpoint + "/v2/erc/results"
+	topoUrl := config.GetConfiguration().NMTEndpoint + "/v1/topology/mecHosts/metrics"
+
+	ercBody, err := getHttpRespBody(ercUrl)
+	topoBody, err := getHttpRespBody(topoUrl)
+
+	err = json.Unmarshal(ercBody, &ercResults)
+	if err != nil {
+		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+
+		return
+	}
+
+	err = json.Unmarshal(topoBody, &topoResults.MecHostsResults)
+	if err != nil {
+		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	res := results.ExpResult{
+		Metadata: results.ExpResultsMeta{
+			Strategy:  strategy,
+			Objective: objective,
+		},
+		Data: results.ExpResultsData{
+			Erd:  ercResults,
+			Topo: topoResults,
+		},
+	}
+
+	h.ResultClient.AppendResult(res)
 
 	w.WriteHeader(http.StatusOK)
 }
-
-// type res
-// exp_type
-// iter
-// type erc_result
-// type topo_result
-
-//type T struct {
-//	ExperimentsNumber string `json:"experiments-number"`
-//	AppNumber         string `json:"app-number"`
-//	ExperimentType    string `json:"experiment-type"`
-//	Weights           struct {
-//		LatencyWeight        float64 `json:"latencyWeight"`
-//		ResourcesWeight      float64 `json:"resourcesWeight"`
-//		CpuUtilizationWeight float64 `json:"cpuUtilizationWeight"`
-//		MemUtilizationWeight float64 `json:"memUtilizationWeight"`
-//	} `json:"Weights"`
-//}

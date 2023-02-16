@@ -10,6 +10,7 @@ import (
 	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 
 	//var simuClient *model.SimuClient
 	simuClient := &model.SimuClient{}
+	resultsClient := results.NewClient()
 
 	/*	err := simuClient.FetchAppsFromNMT()
 		if err != nil {
@@ -25,13 +27,13 @@ func main() {
 			log.Infof("Initial app list fetched from NMT")
 		}*/
 
-	startSIMUserver(simuClient)
+	startSIMUserver(simuClient, resultsClient)
 
 }
 
-func startSIMUserver(simuClient *model.SimuClient) {
+func startSIMUserver(sClient *model.SimuClient, rClient *results.Client) {
 
-	httpRouter := api.NewRouter(simuClient)
+	httpRouter := api.NewRouter(sClient, rClient)
 	httpServer := &http.Server{
 		Handler: httpRouter,
 		Addr:    ":" + config.GetConfiguration().ServicePort,

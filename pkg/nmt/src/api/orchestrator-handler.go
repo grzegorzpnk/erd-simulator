@@ -224,7 +224,7 @@ func (h *apiHandler) Prerequesties(w http.ResponseWriter, r *http.Request) {
 			h.graphClient.Application[i].PrintApplication()
 		}
 	} else {
-		w.WriteHeader(http.StatusConflict)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorf("Cannot find clsuters for declared apps\n")
 		return
 	}
