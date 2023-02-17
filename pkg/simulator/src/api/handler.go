@@ -2,24 +2,58 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
 	"strconv"
+	"strings"
 )
 
 type apiHandler struct {
-	SimuClient model.SimuClient
+	SimuClient   model.SimuClient
+	ResultClient results.Client
 }
 
-func (h *apiHandler) SetClients(simulatotClient model.SimuClient) {
-	h.SimuClient = simulatotClient
+func (h *apiHandler) SetClients(sClient model.SimuClient, rClient results.Client) {
+	h.SimuClient = sClient
+	h.ResultClient = rClient
 }
 
 func (h *apiHandler) getUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(h.SimuClient.Apps)
 	w.WriteHeader(http.StatusOK)
+}
+
+// getAllResults
+func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	respBody := h.ResultClient.GetResults()
+
+	err := json.NewEncoder(w).Encode(respBody)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func checkExperimentType(inputType string) (results.ExperimentType, error) {
+	if strings.ToLower(inputType) == "optimal" {
+		return results.ExpOptimal, nil
+
+	} else if strings.ToLower(inputType) == "heuristic" {
+		return results.ExpHeuristic, nil
+	} else if strings.ToLower(inputType) == "ear-heuristic" || strings.ToLower(inputType) == "earheuristic" || strings.ToLower(inputType) == "ear" {
+		return results.ExpEarHeuristic, nil
+	}
+
+	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
 }
 
 func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
@@ -34,14 +68,33 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	experimentType := intent.ExperimentType
-	experimentNumber, _ := strconv.Atoi(intent.ExperimentsNumber)
+	experimentType, err := checkExperimentType(intent.ExperimentType)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	appsNumber, err := strconv.Atoi(intent.AppNumber)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	experimentNumber, err := strconv.Atoi(intent.ExperimentsNumber)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: [experiments-number] %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	log.Infof("Started new experiment: %v, with %v relocations", experimentType, experimentNumber)
 
 	//at the beggining let's synchro latest placement at nmt
 	//todo: run initial placement generator in NMT
 
-	err := GenerateInitialAppPlacementAtNMT(intent.AppNumber)
+	err = GenerateInitialAppPlacementAtNMT(intent.AppNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
@@ -94,17 +147,17 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 			log.Errorf("Cannot generate SPI: %v", err.Error())
 		}
 
+		// TODO: make sure that experimentType exists (use constants?)
 		//send request to ERC to select new position
-		cluster, err := CallPlacementController(spi, experimentType)
-
+		cluster, err := CallPlacementController(spi, string(experimentType))
 		if err != nil {
-			log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
-			log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+			log.Warnf(experimentN+"Error: %v", err.Error())
+			log.Warnf(experimentN + "Stopped, NO RELOCATION, going to next iteration")
 			continue
 		}
 
 		if cluster.Cluster == app.ClusterId {
-			log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+			log.Warnf(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
 			continue
 		}
 
@@ -124,26 +177,44 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//todo: get results from nmt and return as a response
-	//Fetch stats from ERC
-	//process results
+
+	var ercResults results.ErdResults
+	var topoResults results.TopoResults
+
+	ercUrl := config.GetConfiguration().ERCEndpoint + "/v2/erc/results"
+	topoUrl := config.GetConfiguration().NMTEndpoint + "/v1/topology/mecHosts/metrics"
+
+	ercBody, err := getHttpRespBody(ercUrl)
+	topoBody, err := getHttpRespBody(topoUrl)
+
+	err = json.Unmarshal(ercBody, &ercResults)
+	if err != nil {
+		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+
+		return
+	}
+
+	err = json.Unmarshal(topoBody, &topoResults.MecHostsResults)
+	if err != nil {
+		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	res := results.ExpResult{
+		Metadata: results.ExpResultsMeta{
+			Type:      experimentType,
+			Apps:      appsNumber,
+			Movements: experimentNumber,
+		},
+		Data: results.ExpResultsData{
+			Erd:  ercResults,
+			Topo: topoResults,
+		},
+	}
+
+	h.ResultClient.AppendResult(res)
 
 	w.WriteHeader(http.StatusOK)
 }
-
-// type res
-// exp_type
-// iter
-// type erc_result
-// type topo_result
-
-//type T struct {
-//	ExperimentsNumber string `json:"experiments-number"`
-//	AppNumber         string `json:"app-number"`
-//	ExperimentType    string `json:"experiment-type"`
-//	Weights           struct {
-//		LatencyWeight        float64 `json:"latencyWeight"`
-//		ResourcesWeight      float64 `json:"resourcesWeight"`
-//		CpuUtilizationWeight float64 `json:"cpuUtilizationWeight"`
-//		MemUtilizationWeight float64 `json:"memUtilizationWeight"`
-//	} `json:"Weights"`
-//}
