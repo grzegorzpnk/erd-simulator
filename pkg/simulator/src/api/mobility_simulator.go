@@ -20,7 +20,6 @@ func (h *apiHandler) generateTargetCellId(app *model.MECApp) int {
 	var nextState int
 
 	user := app
-
 	possibleStates := cellStateMachine[user.UserLocation]
 	for {
 		nextState = possibleStates[rand.Intn(len(possibleStates))]

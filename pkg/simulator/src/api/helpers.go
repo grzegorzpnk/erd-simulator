@@ -11,8 +11,8 @@ import (
 	log "simu/src/logger"
 	"simu/src/pkg/model"
 	"simu/src/pkg/results"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (model.SmartPlacementIntent, error) {
@@ -235,7 +235,6 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex+1) + "." + strconv.Itoa(subExpIndex+1) + "] "
 	//generate number of user to move
 	id := h.generateUserToMove() //USER==APP
-	//id := "10"
 
 	// select new position for selected user and add new position to UserPath
 	app := h.SimuClient.GetApps(id)
