@@ -10,6 +10,8 @@ import (
 	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
+	"strings"
 	"strconv"
 )
 
@@ -70,14 +72,12 @@ func CallPlacementController(intent model.SmartPlacementIntent, experimentType s
 
 	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
 	if err != nil {
-		log.Warnf("[ERROR] Placement Controller returned status: %v. Relocation for APP[%v] not done.", err, intent.Metadata.Name)
-		return nil, err
+		return nil, fmt.Errorf("relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
 	}
 
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		log.Warnf("error occured while unmarshaling: %v. Resp body: %v", err, string(responseBody))
-		return nil, err
+		return nil, fmt.Errorf("relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
 	}
 
 	var cluster model.Cluster
@@ -109,10 +109,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
-		getErr := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n",
-			resp.Status, url)
-		fmt.Fprintf(os.Stderr, getErr.Error())
-		return nil, getErr
+		return nil, fmt.Errorf("response code [%s] for URL [%s]", resp.Status, url)
 	}
 
 	b, err := ioutil.ReadAll(resp.Body)
@@ -177,6 +174,44 @@ func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {
 
 	return url
 
+}
+
+func checkExperimentType(inputType string) (results.ExperimentType, error) {
+	if strings.ToLower(inputType) == "optimal" {
+		return results.ExpOptimal, nil
+
+	} else if strings.ToLower(inputType) == "heuristic" {
+		return results.ExpHeuristic, nil
+	} else if strings.ToLower(inputType) == "ear-heuristic" || strings.ToLower(inputType) == "earheuristic" || strings.ToLower(inputType) == "ear" {
+		return results.ExpEarHeuristic, nil
+	}
+
+	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
+}
+
+func getHttpRespBody(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		getErr := fmt.Errorf("HTTP GET failed for URL %s.\nError: %s\n",
+			url, err)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		getErr := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n",
+			resp.Status, url)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return b, nil
 }
 
 func specifyStrategy(weights model.Weights) string {

@@ -5,15 +5,18 @@ import (
 	"net/http"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
 	"strconv"
 )
 
 type apiHandler struct {
-	SimuClient model.SimuClient
+	SimuClient   model.SimuClient
+	ResultClient results.Client
 }
 
-func (h *apiHandler) SetClients(simulatotClient model.SimuClient) {
-	h.SimuClient = simulatotClient
+func (h *apiHandler) SetClients(sClient model.SimuClient, rClient results.Client) {
+	h.SimuClient = sClient
+	h.ResultClient = rClient
 }
 
 func (h *apiHandler) getUsers(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +24,22 @@ func (h *apiHandler) getUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(h.SimuClient.Apps)
 	w.WriteHeader(http.StatusOK)
 }
+
+// getAllResults
+func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	respBody := h.ResultClient.GetResults()
+
+	err := json.NewEncoder(w).Encode(respBody)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
 
 func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -35,6 +54,28 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 	}
 
 	log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, specifyStrategy(intent.Weights))
+	experimentType, err := checkExperimentType(intent.ExperimentType)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	appsNumber, err := strconv.Atoi(intent.AppNumber)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	experimentNumber, err := strconv.Atoi(intent.ExperimentsNumber)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: [experiments-number] %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	log.Infof("Started new experiment: %v, with %v relocations", experimentType, experimentNumber)
 
 	//at the beggining let's synchro latest placement at nmt
 	err := GenerateInitialAppPlacementAtNMT(intent.ExperimentDetails.AppNumber)
@@ -142,9 +183,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		//todo: get results from nmt and return as a response
-		//Fetch stats from ERC
-		//process results
+	// TODO: Update experimentId and iterationId if needed; 0 to omit
+	err = h.ResultClient.CollectExperimentStats(0, 0, experimentType, appsNumber, experimentNumber)
+	if err != nil {
+		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 		log.Infof("Finished Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, specifyStrategy(experiment.Weights))
 
