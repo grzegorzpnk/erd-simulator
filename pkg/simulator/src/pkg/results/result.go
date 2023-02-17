@@ -1,5 +1,13 @@
 package results
 
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	log "simu/src/logger"
+)
+
 type AppType string
 
 const (
@@ -23,33 +31,17 @@ func GetExpTypes() []ExperimentType {
 	return []ExperimentType{ExpOptimal, ExpHeuristic, ExpEarHeuristic}
 }
 
-type Client struct {
-	expResults []ExpResult
-}
-
-func (c *Client) GetResults() []ExpResult {
-	return c.expResults
-}
-
-func (c *Client) AppendResult(result ExpResult) {
-	c.expResults = append(c.expResults, result)
-}
-
-func NewClient() *Client {
-	return &Client{
-		expResults: []ExpResult{},
-	}
-}
-
 type ExpResult struct {
 	Metadata ExpResultsMeta `json:"metadata"`
 	Data     ExpResultsData `json:"data"`
 }
 
 type ExpResultsMeta struct {
-	Type      ExperimentType
-	Apps      int
-	Movements int
+	ExperimentId int            `json:"experiment-id,omitempty"`
+	IterationId  int            `json:"iteration-id,omitempty"`
+	Type         ExperimentType `json:"type"`
+	Apps         int            `json:"apps-number"`
+	Movements    int            `json:"movements"`
 }
 
 type ExpResultsData struct {
@@ -66,7 +58,7 @@ type ErdResults struct {
 }
 
 type TopoResults struct {
-	MecHostsResults []MecHostResults
+	MecHostsResults []MecHostResults `json:"mec-hosts"`
 }
 
 // EvaluationTimes times should be in milliseconds
@@ -109,4 +101,29 @@ type ClusterResources struct {
 	Used        float64 `json:"used"`        // How many cpu/memory used (value)
 	Capacity    float64 `json:"capacity"`    // How many cpu/memory available (value)
 	Utilization float64 `json:"utilization"` // How much is cpu/memory utilized (percentage)
+}
+
+func getHttpRespBody(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		getErr := fmt.Errorf("HTTP GET failed for URL %s.\nError: %s\n",
+			url, err)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		getErr := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n",
+			resp.Status, url)
+		fmt.Fprintf(os.Stderr, getErr.Error())
+		return nil, getErr
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln()
+	}
+
+	return b, nil
 }

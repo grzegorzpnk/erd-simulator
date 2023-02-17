@@ -2,14 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
 	"simu/src/pkg/results"
 	"strconv"
-	"strings"
 )
 
 type apiHandler struct {
@@ -41,19 +38,6 @@ func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-}
-
-func checkExperimentType(inputType string) (results.ExperimentType, error) {
-	if strings.ToLower(inputType) == "optimal" {
-		return results.ExpOptimal, nil
-
-	} else if strings.ToLower(inputType) == "heuristic" {
-		return results.ExpHeuristic, nil
-	} else if strings.ToLower(inputType) == "ear-heuristic" || strings.ToLower(inputType) == "earheuristic" || strings.ToLower(inputType) == "ear" {
-		return results.ExpEarHeuristic, nil
-	}
-
-	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
 }
 
 func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
@@ -173,48 +157,15 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 			//update cluster in internal app list
 			app.ClusterId = cluster.Cluster
 		}
-
 	}
 
-	//todo: get results from nmt and return as a response
-
-	var ercResults results.ErdResults
-	var topoResults results.TopoResults
-
-	ercUrl := config.GetConfiguration().ERCEndpoint + "/v2/erc/results"
-	topoUrl := config.GetConfiguration().NMTEndpoint + "/v1/topology/mecHosts/metrics"
-
-	ercBody, err := getHttpRespBody(ercUrl)
-	topoBody, err := getHttpRespBody(topoUrl)
-
-	err = json.Unmarshal(ercBody, &ercResults)
-	if err != nil {
-		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
-		w.WriteHeader(http.StatusInternalServerError)
-
-		return
-	}
-
-	err = json.Unmarshal(topoBody, &topoResults.MecHostsResults)
+	// TODO: Update experimentId and iterationId if needed; 0 to omit
+	err = h.ResultClient.CollectExperimentStats(0, 0, experimentType, appsNumber, experimentNumber)
 	if err != nil {
 		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	res := results.ExpResult{
-		Metadata: results.ExpResultsMeta{
-			Type:      experimentType,
-			Apps:      appsNumber,
-			Movements: experimentNumber,
-		},
-		Data: results.ExpResultsData{
-			Erd:  ercResults,
-			Topo: topoResults,
-		},
-	}
-
-	h.ResultClient.AppendResult(res)
 
 	w.WriteHeader(http.StatusOK)
 }

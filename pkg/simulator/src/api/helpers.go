@@ -10,6 +10,8 @@ import (
 	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
+	"strings"
 )
 
 func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (model.SmartPlacementIntent, error) {
@@ -167,6 +169,19 @@ func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {
 
 	return url
 
+}
+
+func checkExperimentType(inputType string) (results.ExperimentType, error) {
+	if strings.ToLower(inputType) == "optimal" {
+		return results.ExpOptimal, nil
+
+	} else if strings.ToLower(inputType) == "heuristic" {
+		return results.ExpHeuristic, nil
+	} else if strings.ToLower(inputType) == "ear-heuristic" || strings.ToLower(inputType) == "earheuristic" || strings.ToLower(inputType) == "ear" {
+		return results.ExpEarHeuristic, nil
+	}
+
+	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
 }
 
 func getHttpRespBody(url string) ([]byte, error) {
