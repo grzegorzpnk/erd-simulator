@@ -32,9 +32,16 @@ func (c *Client) CollectExperimentStats(expId, iterId int, expType ExperimentTyp
 	topoUrl := config.GetConfiguration().NMTEndpoint + "/v1/topology/mecHosts/metrics"
 
 	ercBody, err := getHttpRespBody(ercUrl)
-	topoBody, err := getHttpRespBody(topoUrl)
+	if err != nil {
+		return err
+	}
 
 	err = json.Unmarshal(ercBody, &ercResults)
+	if err != nil {
+		return err
+	}
+
+	topoBody, err := getHttpRespBody(topoUrl)
 	if err != nil {
 		return err
 	}
