@@ -57,8 +57,8 @@ type ExperimentIntent struct {
 }
 
 type ExperimentDetails struct {
-	ExperimentsNumber string `json:"experiments-number"`
-	AppNumber         string `json:"app-number"`
+	ExperimentIterations string `json:"experiments-number"`
+	AppNumber            string `json:"app-number"`
 }
 
 func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
@@ -179,103 +179,70 @@ func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {
 
 }
 
-func executeExperiment(experiment ExperimentIntent, h *apiHandler, z int) int {
+func specifyStrategy(weights model.Weights) string {
 
 	var strategy string
-	if experiment.Weights.LatencyWeight == 1 {
+
+	if weights.LatencyWeight == 1 {
 		strategy = "latency min"
-	} else if experiment.Weights.ResourcesWeight == 1 {
+	} else if weights.ResourcesWeight == 1 {
 		strategy = "resources LB"
 	} else {
 		strategy = "hybrid"
 	}
+	return strategy
+}
 
-	log.Infof("Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, strategy)
+func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, subExpIndex int) bool {
 
-	experimentType := experiment.ExperimentType
-	experimentNumber, _ := strconv.Atoi(experiment.ExperimentDetails.ExperimentsNumber)
+	//log.Infof("Experiment numer: %v", i+1)
 
-	//at the beggining let's synchro latest placement at nmt
-	err := GenerateInitialAppPlacementAtNMT(experiment.ExperimentDetails.AppNumber)
+	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex+1) + "." + strconv.Itoa(subExpIndex+1) + "] "
+	//generate number of user to move
+	id := h.generateUserToMove() //USER==APP
+	//id := "10"
+
+	// select new position for selected user and add new position to UserPath
+	app := h.SimuClient.GetApps(id)
+	h.generateTargetCellId(app)
+	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
+
+	//create smart placement intent
+
+	spi, err := GenerateSmartPlacementIntent(*app, experiment.Weights)
 	if err != nil {
-		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
-		return http.StatusInternalServerError
-	} else {
-		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiment.ExperimentDetails.AppNumber)
+		log.Errorf("Cannot generate SPI: %v", err.Error())
+		return false
 	}
-	//take initial topology and apps from NMT - done
 
-	err2 := h.SimuClient.FetchAppsFromNMT()
+	//send request to ERC to select new position
+	cluster, err := CallPlacementController(spi, experiment.ExperimentType)
+
+	if err != nil {
+		log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
+		log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+		return true
+	}
+
+	if cluster.Cluster == app.ClusterId {
+		log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+		return true
+	}
+
+	log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+
+	//generate request to orchestrator
+	err2 := sendRelocationRequest(*app, *cluster)
 	if err2 != nil {
-		log.Errorf("Cannot fetch current app list from NMT. Error: %v", err2.Error())
-		return http.StatusInternalServerError
+		log.Errorf("Cannot relocate app! Error: %v", err2.Error())
 	} else {
-		log.Infof("Initial app list fetched from NMT")
+		log.Infof(experimentN + "Application has been relocated in nmt")
+
+		//update cluster in internal app list
+		app.ClusterId = cluster.Cluster
 	}
 
-	//todo: reset results status at ERC before starting new expe
-	err3 := resetResultsAtERC()
-	if err3 != nil {
-		log.Errorf("Cannot reset the results at NMT. Error: %v", err3.Error())
-		return http.StatusInternalServerError
-	} else {
-		log.Infof("Results module ready -> cache cleared at NMT")
-	}
-
-	//check type of experiment
-	//take statistics every M repetition
-
-	for i := 0; i < experimentNumber; i++ {
-
-		//log.Infof("Experiment numer: %v", i+1)
-
-		experimentN := "[EXPERIMENT " + strconv.Itoa(z+1) + "." + strconv.Itoa(i+1) + "] "
-		//generate number of user to move
-		id := h.generateUserToMove() //USER==APP
-		//id := "10"
-
-		// select new position for selected user and add new position to UserPath
-		app := h.SimuClient.GetApps(id)
-		h.generateTargetCellId(app)
-		log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
-
-		//create smart placement intent
-
-		spi, err := GenerateSmartPlacementIntent(*app, experiment.Weights)
-		if err != nil {
-			log.Errorf("Cannot generate SPI: %v", err.Error())
-		}
-
-		//send request to ERC to select new position
-		cluster, err := CallPlacementController(spi, experimentType)
-
-		if err != nil {
-			log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
-			log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
-			continue
-		}
-
-		if cluster.Cluster == app.ClusterId {
-			log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
-			continue
-		}
-
-		log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
-
-		//generate request to orchestrator
-		err2 := sendRelocationRequest(*app, *cluster)
-		if err2 != nil {
-			log.Errorf("Cannot relocate app! Error: %v", err2.Error())
-		} else {
-			log.Infof(experimentN + "Application has been relocated in nmt")
-
-			//update cluster in internal app list
-			app.ClusterId = cluster.Cluster
-		}
-	}
-
-	return http.StatusOK
-
+	return true
 }
 
 func declareExperiments(details ExperimentDetails) []ExperimentIntent {
