@@ -16,7 +16,7 @@ func NewRouter(simuClient *model.SimuClient) *mux.Router {
 
 	baseUrl := ""
 
-	r.HandleFunc(baseUrl+"/simu/experiment/", handler.conductSingleExperiment).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/single-experiment/", handler.conductSingleExperiment).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment/", handler.conductExperiment).Methods("POST")
 
 	//test API
