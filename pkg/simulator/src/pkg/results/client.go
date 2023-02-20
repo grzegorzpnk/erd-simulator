@@ -5,6 +5,8 @@ import (
 	"simu/src/config"
 )
 
+var experimentId = 1
+
 type Client struct {
 	expResults []ExpResult
 }
@@ -24,7 +26,11 @@ func (c *Client) AppendResult(result ExpResult) {
 	c.expResults = append(c.expResults, result)
 }
 
-func (c *Client) CollectExperimentStats(expId, iterId int, expType ExperimentType, appNum, expNum int) error {
+func (c *Client) IncExpId() {
+	experimentId++
+}
+
+func (c *Client) CollectExperimentStats(iterId int, expType ExperimentType, appNum, expNum int) error {
 	var ercResults ErdResults
 	var topoResults TopoResults
 
@@ -53,8 +59,8 @@ func (c *Client) CollectExperimentStats(expId, iterId int, expType ExperimentTyp
 
 	res := ExpResult{
 		Metadata: ExpResultsMeta{
-			ExperimentId: expId,
-			IterationId:  iterId,
+			ExperimentId: experimentId,
+			Timestamp:    iterId,
 			Type:         expType,
 			Apps:         appNum,
 			Movements:    expNum,

@@ -112,15 +112,18 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-	}
 
-	// TODO: Update experimentId and iterationId if needed; 0 to omit
-	err = h.ResultClient.CollectExperimentStats(0, 0, experimentType, appsNumber, experimentIterations)
-	if err != nil {
-		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		// Collect experiments data every 50 movements
+		if (i+1)%50 == 0 || i == experimentIterations-1 {
+			err = h.ResultClient.CollectExperimentStats(i+1, experimentType, appsNumber, experimentIterations)
+			if err != nil {
+				log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+		}
 	}
+	h.ResultClient.IncExpId()
 
 	w.WriteHeader(http.StatusOK)
 }
@@ -199,18 +202,21 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		for i := 0; i < experimentIterations; i++ {
 			status := executeExperiment(experiment, h, z, i)
 			if status != true {
-				break
 				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
+				break
 			}
 
-			// TODO: Update experimentId and iterationId if needed; 0 to omit
-			err = h.ResultClient.CollectExperimentStats(0, 0, experimentType, appsNumber, experimentIterations)
-			if err != nil {
-				log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
+			// Collect experiments data every 50 movements
+			if (i+1)%50 == 0 || i == experimentIterations-1 {
+				err = h.ResultClient.CollectExperimentStats(i+1, experimentType, appsNumber, experimentIterations)
+				if err != nil {
+					log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+					w.WriteHeader(http.StatusInternalServerError)
+					return
+				}
 			}
 		}
+		h.ResultClient.IncExpId()
 		log.Infof("Finished Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, specifyStrategy(experiment.Weights))
 	}
 	log.Infof("Finished all Experiments (%v), each %v iterations", len(experiments), experiments[0].ExperimentDetails.ExperimentIterations)
