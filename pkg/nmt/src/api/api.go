@@ -42,7 +42,7 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/initial-placement-generator", handler.GenerateInitialClusters).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/instantiate-all", handler.InstantiateAllDefinedApps).Methods("POST")
 	//this API defines one-click (DefineApplications & GenerateInitialClusters & InstantiateAllDefinedApps)
-	r.HandleFunc(baseUrl+"/topology/prerequesties/{applications}", handler.Prerequesties).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/prerequesties/{applications}", handler.Prerequisites).Methods("POST")
 
 	return r
 

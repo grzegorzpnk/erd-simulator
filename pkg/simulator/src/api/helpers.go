@@ -59,8 +59,8 @@ type ExperimentIntent struct {
 }
 
 type ExperimentDetails struct {
-	ExperimentIterations string `json:"experiments-number"`
-	AppNumber            string `json:"app-number"`
+	ExperimentIterations string             `json:"experiments-number"`
+	AppsNumber           results.AppCounter `json:"apps-number"`
 }
 
 func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
@@ -149,13 +149,13 @@ func resetResultsAtERC() error {
 
 }
 
-func GenerateInitialAppPlacementAtNMT(appQuantity string) error {
+func GenerateInitialAppPlacementAtNMT(appQuantity results.AppCounter) error {
 
 	url := config.GetConfiguration().NMTEndpoint
 	url += "/v1/topology/prerequesties/"
-	url += appQuantity
+	url += "generate-apps"
 
-	_, err := postHttpRespBody(url, nil)
+	_, err := postHttpRespBody(url, appQuantity)
 	if err != nil {
 		log.Errorf("[ERROR] NMT returned error: %v ", err)
 		return err
@@ -219,9 +219,9 @@ func specifyStrategy(weights model.Weights) string {
 	var strategy string
 
 	if weights.LatencyWeight == 1 {
-		strategy = "latency min"
+		strategy = "latency"
 	} else if weights.ResourcesWeight == 1 {
-		strategy = "resources LB"
+		strategy = "lb"
 	} else {
 		strategy = "hybrid"
 	}

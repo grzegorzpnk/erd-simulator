@@ -2,6 +2,7 @@ package api
 
 import (
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
+	mec_topology "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
 	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"encoding/json"
 	"fmt"
@@ -167,11 +168,17 @@ func (h *apiHandler) RelocateApplication2(w http.ResponseWriter, r *http.Request
 }
 
 func (h *apiHandler) DefineApplications(w http.ResponseWriter, r *http.Request) {
+	var ac mec_topology.AppCounter
 
 	h.graphClient.DeleteAllDeclaredApps()
 	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	h.graphClient.DeclareApplications(params["applications"])
+
+	err := json.NewDecoder(r.Body).Decode(&ac)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+	}
+
+	h.graphClient.DeclareApplications(ac)
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -206,15 +213,20 @@ func (h *apiHandler) InstantiateAllDefinedApps(w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *apiHandler) Prerequesties(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 
+	var ac mec_topology.AppCounter
 	h.graphClient.DeleteAllDeclaredApps()
 	h.graphClient.UninstallAllApps()
 
 	//declare
 	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	h.graphClient.DeclareApplications(params["applications"])
+
+	err := json.NewDecoder(r.Body).Decode(&ac)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+	}
+	h.graphClient.DeclareApplications(ac)
 
 	//find candidates mec and assign
 	status := h.graphClient.FindInitialClusters()
@@ -229,7 +241,7 @@ func (h *apiHandler) Prerequesties(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.graphClient.InstantiateAllDefinedApps()
+	err = h.graphClient.InstantiateAllDefinedApps()
 	if err != nil {
 		log.Errorf("Error has been raised: ", err)
 		w.WriteHeader(http.StatusConflict)

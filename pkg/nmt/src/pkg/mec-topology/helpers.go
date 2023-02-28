@@ -153,3 +153,13 @@ type ShortestPathResult struct {
 	latencyResults float64
 	path           []string
 }
+
+type AppCounter struct {
+	Cg  int `json:"cg"`
+	V2x int `json:"v2x"`
+	Uav int `json:"uav"`
+}
+
+func (ac *AppCounter) GetTotal() int {
+	return ac.Cg + ac.V2x + ac.Uav
+}

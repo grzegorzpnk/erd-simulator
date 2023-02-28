@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
@@ -40,6 +41,80 @@ func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *apiHandler) generateChartPkg(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	basePath := "results"
+	iter := "iterations"
+	aggr := "aggregated"
+	mecs := "mec-hosts"
+
+	err := h.ResultClient.GenerateChartPkgApps(results.RelocationRates, basePath+"/"+iter)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.SkippedRates, basePath+"/"+iter)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.RedundantRates, basePath+"/"+iter)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.FailedRates, basePath+"/"+iter)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+aggr)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationSuccessfulSearchRates, basePath+"/"+aggr)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationRejectionRates, basePath+"/"+aggr)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -52,7 +127,9 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, specifyStrategy(intent.Weights))
+	strategy := specifyStrategy(intent.Weights)
+
+	log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, strategy)
 	experimentType, err := checkExperimentType(intent.ExperimentType)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: %v", err)
@@ -60,7 +137,8 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	appsNumber, err := strconv.Atoi(intent.ExperimentDetails.AppNumber)
+	appsNumber := intent.ExperimentDetails.AppsNumber
+
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -77,13 +155,13 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 	log.Infof("Started new experiment: %v, with %v relocations", experimentType, experimentIterations)
 
 	//at the beggining let's synchro latest placement at nmt
-	err = GenerateInitialAppPlacementAtNMT(intent.ExperimentDetails.AppNumber)
+	err = GenerateInitialAppPlacementAtNMT(intent.ExperimentDetails.AppsNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", intent.ExperimentDetails.AppNumber)
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", intent.ExperimentDetails.AppsNumber.GetTotalAsString())
 	}
 
 	err = h.SimuClient.FetchAppsFromNMT()
@@ -113,16 +191,14 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 			return
 		}
 
-		// Collect experiments data every 50 movements
-		if (i+1)%50 == 0 || i == experimentIterations-1 {
-			err = h.ResultClient.CollectExperimentStats(i+1, experimentType, appsNumber, experimentIterations)
-			if err != nil {
-				log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
+		err = h.ResultClient.CollectExperimentStats(experimentType, "null", appsNumber, experimentIterations)
+		if err != nil {
+			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 	}
+
 	h.ResultClient.IncExpId()
 
 	w.WriteHeader(http.StatusOK)
@@ -139,15 +215,16 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Printf("%+v, total: %v", experimentDetails, experimentDetails.AppsNumber.GetTotal())
+
 	var experiments []ExperimentIntent
+
 	experiments = declareExperiments(experimentDetails)
 
 	log.Infof("Started new full experiment with all 5 types")
 
 	//loop for each experiment defined in method declareExperiments()
 	for z, experiment := range experiments {
-
-		log.Infof("Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, specifyStrategy(experiment.Weights))
 
 		experimentType, err := checkExperimentType(experiment.ExperimentType)
 		if err != nil {
@@ -156,7 +233,12 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		appsNumber, err := strconv.Atoi(experiment.ExperimentDetails.AppNumber)
+		strategy := specifyStrategy(experiment.Weights)
+
+		log.Infof("Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, strategy)
+
+		appsNumber := experiment.ExperimentDetails.AppsNumber
+
 		if err != nil {
 			log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
 			w.WriteHeader(http.StatusBadRequest)
@@ -171,13 +253,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		}
 
 		//at the beggining let's synchro latest placement at nmt
-		err = GenerateInitialAppPlacementAtNMT(experiment.ExperimentDetails.AppNumber)
+		err = GenerateInitialAppPlacementAtNMT(experiment.ExperimentDetails.AppsNumber)
 		if err != nil {
 			log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		} else {
-			log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiment.ExperimentDetails.AppNumber)
+			log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiment.ExperimentDetails.AppsNumber.GetTotalAsString())
 		}
 
 		err = h.SimuClient.FetchAppsFromNMT()
@@ -206,15 +288,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 
-			// Collect experiments data every 50 movements
-			if (i+1)%50 == 0 || i == experimentIterations-1 {
-				err = h.ResultClient.CollectExperimentStats(i+1, experimentType, appsNumber, experimentIterations)
-				if err != nil {
-					log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
-					w.WriteHeader(http.StatusInternalServerError)
-					return
-				}
-			}
+		}
+
+		err = h.ResultClient.CollectExperimentStats(experimentType, strategy, appsNumber, experimentIterations)
+		if err != nil {
+			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 		h.ResultClient.IncExpId()
 		log.Infof("Finished Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, specifyStrategy(experiment.Weights))

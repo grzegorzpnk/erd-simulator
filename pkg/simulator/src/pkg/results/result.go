@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	log "simu/src/logger"
+	"strconv"
 )
 
 type AppType string
@@ -31,6 +32,20 @@ func GetExpTypes() []ExperimentType {
 	return []ExperimentType{ExpOptimal, ExpHeuristic, ExpEarHeuristic}
 }
 
+type AppCounter struct {
+	Cg  int `json:"cg"`
+	V2x int `json:"v2x"`
+	Uav int `json:"uav"`
+}
+
+func (ac *AppCounter) GetTotal() int {
+	return ac.Cg + ac.V2x + ac.Uav
+}
+
+func (ac *AppCounter) GetTotalAsString() string {
+	return strconv.Itoa(ac.Cg + ac.V2x + ac.Uav)
+}
+
 type ExpResult struct {
 	Metadata ExpResultsMeta `json:"metadata"`
 	Data     ExpResultsData `json:"data"`
@@ -38,9 +53,9 @@ type ExpResult struct {
 
 type ExpResultsMeta struct {
 	ExperimentId int            `json:"experiment-id,omitempty"`
-	Timestamp    int            `json:"timestamp,omitempty"`
 	Type         ExperimentType `json:"type"`
-	Apps         int            `json:"apps-number"`
+	Strategy     string         `json:"strategy"`
+	Apps         AppCounter     `json:"apps-number"`
 	Movements    int            `json:"movements"`
 }
 

@@ -17,8 +17,8 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 
 	baseUrl := ""
 
-	r.HandleFunc(baseUrl+"/simu/single-experiment/", handler.conductSingleExperiment).Methods("POST")
-	r.HandleFunc(baseUrl+"/simu/experiment/", handler.conductExperiment).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/single-experiment", handler.conductSingleExperiment).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/experiment", handler.conductExperiment).Methods("POST")
 
 	//test API
 	r.HandleFunc(baseUrl+"/simu/users", handler.getUsers).Methods("GET")
@@ -26,6 +26,7 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 	//r.HandleFunc(baseUrl+"/simu/compareLists", handler.CompareLists).Methods("GET")
 
 	r.HandleFunc(baseUrl+"/results/all", handler.getAllResults).Methods("GET")
+	r.HandleFunc(baseUrl+"/results/charts", handler.generateChartPkg).Methods("GET")
 
 	return r
 

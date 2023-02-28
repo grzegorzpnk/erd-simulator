@@ -228,22 +228,11 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 	return latency, nil
 }
 
-func (g *Graph) DeclareApplications(count string) {
+func (g *Graph) DeclareApplications(ac AppCounter) {
 
-	//we have defined three types of application, with a requirements os 10, 15 and 25 ms, 1/3 for each type
-	cnt, _ := strconv.Atoi(count)
-	v2x, drones, video := cnt/3, cnt/3, cnt/3
+	v2x, drones, video := ac.V2x, ac.Uav, ac.Cg
 
-	modulo := cnt % 3
-
-	if modulo == 2 {
-		v2x++
-		drones++
-	} else if modulo == 1 {
-		v2x++
-	}
-
-	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", cnt, v2x, drones, video)
+	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", ac.GetTotal(), v2x, drones, video)
 	//todo: values should be parametrized, not hardcoded!
 	for i := 0; i < v2x; i++ {
 		var app model.MECApp
