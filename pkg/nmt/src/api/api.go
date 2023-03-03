@@ -45,11 +45,8 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/prerequesties/{applications}", handler.Prerequisites).Methods("POST")
 
 	// interaction with ML
-	r.HandleFunc(baseUrl+"/topology/ml/InitialState/{applications}", handler.MLInitialState).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/ml/InitialState/{applications}", handler.MLInitialState).Methods("GET")
 
 	return r
 
 }
-
-
-
