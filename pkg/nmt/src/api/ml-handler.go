@@ -59,13 +59,13 @@ func (h *apiHandler) MLInitialState(w http.ResponseWriter, r *http.Request) {
 		//todo: mec_node.LatencyMatrix =
 		response = append(response, mec_node)
 	}
+	/*
+		body, err := json.Marshal(response)
+		if err != nil {
+			fmt.Println("error: marshaling failed")
+		}*/
 
-	body, err := json.Marshal(response)
-	if err != nil {
-		fmt.Println("error: marshaling failed")
-	}
-
-	json.NewEncoder(w).Encode(body)
+	json.NewEncoder(w).Encode(response)
 	w.WriteHeader(http.StatusOK)
 
 }
