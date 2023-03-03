@@ -187,7 +187,7 @@ func (h *apiHandler) GenerateInitialClusters(w http.ResponseWriter, r *http.Requ
 	h.graphClient.UninstallAllApps()
 	w.Header().Set("Content-Type", "application/json")
 
-	status := h.graphClient.FindInitialClusters()
+	status, _ := h.graphClient.FindInitialClusters()
 	if status == true {
 		w.WriteHeader(http.StatusOK)
 		fmt.Printf("Apps with clusters:\n")
@@ -229,7 +229,7 @@ func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 	h.graphClient.DeclareApplications(ac)
 
 	//find candidates mec and assign
-	status := h.graphClient.FindInitialClusters()
+	status, _ := h.graphClient.FindInitialClusters()
 	if status == true {
 		fmt.Printf("Apps with clusters:\n")
 		for i := 0; i < len(h.graphClient.Application); i++ {
@@ -237,7 +237,7 @@ func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		w.WriteHeader(http.StatusConflict)
-		log.Errorf("Cannot find clsuters for declared apps\n")
+		log.Errorf("Cannot find cluster for declared apps\n")
 		return
 	}
 

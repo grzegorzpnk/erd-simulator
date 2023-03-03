@@ -295,7 +295,7 @@ func (g *Graph) DeleteAllDeclaredApps() {
 	g.Application = nil
 }
 
-func (g *Graph) FindInitialClusters() bool {
+func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 
 	var mecHostSource []model.MecHost
 	var cells = map[int]int{}
@@ -316,7 +316,7 @@ func (g *Graph) FindInitialClusters() bool {
 		if cnt > 5 {
 			//if you failed more than 5 time let's break the function and return false
 			fmt.Printf("Cannot identify initial clusters!\n")
-			return false
+			return false, nil
 		}
 		copy(mecHostsSourcesTmp, mecHostSource)
 		cells = GenerateRandomCellsForUsers(len(g.Application), *g)
@@ -337,7 +337,7 @@ func (g *Graph) FindInitialClusters() bool {
 	}
 
 	fmt.Printf("Found after %v iterations", cnt)
-	return true
+	return true, mecHostsSourcesTmp
 
 }
 
