@@ -59,13 +59,18 @@ func (h *apiHandler) MLInitialState(w http.ResponseWriter, r *http.Request) {
 		//todo: mec_node.LatencyMatrix =
 		response = append(response, mec_node)
 	}
-	/*
-		body, err := json.Marshal(response)
-		if err != nil {
-			fmt.Println("error: marshaling failed")
-		}*/
 
 	json.NewEncoder(w).Encode(response)
+	w.WriteHeader(http.StatusOK)
+
+}
+
+func (h *apiHandler) MLGetRANs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	//todo: consider max-cell-numbers
+	log.Infof("number of RANS: %v", len(h.graphClient.NetworkCells))
+	json.NewEncoder(w).Encode(len(h.graphClient.NetworkCells))
 	w.WriteHeader(http.StatusOK)
 
 }
