@@ -17,7 +17,7 @@ type MecNode struct {
 	CPUUtilization    int       `json:"cpu_utilization"`
 	MemoryUtilization int       `json:"memory_utilization"`
 	LatencyMatrix     []float64 `json:"latency_matrix"`
-	PlacementCost     int       `json:"placement_cost"`
+	PlacementCost     float64   `json:"placement_cost"`
 }
 
 func (h *apiHandler) MLInitialState(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +55,14 @@ func (h *apiHandler) MLInitialState(w http.ResponseWriter, r *http.Request) {
 		mec_node.MemoryCapacity = int(v.MemoryResources.Capacity)
 		mec_node.CPUUtilization = int(v.CpuResources.Utilization)
 		mec_node.MemoryUtilization = int(v.MemoryResources.Utilization)
-		mec_node.PlacementCost = int(v.Identity.Location.Level) + 1
+		switch v.Identity.Location.Level {
+		case 0:
+			mec_node.PlacementCost = 1.0
+		case 1:
+			mec_node.PlacementCost = 0.66667
+		case 2:
+			mec_node.PlacementCost = 0.33333
+		}
 		//todo: mec_node.LatencyMatrix =
 		response = append(response, mec_node)
 	}
