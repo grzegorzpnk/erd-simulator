@@ -3,6 +3,7 @@ package api
 import (
 	log "10.254.188.33/matyspi5/erd/pkg/nmt/src/logger"
 	mec_topology "10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/mec-topology"
+	"10.254.188.33/matyspi5/erd/pkg/nmt/src/pkg/model"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -16,7 +17,7 @@ type MecNode struct {
 	MemoryCapacity    int       `json:"memory_capacity"`
 	CPUUtilization    int       `json:"cpu_utilization"`
 	MemoryUtilization int       `json:"memory_utilization"`
-	LatencyMatrix     []float64 `json:"latency_matrix"`
+	LatencyMatrix     []float64 `json:"latency_array"`
 	PlacementCost     float64   `json:"placement_cost"`
 }
 
@@ -55,6 +56,40 @@ func (h *apiHandler) MLInitialState(w http.ResponseWriter, r *http.Request) {
 		mec_node.MemoryCapacity = int(v.MemoryResources.Capacity)
 		mec_node.CPUUtilization = int(v.CpuResources.Utilization)
 		mec_node.MemoryUtilization = int(v.MemoryResources.Utilization)
+		switch v.Identity.Location.Level {
+		case 0:
+			mec_node.PlacementCost = 1.0
+		case 1:
+			mec_node.PlacementCost = 0.66667
+		case 2:
+			mec_node.PlacementCost = 0.33333
+		}
+		//todo: mec_node.LatencyMatrix =
+		response = append(response, mec_node)
+	}
+
+	json.NewEncoder(w).Encode(response)
+	w.WriteHeader(http.StatusOK)
+
+}
+
+func (h *apiHandler) MLInitialConfig(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var mecHosts []model.MecHost
+
+	for _, v := range h.graphClient.MecHosts {
+		mecHosts = append(mecHosts, *v)
+	}
+
+	var response []MecNode
+	var mec_node MecNode
+	for _, v := range mecHosts {
+		mec_node.ID = v.Identity.Cluster
+		mec_node.CPUCapacity = 0
+		mec_node.MemoryCapacity = 0
+		mec_node.CPUUtilization = 0
+		mec_node.MemoryUtilization = 0
 		switch v.Identity.Location.Level {
 		case 0:
 			mec_node.PlacementCost = 1.0
