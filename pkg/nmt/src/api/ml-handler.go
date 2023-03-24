@@ -17,7 +17,7 @@ type MecNode struct {
 	MemoryCapacity    int       `json:"memory_capacity"`
 	CPUUtilization    int       `json:"cpu_utilization"`
 	MemoryUtilization int       `json:"memory_utilization"`
-	LatencyMatrix     []float64 `json:"latency_array"`
+	LatencyVector     []float64 `json:"latency_array"`
 	PlacementCost     float64   `json:"placement_cost"`
 }
 
@@ -64,7 +64,7 @@ func (h *apiHandler) MLInitialState(w http.ResponseWriter, r *http.Request) {
 		case 2:
 			mec_node.PlacementCost = 0.33333
 		}
-		//todo: mec_node.LatencyMatrix =
+		//todo: mec_node.LatencyVector =
 		response = append(response, mec_node)
 	}
 
@@ -86,8 +86,8 @@ func (h *apiHandler) MLInitialConfig(w http.ResponseWriter, r *http.Request) {
 	var mec_node MecNode
 	for _, v := range mecHosts {
 		mec_node.ID = v.Identity.Cluster
-		mec_node.CPUCapacity = 0
-		mec_node.MemoryCapacity = 0
+		mec_node.CPUCapacity = int(v.CpuResources.Capacity)
+		mec_node.MemoryCapacity = int(v.MemoryResources.Capacity)
 		mec_node.CPUUtilization = 0
 		mec_node.MemoryUtilization = 0
 		switch v.Identity.Location.Level {
@@ -98,8 +98,15 @@ func (h *apiHandler) MLInitialConfig(w http.ResponseWriter, r *http.Request) {
 		case 2:
 			mec_node.PlacementCost = 0.33333
 		}
-		//todo: mec_node.LatencyMatrix =
+
+		for i := 1; i <= len(h.graphClient.NetworkCells); i++ {
+			cell := h.graphClient.GetCell(strconv.Itoa(i))
+			latency, _ := h.graphClient.ShortestPath(cell, &v)
+			mec_node.LatencyVector = append(mec_node.LatencyVector, latency)
+		}
+
 		response = append(response, mec_node)
+		mec_node.LatencyVector = nil
 	}
 
 	json.NewEncoder(w).Encode(response)
