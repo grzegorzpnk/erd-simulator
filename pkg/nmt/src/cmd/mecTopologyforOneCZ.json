@@ -2,7 +2,7 @@
   { "identity":
     {
       "provider": "orange",
-      "cluster": "mec12",
+      "cluster": "mec8",
       "location": {
        "type": 0,
        "region": "poland 1",
@@ -14,7 +14,7 @@
   { "identity":
   {
     "provider": "orange",
-    "cluster": "mec13",
+    "cluster": "mec9",
     "location": {
       "type": 0,
       "region": "poland 1",
@@ -26,12 +26,60 @@
   { "identity":
   {
     "provider": "orange",
-    "cluster": "mec14",
+    "cluster": "mec10",
     "location": {
       "type": 0,
       "region": "poland 1",
       "zone": "west",
       "local-zone": "wroclaw"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec7",
+    "location": {
+      "type": 0,
+      "region": "poland 1",
+      "zone": "west",
+      "local-zone": "wroclaw"
+    }
+  }
+  },
+  { "identity":
+{
+  "provider": "orange",
+  "cluster": "mec12",
+  "location": {
+    "type": 0,
+    "region": "poland 1",
+    "zone": "west",
+    "local-zone": "poznan"
+  }
+}
+},
+  { "identity":
+{
+  "provider": "orange",
+  "cluster": "mec13",
+  "location": {
+    "type": 0,
+    "region": "poland 1",
+    "zone": "west",
+    "local-zone": "poznan"
+  }
+}
+},
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec14",
+    "location": {
+      "type": 0,
+      "region": "poland 1",
+      "zone": "west",
+      "local-zone": "poznan"
     }
   }
   },
@@ -43,34 +91,34 @@
       "type": 0,
       "region": "poland 1",
       "zone": "west",
-      "local-zone": "wroclaw"
+      "local-zone": "poznan"
     }
   }
   },
   { "identity":
-{
-  "provider": "orange",
-  "cluster": "mec16",
-  "location": {
-    "type": 0,
-    "region": "poland 1",
-    "zone": "west",
-    "local-zone": "poznan"
+  {
+    "provider": "orange",
+    "cluster": "mec16",
+    "location": {
+      "type": 0,
+      "region": "poland 1",
+      "zone": "central",
+      "local-zone": "lodz"
+    }
   }
-}
-},
+  },
   { "identity":
-{
-  "provider": "orange",
-  "cluster": "mec17",
-  "location": {
-    "type": 0,
-    "region": "poland 1",
-    "zone": "west",
-    "local-zone": "poznan"
+  {
+    "provider": "orange",
+    "cluster": "mec17",
+    "location": {
+      "type": 0,
+      "region": "poland 1",
+      "zone": "central",
+      "local-zone": "lodz"
+    }
   }
-}
-},
+  },
   { "identity":
   {
     "provider": "orange",
@@ -78,8 +126,8 @@
     "location": {
       "type": 0,
       "region": "poland 1",
-      "zone": "west",
-      "local-zone": "poznan"
+      "zone": "central",
+      "local-zone": "lodz"
     }
   }
   },
@@ -90,8 +138,8 @@
     "location": {
       "type": 0,
       "region": "poland 1",
-      "zone": "west",
-      "local-zone": "poznan"
+      "zone": "central",
+      "local-zone": "lodz"
     }
   }
   },
@@ -103,7 +151,7 @@
       "type": 0,
       "region": "poland 1",
       "zone": "central",
-      "local-zone": "lodz"
+      "local-zone": "warszawa"
     }
   }
   },
@@ -115,7 +163,7 @@
       "type": 0,
       "region": "poland 1",
       "zone": "central",
-      "local-zone": "lodz"
+      "local-zone": "warszawa"
     }
   }
   },
@@ -127,7 +175,7 @@
       "type": 0,
       "region": "poland 1",
       "zone": "central",
-      "local-zone": "lodz"
+      "local-zone": "warszawa"
     }
   }
   },
@@ -139,18 +187,6 @@
       "type": 0,
       "region": "poland 1",
       "zone": "central",
-      "local-zone": "lodz"
-    }
-  }
-  },
-  { "identity":
-  {
-    "provider": "orange",
-    "cluster": "mec24",
-    "location": {
-      "type": 0,
-      "region": "poland 1",
-      "zone": "central",
       "local-zone": "warszawa"
     }
   }
@@ -158,36 +194,12 @@
   { "identity":
   {
     "provider": "orange",
-    "cluster": "mec25",
+    "cluster": "mec2",
     "location": {
-      "type": 0,
+      "type": 1,
       "region": "poland 1",
-      "zone": "central",
-      "local-zone": "warszawa"
-    }
-  }
-  },
-  { "identity":
-  {
-    "provider": "orange",
-    "cluster": "mec26",
-    "location": {
-      "type": 0,
-      "region": "poland 1",
-      "zone": "central",
-      "local-zone": "warszawa"
-    }
-  }
-  },
-  { "identity":
-  {
-    "provider": "orange",
-    "cluster": "mec23",
-    "location": {
-      "type": 0,
-      "region": "poland 1",
-      "zone": "central",
-      "local-zone": "warszawa"
+      "zone": "west",
+      "local-zone": ""
     }
   }
   },
@@ -222,18 +234,6 @@
     "location": {
       "type": 1,
       "region": "poland 1",
-      "zone": "west",
-      "local-zone": ""
-    }
-  }
-  },
-  { "identity":
-  {
-    "provider": "orange",
-    "cluster": "mec6",
-    "location": {
-      "type": 1,
-      "region": "poland 1",
       "zone": "central",
       "local-zone": ""
     }
@@ -242,7 +242,7 @@
   { "identity":
   {
     "provider": "orange",
-    "cluster": "mec7",
+    "cluster": "mec6",
     "location": {
       "type": 1,
       "region": "poland 1",

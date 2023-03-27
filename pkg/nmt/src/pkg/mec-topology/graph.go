@@ -157,8 +157,8 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					if source.Identity.Location.LocalZone == target.Identity.Location.LocalZone {
 						latency = 1.0 // Latency between clusters at N-level in the same LocalZone
 					} else {
-						if (source.Identity.Cluster == "mec17" || source.Identity.Cluster == "mec18") && (target.Identity.Cluster == "mec19" || target.Identity.Cluster == "mec20") ||
-							(target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18") && (source.Identity.Cluster == "mec19" || source.Identity.Cluster == "mec20") {
+						if (source.Identity.Cluster == "mec13" || source.Identity.Cluster == "mec14") && (target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16") ||
+							(target.Identity.Cluster == "mec13" || target.Identity.Cluster == "mec14") && (source.Identity.Cluster == "mec15" || source.Identity.Cluster == "mec16") {
 							latency = 5.0 // 2.8
 						} else {
 							latency = 5.0 // 4.0
@@ -179,17 +179,17 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 				}
 			case 1:
 				if source.Identity.Location.Level == 2 {
-					if target.Identity.Cluster == "mec6" || target.Identity.Cluster == "mec7" {
+					if target.Identity.Cluster == "mec5" || target.Identity.Cluster == "mec6" {
 						latency = 3
 					} else {
 						latency = 2.8
 					}
 					latency += 4 // DPI time for level N+2
 				} else if source.Identity.Location.Level == 1 {
-					if ((source.Identity.Cluster == "mec3" || source.Identity.Cluster == "mec4" || source.Identity.Cluster == "mec5") &&
-						(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) ||
-						((source.Identity.Cluster == "mec6" || source.Identity.Cluster == "mec7") &&
-							(target.Identity.Cluster == "mec19" || target.Identity.Cluster == "mec20" || target.Identity.Cluster == "mec21" || target.Identity.Cluster == "mec22")) {
+					if ((source.Identity.Cluster == "mec2" || source.Identity.Cluster == "mec3" || source.Identity.Cluster == "mec4") &&
+						(target.Identity.Cluster == "mec11" || target.Identity.Cluster == "mec12" || target.Identity.Cluster == "mec13" || target.Identity.Cluster == "mec14")) ||
+						((source.Identity.Cluster == "mec5" || source.Identity.Cluster == "mec6") &&
+							(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) {
 						latency = 3
 					} else {
 						latency = 4
@@ -205,10 +205,10 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					}
 					latency += 4 // DPI time for level N+2
 				} else if source.Identity.Location.Level == 0 {
-					if ((target.Identity.Cluster == "mec3" || target.Identity.Cluster == "mec4" || target.Identity.Cluster == "mec5") &&
-						(source.Identity.Cluster == "mec15" || source.Identity.Cluster == "mec16" || source.Identity.Cluster == "mec17" || source.Identity.Cluster == "mec18")) ||
-						((target.Identity.Cluster == "mec6" || target.Identity.Cluster == "mec7") &&
-							(source.Identity.Cluster == "mec19" || source.Identity.Cluster == "mec20" || source.Identity.Cluster == "mec21" || source.Identity.Cluster == "mec22")) {
+					if ((target.Identity.Cluster == "mec2" || target.Identity.Cluster == "mec3" || target.Identity.Cluster == "mec4") &&
+						(source.Identity.Cluster == "mec11" || source.Identity.Cluster == "mec12" || source.Identity.Cluster == "mec13" || source.Identity.Cluster == "mec14")) ||
+						((target.Identity.Cluster == "mec5" || target.Identity.Cluster == "mec6") &&
+							(source.Identity.Cluster == "mec15" || source.Identity.Cluster == "mec16" || source.Identity.Cluster == "mec17" || source.Identity.Cluster == "mec18")) {
 						latency = 3
 					} else {
 						latency = 4
