@@ -55,7 +55,7 @@ func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (mode
 type ExperimentIntent struct {
 	ExperimentType    string            `json:"experiment-type"`
 	ExperimentDetails ExperimentDetails `json:"experiment-details"`
-	Weights           model.Weights     `json:"Weights"`
+	Weights           model.Weights     `json:"Weights,omitempty"`
 }
 
 type ExperimentDetails struct {

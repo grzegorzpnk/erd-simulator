@@ -44,10 +44,13 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	//this API defines one-click (DefineApplications & GenerateInitialClusters & InstantiateAllDefinedApps)
 	r.HandleFunc(baseUrl+"/topology/prerequesties/{applications}", handler.Prerequisites).Methods("POST")
 
-	// interaction with ML
+	// interaction with ML training app (currently not used). Used only to create first config input in order to train on
 	r.HandleFunc(baseUrl+"/topology/ml/InitialState/{applications}", handler.MLInitialState).Methods("GET")
 	r.HandleFunc(baseUrl+"/topology/ml/InitialConfig", handler.MLInitialConfig).Methods("GET")
 	r.HandleFunc(baseUrl+"/topology/ml/rans", handler.MLGetRANs).Methods("GET")
+
+	//interaction with Simulator in order to preapre ML smart placement intent  for current state of MECs
+	r.HandleFunc(baseUrl+"/topology/ml/get-state", handler.GetCurrentState).Methods("GET")
 
 	return r
 

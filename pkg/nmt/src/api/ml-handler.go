@@ -123,3 +123,36 @@ func (h *apiHandler) MLGetRANs(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 }
+
+func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	response := make([][]int, len(h.graphClient.MecHosts))
+	for i := 0; i < len(response); i++ {
+		response[i] = make([]int, 5)
+	}
+
+	// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
+	for i, v := range h.graphClient.MecHosts {
+		response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
+		response[i][1] = int(v.GetCpuUtilization() * 100)
+		response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
+		response[i][3] = int(v.GetMemoryUtilization() * 100)
+		response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
+	}
+
+	json.NewEncoder(w).Encode(response)
+	w.WriteHeader(http.StatusOK)
+
+}
+
+func determineStateOfCapacity(capacityValue int) int {
+	capacityMap := map[int]int{4000: 1, 8000: 2, 12000: 3}
+	return capacityMap[capacityValue]
+}
+
+//jeśli level 0 (city-level), to koszt placementu jest najwyzszy i jest reprezentowany przez wartość 3 itd..
+func determineStateofCost(placementCost int) int {
+	costMap := map[int]int{0: 3, 1: 2, 2: 1}
+	return costMap[placementCost]
+}

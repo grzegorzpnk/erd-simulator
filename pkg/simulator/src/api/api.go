@@ -17,6 +17,7 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 
 	baseUrl := ""
 
+	r.HandleFunc(baseUrl+"/simu/ml-experiment", handler.conductMLExperiment).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/single-experiment", handler.conductSingleExperiment).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment", handler.conductExperiment).Methods("POST")
 

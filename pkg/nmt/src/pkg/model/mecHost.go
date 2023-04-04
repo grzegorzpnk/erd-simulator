@@ -193,3 +193,11 @@ func (mec *MecHost) GetCpuCapacity() float64 {
 func (mec *MecHost) GetMemoryCapacity() float64 {
 	return mec.MemoryResources.Capacity
 }
+
+func (mec *MecHost) GetCpuUtilization() float64 {
+	return mec.CpuResources.Utilization
+}
+
+func (mec *MecHost) GetMemoryUtilization() float64 {
+	return mec.MemoryResources.Utilization
+}
