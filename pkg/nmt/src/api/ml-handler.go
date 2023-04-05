@@ -127,6 +127,7 @@ func (h *apiHandler) MLGetRANs(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
 	response := make([][]int, len(h.graphClient.MecHosts))
 	for i := 0; i < len(response); i++ {
 		response[i] = make([]int, 5)
@@ -141,9 +142,21 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
 	}
 
+	fmt.Printf("State of MECs before returning to Simu:\n ")
+	printSlice(response)
+
 	json.NewEncoder(w).Encode(response)
 	w.WriteHeader(http.StatusOK)
 
+}
+
+func printSlice(slice [][]int) {
+	for i := 0; i < len(slice); i++ {
+		for j := 0; j < len(slice[i]); j++ {
+			fmt.Print(slice[i][j], " ")
+		}
+		fmt.Println()
+	}
 }
 
 func determineStateOfCapacity(capacityValue int) int {

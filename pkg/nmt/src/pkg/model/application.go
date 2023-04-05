@@ -1,10 +1,8 @@
 package model
 
 import (
-	"10.254.188.33/matyspi5/erd/pkg/nmt/src/config"
 	"fmt"
 	"math/rand"
-	"strconv"
 )
 
 type MECApp struct {
@@ -21,20 +19,21 @@ type RequestedResources struct {
 }
 
 func (app *MECApp) GeneratreResourceRequirements() {
-	//
-	////todo set precision of float 64 in order to reduce the computation
-	//minRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMin, 64)
-	//maxRes, _ := strconv.ParseFloat(config.GetConfiguration().ResMax, 64)
-	//rand.Float64()
-	//
-	//app.Requirements.RequestedCPU = minRes + rand.Float64()*(maxRes-minRes)
-	//app.Requirements.RequestedMEMORY = minRes + rand.Float64()*(maxRes-minRes)
+	// for ML we introduced possible requirement like 500, 600, 700, 800, 900 or 1000
+	//minRes, _ := strconv.Atoi(config.GetConfiguration().ResMin)
+	//maxRes, _ := strconv.Atoi(config.GetConfiguration().ResMax)
 
-	minRes, _ := strconv.Atoi(config.GetConfiguration().ResMin)
-	maxRes, _ := strconv.Atoi(config.GetConfiguration().ResMax)
+	// Create a slice containing the possible values
+	values := []int{500, 600, 700, 800, 900, 1000}
 
-	app.Requirements.RequestedCPU = float64(minRes + rand.Intn(maxRes-minRes))
-	app.Requirements.RequestedMEMORY = float64(minRes + rand.Intn(maxRes-minRes))
+	// Select a random value from the slice using rand.Intn()
+	randomCPUIndex := rand.Intn(len(values))
+	randomMEMIndex := rand.Intn(len(values))
+	randomCPU := values[randomCPUIndex]
+	randomMemory := values[randomMEMIndex]
+
+	app.Requirements.RequestedCPU = float64(randomCPU)
+	app.Requirements.RequestedMEMORY = float64(randomMemory)
 
 }
 

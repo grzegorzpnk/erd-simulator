@@ -65,15 +65,17 @@ func GenerateMLSmartPlacementIntent(app model.MECApp) (model.MLSmartPlacementInt
 
 	var spIntent model.MLSmartPlacementIntent
 	clusterID, _ := convertMECNameToID(app.ClusterId)
-	userLocation, _ := strconv.ParseInt(app.UserLocation, 10, 64)
+	userLocation, _ := strconv.Atoi(app.UserLocation)
 
-	appState := [5]int64{int64(app.Requirements.RequestedCPU),
-		int64(app.Requirements.RequestedMEMORY),
-		int64(app.Requirements.RequestedLatency),
+	appState := [5]int{
+		determineReqRes(int(app.Requirements.RequestedCPU)),
+		determineReqRes(int(app.Requirements.RequestedMEMORY)),
+		determineStateofAppLatReq(int(app.Requirements.RequestedLatency)),
 		clusterID,
 		userLocation}
 
 	url := buildNMTCurrentStateEndpoint()
+	fmt.Printf("asking for MECs config url:, %v     |", url)
 
 	mecState, err := GetMECsStateFromNMT(url)
 	if err != nil {
@@ -91,6 +93,33 @@ func GenerateMLSmartPlacementIntent(app model.MECApp) (model.MLSmartPlacementInt
 	log.Infof("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
 
 	return spIntent, nil
+}
+
+func determineReqRes(reqRes int) int {
+	resMap := map[int]int{
+		500:  1,
+		600:  2,
+		700:  3,
+		800:  4,
+		900:  5,
+		1000: 6,
+	}
+	if val, ok := resMap[reqRes]; ok {
+		return val
+	}
+	return 0
+}
+
+func determineStateofAppLatReq(latValue int) int {
+	latMap := map[int]int{
+		10: 1,
+		15: 2,
+		30: 3,
+	}
+	if val, ok := latMap[latValue]; ok {
+		return val
+	}
+	return 0
 }
 
 func CallMLClient(intent model.MLSmartPlacementIntent) (*model.Cluster, error) {
@@ -128,7 +157,7 @@ func buildMLPlcCtrlURL() string {
 func buildNMTCurrentStateEndpoint() string {
 	///topology/ml/get-state
 	url := config.GetConfiguration().NMTEndpoint
-	url += "/v1//topology/ml/get-state/"
+	url += "/v1/topology/ml/get-state"
 	return url
 }
 
@@ -157,12 +186,12 @@ func GetMECsStateFromNMT(endpoint string) ([][]int, error) {
 
 }
 
-func convertMECNameToID(s string) (int64, error) {
+func convertMECNameToID(s string) (int, error) {
 	if !strings.HasPrefix(s, "mec") {
 		return 0, fmt.Errorf("invalid input format: %s", s)
 	}
 	numStr := strings.TrimPrefix(s, "mec")
-	num, err := strconv.ParseInt(numStr, 10, 64)
+	num, err := strconv.Atoi(numStr)
 	if err != nil {
 		return 0, fmt.Errorf("failed to convert %s to int: %v", numStr, err)
 	}
