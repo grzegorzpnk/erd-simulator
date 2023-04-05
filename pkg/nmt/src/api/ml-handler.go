@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
+	"sort"
 	"strconv"
+	"strings"
 )
 
 type MecNode struct {
@@ -161,24 +163,36 @@ func (h *apiHandler) GetCurrentMask(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("Error: %v", err)
 	}
 
-	//
-	//fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
-	//response := make([][]int, len(h.graphClient.MecHosts))
-	//for i := 0; i < len(response); i++ {
-	//	response[i] = make([]int, 5)
-	//}
-	//
-	//// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
-	//for i, v := range h.graphClient.MecHosts {
-	//	response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
-	//	response[i][1] = int(v.GetCpuUtilization() * 100)
-	//	response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
-	//	response[i][3] = int(v.GetMemoryUtilization() * 100)
-	//	response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
-	//}
-	//
-	//fmt.Printf("State of MECs before returning to Simu:\n ")
-	//printSlice(response)
+	//let's work on a copy
+	var mecHostsCopy []model.MecHost
+
+	for _, mec := range h.graphClient.MecHosts {
+		mecHostsCopy = append(mecHostsCopy, *mec)
+	}
+
+	//now lets sort this slice of MEC hosts in order by ID
+	sort.Slice(mecHostsCopy, func(i, j int) bool {
+		id1 := mecHostsCopy[i].Identity.Cluster
+		id2 := mecHostsCopy[j].Identity.Cluster
+
+		// Extract the number from the id attribute
+		num1, _ := strconv.Atoi(strings.TrimPrefix(id1, "mec"))
+		num2, _ := strconv.Atoi(strings.TrimPrefix(id2, "mec"))
+
+		// Compare the numbers extracted from the id attribute
+		return num1 < num2
+	})
+
+	for _, mec := range mecHostsCopy {
+		if mec.CheckEnoughResources(app) && mec.CheckLatency(app) {
+			responseMask = append(responseMask, 1)
+		} else {
+			responseMask = append(responseMask, 0)
+		}
+	}
+
+	//todo: what if all actions are masked?
+	//todo: check what means false and what means true
 
 	json.NewEncoder(w).Encode(responseMask)
 	w.WriteHeader(http.StatusOK)

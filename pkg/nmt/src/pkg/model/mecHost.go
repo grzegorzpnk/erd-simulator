@@ -16,8 +16,9 @@ type MecHost struct {
 	CpuResources    metrics.ClusterResources `json:"cpu_resources,omitempty"`
 	MemoryResources metrics.ClusterResources `json:"memory_resources,omitempty"`
 	Neighbours      []MecIdentity
-	SupportingCells []Cell   `json:"supporting_cells"`
-	MECApps         []MECApp `json:"mec_apps,omitempty"`
+	SupportingCells []Cell    `json:"supporting_cells"`
+	MECApps         []MECApp  `json:"mec_apps,omitempty"`
+	LatencyVector   []float64 `json:"latency_vector,omitempty"`
 	TmpLatency      float64
 }
 
@@ -82,17 +83,34 @@ func (mec *MecHost) CheckMECsupportsCell(cellId string) bool {
 
 func (mec *MecHost) CheckEnoughResources(app MECApp) bool {
 
+	if mec.Identity.Cluster == app.ClusterId {
+		return true
+	}
+
 	tau, _ := strconv.ParseFloat(config.GetConfiguration().Tau, 64)
 	availableCPU := mec.CpuResources.Capacity - mec.CpuResources.Used
 	availableMem := mec.MemoryResources.Capacity - mec.MemoryResources.Used
-	if !(app.Requirements.RequestedCPU < (availableCPU * tau)) {
+	if !((app.Requirements.RequestedCPU+mec.CpuResources.Used) < (mec.CpuResources.Capacity*tau) &&
+		app.Requirements.RequestedCPU < availableCPU) {
 		return false
 	}
-	if !(app.Requirements.RequestedMEMORY < (availableMem * tau)) {
+	if !((app.Requirements.RequestedMEMORY+mec.MemoryResources.Used) < (mec.MemoryResources.Capacity*tau) &&
+		app.Requirements.RequestedMEMORY < availableMem) {
 		return false
 	}
 
 	return true
+}
+
+func (mec *MecHost) CheckLatency(app MECApp) bool {
+
+	userLocation, _ := strconv.Atoi(app.UserLocation)
+	if app.Requirements.RequestedLatency > mec.LatencyVector[userLocation-1] {
+		return true
+	} else {
+		return false
+	}
+
 }
 
 func (mec *MecHost) InstantiateApp(app MECApp) error {

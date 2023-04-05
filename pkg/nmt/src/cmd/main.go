@@ -25,6 +25,10 @@ func main() {
 	// TODO: setup latency on links - to be included if we already created links !
 	graph.NetworkMetricsUpdate()
 
+	//for each MEC define shortest path ( lower latency) to reach each of cell
+	//this has been introduced for ML mask immidiate calcualation
+	graph.FindShortestPathsConfigurationForMECs()
+
 	//start NMT server
 	startNMTserver()
 

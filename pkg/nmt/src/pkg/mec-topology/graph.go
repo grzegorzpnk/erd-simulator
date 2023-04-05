@@ -112,7 +112,17 @@ func (g *Graph) NetworkMetricsUpdate() {
 			g.Edges[d].EdgeMetrics.Latency = latency
 		}
 	}
+}
 
+func (g *Graph) FindShortestPathsConfigurationForMECs() {
+
+	for _, v := range g.MecHosts {
+		for i := 1; i <= len(g.NetworkCells); i++ {
+			cell := g.GetCell(strconv.Itoa(i))
+			latency, _ := g.ShortestPath(cell, v)
+			v.LatencyVector = append(v.LatencyVector, latency)
+		}
+	}
 }
 
 func generateLatency(sNode, tNode interface{}) (float64, error) {
