@@ -13,9 +13,10 @@ import (
 // Configuration loads up all the values that are used to configure
 // backend implementations
 type Configuration struct {
-	ServicePort string `json:"service-port"`
-	NMTEndpoint string `json:"nmt-endpoint"`
-	ERCEndpoint string `json:"erc-endpoint"`
+	ServicePort      string `json:"service-port"`
+	NMTEndpoint      string `json:"nmt-endpoint"`
+	ERCEndpoint      string `json:"erc-endpoint"`
+	MLClientEndpoint string `json:"ml-client-endpoint"`
 }
 
 // Config is the structure that stores the configuration
@@ -47,9 +48,10 @@ func readConfigFile(file string) (*Configuration, error) {
 func defaultConfiguration() *Configuration {
 
 	return &Configuration{
-		ServicePort: "8989",
-		NMTEndpoint: "http://10.254.185.104:32139/",
-		ERCEndpoint: "http://10.254.185.111:32147/",
+		ServicePort:      "8989",
+		NMTEndpoint:      "http://10.254.185.104:32139/",
+		ERCEndpoint:      "http://10.254.185.111:32147/",
+		MLClientEndpoint: "http://10.254.185.111:32444/",
 	}
 
 }

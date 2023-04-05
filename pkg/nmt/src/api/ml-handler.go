@@ -150,6 +150,41 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (h *apiHandler) GetCurrentMask(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	app := model.MECApp{}
+	responseMask := make([]int, len(h.graphClient.MecHosts))
+
+	err := json.NewDecoder(r.Body).Decode(&app)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+	}
+
+	//
+	//fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
+	//response := make([][]int, len(h.graphClient.MecHosts))
+	//for i := 0; i < len(response); i++ {
+	//	response[i] = make([]int, 5)
+	//}
+	//
+	//// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
+	//for i, v := range h.graphClient.MecHosts {
+	//	response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
+	//	response[i][1] = int(v.GetCpuUtilization() * 100)
+	//	response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
+	//	response[i][3] = int(v.GetMemoryUtilization() * 100)
+	//	response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
+	//}
+	//
+	//fmt.Printf("State of MECs before returning to Simu:\n ")
+	//printSlice(response)
+
+	json.NewEncoder(w).Encode(responseMask)
+	w.WriteHeader(http.StatusOK)
+
+}
+
 func printSlice(slice [][]int) {
 	for i := 0; i < len(slice); i++ {
 		for j := 0; j < len(slice[i]); j++ {

@@ -1,5 +1,6 @@
 {
   "service-port":"8484",
   "nmt-endpoint" : "http://127.0.0.1:8282",
-  "erc-endpoint" : "http://10.254.185.111:32147"
+  "erc-endpoint" : "http://10.254.185.111:32147",
+  "ml-client-endpoint": "http://127.0.0.1:8080"
 }

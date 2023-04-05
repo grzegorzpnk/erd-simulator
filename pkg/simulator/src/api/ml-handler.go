@@ -19,7 +19,12 @@ func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	//appsNumber := intent.ExperimentDetails.AppsNumber
+	experimentType, err := checkExperimentType(intent.ExperimentType)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	experimentIterations, err := strconv.Atoi(intent.ExperimentDetails.ExperimentIterations)
 	if err != nil {
@@ -63,7 +68,7 @@ func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request)
 	//This is already refactored
 	//loop for each experimentIterations defined in intent
 	for i := 0; i < experimentIterations; i++ {
-		status := executeMLExperiment(intent, h, 1, i)
+		status := executeMLExperiment(h, 1, i, experimentType)
 		if status != true {
 			log.Error("Experiment cannot be coninued due to error in one of the iterations")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -83,6 +88,7 @@ func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request)
 	w.WriteHeader(http.StatusOK)
 }
 
+/// function for debugging purposes only
 func (h *apiHandler) stateTest(w http.ResponseWriter, r *http.Request) {
 
 	var intent ExperimentIntent

@@ -8,11 +8,12 @@ import (
 	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
+	"simu/src/pkg/results"
 	"strconv"
 	"strings"
 )
 
-func executeMLExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, subExpIndex int) bool {
+func executeMLExperiment(h *apiHandler, expIndex, subExpIndex int, experimentType results.ExperimentType) bool {
 
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex+1) + "." + strconv.Itoa(subExpIndex+1) + "] "
 	//generate number of user to move
@@ -23,7 +24,7 @@ func executeMLExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, s
 	h.generateTargetCellId(app)
 	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
 
-	spi, err := GenerateMLSmartPlacementIntent(*app)
+	spi, err := GenerateMLSmartPlacementIntent(*app, experimentType)
 	if err != nil {
 		log.Errorf("Cannot generate SPI: %v", err.Error())
 		return false
@@ -60,10 +61,11 @@ func executeMLExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, s
 }
 
 // SpaceAPP (for single app)  : 1) Required mvCPU 2) required Memory 3) Required Latency 4) Current MEC 5) Current RAN
-func GenerateMLSmartPlacementIntent(app model.MECApp) (model.MLSmartPlacementIntent, error) {
+func GenerateMLSmartPlacementIntent(app model.MECApp, experimentType results.ExperimentType) (model.MLSmartPlacementIntent, error) {
 	//log.Printf("GenerateSmartPlacementIntent: activity start\n")
 
 	var spIntent model.MLSmartPlacementIntent
+
 	clusterID, _ := convertMECNameToID(app.ClusterId)
 	userLocation, _ := strconv.Atoi(app.UserLocation)
 
@@ -82,17 +84,54 @@ func GenerateMLSmartPlacementIntent(app model.MECApp) (model.MLSmartPlacementInt
 		return spIntent, err
 	}
 
-	spIntent = model.MLSmartPlacementIntent{
-		StateApp: model.SpaceAPP{
-			AppCharacteristic: appState,
-		},
-		StateMECS: model.SpaceMECs{
-			MecCharacteristics: mecState,
-		},
+	if experimentType == results.ExpMLMasked {
+		mask, err := GenerateMLMask(app)
+		if err != nil {
+			log.Errorf("Cannot generate Mask: %v", err.Error())
+		}
+
+		spIntent = model.MLSmartPlacementIntent{
+			StateApp: model.SpaceAPP{
+				AppCharacteristic: appState,
+			},
+			StateMECS: model.SpaceMECs{
+				MecCharacteristics: mecState,
+			},
+			CurrentMask: model.Mask{
+				Mask: mask,
+			},
+		}
+	} else {
+		spIntent = model.MLSmartPlacementIntent{
+			StateApp: model.SpaceAPP{
+				AppCharacteristic: appState,
+			},
+			StateMECS: model.SpaceMECs{
+				MecCharacteristics: mecState,
+			},
+		}
 	}
+
 	log.Infof("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
 
 	return spIntent, nil
+}
+
+func GenerateMLMask(app model.MECApp) ([]int, error) {
+
+	mask := make([]int, 22)
+
+	url := buildNMTMaskEndpoint()
+	fmt.Printf("asking for Mask url:, %v     |", url)
+
+	mask, err := GetMaskFromNMT(url, app)
+	if err != nil {
+		return mask, err
+	}
+
+	log.Infof("GeneratedMask: %+v\n", mask)
+
+	return mask, nil
 }
 
 func determineReqRes(reqRes int) int {
@@ -147,11 +186,18 @@ func CallMLClient(intent model.MLSmartPlacementIntent) (*model.Cluster, error) {
 	return &cluster, nil
 }
 
-//todo: write proper url
 func buildMLPlcCtrlURL() string {
-	url := "ml"
-	return url
+	url := config.GetConfiguration().MLClientEndpoint
+	url += "/ermodel/get-prediction"
 
+	return url
+}
+
+func buildNMTMaskEndpoint() string {
+	url := config.GetConfiguration().NMTEndpoint
+	url += "/v1/topology/ml/get-mask"
+
+	return url
 }
 
 func buildNMTCurrentStateEndpoint() string {
@@ -186,6 +232,23 @@ func GetMECsStateFromNMT(endpoint string) ([][]int, error) {
 
 }
 
+func GetMaskFromNMT(endpoint string, app model.MECApp) ([]int, error) {
+
+	mask := make([]int, 22)
+
+	responseBody, err := postHttpRespBody(endpoint, app)
+	if err != nil {
+		return nil, fmt.Errorf("cannot fetch mask from nmt: %v", err)
+	}
+
+	err = json.Unmarshal(responseBody, &mask)
+	if err != nil {
+		return nil, fmt.Errorf("cannot unmarshall mask: %v", err)
+	}
+
+	return mask, nil
+}
+
 func convertMECNameToID(s string) (int, error) {
 	if !strings.HasPrefix(s, "mec") {
 		return 0, fmt.Errorf("invalid input format: %s", s)
@@ -196,4 +259,15 @@ func convertMECNameToID(s string) (int, error) {
 		return 0, fmt.Errorf("failed to convert %s to int: %v", numStr, err)
 	}
 	return num, nil
+}
+
+func checkMLExperimentType(inputType string) (results.ExperimentType, error) {
+	if strings.ToLower(inputType) == "ml-masked" {
+		return results.ExpMLMasked, nil
+
+	} else if strings.ToLower(inputType) == "ml-non-masked" {
+		return results.ExpMLNonMasked, nil
+	}
+
+	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
 }

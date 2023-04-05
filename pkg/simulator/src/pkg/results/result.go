@@ -25,11 +25,13 @@ const (
 	ExpOptimal      ExperimentType = "optimal"
 	ExpHeuristic    ExperimentType = "heuristic"
 	ExpEarHeuristic ExperimentType = "ear-heuristic"
+	ExpMLMasked     ExperimentType = "ml-masked"
+	ExpMLNonMasked  ExperimentType = "ml-non-masked"
 	ExpNotExists    ExperimentType = ""
 )
 
 func GetExpTypes() []ExperimentType {
-	return []ExperimentType{ExpOptimal, ExpHeuristic, ExpEarHeuristic}
+	return []ExperimentType{ExpOptimal, ExpHeuristic, ExpEarHeuristic, ExpMLMasked, ExpMLNonMasked}
 }
 
 type AppCounter struct {
