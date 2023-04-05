@@ -1,11 +1,11 @@
 package api
+
 import (
 	"encoding/json"
 	"net/http"
 	log "simu/src/logger"
 	"strconv"
 )
-
 
 func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -83,10 +83,10 @@ func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request)
 	w.WriteHeader(http.StatusOK)
 }
 
-
-func (h *apiHandler) stateTest (w http.ResponseWriter, r *http.Request) {
-
-	GenerateMLSmartPlacementIntent(app
-	model.MECApp)
-
-}
+//
+//func (h *apiHandler) stateTest (w http.ResponseWriter, r *http.Request) {
+//
+//	GenerateMLSmartPlacementIntent(app
+//	model.MECApp)
+//
+//}
