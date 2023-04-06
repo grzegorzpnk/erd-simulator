@@ -19,7 +19,7 @@ func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	experimentType, err := checkExperimentType(intent.ExperimentType)
+	experimentType, err := checkMLExperimentType(intent.ExperimentType)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -109,6 +109,13 @@ func (h *apiHandler) stateTest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	experimentType, err := checkMLExperimentType(intent.ExperimentType)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	log.Infof("Started new experiment: %v, with %v relocations", intent.ExperimentType, experimentIterations)
 
 	//at the beggining let's synchro latest placement at nmt
@@ -137,7 +144,7 @@ func (h *apiHandler) stateTest(w http.ResponseWriter, r *http.Request) {
 	app := h.SimuClient.GetApps(id)
 	h.generateTargetCellId(app)
 
-	spi, err := GenerateMLSmartPlacementIntent(*app)
+	spi, err := GenerateMLSmartPlacementIntent(*app, experimentType)
 	if err != nil {
 		log.Errorf("Cannot generate SPI: %v", err.Error())
 	}

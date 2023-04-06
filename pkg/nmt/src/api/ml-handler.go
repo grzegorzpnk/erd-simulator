@@ -156,11 +156,14 @@ func (h *apiHandler) GetCurrentMask(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	app := model.MECApp{}
-	responseMask := make([]int, len(h.graphClient.MecHosts))
+	//responseMask := make([]int, len(h.graphClient.MecHosts))
+	var responseMask []int
 
 	err := json.NewDecoder(r.Body).Decode(&app)
-	if err != nil {
+	if err != nil || app.Id == "" {
 		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	//let's work on a copy
@@ -190,9 +193,6 @@ func (h *apiHandler) GetCurrentMask(w http.ResponseWriter, r *http.Request) {
 			responseMask = append(responseMask, 0)
 		}
 	}
-
-	//todo: what if all actions are masked?
-	//todo: check what means false and what means true
 
 	json.NewEncoder(w).Encode(responseMask)
 	w.WriteHeader(http.StatusOK)

@@ -65,16 +65,17 @@ func GenerateMLSmartPlacementIntent(app model.MECApp, experimentType results.Exp
 	//log.Printf("GenerateSmartPlacementIntent: activity start\n")
 
 	var spIntent model.MLSmartPlacementIntent
+	var state model.State
 
 	clusterID, _ := convertMECNameToID(app.ClusterId)
 	userLocation, _ := strconv.Atoi(app.UserLocation)
 
-	appState := [5]int{
+	appState := [1][5]int{{
 		determineReqRes(int(app.Requirements.RequestedCPU)),
 		determineReqRes(int(app.Requirements.RequestedMEMORY)),
 		determineStateofAppLatReq(int(app.Requirements.RequestedLatency)),
 		clusterID,
-		userLocation}
+		userLocation}}
 
 	url := buildNMTCurrentStateEndpoint()
 	fmt.Printf("asking for MECs config url:, %v     |", url)
@@ -84,32 +85,23 @@ func GenerateMLSmartPlacementIntent(app model.MECApp, experimentType results.Exp
 		return spIntent, err
 	}
 
-	if experimentType == results.ExpMLMasked {
+	state = model.State{
+		SpaceAPP:  appState,
+		SpaceMECs: mecState,
+	}
+
+	if experimentType == results.ExpMLNonMasked {
+		spIntent = model.MLSmartPlacementIntent{State: state}
+
+	} else if experimentType == results.ExpMLMasked {
 		mask, err := GenerateMLMask(app)
 		if err != nil {
 			log.Errorf("Cannot generate Mask: %v", err.Error())
 		}
-
-		spIntent = model.MLSmartPlacementIntent{
-			StateApp: model.SpaceAPP{
-				AppCharacteristic: appState,
-			},
-			StateMECS: model.SpaceMECs{
-				MecCharacteristics: mecState,
-			},
-			CurrentMask: model.Mask{
-				Mask: mask,
-			},
-		}
+		spIntent = model.MLSmartPlacementIntent{State: state, CurrentMask: mask}
 	} else {
-		spIntent = model.MLSmartPlacementIntent{
-			StateApp: model.SpaceAPP{
-				AppCharacteristic: appState,
-			},
-			StateMECS: model.SpaceMECs{
-				MecCharacteristics: mecState,
-			},
-		}
+		fmt.Errorf("Invalid type of experiment: %v ", experimentType)
+		return spIntent, err
 	}
 
 	log.Infof("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
