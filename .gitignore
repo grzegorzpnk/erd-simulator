@@ -35,4 +35,5 @@ notification_order
 /pkg/ueransim-ho/build/
 /pkg/ueransim-ho/cmake-build-release/
 
+**/__pycache__/
 
