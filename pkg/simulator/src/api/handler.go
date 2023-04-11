@@ -133,7 +133,7 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, strategy)
 	}
 
-	log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType)
+	log.Infof("Starting Experiment [%v] type: %v", 1, intent.ExperimentType)
 	experimentType, err := checkExperimentType(intent.ExperimentType)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: %v", err)
@@ -194,17 +194,16 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+	}
 
-		err = h.ResultClient.CollectExperimentStats(experimentType, "null", appsNumber, movementsInExperiment)
-		if err != nil {
-			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+	err = h.ResultClient.CollectExperimentStats(experimentType, "null", appsNumber, movementsInExperiment)
+	if err != nil {
+		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	h.ResultClient.IncExpId()
-
 	w.WriteHeader(http.StatusOK)
 }
 

@@ -17,7 +17,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 
 	var bestMec model.MecHost
 
-	log.Infof("\n\nReceived request about finding new cluster for app: %v located at Cluster: %v, that moves towards cell: %v\n", intent.Spec.AppName, intent.CurrentPlacement.Cluster, intent.Spec.SmartPlacementIntentData.TargetCell)
+	log.Infof("Received request about finding new cluster for app: %v located at Cluster: %v, that moves towards cell: %v", intent.Spec.AppName, intent.CurrentPlacement.Cluster, intent.Spec.SmartPlacementIntentData.TargetCell)
 	log.Infof("Smart Placement Intent: %+v", intent)
 	if checkIfMasked {
 		log.Infof("Searching Type: ML MASKED")
@@ -193,7 +193,7 @@ func determineStateofAppLatReq(latValue int) int {
 
 func buildNMTMaskEndpoint() string {
 	url := config.GetConfiguration().NMTEndpoint
-	url += "/v1/topology/ml/get-mask"
+	url += "/topology/ml/get-mask"
 
 	return url
 }
@@ -201,7 +201,7 @@ func buildNMTMaskEndpoint() string {
 func buildNMTCurrentStateEndpoint() string {
 	///topology/ml/get-state
 	url := config.GetConfiguration().NMTEndpoint
-	url += "/v1/topology/ml/get-state"
+	url += "/topology/ml/get-state"
 	return url
 }
 

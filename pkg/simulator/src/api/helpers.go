@@ -90,10 +90,16 @@ type ExperimentIntent struct {
 }
 
 type ExperimentDetails struct {
-	MovementsInExperiment string             `json:"experiments-iteration"`
+	MovementsInExperiment string             `json:"number-of-movements"`
 	InitialAppsNumber     results.AppCounter `json:"initial-apps-number"`
 }
 
+//
+//type AppCounter struct {
+//	Cg  int `json:"cg"`
+//	V2x int `json:"v2x"`
+//	Uav int `json:"uav"`
+//}
 func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
 	//	log.Printf("CallPlacementController: function start\n")
 	var resp model.Cluster
@@ -267,7 +273,7 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 
 	//log.Infof("Experiment numer: %v", i+1)
 
-	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex+1) + "." + strconv.Itoa(subExpIndex+1) + "] "
+	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
 	//generate number of user to move
 	id := h.generateUserToMove() //USER==APP
 

@@ -1,6 +1,7 @@
 {
-    "mec-topology-endpoint":"http://10.254.185.104:32139/v1",
+    "mec-topology-endpoint":"http://127.0.0.1:8282/v1",
     "plugin-dir":"cwd",
     "service-port":"8686",
-    "tau": "80"
+    "tau": "80",
+    "ml-client-endpoint": "http://127.0.0.1:8080/"
 }
