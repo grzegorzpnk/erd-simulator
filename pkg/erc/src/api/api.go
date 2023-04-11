@@ -24,6 +24,8 @@ func NewRouter(mockClient interface{}, resultClient *results.Client) *mux.Router
 	r.HandleFunc(spiURL+"/optimal", h.handleSmartPlacementIntentOptimal).Methods("POST")
 	r.HandleFunc(spiURL+"/heuristic", h.handleSmartPlacementIntentHeuristic).Methods("POST")
 	r.HandleFunc(spiURL+"/ear-heuristic", h.handleSmartPlacementIntentEarHeuristic).Methods("POST")
+	r.HandleFunc(spiURL+"/ml-masked", h.handleSmartPlacementIntentMLMasked).Methods("POST")
+	r.HandleFunc(spiURL+"/ml-non-masked", h.handleSmartPlacementIntentMLNonMasked).Methods("POST")
 
 	// API which will be used to collect information about experiments
 

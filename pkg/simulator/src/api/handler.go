@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
 	"simu/src/pkg/results"
@@ -127,9 +128,12 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	strategy := specifyStrategy(intent.Weights)
+	if !reflect.ValueOf(intent).FieldByName("Weights").IsZero() {
+		strategy := specifyStrategy(intent.Weights)
+		log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, strategy)
+	}
 
-	log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, strategy)
+	log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType)
 	experimentType, err := checkExperimentType(intent.ExperimentType)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: %v", err)
@@ -137,7 +141,7 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	appsNumber := intent.ExperimentDetails.AppsNumber
+	appsNumber := intent.ExperimentDetails.InitialAppsNumber
 
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
@@ -145,23 +149,23 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	experimentIterations, err := strconv.Atoi(intent.ExperimentDetails.ExperimentIterations)
+	movementsInExperiment, err := strconv.Atoi(intent.ExperimentDetails.MovementsInExperiment)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: [experiments-iterations] %v", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	log.Infof("Started new experiment: %v, with %v relocations", experimentType, experimentIterations)
+	log.Infof("Started new experiment: %v, with %v relocations", experimentType, movementsInExperiment)
 
 	//at the beggining let's synchro latest placement at nmt
-	err = GenerateInitialAppPlacementAtNMT(intent.ExperimentDetails.AppsNumber)
+	err = GenerateInitialAppPlacementAtNMT(intent.ExperimentDetails.InitialAppsNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", intent.ExperimentDetails.AppsNumber.GetTotalAsString())
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", intent.ExperimentDetails.InitialAppsNumber.GetTotalAsString())
 	}
 
 	err = h.SimuClient.FetchAppsFromNMT()
@@ -182,16 +186,16 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		log.Infof("Results module ready -> cache cleared at NMT")
 	}
 
-	//loop for each experimentIterations defined in intent
-	for i := 0; i < experimentIterations; i++ {
-		status := executeExperiment(intent, h, 1, i)
+	//loop for each movementsInExperiment defined in intent
+	for i := 0; i < movementsInExperiment; i++ {
+		status := executeExperiment(intent, h, 1, i, experimentType)
 		if status != true {
 			log.Error("Experiment cannot be coninued due to error in one of the iterations")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		err = h.ResultClient.CollectExperimentStats(experimentType, "null", appsNumber, experimentIterations)
+		err = h.ResultClient.CollectExperimentStats(experimentType, "null", appsNumber, movementsInExperiment)
 		if err != nil {
 			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -215,7 +219,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("%+v, total: %v", experimentDetails, experimentDetails.AppsNumber.GetTotal())
+	fmt.Printf("%+v, total: %v", experimentDetails, experimentDetails.InitialAppsNumber.GetTotal())
 
 	var experiments []ExperimentIntent
 
@@ -237,7 +241,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		log.Infof("Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, strategy)
 
-		appsNumber := experiment.ExperimentDetails.AppsNumber
+		appsNumber := experiment.ExperimentDetails.InitialAppsNumber
 
 		if err != nil {
 			log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
@@ -245,7 +249,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		experimentIterations, err := strconv.Atoi(experiment.ExperimentDetails.ExperimentIterations)
+		experimentIterations, err := strconv.Atoi(experiment.ExperimentDetails.MovementsInExperiment)
 		if err != nil {
 			log.Errorf("Could not proceed with experiment. Reason: [experiments-iterations] %v", err)
 			w.WriteHeader(http.StatusBadRequest)
@@ -253,13 +257,13 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		}
 
 		//at the beggining let's synchro latest placement at nmt
-		err = GenerateInitialAppPlacementAtNMT(experiment.ExperimentDetails.AppsNumber)
+		err = GenerateInitialAppPlacementAtNMT(experiment.ExperimentDetails.InitialAppsNumber)
 		if err != nil {
 			log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		} else {
-			log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiment.ExperimentDetails.AppsNumber.GetTotalAsString())
+			log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiment.ExperimentDetails.InitialAppsNumber.GetTotalAsString())
 		}
 
 		err = h.SimuClient.FetchAppsFromNMT()
@@ -282,7 +286,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		//loop for each sub-experiment defined in method declareExperiments()
 		for i := 0; i < experimentIterations; i++ {
-			status := executeExperiment(experiment, h, z, i)
+			status := executeExperiment(experiment, h, z, i, experimentType)
 			if status != true {
 				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
 				break
@@ -299,6 +303,6 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		h.ResultClient.IncExpId()
 		log.Infof("Finished Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, specifyStrategy(experiment.Weights))
 	}
-	log.Infof("Finished all Experiments (%v), each %v iterations", len(experiments), experiments[0].ExperimentDetails.ExperimentIterations)
+	log.Infof("Finished all Experiments (%v), each %v iterations", len(experiments), experiments[0].ExperimentDetails.MovementsInExperiment)
 	w.WriteHeader(http.StatusOK)
 }

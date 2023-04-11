@@ -184,6 +184,104 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 	}
 }
 
+func (h intentHandler) handleSmartPlacementIntentMLMasked(w http.ResponseWriter, r *http.Request) {
+	var i model.SmartPlacementIntent
+
+	isValid := validateRequestBody(w, r, &i, ErJSONFile)
+	if !isValid {
+		return
+	}
+
+	//measure time of searching for best cluster
+	startTime := time.Now()
+	mec, err := h.client.ServeSmartPlacementIntentML(true, i)
+	elapsedTime := time.Since(startTime)
+
+	if err != nil {
+		// EXPERIMENTS: remove later
+		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
+			sendResponse(w, err.Error(), http.StatusNoContent)
+			return
+		}
+		// EXPERIMENTS: remove later
+		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	} else {
+
+		body := ResponseBody{
+			Provider: mec.Identity.Provider,
+			Cluster:  mec.Identity.Cluster,
+		}
+
+		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
+
+			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
+
+			sendResponse(w, body, http.StatusOK)
+		} else {
+
+			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
+
+			sendResponse(w, body, http.StatusOK)
+		}
+	}
+}
+
+func (h intentHandler) handleSmartPlacementIntentMLNonMasked(w http.ResponseWriter, r *http.Request) {
+	var i model.SmartPlacementIntent
+
+	isValid := validateRequestBody(w, r, &i, ErJSONFile)
+	if !isValid {
+		return
+	}
+
+	//measure time of searching for best cluster
+	startTime := time.Now()
+	mec, err := h.client.ServeSmartPlacementIntentML(false, i)
+	elapsedTime := time.Since(startTime)
+
+	if err != nil {
+		// EXPERIMENTS: remove later
+		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
+			sendResponse(w, err.Error(), http.StatusNoContent)
+			return
+		}
+		// EXPERIMENTS: remove later
+		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
+		sendResponse(w, err.Error(), http.StatusInternalServerError)
+		return
+	} else {
+
+		body := ResponseBody{
+			Provider: mec.Identity.Provider,
+			Cluster:  mec.Identity.Cluster,
+		}
+
+		if mec.Identity.Provider == i.CurrentPlacement.Provider && mec.Identity.Cluster == i.CurrentPlacement.Cluster {
+
+			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
+
+			sendResponse(w, body, http.StatusOK)
+		} else {
+
+			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
+			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
+
+			sendResponse(w, body, http.StatusOK)
+		}
+	}
+}
+
 // validateRequestBody validate the request body before storing it in the database
 func validateRequestBody(w http.ResponseWriter, r *http.Request, v interface{}, filename string) bool {
 	err := json.NewDecoder(r.Body).Decode(&v)

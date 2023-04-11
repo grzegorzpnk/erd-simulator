@@ -16,8 +16,9 @@ import (
 type Configuration struct {
 	PluginDir        string `json:"plugin-dir"`
 	ServicePort      string `json:"service-port"`
-	TopologyEndpoint string `json:"mec-topology-endpoint"`
+	NMTEndpoint      string `json:"mec-topology-endpoint"`
 	Tau              string `json:"tau"`
+	MLClientEndpoint string `json:"ml-client-endpoint"`
 }
 
 // Config is the structure that stores the configuration
@@ -56,8 +57,9 @@ func defaultConfiguration() *Configuration {
 	return &Configuration{
 		PluginDir:        cwd,
 		ServicePort:      "8686",
-		TopologyEndpoint: "dupa",
 		Tau:              "80",
+		NMTEndpoint:      "http://10.254.185.104:32139/",
+		MLClientEndpoint: "http://10.254.185.111:32444/",
 	}
 }
 

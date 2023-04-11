@@ -39,6 +39,7 @@ func NewIntentClient() *SmartPlacementIntentClient {
 type SmartPlacementIntentManager interface {
 	ServeSmartPlacementIntentHeuristic(checkIfClause bool, intent model.SmartPlacementIntent) (model.MecHost, error)
 	ServeSmartPlacementIntentOptimal(intent model.SmartPlacementIntent) (model.MecHost, error)
+	ServeSmartPlacementIntentML(checkIfMasked bool, intent model.SmartPlacementIntent) (model.MecHost, error)
 }
 
 // ServeSmartPlacementIntentHeuristic based on SmartPlacementIntent tries to find and return the best MEC Host.

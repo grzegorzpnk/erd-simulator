@@ -52,6 +52,37 @@ func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (mode
 	return spIntent, nil
 }
 
+func GenerateSmartPlacementMLIntent(app model.MECApp) (model.SmartPlacementIntent, error) {
+	//log.Printf("GenerateSmartPlacementIntent: activity start\n")
+
+	targetAppName := app.Id
+
+	spIntent := model.SmartPlacementIntent{
+		Metadata: model.Metadata{
+			Name:        targetAppName + "-er-intent",
+			Description: fmt.Sprintf("Edge Relocation Intent for app: %s", targetAppName),
+		},
+		CurrentPlacement: model.Cluster{
+			Provider: "orange",
+			Cluster:  app.ClusterId,
+		},
+		Spec: model.SmartPlacementIntentSpec{
+			AppName: targetAppName,
+			SmartPlacementIntentData: model.SmartPlacementIntentStruct{
+				TargetCell: app.UserLocation,
+				AppCpuReq:  app.Requirements.RequestedCPU,
+				AppMemReq:  app.Requirements.RequestedMEMORY,
+				ConstraintsList: model.Constraints{
+					LatencyMax: app.Requirements.RequestedLatency,
+				},
+			},
+		},
+	}
+	//log.Printf("GenerateSmartPlacementIntent: intent = %+v\n", spIntent)
+
+	return spIntent, nil
+}
+
 type ExperimentIntent struct {
 	ExperimentType    string            `json:"experiment-type"`
 	ExperimentDetails ExperimentDetails `json:"experiment-details"`
@@ -59,8 +90,8 @@ type ExperimentIntent struct {
 }
 
 type ExperimentDetails struct {
-	ExperimentIterations string             `json:"experiments-number"`
-	AppsNumber           results.AppCounter `json:"apps-number"`
+	MovementsInExperiment string             `json:"experiments-iteration"`
+	InitialAppsNumber     results.AppCounter `json:"initial-apps-number"`
 }
 
 func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
@@ -184,6 +215,10 @@ func checkExperimentType(inputType string) (results.ExperimentType, error) {
 		return results.ExpHeuristic, nil
 	} else if strings.ToLower(inputType) == "ear-heuristic" || strings.ToLower(inputType) == "earheuristic" || strings.ToLower(inputType) == "ear" {
 		return results.ExpEarHeuristic, nil
+	} else if strings.ToLower(inputType) == "ml-masked" || strings.ToLower(inputType) == "mlmasked" {
+		return results.ExpMLMasked, nil
+	} else if strings.ToLower(inputType) == "ml-non-masked" || strings.ToLower(inputType) == "mlnonmasked" {
+		return results.ExpMLNonMasked, nil
 	}
 
 	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
@@ -228,7 +263,7 @@ func specifyStrategy(weights model.Weights) string {
 	return strategy
 }
 
-func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, subExpIndex int) bool {
+func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, subExpIndex int, experimentType results.ExperimentType) bool {
 
 	//log.Infof("Experiment numer: %v", i+1)
 
@@ -241,9 +276,14 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 	h.generateTargetCellId(app)
 	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
 
-	//create smart placement intent
+	var spi model.SmartPlacementIntent
+	var err error
 
-	spi, err := GenerateSmartPlacementIntent(*app, experiment.Weights)
+	if experimentType == results.ExpOptimal || experimentType == results.ExpOptimal || experimentType == results.ExpEarHeuristic {
+		spi, err = GenerateSmartPlacementIntent(*app, experiment.Weights)
+	} else {
+		spi, err = GenerateSmartPlacementMLIntent(*app)
+	}
 	if err != nil {
 		log.Errorf("Cannot generate SPI: %v", err.Error())
 		return false
