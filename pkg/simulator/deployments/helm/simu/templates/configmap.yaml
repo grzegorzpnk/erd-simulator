@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: simu-cm
   labels:
-    app: {{ include "nmt.name" . }}
+    app: {{ include "simu.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -11,6 +11,7 @@ data:
   config.json: |
     {
       "service-port":"{{ .Values.config.servicePort }}",
-      "erc-endpoint" : "{{ .Values.config.erc_endpoint}}",
-      "nmt-endpoint" : "{{ .Values.config.nmt_endpoint}}"
+      "erc-endpoint": "{{ .Values.config.erc_endpoint }}",
+      "nmt-endpoint": "{{ .Values.config.nmt_endpoint }}",
+      "ml-client-endpoint": "{{ .Values.config.rl_agent_endpoint }}"
     }

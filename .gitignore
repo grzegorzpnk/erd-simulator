@@ -1,39 +1,29 @@
-.idea/
-.vscode/
-.history/
 notification_order
 
-/pkg/erc/bin/
-/pkg/erc/.idea/
+**/bin/
+
+**/.idea/
+**/.history/
+**/.vscode/
+
+**/__pycache__/
+
 /pkg/erc/deployments/helm/*.tgz
 
-/pkg/innot/bin/
-/pkg/innot/.idea/
 /pkg/innot/deployments/helm/*.tgz
 
-/pkg/lcm-workflow/bin/*
-/pkg/lcm-workflow/.idea/
 /pkg/lcm-workflow/deployments/helm/*.tgz
 /pkg/lcm-workflow/samples/lcm-example/apps/*.tgz
 /pkg/lcm-workflow/samples/lcm-example/emco-manifests-v2/values-v3.0.8.yaml
 /pkg/lcm-workflow/samples/lcm-example/emco-manifests-v2/values-no-clusters.yaml
 
-/pkg/nmt/bin/
-/pkg/nmt/.idea/
 /pkg/nmt/deployments/helm/*.tgz
 
-/pkg/obs/bin/
-/pkg/obs/.idea/
 /pkg/obs/deployments/helm/*.tgz
 
 /pkg/relocate-workflow/deployments/helm/*.tgz
 /pkg/relocate-workflow/temporal-migrate-workflow
 
-/pkg/ueransim-ho/.idea/
-/pkg/ueransim-ho/.history/
-/pkg/ueransim-ho/.vscode/
 /pkg/ueransim-ho/build/
 /pkg/ueransim-ho/cmake-build-release/
-
-**/__pycache__/
 

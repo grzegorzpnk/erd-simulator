@@ -13,5 +13,6 @@ data:
       "plugin-dir": "cwd",
       "service-port": "{{ .Values.config.servicePort }}",
       "mec-topology-endpoint": "{{ .Values.config.topologyEndpoint }}",
-      "tau": "80"
+      "tau": "80",
+      "ml-client-endpoint": "{{ .Values.config.rl_agent_endpoint }}"
     }

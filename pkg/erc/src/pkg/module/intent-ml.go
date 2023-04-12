@@ -34,7 +34,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	//send request to ML ctrl to select new position
 	bestMec, err = CallMLClient(MLspi)
 	if err != nil {
-		log.Warnf(" Could not find optimal cluster for given APP[%v]", intent.Spec.AppName)
+		log.Warnf(" Could not find optimal cluster for given APP[%v]. Error[%v]", intent.Spec.AppName, err)
 		return model.MecHost{}, err
 	} else {
 		log.Infof("ML CLient has found cluster[%v] for given APP[%v]", bestMec.Identity.Cluster, intent.Spec.AppName)
@@ -45,7 +45,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 
 func CallMLClient(intent model.MLSmartPlacementIntent) (model.MecHost, error) {
 	//	log.Printf("CallPlacementController: function start\n")
-	var respClusterID string
+	var respClusterID json.Number
 
 	plcCtrlUrl := buildMLPlcCtrlURL()
 	data := intent
@@ -62,8 +62,8 @@ func CallMLClient(intent model.MLSmartPlacementIntent) (model.MecHost, error) {
 
 	cluster := model.MecHost{
 		Identity: model.MecIdentity{
-			Cluster:  "orange",
-			Provider: "mec" + respClusterID,
+			Provider: "orange",
+			Cluster:  "mec" + respClusterID.String(),
 		},
 	}
 
@@ -255,7 +255,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		log.Errorf("Could not make post request. reason: %v\n", err)
+		log.Errorf("Could not make POST request. reason: %v\n", err)
 	}
 	defer resp.Body.Close()
 

@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: grzegorzpnk/simu
+  repository: pmatysiaq/simu
   pullPolicy: Always
   tag: "latest"
 
@@ -9,8 +9,9 @@ workingDir: "/simu"
 command: "./simu"
 config:
   servicePort: 8484
-  nmt_endpoint: "http://10.254.185.104:32139"
-  erc_endpoint: "http://10.254.185.111:32147"
+  nmt_endpoint: "http://172.18.0.3:32139"
+  erc_endpoint: "http://172.18.0.3:32147"
+  rl_agent_endpoint: "http://172.18.0.3:32444"
 
 podAnnotations: {}
 podSecurityContext: {}

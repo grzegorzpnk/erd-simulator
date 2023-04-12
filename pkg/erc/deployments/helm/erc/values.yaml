@@ -1,13 +1,14 @@
 replicaCount: 1
 
 image:
-  repository: grzegorzpnk/erc
+  repository: pmatysiaq/erc
   pullPolicy: Always
   tag: "latest"
 
 config:
   servicePort: 8686
-  topologyEndpoint: http://10.254.185.104:32139/v1
+  topologyEndpoint: http://172.18.0.3:32139/v1
+  rl_agent_endpoint: http://172.18.0.3:32444
 
 workingDir: "/erc"
 command: "./erc"

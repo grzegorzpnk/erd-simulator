@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-WORKDIR /nmt
+WORKDIR /simu
 
 USER root
 

@@ -27,12 +27,12 @@ type intentHandler struct {
 	resultClient *results.Client
 }
 
-//replace below if you are running locally
+// replace below if you are running locally
 var ErJSONFile = "./json-schemas/intent.json"
 
 //var ErJSONFile = "./../../json-schemas/intent.json"
 
-func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter, r *http.Request) {
+func (h *intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)
@@ -81,7 +81,7 @@ func (h intentHandler) handleSmartPlacementIntentHeuristic(w http.ResponseWriter
 	}
 }
 
-func (h intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWriter, r *http.Request) {
+func (h *intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)
@@ -130,7 +130,7 @@ func (h intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWri
 	}
 }
 
-func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, r *http.Request) {
+func (h *intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)
@@ -184,7 +184,7 @@ func (h intentHandler) handleSmartPlacementIntentOptimal(w http.ResponseWriter, 
 	}
 }
 
-func (h intentHandler) handleSmartPlacementIntentMLMasked(w http.ResponseWriter, r *http.Request) {
+func (h *intentHandler) handleSmartPlacementIntentMLMasked(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)
@@ -233,7 +233,7 @@ func (h intentHandler) handleSmartPlacementIntentMLMasked(w http.ResponseWriter,
 	}
 }
 
-func (h intentHandler) handleSmartPlacementIntentMLNonMasked(w http.ResponseWriter, r *http.Request) {
+func (h *intentHandler) handleSmartPlacementIntentMLNonMasked(w http.ResponseWriter, r *http.Request) {
 	var i model.SmartPlacementIntent
 
 	isValid := validateRequestBody(w, r, &i, ErJSONFile)

@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: grzegorzpnk/nmt
+  repository: pmatysiaq/nmt
   pullPolicy: Always
   tag: "latest"
 

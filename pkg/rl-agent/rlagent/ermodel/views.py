@@ -13,7 +13,7 @@ sys.path.append("../config")
 # Create your views here.
 def get_prediction(request: HttpRequest):
     log = logging.getLogger('ermodel')
-    if request.method == "GET":
+    if request.method == "GET" or request.method == "POST":
         body = request.body
         try:
             data = json.loads(body)
@@ -45,6 +45,8 @@ def get_prediction(request: HttpRequest):
         except ValueError as e:
             log.error({"error": {'state': f'{state}', 'mask': f'{mask}', "exception": f'{e}'}})
             return JsonResponse({"error": {'state': f'{state}', 'mask': f'{mask}', "exception": f'{e}'}}, status=400)
+
+        action += 1
 
         return HttpResponse(f'{action}')
     else:

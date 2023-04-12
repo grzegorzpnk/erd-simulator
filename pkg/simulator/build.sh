@@ -2,6 +2,6 @@
 
 make all
 
-sudo docker tag simu grzegorzpnk/simu:latest
+sudo docker tag simu pmatysiaq/simu:latest
 
-sudo docker push grzegorzpnk/simu:latest
+sudo docker push pmatysiaq/simu:latest

@@ -13,7 +13,7 @@ COPY get-prediction-schema.json ./json-schemas/
 COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
-COPY model.zip .
+COPY masked_model_trajectory25_steps500k_variableload.zip model.zip
 
 RUN chmod +x ./start-server.sh
 

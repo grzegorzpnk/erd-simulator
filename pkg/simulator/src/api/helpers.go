@@ -94,12 +94,11 @@ type ExperimentDetails struct {
 	InitialAppsNumber     results.AppCounter `json:"initial-apps-number"`
 }
 
-//
-//type AppCounter struct {
-//	Cg  int `json:"cg"`
-//	V2x int `json:"v2x"`
-//	Uav int `json:"uav"`
-//}
+//	type AppCounter struct {
+//		Cg  int `json:"cg"`
+//		V2x int `json:"v2x"`
+//		Uav int `json:"uav"`
+//	}
 func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
 	//	log.Printf("CallPlacementController: function start\n")
 	var resp model.Cluster
@@ -285,7 +284,7 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 	var spi model.SmartPlacementIntent
 	var err error
 
-	if experimentType == results.ExpOptimal || experimentType == results.ExpOptimal || experimentType == results.ExpEarHeuristic {
+	if experimentType == results.ExpOptimal || experimentType == results.ExpEarHeuristic || experimentType == results.ExpHeuristic {
 		spi, err = GenerateSmartPlacementIntent(*app, experiment.Weights)
 	} else {
 		spi, err = GenerateSmartPlacementMLIntent(*app)
