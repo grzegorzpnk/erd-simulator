@@ -202,12 +202,18 @@ func (h *intentHandler) handleSmartPlacementIntentMLMasked(w http.ResponseWriter
 		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
 			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
+
+			log.Infof("Skipped! Best cluster will not be returned. Reason: %v", err.Error())
+
 			sendResponse(w, err.Error(), http.StatusNoContent)
 			return
 		}
 		// EXPERIMENTS: remove later
 		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
+
+		log.Infof("Failed! Best cluster will not be returned. Reason: %v", err.Error())
+
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
@@ -222,11 +228,15 @@ func (h *intentHandler) handleSmartPlacementIntentMLMasked(w http.ResponseWriter
 			h.resultClient.Results.IncRedundant(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddRedundantTime(int(elapsedTime.Milliseconds()))
 
+			log.Infof("Redundant! Best cluster found [%v, %v] but it's redundant.", mec.Identity.Provider, mec.Identity.Cluster)
+
 			sendResponse(w, body, http.StatusOK)
 		} else {
 
 			h.resultClient.Results.IncSuccessful(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSuccessfulTime(int(elapsedTime.Milliseconds()))
+
+			log.Infof("Success! Best cluster found [%v, %v]", mec.Identity.Provider, mec.Identity.Cluster)
 
 			sendResponse(w, body, http.StatusOK)
 		}

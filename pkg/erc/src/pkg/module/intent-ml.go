@@ -4,8 +4,10 @@ import (
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/config"
 	log "10.254.188.33/matyspi5/erd/pkg/erc/src/logger"
 	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/model"
+	"10.254.188.33/matyspi5/erd/pkg/erc/src/pkg/topology"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -15,9 +17,13 @@ import (
 
 func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked bool, intent model.SmartPlacementIntent) (model.MecHost, error) {
 
+	var err error
 	var bestMec model.MecHost
 
-	log.Infof("Received request about finding new cluster for app: %v located at Cluster: %v, that moves towards cell: %v", intent.Spec.AppName, intent.CurrentPlacement.Cluster, intent.Spec.SmartPlacementIntentData.TargetCell)
+	tc := topology.NewTopologyClient()
+	tc.CurrentCell = intent.Spec.SmartPlacementIntentData.TargetCell
+
+	log.Infof("Received request to find new cluster for App [%v] located at Cluster [%v], that moves towards Cell [%v]", intent.Spec.AppName, intent.CurrentPlacement.Cluster, intent.Spec.SmartPlacementIntentData.TargetCell)
 	log.Infof("Smart Placement Intent: %+v", intent)
 	if checkIfMasked {
 		log.Infof("Searching Type: ML MASKED")
@@ -36,15 +42,55 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	if err != nil {
 		log.Warnf(" Could not find optimal cluster for given APP[%v]. Error[%v]", intent.Spec.AppName, err)
 		return model.MecHost{}, err
-	} else {
-		log.Infof("ML CLient has found cluster[%v] for given APP[%v]", bestMec.Identity.Cluster, intent.Spec.AppName)
-		return bestMec, nil
 	}
+
+	// Collect info from topology
+	bestMec.Resources.Latency, err = tc.GetShortestPath(tc.CurrentCell, bestMec)
+	if err != nil {
+		log.Warnf("Could not collect MEC [%v+%v] LATENCY info", bestMec.Identity.Provider, bestMec.Identity.Cluster)
+		return model.MecHost{}, err
+	}
+
+	bestMec.Resources.Cpu, err = tc.GetMecResource(model.MecCpu, bestMec)
+	if err != nil {
+		log.Warnf("Could not collect MEC [%v+%v] CPU info", bestMec.Identity.Provider, bestMec.Identity.Cluster)
+		return model.MecHost{}, err
+	}
+
+	bestMec.Resources.Memory, err = tc.GetMecResource(model.MecMem, bestMec)
+	if err != nil {
+		log.Warnf("Could not collect MEC [%v+%v] MEMORY info", bestMec.Identity.Provider, bestMec.Identity.Cluster)
+		return model.MecHost{}, err
+	}
+
+	// Check if ok
+	cpuUtilAfterRel := 100 * ((bestMec.GetCpuUsed() + reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][0])) / bestMec.GetCpuCapacity())
+	//log.Warnf("CPU used: [%v], CPU req: [%v]", bestMec.GetCpuUsed(), reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][0]))
+
+	memUtilAfterRel := 100 * ((bestMec.GetMemUsed() + reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][1])) / bestMec.GetMemCapacity())
+	//log.Warnf("MEM used: [%v], MEM req: [%v]", bestMec.GetMemUsed(), reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][1]))
+
+	reqLatency := reverseDetermineAppLatReqFloat64(MLspi.State.SpaceAPP[0][2])
+
+	threshold := 80.0
+
+	log.Warnf("[%v] CPU Util [%v], Mem Util [%v], threshold [%v]", bestMec.Identity.Cluster, cpuUtilAfterRel, memUtilAfterRel, threshold)
+
+	if bestMec.GetLatency() > reqLatency {
+		err = errors.New(fmt.Sprintf("mec latency [%v] is higher than required [%v]", bestMec.GetLatency(), reqLatency))
+		return model.MecHost{}, err
+	} else if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
+		err = errors.New(fmt.Sprintf("mec resource utilization [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
+		return model.MecHost{}, err
+	}
+
+	log.Infof("ML CLient has found cluster[%v] for given APP[%v]", bestMec.Identity.Cluster, intent.Spec.AppName)
+	return bestMec, nil
 
 }
 
 func CallMLClient(intent model.MLSmartPlacementIntent) (model.MecHost, error) {
-	//	log.Printf("CallPlacementController: function start\n")
+	//	log.Printf("CallPlacementController: function start")
 	var respClusterID json.Number
 
 	plcCtrlUrl := buildMLPlcCtrlURL()
@@ -79,7 +125,7 @@ func buildMLPlcCtrlURL() string {
 
 // SpaceAPP (for single app)  : 1) Required mvCPU 2) required Memory 3) Required Latency 4) Current MEC 5) Current RAN
 func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMasked bool) (model.MLSmartPlacementIntent, error) {
-	//log.Printf("GenerateSmartPlacementIntent: activity start\n")
+	//log.Printf("GenerateSmartPlacementIntent: activity start")
 
 	var spIntent model.MLSmartPlacementIntent
 	var state model.State
@@ -95,7 +141,7 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 		userLocation}}
 
 	url := buildNMTCurrentStateEndpoint()
-	fmt.Printf("asking for MECs config url:, %v     |", url)
+	//log.Infof("Asking for MECs config url:, %v     |", url)
 
 	mecState, err := GetMECsStateFromNMT(url)
 	if err != nil {
@@ -126,11 +172,11 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	} else if !checkIfMasked {
 		spIntent = model.MLSmartPlacementIntent{State: state}
 	} else {
-		fmt.Errorf("Invalid type of experiment")
+		log.Errorf("Invalid type of experiment: %v", err.Error())
 		return spIntent, err
 	}
 
-	log.Infof("GenerateMLSmartPlacementIntent: intent = %+v\n", spIntent)
+	log.Infof("GenerateMLSmartPlacementIntent: intent = %+v", spIntent)
 
 	return spIntent, nil
 }
@@ -152,14 +198,14 @@ func GenerateMLMask(app model.MECApp) ([]int, error) {
 	mask := make([]int, 22)
 
 	url := buildNMTMaskEndpoint()
-	fmt.Printf("asking for Mask url:, %v     |", url)
+	//fmt.Printf("Asking for Mask url:, %v     |", url)
 
 	mask, err := GetMaskFromNMT(url, app)
 	if err != nil {
 		return mask, err
 	}
 
-	log.Infof("GeneratedMask: %+v\n", mask)
+	log.Infof("Mask: %+v", mask)
 
 	return mask, nil
 }
@@ -179,11 +225,38 @@ func determineReqRes(reqRes int) int {
 	return 0
 }
 
+func reverseDetermineReqResFloat64(reqRes int) float64 {
+	resMap := map[int]float64{
+		1: 500.0,
+		2: 600.0,
+		3: 700.0,
+		4: 800.0,
+		5: 900.0,
+		6: 1000.0,
+	}
+	if val, ok := resMap[reqRes]; ok {
+		return val
+	}
+	return 0
+}
+
 func determineStateofAppLatReq(latValue int) int {
 	latMap := map[int]int{
 		10: 1,
 		15: 2,
 		30: 3,
+	}
+	if val, ok := latMap[latValue]; ok {
+		return val
+	}
+	return 0
+}
+
+func reverseDetermineAppLatReqFloat64(latValue int) float64 {
+	latMap := map[int]float64{
+		1: 10.0,
+		2: 15.0,
+		3: 30.0,
 	}
 	if val, ok := latMap[latValue]; ok {
 		return val
@@ -255,7 +328,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		log.Errorf("Could not make POST request. reason: %v\n", err)
+		log.Errorf("Could not make POST request. reason: %v", err)
 	}
 	defer resp.Body.Close()
 

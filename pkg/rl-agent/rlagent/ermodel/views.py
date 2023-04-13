@@ -5,7 +5,7 @@ import os
 import sys
 from config import config
 import json
-import jsonschema
+from .helpers import validate_body, make_prediction
 
 sys.path.append("../config")
 
@@ -38,35 +38,15 @@ def get_prediction(request: HttpRequest):
         model = MaskablePPO.load(cfg.get_model_path())
 
         try:
-            if use_mask:
-                action, _ = model.predict(state, action_masks=mask)
-            else:
-                action, _ = model.predict(state)
+            action, new_state = make_prediction(model, state, mask, use_mask)
         except ValueError as e:
             log.error({"error": {'state': f'{state}', 'mask': f'{mask}', "exception": f'{e}'}})
             return JsonResponse({"error": {'state': f'{state}', 'mask': f'{mask}', "exception": f'{e}'}}, status=400)
 
+        # Actions are counter from 0, but we consider mec names in a format (mecN, mecN+1, ...), where N=1
         action += 1
 
         return HttpResponse(f'{action}')
     else:
         log.error({'error': f'Method [{request.method}] Not Allowed'})
         return JsonResponse({'error': f'Method [{request.method}] Not Allowed'}, status=405)
-
-
-def validate_body(data: dict):
-    log = logging.getLogger('ermodel')
-    schema_path = os.environ.get("GET_PREDICTION_SCHEMA_PATH")
-
-    with open(schema_path) as file:
-        schema_json = file.read()
-
-    schema = json.loads(schema_json)
-
-    try:
-        jsonschema.validate(data, schema)
-        return True
-    except jsonschema.exceptions.ValidationError as e:
-        log.error("Body schema validation error:", e.message)
-
-        return False

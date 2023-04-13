@@ -1,4 +1,4 @@
-module "10.254.188.33/matyspi5/erd/pkg/lcm-workflow"
+module 10.254.188.33/matyspi5/erd/pkg/lcm-workflow
 
 go 1.18
 
