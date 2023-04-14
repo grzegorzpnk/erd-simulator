@@ -44,6 +44,12 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 		return model.MecHost{}, err
 	}
 
+	// check if relocation redundant
+	if bestMec.Identity.Provider == intent.CurrentPlacement.Provider &&
+		bestMec.Identity.Cluster == intent.CurrentPlacement.Cluster {
+		log.Warnf("[DEBUG-INFO] Relocation redundant skipping...")
+		return bestMec, nil
+	}
 	// Collect info from topology
 	bestMec.Resources.Latency, err = tc.GetShortestPath(tc.CurrentCell, bestMec)
 	if err != nil {
