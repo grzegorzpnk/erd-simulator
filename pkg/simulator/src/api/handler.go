@@ -329,12 +329,24 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	}
 
 	//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
+	err = GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
+	if err != nil {
+		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiments[0].ExperimentDetails.InitialAppsNumber.GetTotalAsString())
+	}
 
-	//this is used for initial declaration of apps(users) and is useful during trajectory creation
-	apps := DeclareApplications(experiments[0].ExperimentDetails.InitialAppsNumber)
-	h.SimuClient.SetApps(apps)
+	err = h.SimuClient.FetchAppsFromNMT()
+	if err != nil {
+		log.Errorf("Cannot fetch current app list from NMT. Error: %v", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		log.Infof("Initial app list fetched from NMT")
+	}
 
-	//todo: issue of first cell is not yet solved
 	trajectory, err := createTrajectory(movements, h)
 	if err != nil {
 		log.Errorf("Cannot create trajectory. Error: %v", err.Error())
@@ -356,27 +368,19 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 
 		log.Infof("Experiment [%v] type: %v", z+1, experiment.ExperimentType)
 
-		appsNumber := experiment.ExperimentDetails.InitialAppsNumber
-
+		//at the beggining let's recreate initial app placement at NMT and fetch
+		err = h.SimuClient.RecreateInitialPlacementAtNMT()
 		if err != nil {
-			log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-
-		//at the beggining let's synchro latest placement at nmt
-		err = GenerateInitialAppPlacementAtNMT(experiment.ExperimentDetails.InitialAppsNumber)
-		if err != nil {
-			log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
+			log.Errorf("Cannot recreate initial placement and fetch current app list from NMT. Error: %v", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		} else {
-			log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiment.ExperimentDetails.InitialAppsNumber.GetTotalAsString())
+			log.Infof("Initial placement recreated at NMT")
 		}
 
 		err = h.SimuClient.FetchAppsFromNMT()
 		if err != nil {
-			log.Errorf("Cannot fetch current app list from NMT. Error: %v", err.Error())
+			log.Errorf("Cannot recreate initial placement and fetch current app list from NMT. Error: %v", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		} else {
@@ -393,7 +397,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		}
 
 		//loop for each sub-experiment defined in method declareExperiments()
-		for i := 0; i < len(trajectory); i++ {
+		for i := 1; i < len(trajectory); i++ {
 			status := executeGlobcomExperiment(experiment, h, z, i, experimentType, trajectory[i][0], trajectory[i][1])
 			if status != true {
 				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
@@ -402,6 +406,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 
 		}
 
+		appsNumber := experiment.ExperimentDetails.InitialAppsNumber
 		err = h.ResultClient.CollectExperimentStats(experimentType, "", appsNumber, movements)
 		if err != nil {
 			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)

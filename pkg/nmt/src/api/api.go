@@ -38,11 +38,12 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/mecHosts/provider/{provider}/cluster/{cluster}/removeApplication", handler.DeleteApplication).Methods("POST")
 	r.HandleFunc(baseUrl+"/orchestrator/relocate/old-cluster/{old-cluster}/new-cluster/{new-cluster}/application", handler.RelocateApplication2).Methods("POST")
 
-	r.HandleFunc(baseUrl+"/topology/declare-apps/{applications}", handler.DefineApplications).Methods("POST")
+	//r.HandleFunc(baseUrl+"/topology/declare-apps/{applications}", handler.DefineApplications).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/initial-placement-generator", handler.GenerateInitialClusters).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/instantiate-all", handler.InstantiateAllDefinedApps).Methods("POST")
 	//this API defines one-click (DefineApplications & GenerateInitialClusters & InstantiateAllDefinedApps)
 	r.HandleFunc(baseUrl+"/topology/prerequesties/{applications}", handler.Prerequisites).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/recreate-initial", handler.Recreate).Methods("POST")
 
 	// interaction with ML training app (currently not used). Used only to create first config input in order to train on
 	r.HandleFunc(baseUrl+"/topology/ml/InitialState/{applications}", handler.MLInitialState).Methods("GET")
