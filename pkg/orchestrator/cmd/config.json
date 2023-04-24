@@ -1,4 +1,0 @@
-{
-  "service-port":"8282",
-  "network-topology-endpoint" : "http://10.254.185.44:32138",
-}

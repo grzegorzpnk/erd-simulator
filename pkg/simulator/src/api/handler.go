@@ -319,7 +319,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 
 	var experiments []ExperimentIntent
 	experiments = declareGlobcomExperiments(experimentDetails)
-	log.Infof("Started new full GLOBECOM experiment with all 3 types: Optimal, EAR, RL")
+	log.Infof("Started new full GLOBECOM experiment with all 4 types: Optimal, EAR, RL-masked, RL-no-masked")
 
 	movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
 	if err != nil {
