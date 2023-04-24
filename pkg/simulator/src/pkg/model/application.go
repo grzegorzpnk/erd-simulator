@@ -42,7 +42,7 @@ func (simuCl *SimuClient) FetchAppsFromNMT() error {
 		return err
 	}
 
-	simuCl.setApps(apps)
+	simuCl.SetApps(apps)
 	simuCl.setPath()
 	return nil
 }
@@ -68,7 +68,7 @@ func GetAppsFromNMT(endpoint string) ([]MECApp, error) {
 
 }
 
-func (simuCl *SimuClient) setApps(apps []MECApp) {
+func (simuCl *SimuClient) SetApps(apps []MECApp) {
 	simuCl.Apps = apps
 }
 

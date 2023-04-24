@@ -56,7 +56,7 @@ type ExpResult struct {
 type ExpResultsMeta struct {
 	ExperimentId int            `json:"experiment-id,omitempty"`
 	Type         ExperimentType `json:"type"`
-	Strategy     string         `json:"strategy"`
+	Strategy     string         `json:"strategy,omitempty"`
 	Apps         AppCounter     `json:"apps-number"`
 	Movements    int            `json:"movements"`
 }
