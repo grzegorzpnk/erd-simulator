@@ -42,8 +42,25 @@ func (simuCl *SimuClient) FetchAppsFromNMT() error {
 		return err
 	}
 
-	simuCl.setApps(apps)
+	simuCl.SetApps(apps)
 	simuCl.setPath()
+	return nil
+}
+
+func (simuCl *SimuClient) RecreateInitialPlacementAtNMT() error {
+
+	url := buildRecreateInitialPlacementNMTendpoint()
+
+	resp, err := http.Post(url, "application/json", nil)
+	if err != nil {
+		log.Errorf("Could not make POST request. reason: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
+		return fmt.Errorf("response code [%s] for URL [%s]", resp.Status, url)
+	}
+
 	return nil
 }
 
@@ -68,7 +85,7 @@ func GetAppsFromNMT(endpoint string) ([]MECApp, error) {
 
 }
 
-func (simuCl *SimuClient) setApps(apps []MECApp) {
+func (simuCl *SimuClient) SetApps(apps []MECApp) {
 	simuCl.Apps = apps
 }
 
@@ -88,6 +105,12 @@ func buildNMTendpoint() string {
 	return url
 }
 
+func buildRecreateInitialPlacementNMTendpoint() string {
+	url := config.GetConfiguration().NMTEndpoint
+	url += "/v1/topology/recreate-initial"
+
+	return url
+}
 func (simuCl *SimuClient) GetApps(id string) *MECApp {
 
 	for i, v := range simuCl.Apps {

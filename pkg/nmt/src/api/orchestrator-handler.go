@@ -233,7 +233,10 @@ func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 	if status == true {
 		fmt.Printf("Apps with clusters:\n")
 		for i := 0; i < len(h.graphClient.Application); i++ {
-			h.graphClient.Application[i].PrintApplication()
+			var app model.MECApp
+			app = *h.graphClient.Application[i]
+			h.graphClient.ImmutableApplicationList = append(h.graphClient.ImmutableApplicationList, app)
+			h.graphClient.ImmutableApplicationList[i].PrintApplication()
 		}
 	} else {
 		w.WriteHeader(http.StatusConflict)
@@ -242,6 +245,30 @@ func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.graphClient.InstantiateAllDefinedApps()
+	if err != nil {
+		log.Errorf("Error has been raised: ", err)
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+
+}
+
+func (h *apiHandler) Recreate(w http.ResponseWriter, r *http.Request) {
+
+	//declare
+	w.Header().Set("Content-Type", "application/json")
+
+	//first let's remove all apps from clusters
+	h.graphClient.UninstallAllApps()
+	h.graphClient.Application = nil
+
+	for i := 0; i < len(h.graphClient.ImmutableApplicationList); i++ {
+		app := h.graphClient.ImmutableApplicationList[i]
+		h.graphClient.Application = append(h.graphClient.Application, &app)
+	}
+
+	err := h.graphClient.InstantiateAllDefinedApps()
 	if err != nil {
 		log.Errorf("Error has been raised: ", err)
 		w.WriteHeader(http.StatusConflict)

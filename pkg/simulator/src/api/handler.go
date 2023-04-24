@@ -305,3 +305,117 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	log.Infof("Finished all Experiments (%v), each %v iterations", len(experiments), experiments[0].ExperimentDetails.MovementsInExperiment)
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var experimentDetails ExperimentDetails
+	err0 := json.NewDecoder(r.Body).Decode(&experimentDetails)
+	if err0 != nil {
+		log.Errorf("Cannot parse experiment intent. Error: %v", err0.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var experiments []ExperimentIntent
+	experiments = declareGlobcomExperiments(experimentDetails)
+	log.Infof("Started new full GLOBECOM experiment with all 4 types: Optimal, EAR, RL-masked, RL-no-masked")
+
+	movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
+	if err != nil {
+		log.Errorf("Could not proceed with experiment. Reason: [movements-in-experiment] %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
+	err = GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
+	if err != nil {
+		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiments[0].ExperimentDetails.InitialAppsNumber.GetTotalAsString())
+	}
+
+	err = h.SimuClient.FetchAppsFromNMT()
+	if err != nil {
+		log.Errorf("Cannot fetch current app list from NMT. Error: %v", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		log.Infof("Initial app list fetched from NMT")
+	}
+
+	trajectory, err := createTrajectory(movements, h)
+	if err != nil {
+		log.Errorf("Cannot create trajectory. Error: %v", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		log.Infof("Trajectory has been created: %v", trajectory)
+	}
+
+	//loop for each experiment defined in method declareExperiments()
+	for z, experiment := range experiments {
+
+		experimentType, err := checkExperimentType(experiment.ExperimentType)
+		if err != nil {
+			log.Errorf("Could not proceed with experiment. Reason: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		log.Infof("Experiment [%v] type: %v", z+1, experiment.ExperimentType)
+
+		//at the beggining let's recreate initial app placement at NMT and fetch
+		err = h.SimuClient.RecreateInitialPlacementAtNMT()
+		if err != nil {
+			log.Errorf("Cannot recreate initial placement and fetch current app list from NMT. Error: %v", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		} else {
+			log.Infof("Initial placement recreated at NMT")
+		}
+
+		err = h.SimuClient.FetchAppsFromNMT()
+		if err != nil {
+			log.Errorf("Cannot recreate initial placement and fetch current app list from NMT. Error: %v", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		} else {
+			log.Infof("Initial app list fetched from NMT")
+		}
+
+		err = resetResultsAtERC()
+		if err != nil {
+			log.Errorf("Cannot reset the results at NMT. Error: %v", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		} else {
+			log.Infof("Results module ready -> cache cleared at NMT")
+		}
+
+		//loop for each sub-experiment defined in method declareExperiments()
+		for i := 1; i < len(trajectory); i++ {
+			status := executeGlobcomExperiment(experiment, h, z, i, experimentType, trajectory[i][0], trajectory[i][1])
+			if status != true {
+				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
+				break
+			}
+
+		}
+
+		appsNumber := experiment.ExperimentDetails.InitialAppsNumber
+		err = h.ResultClient.CollectExperimentStats(experimentType, "", appsNumber, movements)
+		if err != nil {
+			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		h.ResultClient.IncExpId()
+		log.Infof("Finished Experiment [%v] type: %v", z+1, experiment.ExperimentType)
+	}
+	log.Infof("Finished all Experiments (%v), each %v iterations", len(experiments), experiments[0].ExperimentDetails.MovementsInExperiment)
+	w.WriteHeader(http.StatusOK)
+}

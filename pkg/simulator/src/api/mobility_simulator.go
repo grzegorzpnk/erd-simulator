@@ -5,12 +5,11 @@ import (
 	log "simu/src/logger"
 	"simu/src/pkg/model"
 	"strconv"
-	"time"
 )
 
 func (h *apiHandler) generateUserToMove() string {
 
-	rand.Seed(time.Now().UnixNano())
+	//rand.Seed(time.Now().UnixNano())
 	return strconv.Itoa(rand.Intn(len(h.SimuClient.Apps)) + 1)
 }
 

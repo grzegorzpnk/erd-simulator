@@ -11,10 +11,11 @@ import (
 )
 
 type Graph struct {
-	MecHosts     []*model.MecHost
-	Edges        []*model.Edge
-	NetworkCells []*model.Cell
-	Application  []*model.MECApp
+	MecHosts                 []*model.MecHost
+	Edges                    []*model.Edge
+	NetworkCells             []*model.Cell
+	Application              []*model.MECApp
+	ImmutableApplicationList []model.MECApp
 }
 
 func (g *Graph) GetMecHost(clusterName, clusterProvider string) *model.MecHost {
@@ -303,6 +304,7 @@ func (g *Graph) UninstallAllApps() {
 func (g *Graph) DeleteAllDeclaredApps() {
 
 	g.Application = nil
+	g.ImmutableApplicationList = nil
 }
 
 func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
