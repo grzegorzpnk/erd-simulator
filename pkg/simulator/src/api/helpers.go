@@ -492,6 +492,7 @@ func createTrajectory(movements int, h *apiHandler) ([][]int, error) {
 		app := h.SimuClient.GetApps(UserID)
 		h.generateTargetCellId(app)
 
+		trajectory[i] = make([]int, 2)
 		trajectory[i][0], _ = strconv.Atoi(UserID)
 		trajectory[i][1], _ = strconv.Atoi(app.UserLocation)
 
