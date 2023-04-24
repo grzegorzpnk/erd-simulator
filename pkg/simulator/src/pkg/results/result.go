@@ -6,47 +6,10 @@ import (
 	"net/http"
 	"os"
 	log "simu/src/logger"
-	"strconv"
+	"simu/src/pkg/model"
 )
 
-type AppType string
-
-const (
-	CG  AppType = "10"
-	V2X AppType = "15"
-	UAV AppType = "30"
-)
-
-type ResultCounter map[AppType]int
-
-type ExperimentType string
-
-const (
-	ExpOptimal      ExperimentType = "optimal"
-	ExpHeuristic    ExperimentType = "heuristic"
-	ExpEarHeuristic ExperimentType = "ear-heuristic"
-	ExpMLMasked     ExperimentType = "ml-masked"
-	ExpMLNonMasked  ExperimentType = "ml-non-masked"
-	ExpNotExists    ExperimentType = ""
-)
-
-func GetExpTypes() []ExperimentType {
-	return []ExperimentType{ExpOptimal, ExpHeuristic, ExpEarHeuristic, ExpMLMasked, ExpMLNonMasked}
-}
-
-type AppCounter struct {
-	Cg  int `json:"cg"`
-	V2x int `json:"v2x"`
-	Uav int `json:"uav"`
-}
-
-func (ac *AppCounter) GetTotal() int {
-	return ac.Cg + ac.V2x + ac.Uav
-}
-
-func (ac *AppCounter) GetTotalAsString() string {
-	return strconv.Itoa(ac.Cg + ac.V2x + ac.Uav)
-}
+type ResultCounter map[model.AppType]int
 
 type ExpResult struct {
 	Metadata ExpResultsMeta `json:"metadata"`
@@ -54,11 +17,11 @@ type ExpResult struct {
 }
 
 type ExpResultsMeta struct {
-	ExperimentId int            `json:"experiment-id,omitempty"`
-	Type         ExperimentType `json:"type"`
-	Strategy     string         `json:"strategy,omitempty"`
-	Apps         AppCounter     `json:"apps-number"`
-	Movements    int            `json:"movements"`
+	ExperimentId int                      `json:"experiment-id,omitempty"`
+	Type         model.ExperimentType     `json:"type"`
+	Strategy     model.ExperimentStrategy `json:"strategy,omitempty"`
+	Apps         model.AppCounter         `json:"apps-number"`
+	Movements    int                      `json:"movements"`
 }
 
 type ExpResultsData struct {

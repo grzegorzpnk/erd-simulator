@@ -46,53 +46,24 @@ func (h *apiHandler) generateChartPkg(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	basePath := "results"
-	iter := "iterations"
-	aggr := "aggregated"
-	mecs := "mec-hosts"
+	apps := "apps"
+	mecs := "mecs"
 
-	err := h.ResultClient.GenerateChartPkgApps(results.RelocationRates, basePath+"/"+iter)
+	err := h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgApps(results.SkippedRates, basePath+"/"+iter)
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationSuccessfulSearchRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgApps(results.RedundantRates, basePath+"/"+iter)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgApps(results.FailedRates, basePath+"/"+iter)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+aggr)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationSuccessfulSearchRates, basePath+"/"+aggr)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationRejectionRates, basePath+"/"+aggr)
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationRejectionRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -119,29 +90,27 @@ func (h *apiHandler) generateChartPkg(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var intent ExperimentIntent
+	var expIntent model.ExperimentIntent
 
-	err0 := json.NewDecoder(r.Body).Decode(&intent)
+	err0 := json.NewDecoder(r.Body).Decode(&expIntent)
 	if err0 != nil {
 		log.Errorf("Cannot parse experiment intent. Error: %v", err0.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	if !reflect.ValueOf(intent).FieldByName("Weights").IsZero() {
-		strategy := specifyStrategy(intent.Weights)
-		log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, intent.ExperimentType, strategy)
+	if !reflect.ValueOf(expIntent).FieldByName("Weights").IsZero() {
+		strategy := specifyStrategy(expIntent.Weights)
+		log.Infof("Starting Experiment [%v] type: %v, strategy: %v ", 1, expIntent.ExperimentType, strategy)
 	}
 
-	log.Infof("Starting Experiment [%v] type: %v", 1, intent.ExperimentType)
-	experimentType, err := checkExperimentType(intent.ExperimentType)
+	log.Infof("Starting Experiment [%v] type: %v", 1, expIntent.ExperimentType)
+	err := checkExperimentType(expIntent.ExperimentType)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	appsNumber := intent.ExperimentDetails.InitialAppsNumber
 
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
@@ -149,23 +118,23 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	movementsInExperiment, err := strconv.Atoi(intent.ExperimentDetails.MovementsInExperiment)
+	movementsInExperiment, err := strconv.Atoi(expIntent.ExperimentDetails.MovementsInExperiment)
 	if err != nil {
 		log.Errorf("Could not proceed with experiment. Reason: [experiments-iterations] %v", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	log.Infof("Started new experiment: %v, with %v relocations", experimentType, movementsInExperiment)
+	log.Infof("Started new experiment: [T:%v][S:%v], with %v relocations", expIntent.ExperimentType, expIntent.ExperimentStrategy, movementsInExperiment)
 
 	//at the beggining let's synchro latest placement at nmt
-	err = GenerateInitialAppPlacementAtNMT(intent.ExperimentDetails.InitialAppsNumber)
+	err = GenerateInitialAppPlacementAtNMT(expIntent.ExperimentDetails.InitialAppsNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", intent.ExperimentDetails.InitialAppsNumber.GetTotalAsString())
+		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", expIntent.ExperimentDetails.InitialAppsNumber.GetTotalAsString())
 	}
 
 	err = h.SimuClient.FetchAppsFromNMT()
@@ -188,7 +157,7 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 
 	//loop for each movementsInExperiment defined in intent
 	for i := 0; i < movementsInExperiment; i++ {
-		status := executeExperiment(intent, h, 1, i, experimentType)
+		status := h.executeExperiment(expIntent, 1, i)
 		if status != true {
 			log.Error("Experiment cannot be coninued due to error in one of the iterations")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -196,7 +165,7 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 		}
 	}
 
-	err = h.ResultClient.CollectExperimentStats(experimentType, "null", appsNumber, movementsInExperiment)
+	err = h.ResultClient.CollectExperimentStats(expIntent)
 	if err != nil {
 		log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -210,7 +179,7 @@ func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Requ
 func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var experimentDetails ExperimentDetails
+	var experimentDetails model.ExperimentDetails
 	err0 := json.NewDecoder(r.Body).Decode(&experimentDetails)
 	if err0 != nil {
 		log.Errorf("Cannot parse experiment intent. Error: %v", err0.Error())
@@ -220,7 +189,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("%+v, total: %v", experimentDetails, experimentDetails.InitialAppsNumber.GetTotal())
 
-	var experiments []ExperimentIntent
+	var experiments []model.ExperimentIntent
 
 	experiments = declareExperiments(experimentDetails)
 
@@ -229,7 +198,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 	//loop for each experiment defined in method declareExperiments()
 	for z, experiment := range experiments {
 
-		experimentType, err := checkExperimentType(experiment.ExperimentType)
+		err := checkExperimentType(experiment.ExperimentType)
 		if err != nil {
 			log.Errorf("Could not proceed with experiment. Reason: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
@@ -239,8 +208,6 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 		strategy := specifyStrategy(experiment.Weights)
 
 		log.Infof("Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, strategy)
-
-		appsNumber := experiment.ExperimentDetails.InitialAppsNumber
 
 		if err != nil {
 			log.Errorf("Could not proceed with experiment. Reason: [apps-number] %v", err)
@@ -285,7 +252,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		//loop for each sub-experiment defined in method declareExperiments()
 		for i := 0; i < experimentIterations; i++ {
-			status := executeExperiment(experiment, h, z, i, experimentType)
+			status := h.executeExperiment(experiment, z, i)
 			if status != true {
 				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
 				break
@@ -293,7 +260,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		err = h.ResultClient.CollectExperimentStats(experimentType, strategy, appsNumber, experimentIterations)
+		err = h.ResultClient.CollectExperimentStats(experiment)
 		if err != nil {
 			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -309,7 +276,7 @@ func (h *apiHandler) conductExperiment(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var experimentDetails ExperimentDetails
+	var experimentDetails model.ExperimentDetails
 	err0 := json.NewDecoder(r.Body).Decode(&experimentDetails)
 	if err0 != nil {
 		log.Errorf("Cannot parse experiment intent. Error: %v", err0.Error())
@@ -317,7 +284,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	var experiments []ExperimentIntent
+	var experiments []model.ExperimentIntent
 	experiments = declareGlobcomExperiments(experimentDetails)
 	log.Infof("Started new full GLOBECOM experiment with all 4 types: Optimal, EAR, RL-masked, RL-no-masked")
 
@@ -359,7 +326,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	//loop for each experiment defined in method declareExperiments()
 	for z, experiment := range experiments {
 
-		experimentType, err := checkExperimentType(experiment.ExperimentType)
+		err := checkExperimentType(experiment.ExperimentType)
 		if err != nil {
 			log.Errorf("Could not proceed with experiment. Reason: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
@@ -398,7 +365,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 
 		//loop for each sub-experiment defined in method declareExperiments()
 		for i := 1; i < len(trajectory); i++ {
-			status := executeGlobcomExperiment(experiment, h, z, i, experimentType, trajectory[i][0], trajectory[i][1])
+			status := h.executeGlobcomExperiment(experiment, z, i, trajectory[i][0], trajectory[i][1])
 			if status != true {
 				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
 				break
@@ -406,8 +373,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 
 		}
 
-		appsNumber := experiment.ExperimentDetails.InitialAppsNumber
-		err = h.ResultClient.CollectExperimentStats(experimentType, "", appsNumber, movements)
+		err = h.ResultClient.CollectExperimentStats(experiment)
 		if err != nil {
 			log.Errorf("Error: %v. Status code: %v", err, http.StatusInternalServerError)
 			w.WriteHeader(http.StatusInternalServerError)

@@ -1,7 +1,7 @@
 package api
 
 //
-//func executeMLExperiment(h *apiHandler, expIndex, subExpIndex int, experimentType results.ExperimentType) bool {
+//func executeMLExperiment(h *apiHandler, expIndex, subExpIndex int, experimentType model.ExperimentType) bool {
 //
 //	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex+1) + "." + strconv.Itoa(subExpIndex+1) + "] "
 //	//generate number of user to move
@@ -50,7 +50,7 @@ package api
 
 //
 //// SpaceAPP (for single app)  : 1) Required mvCPU 2) required Memory 3) Required Latency 4) Current MEC 5) Current RAN
-//func GenerateMLSmartPlacementIntent(app model.MECApp, experimentType results.ExperimentType) (model.MLSmartPlacementIntent, error) {
+//func GenerateMLSmartPlacementIntent(app model.MECApp, experimentType model.ExperimentType) (model.MLSmartPlacementIntent, error) {
 //	//log.Printf("GenerateSmartPlacementIntent: activity start\n")
 //
 //	var spIntent model.MLSmartPlacementIntent
@@ -244,7 +244,7 @@ package api
 //	return num, nil
 //}
 
-//func checkMLExperimentType(inputType string) (results.ExperimentType, error) {
+//func checkMLExperimentType(inputType string) (model.ExperimentType, error) {
 //	if strings.ToLower(inputType) == "ml-masked" {
 //		return results.ExpMLMasked, nil
 //

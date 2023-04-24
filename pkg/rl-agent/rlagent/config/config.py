@@ -18,8 +18,11 @@ class Config:
         self.logger = logging.getLogger("django")
         self.config = dict(self.read_config_file(config_path))
 
-    def get_model_path(self):
-        return self.config['model_path']
+    def get_model_path(self, mode):
+        if mode == "basic":
+            return self.config['model_path_basic']
+        if mode == "masked":
+            return self.config['model_path_masked']
 
     def read_config_file(self, path):
         try:

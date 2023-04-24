@@ -163,19 +163,17 @@ set bmargin 7
 set ylabel "%s" font 'Helvetica,20'
 set key inside top left horizontal font "Helvetica, 25" width 1.0
 
-plot newhistogram "O-LoadBalancing" font 'Helvetica,17' offset 0,0.7, \
+plot newhistogram "Optimal-Hybrid" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "City-Level" linecolor rgb "black", \
-     newhistogram "O-Latency" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "Heuristic-Hybrid" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "dark-gray", \
-     newhistogram "O-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "ML-Masked" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey", \
-     newhistogram "EAR-Heuristic" font 'Helvetica,17' offset 0,0.7, \
-       '%s' using 2:xticlabels(1) title "" linecolor rgb "black", \
-     newhistogram "H-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "ML-NonMasked" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "" linecolor rgb "black"
 
 exit
-`, title, resType, yLabel, iterFiles[0], iterFiles[1], iterFiles[2], iterFiles[3], iterFiles[4])
+`, title, resType, yLabel, iterFiles[0], iterFiles[1], iterFiles[2], iterFiles[3])
 
 	return script
 }

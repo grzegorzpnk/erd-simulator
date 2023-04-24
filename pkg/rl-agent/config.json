@@ -1,3 +1,4 @@
 {
-  "model_path": "./model"
+  "model_path_basic": "./model-basic",
+  "model_path_masked": "./model-masked"
 }

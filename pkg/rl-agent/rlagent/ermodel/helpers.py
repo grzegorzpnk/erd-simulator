@@ -24,13 +24,13 @@ def validate_body(data: dict):
         return False
 
 
-def make_prediction(model: MaskablePPO, state_t0, mask, use_mask: bool):
+def make_prediction(models: dict, state_t0, mask, use_mask: bool):
     log = logging.getLogger('ermodel')
 
     if use_mask:
-        action, state_t1 = model.predict(state_t0, action_masks=mask)
+        action, state_t1 = models["masked"].predict(state_t0, action_masks=mask)
     else:
-        action, state_t1 = model.predict(state_t0)
+        action, state_t1 = models["basic"].predict(state_t0)
 
     # State representation:
     #   APP  : [0,1] Required mvCPU  [0,2] required Memory [0,3] Required Latency [0,4] Current MEC [0,5] Current RAN

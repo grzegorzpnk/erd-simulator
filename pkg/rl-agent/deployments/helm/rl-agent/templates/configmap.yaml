@@ -10,5 +10,6 @@ metadata:
 data:
   config.json: |
     {
-      "model_path": "{{ .Values.config.modelPath }}"
+      "model_path_basic": "{{ .Values.config.modelPathBasic }}",
+      "model_path_masked": "{{ .Values.config.modelPathMasked }}"
     }
