@@ -196,6 +196,11 @@ func (c *Client) GetRateValue(et model.ExperimentType, strategy model.Experiment
 	return pc.getPercentage()
 }
 
+func (c *Client) GetConfidenceValue() (confidence float64) {
+
+	return
+}
+
 func (c *Client) CollectExperimentStats(exp model.ExperimentIntent) error {
 
 	var ercResults ErdResults

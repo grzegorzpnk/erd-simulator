@@ -14,7 +14,7 @@ COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
 COPY masked_model_trajectory250_steps500k_variableload_newReward.zip model-masked.zip
-COPY masked_model_trajectory250_steps500k_variableload_newReward.zip model-basic.zip
+COPY model-non-masked-25trajectory_newReward_variableloadTest_NONMask_250trajectory_newReward20230425-131627.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
 
