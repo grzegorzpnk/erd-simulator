@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -10,9 +11,7 @@ import (
 	"simu/src/config"
 	log "simu/src/logger"
 	"simu/src/pkg/model"
-	"simu/src/pkg/results"
 	"strconv"
-	"strings"
 )
 
 func GenerateSmartPlacementIntent(app model.MECApp, weights model.Weights) (model.SmartPlacementIntent, error) {
@@ -83,27 +82,17 @@ func GenerateSmartPlacementMLIntent(app model.MECApp) (model.SmartPlacementInten
 	return spIntent, nil
 }
 
-type ExperimentIntent struct {
-	ExperimentType    string            `json:"experiment-type"`
-	ExperimentDetails ExperimentDetails `json:"experiment-details"`
-	Weights           model.Weights     `json:"Weights,omitempty"`
-}
-
-type ExperimentDetails struct {
-	MovementsInExperiment string             `json:"number-of-movements"`
-	InitialAppsNumber     results.AppCounter `json:"initial-apps-number"`
-}
-
 //	type AppCounter struct {
 //		Cg  int `json:"cg"`
 //		V2x int `json:"v2x"`
 //		Uav int `json:"uav"`
 //	}
-func CallPlacementController(intent model.SmartPlacementIntent, experimentType string) (*model.Cluster, error) {
+
+func CallPlacementController(intent model.SmartPlacementIntent, experimentType model.ExperimentType) (*model.Cluster, error) {
 	//	log.Printf("CallPlacementController: function start\n")
 	var resp model.Cluster
 
-	plcCtrlUrl := buildPlcCtrlURL(experimentType)
+	plcCtrlUrl := buildPlcCtrlURL(string(experimentType))
 	data := intent
 
 	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
@@ -185,7 +174,7 @@ func resetResultsAtERC() error {
 
 }
 
-func GenerateInitialAppPlacementAtNMT(appQuantity results.AppCounter) error {
+func GenerateInitialAppPlacementAtNMT(appQuantity model.AppCounter) error {
 
 	url := config.GetConfiguration().NMTEndpoint
 	url += "/v1/topology/prerequesties/"
@@ -212,21 +201,15 @@ func buildOrchestratorURL(app model.MECApp, cluster model.Cluster) string {
 
 }
 
-func checkExperimentType(inputType string) (results.ExperimentType, error) {
-	if strings.ToLower(inputType) == "optimal" {
-		return results.ExpOptimal, nil
+func checkExperimentType(et model.ExperimentType) error {
 
-	} else if strings.ToLower(inputType) == "heuristic" {
-		return results.ExpHeuristic, nil
-	} else if strings.ToLower(inputType) == "ear-heuristic" || strings.ToLower(inputType) == "earheuristic" || strings.ToLower(inputType) == "ear" {
-		return results.ExpEarHeuristic, nil
-	} else if strings.ToLower(inputType) == "ml-masked" || strings.ToLower(inputType) == "mlmasked" {
-		return results.ExpMLMasked, nil
-	} else if strings.ToLower(inputType) == "ml-non-masked" || strings.ToLower(inputType) == "mlnonmasked" {
-		return results.ExpMLNonMasked, nil
+	for _, expType := range model.ExperimentTypes {
+		if et == expType {
+			return nil
+		}
 	}
 
-	return results.ExpNotExists, fmt.Errorf("provided experiment type [%v] in not an option: %v", inputType, results.GetExpTypes())
+	return errors.New(fmt.Sprintf("Expriment Type [%v] does not exist. Valid options: %v", et, model.ExperimentTypes))
 }
 
 func getHttpRespBody(url string) ([]byte, error) {
@@ -268,7 +251,7 @@ func specifyStrategy(weights model.Weights) string {
 	return strategy
 }
 
-func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, subExpIndex int, experimentType results.ExperimentType) bool {
+func (h *apiHandler) executeExperiment(exp model.ExperimentIntent, expIndex, subExpIndex int) bool {
 
 	//log.Infof("Experiment numer: %v", i+1)
 
@@ -279,13 +262,13 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 	// select new position for selected user and add new position to UserPath
 	app := h.SimuClient.GetApps(id)
 	h.generateTargetCellId(app)
-	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
+	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-1], app.UserLocation)
 
 	var spi model.SmartPlacementIntent
 	var err error
 
-	if experimentType == results.ExpOptimal || experimentType == results.ExpEarHeuristic || experimentType == results.ExpHeuristic {
-		spi, err = GenerateSmartPlacementIntent(*app, experiment.Weights)
+	if exp.ExperimentType == model.ExpOptimal || exp.ExperimentType == model.ExpEarHeuristic || exp.ExperimentType == model.ExpHeuristic {
+		spi, err = GenerateSmartPlacementIntent(*app, exp.Weights)
 	} else {
 		spi, err = GenerateSmartPlacementMLIntent(*app)
 	}
@@ -295,7 +278,7 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 	}
 
 	//send request to ERC to select new position
-	cluster, err := CallPlacementController(spi, experiment.ExperimentType)
+	cluster, err := CallPlacementController(spi, exp.ExperimentType)
 
 	if err != nil {
 		log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
@@ -324,21 +307,20 @@ func executeExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, sub
 	return true
 }
 
-func executeGlobcomExperiment(experiment ExperimentIntent, h *apiHandler, expIndex, subExpIndex int,
-	experimentType results.ExperimentType, userID, userPosition int) bool {
+func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expIndex, subExpIndex int, userID, userPosition int) bool {
 
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
 
 	app := h.SimuClient.GetApps(strconv.Itoa(userID))
 	app.UserLocation = strconv.Itoa(userPosition)
 
-	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-2], app.UserLocation)
+	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-1], app.UserLocation)
 
 	var spi model.SmartPlacementIntent
 	var err error
 
-	if experimentType == results.ExpOptimal || experimentType == results.ExpEarHeuristic || experimentType == results.ExpHeuristic {
-		spi, err = GenerateSmartPlacementIntent(*app, experiment.Weights)
+	if exp.ExperimentType == model.ExpOptimal || exp.ExperimentType == model.ExpEarHeuristic || exp.ExperimentType == model.ExpHeuristic {
+		spi, err = GenerateSmartPlacementIntent(*app, exp.Weights)
 	} else {
 		spi, err = GenerateSmartPlacementMLIntent(*app)
 	}
@@ -348,7 +330,7 @@ func executeGlobcomExperiment(experiment ExperimentIntent, h *apiHandler, expInd
 	}
 
 	//send request to ERC to select new position
-	cluster, err := CallPlacementController(spi, experiment.ExperimentType)
+	cluster, err := CallPlacementController(spi, exp.ExperimentType)
 
 	if err != nil {
 		log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
@@ -377,10 +359,10 @@ func executeGlobcomExperiment(experiment ExperimentIntent, h *apiHandler, expInd
 	return true
 }
 
-func declareExperiments(details ExperimentDetails) []ExperimentIntent {
+func declareExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
 
-	experiments := []ExperimentIntent{}
-	experiment1 := ExperimentIntent{
+	experiments := []model.ExperimentIntent{}
+	experiment1 := model.ExperimentIntent{
 		ExperimentType:    "optimal",
 		ExperimentDetails: details,
 		Weights: model.Weights{
@@ -390,7 +372,7 @@ func declareExperiments(details ExperimentDetails) []ExperimentIntent {
 			MemUtilizationWeight: 0.5,
 		},
 	}
-	experiment2 := ExperimentIntent{
+	experiment2 := model.ExperimentIntent{
 		ExperimentType:    "optimal",
 		ExperimentDetails: details,
 		Weights: model.Weights{
@@ -400,7 +382,7 @@ func declareExperiments(details ExperimentDetails) []ExperimentIntent {
 			MemUtilizationWeight: 0,
 		},
 	}
-	experiment3 := ExperimentIntent{
+	experiment3 := model.ExperimentIntent{
 		ExperimentType:    "optimal",
 		ExperimentDetails: details,
 		Weights: model.Weights{
@@ -410,7 +392,7 @@ func declareExperiments(details ExperimentDetails) []ExperimentIntent {
 			MemUtilizationWeight: 0.5,
 		},
 	}
-	experiment4 := ExperimentIntent{
+	experiment4 := model.ExperimentIntent{
 		ExperimentType:    "heuristic",
 		ExperimentDetails: details,
 		Weights: model.Weights{
@@ -420,7 +402,7 @@ func declareExperiments(details ExperimentDetails) []ExperimentIntent {
 			MemUtilizationWeight: 0.5,
 		},
 	}
-	experiment5 := ExperimentIntent{
+	experiment5 := model.ExperimentIntent{
 		ExperimentType:    "ear-heuristic",
 		ExperimentDetails: details,
 		Weights: model.Weights{
@@ -435,12 +417,14 @@ func declareExperiments(details ExperimentDetails) []ExperimentIntent {
 	return experiments
 }
 
-func declareGlobcomExperiments(details ExperimentDetails) []ExperimentIntent {
+func declareGlobcomExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
 
-	experiments := []ExperimentIntent{}
-	experiment1 := ExperimentIntent{
-		ExperimentType:    "optimal",
-		ExperimentDetails: details,
+	experiments := []model.ExperimentIntent{}
+
+	experiment1 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
 		Weights: model.Weights{
 			LatencyWeight:        0.5,
 			ResourcesWeight:      0.5,
@@ -448,9 +432,11 @@ func declareGlobcomExperiments(details ExperimentDetails) []ExperimentIntent {
 			MemUtilizationWeight: 0.5,
 		},
 	}
-	experiment2 := ExperimentIntent{
-		ExperimentType:    "heuristic",
-		ExperimentDetails: details,
+
+	experiment2 := model.ExperimentIntent{
+		ExperimentType:     model.ExpHeuristic,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
 		Weights: model.Weights{
 			LatencyWeight:        0.5,
 			ResourcesWeight:      0.5,
@@ -458,15 +444,20 @@ func declareGlobcomExperiments(details ExperimentDetails) []ExperimentIntent {
 			MemUtilizationWeight: 0.5,
 		},
 	}
-	experiment3 := ExperimentIntent{
-		ExperimentType:    "ml-masked",
-		ExperimentDetails: details,
+
+	experiment3 := model.ExperimentIntent{
+		ExperimentType:     model.ExpMLMasked,
+		ExperimentStrategy: model.StrML,
+		ExperimentDetails:  details,
 	}
-	experiment4 := ExperimentIntent{
-		ExperimentType:    "ml-non-masked",
-		ExperimentDetails: details,
+
+	experiment4 := model.ExperimentIntent{
+		ExperimentType:     model.ExpMLNonMasked,
+		ExperimentStrategy: model.StrML,
+		ExperimentDetails:  details,
 	}
-	//experiment5 := ExperimentIntent{
+
+	//experiment5 := model.ExperimentIntent{
 	//	ExperimentType:    "ear-heuristic",
 	//	ExperimentDetails: details,
 	//	Weights: model.Weights{
@@ -476,6 +467,7 @@ func declareGlobcomExperiments(details ExperimentDetails) []ExperimentIntent {
 	//		MemUtilizationWeight: 0.5,
 	//	},
 	//}
+
 	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
 
 	return experiments
@@ -501,7 +493,7 @@ func createTrajectory(movements int, h *apiHandler) ([][]int, error) {
 	return trajectory, nil
 }
 
-func DeclareApplications(ac results.AppCounter) []model.MECApp {
+func DeclareApplications(ac model.AppCounter) []model.MECApp {
 
 	var mecList []model.MECApp
 

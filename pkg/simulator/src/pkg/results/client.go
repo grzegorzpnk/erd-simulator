@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"simu/src/config"
+	log "simu/src/logger"
+	"simu/src/pkg/model"
+	"strconv"
 	"strings"
 )
 
@@ -38,10 +41,10 @@ func (c *Client) GetMecUtilizationSingleExperiment(expId int, mecType MecType) f
 }
 
 // GetMecUtilizationAggregated returns aggregated value of resource (cpu/memory) utilization for specific:
-//		- et		ExperimentType
-//		- strategy	string
-//		- mt		MecType
-func (c *Client) GetMecUtilizationAggregated(et ExperimentType, strategy string, mt MecType, resType string) float64 {
+//   - et		ExperimentType
+//   - strategy	string
+//   - mt		MecType
+func (c *Client) GetMecUtilizationAggregated(et model.ExperimentType, strategy model.ExperimentStrategy, mt MecType, resType string) float64 {
 	var okResults []ExpResult
 
 	for _, result := range c.GetResults() {
@@ -49,6 +52,9 @@ func (c *Client) GetMecUtilizationAggregated(et ExperimentType, strategy string,
 			okResults = append(okResults, result)
 		}
 	}
+
+	log.Infof("[GenerateCharts][GetMecUtilAggr] Found %v results for [Exp:%v][Str:%v][Mec:%v][Res:%v]",
+		len(okResults), et, strategy, mt, resType)
 
 	var pc percentageCounter
 
@@ -105,14 +111,17 @@ func (c *Client) GetMecUtilizationAggregated(et ExperimentType, strategy string,
 	return pc.getPercentage()
 }
 
-func (c *Client) GetRateValue(expType ExperimentType, strategy string, eventType string, appType AppType) float64 {
+func (c *Client) GetRateValue(et model.ExperimentType, strategy model.ExperimentStrategy, eventType string, appType model.AppType) float64 {
 	var okResults []ExpResult
 
 	for _, result := range c.GetResults() {
-		if result.Metadata.Type == expType && result.Metadata.Strategy == strategy {
+		if result.Metadata.Type == et && result.Metadata.Strategy == strategy {
 			okResults = append(okResults, result)
 		}
 	}
+
+	log.Infof("[GenerateCharts][GetRateValue] Found %v results for [Exp:%v][Str:%v][Eve:%v][App:%v]",
+		len(okResults), et, strategy, eventType, appType)
 
 	var pc percentageCounter
 
@@ -120,65 +129,65 @@ func (c *Client) GetRateValue(expType ExperimentType, strategy string, eventType
 		switch strings.ToLower(eventType) {
 		case "successful":
 			switch appType {
-			case CG:
-				pc.total += float64(result.Data.Erd.Successful[CG])
-				pc.total += float64(result.Data.Erd.Redundant[CG])
+			case model.CG:
+				pc.total += float64(result.Data.Erd.Successful[model.CG])
+				pc.total += float64(result.Data.Erd.Redundant[model.CG])
 				pc.divisor += float64(result.Metadata.Movements)
-			case V2X:
-				pc.total += float64(result.Data.Erd.Successful[V2X])
-				pc.total += float64(result.Data.Erd.Redundant[V2X])
+			case model.V2X:
+				pc.total += float64(result.Data.Erd.Successful[model.V2X])
+				pc.total += float64(result.Data.Erd.Redundant[model.V2X])
 				pc.divisor += float64(result.Metadata.Movements)
-			case UAV:
-				pc.total += float64(result.Data.Erd.Successful[UAV])
-				pc.total += float64(result.Data.Erd.Redundant[UAV])
+			case model.UAV:
+				pc.total += float64(result.Data.Erd.Successful[model.UAV])
+				pc.total += float64(result.Data.Erd.Redundant[model.UAV])
 				pc.divisor += float64(result.Metadata.Movements)
 			}
 		case "triggering":
 			switch appType {
-			case CG:
-				pc.total += float64(result.Data.Erd.Successful[CG])
+			case model.CG:
+				pc.total += float64(result.Data.Erd.Successful[model.CG])
 				pc.divisor += float64(result.Metadata.Movements)
-			case V2X:
-				pc.total += float64(result.Data.Erd.Successful[V2X])
+			case model.V2X:
+				pc.total += float64(result.Data.Erd.Successful[model.V2X])
 				pc.divisor += float64(result.Metadata.Movements)
-			case UAV:
-				pc.total += float64(result.Data.Erd.Successful[UAV])
+			case model.UAV:
+				pc.total += float64(result.Data.Erd.Successful[model.UAV])
 				pc.divisor += float64(result.Metadata.Movements)
 			}
 		case "failed":
 			switch appType {
-			case CG:
-				pc.total += float64(result.Data.Erd.Failed[CG])
+			case model.CG:
+				pc.total += float64(result.Data.Erd.Failed[model.CG])
 				pc.divisor += float64(result.Metadata.Movements)
-			case V2X:
-				pc.total += float64(result.Data.Erd.Failed[V2X])
+			case model.V2X:
+				pc.total += float64(result.Data.Erd.Failed[model.V2X])
 				pc.divisor += float64(result.Metadata.Movements)
-			case UAV:
-				pc.total += float64(result.Data.Erd.Failed[UAV])
+			case model.UAV:
+				pc.total += float64(result.Data.Erd.Failed[model.UAV])
 				pc.divisor += float64(result.Metadata.Movements)
 			}
 		case "redundant":
 			switch appType {
-			case CG:
-				pc.total += float64(result.Data.Erd.Redundant[CG])
+			case model.CG:
+				pc.total += float64(result.Data.Erd.Redundant[model.CG])
 				pc.divisor += float64(result.Metadata.Movements)
-			case V2X:
-				pc.total += float64(result.Data.Erd.Redundant[V2X])
+			case model.V2X:
+				pc.total += float64(result.Data.Erd.Redundant[model.V2X])
 				pc.divisor += float64(result.Metadata.Movements)
-			case UAV:
-				pc.total += float64(result.Data.Erd.Redundant[UAV])
+			case model.UAV:
+				pc.total += float64(result.Data.Erd.Redundant[model.UAV])
 				pc.divisor += float64(result.Metadata.Movements)
 			}
 		case "skipped":
 			switch appType {
-			case CG:
-				pc.total += float64(result.Data.Erd.Skipped[CG])
+			case model.CG:
+				pc.total += float64(result.Data.Erd.Skipped[model.CG])
 				pc.divisor += float64(result.Metadata.Movements)
-			case V2X:
-				pc.total += float64(result.Data.Erd.Skipped[V2X])
+			case model.V2X:
+				pc.total += float64(result.Data.Erd.Skipped[model.V2X])
 				pc.divisor += float64(result.Metadata.Movements)
-			case UAV:
-				pc.total += float64(result.Data.Erd.Skipped[UAV])
+			case model.UAV:
+				pc.total += float64(result.Data.Erd.Skipped[model.UAV])
 				pc.divisor += float64(result.Metadata.Movements)
 			}
 		}
@@ -187,7 +196,8 @@ func (c *Client) GetRateValue(expType ExperimentType, strategy string, eventType
 	return pc.getPercentage()
 }
 
-func (c *Client) CollectExperimentStats(expType ExperimentType, strategy string, appsNum AppCounter, expNum int) error {
+func (c *Client) CollectExperimentStats(exp model.ExperimentIntent) error {
+
 	var ercResults ErdResults
 	var topoResults TopoResults
 
@@ -214,13 +224,18 @@ func (c *Client) CollectExperimentStats(expType ExperimentType, strategy string,
 		return err
 	}
 
+	mov, err := strconv.Atoi(exp.ExperimentDetails.MovementsInExperiment)
+	if err != nil {
+		return err
+	}
+
 	res := ExpResult{
 		Metadata: ExpResultsMeta{
 			ExperimentId: experimentId,
-			Type:         expType,
-			Strategy:     strategy,
-			Apps:         appsNum,
-			Movements:    expNum,
+			Type:         exp.ExperimentType,
+			Strategy:     exp.ExperimentStrategy,
+			Apps:         exp.ExperimentDetails.InitialAppsNumber,
+			Movements:    mov,
 		},
 		Data: ExpResultsData{
 			Erd:  ercResults,

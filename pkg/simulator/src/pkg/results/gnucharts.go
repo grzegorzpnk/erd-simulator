@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	log "simu/src/logger"
+	"simu/src/pkg/model"
 	"strings"
 )
 
@@ -35,26 +36,26 @@ func (c *Client) GenerateChartPkgMecs(chartType ChartType, basePath string) erro
 
 	var values = [][]float64{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
 
-	// 0 - lb, 1 - lat, 2 - hyb, 3 - ear, 4 - heu | 0 - local, 1 - regional, 2 - central
-	values[0][0] = c.GetMecUtilizationAggregated(ExpOptimal, "lb", MecLocal, resource)
-	values[0][1] = c.GetMecUtilizationAggregated(ExpOptimal, "lb", MecRegional, resource)
-	values[0][2] = c.GetMecUtilizationAggregated(ExpOptimal, "lb", MecCentral, resource)
+	values[0][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecLocal, resource)
+	values[0][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecRegional, resource)
+	values[0][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecCentral, resource)
 
-	values[1][0] = c.GetMecUtilizationAggregated(ExpOptimal, "latency", MecLocal, resource)
-	values[1][1] = c.GetMecUtilizationAggregated(ExpOptimal, "latency", MecRegional, resource)
-	values[1][2] = c.GetMecUtilizationAggregated(ExpOptimal, "latency", MecCentral, resource)
+	values[1][0] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecLocal, resource)
+	values[1][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
+	values[1][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)
 
-	values[2][0] = c.GetMecUtilizationAggregated(ExpOptimal, "hybrid", MecLocal, resource)
-	values[2][1] = c.GetMecUtilizationAggregated(ExpOptimal, "hybrid", MecRegional, resource)
-	values[2][2] = c.GetMecUtilizationAggregated(ExpOptimal, "hybrid", MecCentral, resource)
+	// TODO: Consider EAR-Heuristic as an alternative for Heuristic
+	//values[1][0] = c.GetMecUtilizationAggregated(ExpEarHeuristic, StrHybrid, MecLocal, resource)
+	//values[1][1] = c.GetMecUtilizationAggregated(ExpEarHeuristic, StrHybrid, MecRegional, resource)
+	//values[1][2] = c.GetMecUtilizationAggregated(ExpEarHeuristic, StrHybrid, MecCentral, resource)
 
-	values[3][0] = c.GetMecUtilizationAggregated(ExpEarHeuristic, "hybrid", MecLocal, resource)
-	values[3][1] = c.GetMecUtilizationAggregated(ExpEarHeuristic, "hybrid", MecRegional, resource)
-	values[3][2] = c.GetMecUtilizationAggregated(ExpEarHeuristic, "hybrid", MecCentral, resource)
+	values[2][0] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecLocal, resource)
+	values[2][1] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecRegional, resource)
+	values[2][2] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecCentral, resource)
 
-	values[4][0] = c.GetMecUtilizationAggregated(ExpHeuristic, "hybrid", MecLocal, resource)
-	values[4][1] = c.GetMecUtilizationAggregated(ExpHeuristic, "hybrid", MecRegional, resource)
-	values[4][2] = c.GetMecUtilizationAggregated(ExpHeuristic, "hybrid", MecCentral, resource)
+	values[3][0] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecLocal, resource)
+	values[3][1] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecRegional, resource)
+	values[3][2] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecCentral, resource)
 
 	err := c.genRatesPkgAggregatedMecs(resource, values, basePath)
 	if err != nil {
@@ -66,328 +67,97 @@ func (c *Client) GenerateChartPkgMecs(chartType ChartType, basePath string) erro
 
 func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) error {
 
-	lbIterator, latencyIterator, hybridIterator, earIterator, hybIterator := 0, 0, 0, 0, 0
-	valuesManyIterations := map[int][][]float64{
-		0: initializeEmpty2DArray(),
-		1: initializeEmpty2DArray(),
-		2: initializeEmpty2DArray(),
-		3: initializeEmpty2DArray(),
-		4: initializeEmpty2DArray(),
-	}
-
 	switch chartType {
-	case RelocationRates:
-		for _, result := range c.GetResults() {
-			switch result.Metadata.Type {
-			case ExpOptimal:
-				switch result.Metadata.Strategy {
-				case "lb":
-					if iteratorConstraint(lbIterator) {
-						continue
-					}
-					valuesManyIterations[lbIterator][0][0] = float64(result.Data.Erd.Successful[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][1] = float64(result.Data.Erd.Successful[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][2] = float64(result.Data.Erd.Successful[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][3] = 0 // TODO: confidence
-					lbIterator++
-				case "latency":
-					if iteratorConstraint(latencyIterator) {
-						continue
-					}
-					valuesManyIterations[latencyIterator][1][0] = float64(result.Data.Erd.Successful[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][1] = float64(result.Data.Erd.Successful[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][2] = float64(result.Data.Erd.Successful[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][3] = 0 // TODO: confidence
-					latencyIterator++
-				case "hybrid":
-					if iteratorConstraint(hybridIterator) {
-						continue
-					}
-					valuesManyIterations[hybridIterator][2][0] = float64(result.Data.Erd.Successful[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][1] = float64(result.Data.Erd.Successful[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][2] = float64(result.Data.Erd.Successful[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][3] = 0 // TODO: confidence
-					hybridIterator++
-				}
-			case ExpHeuristic:
-				if iteratorConstraint(earIterator) {
-					continue
-				}
-				valuesManyIterations[earIterator][3][0] = float64(result.Data.Erd.Successful[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][1] = float64(result.Data.Erd.Successful[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][2] = float64(result.Data.Erd.Successful[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][3] = 0 // TODO: confidence
-				earIterator++
-
-			case ExpEarHeuristic:
-				if iteratorConstraint(hybIterator) {
-					continue
-				}
-				valuesManyIterations[hybIterator][4][0] = float64(result.Data.Erd.Successful[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][1] = float64(result.Data.Erd.Successful[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][2] = float64(result.Data.Erd.Successful[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][3] = 0 // TODO: confidence
-				hybIterator++
-			}
-		}
-
-		err := c.genRatesPkgManyIterations("relocations", valuesManyIterations, basePath)
-		return err
-	case SkippedRates:
-		for _, result := range c.GetResults() {
-			switch result.Metadata.Type {
-			case ExpOptimal:
-				switch result.Metadata.Strategy {
-				case "lb":
-					if iteratorConstraint(lbIterator) {
-						continue
-					}
-					valuesManyIterations[lbIterator][0][0] = float64(result.Data.Erd.Skipped[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][1] = float64(result.Data.Erd.Skipped[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][2] = float64(result.Data.Erd.Skipped[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][3] = 0 // TODO: confidence
-					lbIterator++
-				case "latency":
-					if iteratorConstraint(latencyIterator) {
-						continue
-					}
-					valuesManyIterations[latencyIterator][1][0] = float64(result.Data.Erd.Skipped[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][1] = float64(result.Data.Erd.Skipped[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][2] = float64(result.Data.Erd.Skipped[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][3] = 0 // TODO: confidence
-					latencyIterator++
-				case "hybrid":
-					if iteratorConstraint(hybridIterator) {
-						continue
-					}
-					valuesManyIterations[hybridIterator][2][0] = float64(result.Data.Erd.Skipped[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][1] = float64(result.Data.Erd.Skipped[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][2] = float64(result.Data.Erd.Skipped[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][3] = 0 // TODO: confidence
-					hybridIterator++
-				}
-			case ExpHeuristic:
-				if iteratorConstraint(earIterator) {
-					continue
-				}
-				valuesManyIterations[earIterator][3][0] = float64(result.Data.Erd.Skipped[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][1] = float64(result.Data.Erd.Skipped[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][2] = float64(result.Data.Erd.Skipped[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][3] = 0 // TODO: confidence
-				earIterator++
-
-			case ExpEarHeuristic:
-				if iteratorConstraint(hybIterator) {
-					continue
-				}
-				valuesManyIterations[hybIterator][4][0] = float64(result.Data.Erd.Skipped[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][1] = float64(result.Data.Erd.Skipped[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][2] = float64(result.Data.Erd.Skipped[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][3] = 0 // TODO: confidence
-				hybIterator++
-			}
-		}
-
-		err := c.genRatesPkgManyIterations("skipped", valuesManyIterations, basePath)
-		return err
-	case RedundantRates:
-		for _, result := range c.GetResults() {
-			switch result.Metadata.Type {
-			case ExpOptimal:
-				switch result.Metadata.Strategy {
-				case "lb":
-					if iteratorConstraint(lbIterator) {
-						continue
-					}
-					valuesManyIterations[lbIterator][0][0] = float64(result.Data.Erd.Redundant[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][1] = float64(result.Data.Erd.Redundant[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][2] = float64(result.Data.Erd.Redundant[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][3] = 0 // TODO: confidence
-					lbIterator++
-				case "latency":
-					if iteratorConstraint(latencyIterator) {
-						continue
-					}
-					valuesManyIterations[latencyIterator][1][0] = float64(result.Data.Erd.Redundant[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][1] = float64(result.Data.Erd.Redundant[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][2] = float64(result.Data.Erd.Redundant[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][3] = 0 // TODO: confidence
-					latencyIterator++
-				case "hybrid":
-					if iteratorConstraint(hybridIterator) {
-						continue
-					}
-					valuesManyIterations[hybridIterator][2][0] = float64(result.Data.Erd.Redundant[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][1] = float64(result.Data.Erd.Redundant[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][2] = float64(result.Data.Erd.Redundant[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][3] = 0 // TODO: confidence
-					hybridIterator++
-				}
-			case ExpHeuristic:
-				if iteratorConstraint(earIterator) {
-					continue
-				}
-				valuesManyIterations[earIterator][3][0] = float64(result.Data.Erd.Redundant[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][1] = float64(result.Data.Erd.Redundant[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][2] = float64(result.Data.Erd.Redundant[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][3] = 0 // TODO: confidence
-				earIterator++
-
-			case ExpEarHeuristic:
-				if iteratorConstraint(hybIterator) {
-					continue
-				}
-				valuesManyIterations[hybIterator][4][0] = float64(result.Data.Erd.Redundant[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][1] = float64(result.Data.Erd.Redundant[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][2] = float64(result.Data.Erd.Redundant[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][3] = 0 // TODO: confidence
-				hybIterator++
-			}
-		}
-
-		err := c.genRatesPkgManyIterations("redundant", valuesManyIterations, basePath)
-		return err
-	case FailedRates:
-		for _, result := range c.GetResults() {
-			switch result.Metadata.Type {
-			case ExpOptimal:
-				switch result.Metadata.Strategy {
-				case "lb":
-					if iteratorConstraint(lbIterator) {
-						continue
-					}
-					valuesManyIterations[lbIterator][0][0] = float64(result.Data.Erd.Failed[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][1] = float64(result.Data.Erd.Failed[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][2] = float64(result.Data.Erd.Failed[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[lbIterator][0][3] = 0 // TODO: confidence
-					lbIterator++
-				case "latency":
-					if iteratorConstraint(latencyIterator) {
-						continue
-					}
-					valuesManyIterations[latencyIterator][1][0] = float64(result.Data.Erd.Failed[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][1] = float64(result.Data.Erd.Failed[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][2] = float64(result.Data.Erd.Failed[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[latencyIterator][1][3] = 0 // TODO: confidence
-					latencyIterator++
-				case "hybrid":
-					if iteratorConstraint(hybridIterator) {
-						continue
-					}
-					valuesManyIterations[hybridIterator][2][0] = float64(result.Data.Erd.Failed[CG]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][1] = float64(result.Data.Erd.Failed[V2X]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][2] = float64(result.Data.Erd.Failed[UAV]) / float64(result.Metadata.Movements) * 100
-					valuesManyIterations[hybridIterator][2][3] = 0 // TODO: confidence
-					hybridIterator++
-				}
-			case ExpHeuristic:
-				if iteratorConstraint(earIterator) {
-					continue
-				}
-				valuesManyIterations[earIterator][3][0] = float64(result.Data.Erd.Failed[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][1] = float64(result.Data.Erd.Failed[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][2] = float64(result.Data.Erd.Failed[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[earIterator][3][3] = 0 // TODO: confidence
-				earIterator++
-
-			case ExpEarHeuristic:
-				if iteratorConstraint(hybIterator) {
-					continue
-				}
-				valuesManyIterations[hybIterator][4][0] = float64(result.Data.Erd.Failed[CG]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][1] = float64(result.Data.Erd.Failed[V2X]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][2] = float64(result.Data.Erd.Failed[UAV]) / float64(result.Metadata.Movements) * 100
-				valuesManyIterations[hybIterator][4][3] = 0 // TODO: confidence
-				hybIterator++
-			}
-		}
-
-		err := c.genRatesPkgManyIterations("failed", valuesManyIterations, basePath)
-		return err
 	case RelocationTriggeringRates:
 		values := initializeEmpty2DArray()
-		values[0][0] = c.GetRateValue(ExpOptimal, "lb", "triggering", CG)
-		values[0][1] = c.GetRateValue(ExpOptimal, "lb", "triggering", V2X)
-		values[0][2] = c.GetRateValue(ExpOptimal, "lb", "triggering", UAV)
+
+		values[0][0] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "triggering", model.CG)
+		values[0][1] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "triggering", model.V2X)
+		values[0][2] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "triggering", model.UAV)
 		values[0][3] = 0 // TODO: confidence
 
-		values[1][0] = c.GetRateValue(ExpOptimal, "latency", "triggering", CG)
-		values[1][1] = c.GetRateValue(ExpOptimal, "latency", "triggering", V2X)
-		values[1][2] = c.GetRateValue(ExpOptimal, "latency", "triggering", UAV)
+		values[1][0] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[1][1] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[1][2] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "triggering", model.UAV)
 		values[1][3] = 0 // TODO: confidence
 
-		values[2][0] = c.GetRateValue(ExpOptimal, "hybrid", "triggering", CG)
-		values[2][1] = c.GetRateValue(ExpOptimal, "hybrid", "triggering", V2X)
-		values[2][2] = c.GetRateValue(ExpOptimal, "hybrid", "triggering", UAV)
+		// TODO: As an alternative to Heuristic we can use EAR-Heuristic?
+		//values[1][0] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "triggering", CG)
+		//values[1][1] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "triggering", V2X)
+		//values[1][2] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "triggering", UAV)
+		//values[1][3] = 0 // TODO: confidence
+
+		values[2][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.CG)
+		values[2][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.V2X)
+		values[2][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.UAV)
 		values[2][3] = 0 // TODO: confidence
 
-		values[3][0] = c.GetRateValue(ExpHeuristic, "hybrid", "triggering", CG)
-		values[3][1] = c.GetRateValue(ExpHeuristic, "hybrid", "triggering", V2X)
-		values[3][2] = c.GetRateValue(ExpHeuristic, "hybrid", "triggering", UAV)
+		values[3][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.CG)
+		values[3][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.V2X)
+		values[3][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.UAV)
 		values[3][3] = 0 // TODO: confidence
-
-		values[4][0] = c.GetRateValue(ExpEarHeuristic, "hybrid", "triggering", CG)
-		values[4][1] = c.GetRateValue(ExpEarHeuristic, "hybrid", "triggering", CG)
-		values[4][2] = c.GetRateValue(ExpEarHeuristic, "hybrid", "triggering", CG)
-		values[4][3] = 0 // TODO: confidence
 
 		err := c.genRatesPkgAggregatedApps("triggering", values, basePath)
 		return err
 	case RelocationRejectionRates:
 		values := initializeEmpty2DArray()
-		values[0][0] = c.GetRateValue(ExpOptimal, "lb", "failed", CG)
-		values[0][1] = c.GetRateValue(ExpOptimal, "lb", "failed", V2X)
-		values[0][2] = c.GetRateValue(ExpOptimal, "lb", "failed", UAV)
+
+		values[0][0] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "failed", model.CG)
+		values[0][1] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "failed", model.V2X)
+		values[0][2] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "failed", model.UAV)
 		values[0][3] = 0 // TODO: confidence
 
-		values[1][0] = c.GetRateValue(ExpOptimal, "latency", "failed", CG)
-		values[1][1] = c.GetRateValue(ExpOptimal, "latency", "failed", V2X)
-		values[1][2] = c.GetRateValue(ExpOptimal, "latency", "failed", UAV)
+		values[1][0] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "failed", model.CG)
+		values[1][1] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[1][2] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "failed", model.UAV)
 		values[1][3] = 0 // TODO: confidence
 
-		values[2][0] = c.GetRateValue(ExpOptimal, "hybrid", "failed", CG)
-		values[2][1] = c.GetRateValue(ExpOptimal, "hybrid", "failed", V2X)
-		values[2][2] = c.GetRateValue(ExpOptimal, "hybrid", "failed", UAV)
+		// TODO: As an alternative to Heuristic we can use EAR-Heuristic?
+		//values[1][0] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "failed", CG)
+		//values[1][1] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "failed", V2X)
+		//values[1][2] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "failed", UAV)
+		//values[1][3] = 0 // TODO: confidence
+
+		values[2][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.CG)
+		values[2][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.V2X)
+		values[2][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.UAV)
 		values[2][3] = 0 // TODO: confidence
 
-		values[3][0] = c.GetRateValue(ExpHeuristic, "hybrid", "failed", CG)
-		values[3][1] = c.GetRateValue(ExpHeuristic, "hybrid", "failed", V2X)
-		values[3][2] = c.GetRateValue(ExpHeuristic, "hybrid", "failed", UAV)
+		values[3][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.CG)
+		values[3][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.V2X)
+		values[3][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.UAV)
 		values[3][3] = 0 // TODO: confidence
-
-		values[4][0] = c.GetRateValue(ExpEarHeuristic, "hybrid", "failed", CG)
-		values[4][1] = c.GetRateValue(ExpEarHeuristic, "hybrid", "failed", CG)
-		values[4][2] = c.GetRateValue(ExpEarHeuristic, "hybrid", "failed", CG)
-		values[4][3] = 0 // TODO: confidence
 
 		err := c.genRatesPkgAggregatedApps("rejection", values, basePath)
 		return err
 	case RelocationSuccessfulSearchRates:
 		values := initializeEmpty2DArray()
-		values[0][0] = c.GetRateValue(ExpOptimal, "lb", "successful", CG)
-		values[0][1] = c.GetRateValue(ExpOptimal, "lb", "successful", V2X)
-		values[0][2] = c.GetRateValue(ExpOptimal, "lb", "successful", UAV)
+
+		values[0][0] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "successful", model.CG)
+		values[0][1] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "successful", model.V2X)
+		values[0][2] = c.GetRateValue(model.ExpOptimal, model.StrHybrid, "successful", model.UAV)
 		values[0][3] = 0 // TODO: confidence
 
-		values[1][0] = c.GetRateValue(ExpOptimal, "latency", "successful", CG)
-		values[1][1] = c.GetRateValue(ExpOptimal, "latency", "successful", V2X)
-		values[1][2] = c.GetRateValue(ExpOptimal, "latency", "successful", UAV)
+		values[1][0] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "successful", model.CG)
+		values[1][1] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "successful", model.V2X)
+		values[1][2] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "successful", model.UAV)
 		values[1][3] = 0 // TODO: confidence
 
-		values[2][0] = c.GetRateValue(ExpOptimal, "hybrid", "successful", CG)
-		values[2][1] = c.GetRateValue(ExpOptimal, "hybrid", "successful", V2X)
-		values[2][2] = c.GetRateValue(ExpOptimal, "hybrid", "successful", UAV)
+		// TODO: As an alternative to Heuristic we can use EAR-Heuristic?
+		//values[1][0] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "successful", CG)
+		//values[1][1] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "successful", V2X)
+		//values[1][2] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "successful", UAV)
+		//values[1][3] = 0 // TODO: confidence
+
+		values[2][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.CG)
+		values[2][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.V2X)
+		values[2][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.UAV)
 		values[2][3] = 0 // TODO: confidence
 
-		values[3][0] = c.GetRateValue(ExpHeuristic, "hybrid", "successful", CG)
-		values[3][1] = c.GetRateValue(ExpHeuristic, "hybrid", "successful", V2X)
-		values[3][2] = c.GetRateValue(ExpHeuristic, "hybrid", "successful", UAV)
+		values[3][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.CG)
+		values[3][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.V2X)
+		values[3][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.UAV)
 		values[3][3] = 0 // TODO: confidence
-
-		values[4][0] = c.GetRateValue(ExpEarHeuristic, "hybrid", "successful", CG)
-		values[4][1] = c.GetRateValue(ExpEarHeuristic, "hybrid", "successful", CG)
-		values[4][2] = c.GetRateValue(ExpEarHeuristic, "hybrid", "successful", CG)
-		values[4][3] = 0 // TODO: confidence
 
 		err := c.genRatesPkgAggregatedApps("successful-search", values, basePath)
 		return err
@@ -399,7 +169,7 @@ func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) erro
 func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, basePath string) error {
 	mecTypeLabels := []string{"City-Level", "Regional-Level", "International-Level"}
 
-	iterFiles := []string{"o-lb.dat", "o-lat.dat", "o-hyb.dat", "ear.dat", "h-hyb.dat"}
+	iterFiles := []string{"algorithm1.dat", "algorithm2.dat", "algorithm3.dat", "algorithm4.dat"}
 
 	pkgPath := resType + "-aggregated-rates"
 	scriptName := "_" + resType + "-aggregated.sh"
@@ -412,7 +182,7 @@ func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, b
 		return err
 	}
 
-	for i := 0; i < 5; i++ {
+	for i := range iterFiles {
 		iter, err := os.Create(filepath.Join(basePath+"/"+pkgPath, filepath.Base(iterFiles[i])))
 		defer iter.Close()
 		if err != nil {
@@ -439,7 +209,7 @@ func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, b
 }
 
 func (c *Client) genRatesPkgAggregatedApps(ratesType string, values [][]float64, basePath string) error {
-	expLabels := []string{"O-LoadBalancing", "O-Latency", "O-Hybrid", "EAR-Heuristic", "H-Hybrid"}
+	expLabels := []string{"Optimal-Hybrid", "Heuristic-Hybrid", "ML-Masked", "ML-NonMasked"}
 
 	iterFile := ratesType + ".dat"
 

@@ -13,9 +13,11 @@ COPY get-prediction-schema.json ./json-schemas/
 COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
-COPY masked_model_trajectory25_steps500k_variableload.zip model.zip
+COPY masked_model_trajectory250_steps500k_variableload_newReward.zip model-masked.zip
+COPY masked_model_trajectory250_steps500k_variableload_newReward.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
+
 
 # Runtime stage
 FROM python:3.8.12-slim-buster

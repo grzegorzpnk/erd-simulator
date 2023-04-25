@@ -8,7 +8,8 @@ image:
 workingDir: "/app"
 command: "/app/start-server.sh"
 config:
-  modelPath: "/app/model"
+  modelPathBasic: "/app/model-basic"
+  modelPathMasked: "/app/model-masked"
 
 podAnnotations: {}
 podSecurityContext: {}

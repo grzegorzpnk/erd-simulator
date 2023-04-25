@@ -4,7 +4,7 @@ package api
 //func (h *apiHandler) conductMLExperiment(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", "application/json")
 //
-//	var intent ExperimentIntent
+//	var intent model.ExperimentIntent
 //
 //	err0 := json.NewDecoder(r.Body).Decode(&intent)
 //	if err0 != nil {
@@ -85,7 +85,7 @@ package api
 ///// function for debugging purposes only
 //func (h *apiHandler) stateTest(w http.ResponseWriter, r *http.Request) {
 //
-//	var intent ExperimentIntent
+//	var intent model.ExperimentIntent
 //
 //	err0 := json.NewDecoder(r.Body).Decode(&intent)
 //	if err0 != nil {
