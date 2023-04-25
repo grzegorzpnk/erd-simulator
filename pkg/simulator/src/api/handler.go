@@ -345,6 +345,9 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		return
 	} else {
 		log.Infof("Initial app list fetched from NMT")
+		for i := 0; i < len(h.SimuClient.Apps); i++ {
+			log.Infof("1. Apps[%v]: %v, cluster: %v", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+		}
 	}
 
 	trajectory, err := createTrajectory(movements, h)
@@ -354,6 +357,9 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		return
 	} else {
 		log.Infof("Trajectory has been created: %v", trajectory)
+		for i := 0; i < len(h.SimuClient.Apps); i++ {
+			log.Infof("2. Apps[%v]: %v, cluster: %v ", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+		}
 	}
 
 	//loop for each experiment defined in method declareExperiments()
@@ -386,7 +392,9 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		} else {
 			log.Infof("Initial app list fetched from NMT")
 		}
-
+		for i := 0; i < len(h.SimuClient.Apps); i++ {
+			log.Infof("3. Apps[%v]: %v, cluster: %v ", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+		}
 		err = resetResultsAtERC()
 		if err != nil {
 			log.Errorf("Cannot reset the results at NMT. Error: %v", err.Error())
