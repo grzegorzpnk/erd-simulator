@@ -2,6 +2,6 @@
 
 make all
 
-sudo docker tag erc pmatysiaq/erc:latest
+sudo docker tag erc grzegorzpnk/erc:latest
 
-sudo docker push pmatysiaq/erc:latest
+sudo docker push grzegorzpnk/erc:latest
