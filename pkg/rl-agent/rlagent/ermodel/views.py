@@ -1,6 +1,7 @@
 import logging
 from django.http import HttpRequest, JsonResponse, HttpResponse
 from sb3_contrib import MaskablePPO
+from stable_baselines3 import PPO
 import os
 import sys
 from config import config
@@ -37,7 +38,7 @@ def get_prediction(request: HttpRequest):
 
         cfg = config.Config(os.environ.get('CONFIG_PATH'))
         models = {
-            "basic": MaskablePPO.load(cfg.get_model_path("basic")),
+            "basic": PPO.load(cfg.get_model_path("basic")),
             "masked": MaskablePPO.load(cfg.get_model_path("masked"))
         }
 
