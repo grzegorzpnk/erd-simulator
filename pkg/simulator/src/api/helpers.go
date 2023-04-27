@@ -469,17 +469,6 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		ExperimentDetails:  details,
 	}
 
-	//experiment5 := model.ExperimentIntent{
-	//	ExperimentType:    "ear-heuristic",
-	//	ExperimentDetails: details,
-	//	Weights: model.Weights{
-	//		LatencyWeight:        0.5,
-	//		ResourcesWeight:      0.5,
-	//		CpuUtilizationWeight: 0.5,
-	//		MemUtilizationWeight: 0.5,
-	//	},
-	//}
-
 	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
 
 	return experiments
