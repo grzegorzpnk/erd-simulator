@@ -71,7 +71,7 @@ func (c *Client) GetMecHostsByCellId(id model.CellId) ([]model.MecHost, error) {
 // GetMecHost gets a single MEC Host with provider+cluster identifier
 func (c *Client) GetMecHost(provider, cluster string) (model.MecHost, error) {
 	var mh model.MecHost
-	var mhIdentity model.MecIdentity
+	//var mhIdentity model.MecIdentity
 
 	url, err := c.buildGetMecHostUrl(provider, cluster)
 	if err != nil {
@@ -80,12 +80,12 @@ func (c *Client) GetMecHost(provider, cluster string) (model.MecHost, error) {
 
 	respBody, err := getHTTPRespBody(url)
 
-	if err := json.Unmarshal(respBody, &mhIdentity); err != nil {
+	if err := json.Unmarshal(respBody, &mh); err != nil {
 		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
 		return model.MecHost{}, err
 	}
 
-	mh = model.MecHost{Identity: mhIdentity}
+	//mh = model.MecHost{Identity: mhIdentity}
 
 	return mh, nil
 }
