@@ -446,12 +446,24 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 	}
 
 	experiment3 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment4 := model.ExperimentIntent{
 		ExperimentType:     model.ExpMLMasked,
 		ExperimentStrategy: model.StrML,
 		ExperimentDetails:  details,
 	}
 
-	experiment4 := model.ExperimentIntent{
+	experiment5 := model.ExperimentIntent{
 		ExperimentType:     model.ExpMLNonMasked,
 		ExperimentStrategy: model.StrML,
 		ExperimentDetails:  details,
@@ -468,7 +480,7 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 	//	},
 	//}
 
-	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
 
 	return experiments
 }
