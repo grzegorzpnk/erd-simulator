@@ -44,18 +44,17 @@ func (c *Client) GenerateChartPkgMecs(chartType ChartType, basePath string) erro
 	values[1][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
 	values[1][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)
 
-	// TODO: Consider EAR-Heuristic as an alternative for Heuristic
-	//values[1][0] = c.GetMecUtilizationAggregated(ExpEarHeuristic, StrHybrid, MecLocal, resource)
-	//values[1][1] = c.GetMecUtilizationAggregated(ExpEarHeuristic, StrHybrid, MecRegional, resource)
-	//values[1][2] = c.GetMecUtilizationAggregated(ExpEarHeuristic, StrHybrid, MecCentral, resource)
+	values[2][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecLocal, resource)
+	values[2][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecRegional, resource)
+	values[2][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecCentral, resource)
 
-	values[2][0] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecLocal, resource)
-	values[2][1] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecRegional, resource)
-	values[2][2] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecCentral, resource)
+	values[3][0] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecLocal, resource)
+	values[3][1] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecRegional, resource)
+	values[3][2] = c.GetMecUtilizationAggregated(model.ExpMLMasked, model.StrML, MecCentral, resource)
 
-	values[3][0] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecLocal, resource)
-	values[3][1] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecRegional, resource)
-	values[3][2] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecCentral, resource)
+	values[4][0] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecLocal, resource)
+	values[4][1] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecRegional, resource)
+	values[4][2] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecCentral, resource)
 
 	err := c.genRatesPkgAggregatedMecs(resource, values, basePath)
 	if err != nil {
@@ -81,21 +80,20 @@ func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) erro
 		values[1][2] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "triggering", model.UAV)
 		values[1][3] = 0 // TODO: confidence
 
-		// TODO: As an alternative to Heuristic we can use EAR-Heuristic?
-		//values[1][0] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "triggering", CG)
-		//values[1][1] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "triggering", V2X)
-		//values[1][2] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "triggering", UAV)
-		//values[1][3] = 0 // TODO: confidence
-
-		values[2][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.CG)
-		values[2][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.V2X)
-		values[2][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.UAV)
+		values[2][0] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[2][1] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[2][2] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.UAV)
 		values[2][3] = 0 // TODO: confidence
 
-		values[3][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.CG)
-		values[3][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.V2X)
-		values[3][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.UAV)
+		values[3][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.CG)
+		values[3][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.V2X)
+		values[3][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "triggering", model.UAV)
 		values[3][3] = 0 // TODO: confidence
+
+		values[4][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.CG)
+		values[4][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.V2X)
+		values[4][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "triggering", model.UAV)
+		values[4][3] = 0 // TODO: confidence
 
 		err := c.genRatesPkgAggregatedApps("triggering", values, basePath)
 		return err
@@ -112,21 +110,20 @@ func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) erro
 		values[1][2] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "failed", model.UAV)
 		values[1][3] = 0 // TODO: confidence
 
-		// TODO: As an alternative to Heuristic we can use EAR-Heuristic?
-		//values[1][0] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "failed", CG)
-		//values[1][1] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "failed", V2X)
-		//values[1][2] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "failed", UAV)
-		//values[1][3] = 0 // TODO: confidence
-
-		values[2][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.CG)
-		values[2][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.V2X)
-		values[2][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.UAV)
-		values[2][3] = 0 // TODO: confidence
-
-		values[3][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.CG)
-		values[3][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.V2X)
-		values[3][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.UAV)
+		values[2][0] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "failed", model.CG)
+		values[2][1] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[2][2] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "failed", model.UAV)
 		values[3][3] = 0 // TODO: confidence
+
+		values[3][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.CG)
+		values[3][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.V2X)
+		values[3][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "failed", model.UAV)
+		values[3][3] = 0 // TODO: confidence
+
+		values[4][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.CG)
+		values[4][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.V2X)
+		values[4][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "failed", model.UAV)
+		values[4][3] = 0 // TODO: confidence
 
 		err := c.genRatesPkgAggregatedApps("rejection", values, basePath)
 		return err
@@ -143,21 +140,20 @@ func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) erro
 		values[1][2] = c.GetRateValue(model.ExpHeuristic, model.StrHybrid, "successful", model.UAV)
 		values[1][3] = 0 // TODO: confidence
 
-		// TODO: As an alternative to Heuristic we can use EAR-Heuristic?
-		//values[1][0] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "successful", CG)
-		//values[1][1] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "successful", V2X)
-		//values[1][2] = c.GetRateValue(ExpEarHeuristic, StrHybrid, "successful", UAV)
-		//values[1][3] = 0 // TODO: confidence
-
-		values[2][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.CG)
-		values[2][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.V2X)
-		values[2][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.UAV)
+		values[2][0] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "successful", model.CG)
+		values[2][1] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "successful", model.V2X)
+		values[2][2] = c.GetRateValue(model.ExpEarHeuristic, model.StrHybrid, "successful", model.UAV)
 		values[2][3] = 0 // TODO: confidence
 
-		values[3][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.CG)
-		values[3][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.V2X)
-		values[3][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.UAV)
+		values[3][0] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.CG)
+		values[3][1] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.V2X)
+		values[3][2] = c.GetRateValue(model.ExpMLMasked, model.StrML, "successful", model.UAV)
 		values[3][3] = 0 // TODO: confidence
+
+		values[4][0] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.CG)
+		values[4][1] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.V2X)
+		values[4][2] = c.GetRateValue(model.ExpMLNonMasked, model.StrML, "successful", model.UAV)
+		values[4][3] = 0 // TODO: confidence
 
 		err := c.genRatesPkgAggregatedApps("successful-search", values, basePath)
 		return err
@@ -169,7 +165,7 @@ func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) erro
 func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, basePath string) error {
 	mecTypeLabels := []string{"City-Level", "Regional-Level", "International-Level"}
 
-	iterFiles := []string{"algorithm1.dat", "algorithm2.dat", "algorithm3.dat", "algorithm4.dat"}
+	iterFiles := []string{"algorithm1.dat", "algorithm2.dat", "algorithm3.dat", "algorithm4.dat", "algorithm5.dat"}
 
 	pkgPath := resType + "-aggregated-rates"
 	scriptName := "_" + resType + "-aggregated.sh"
@@ -209,7 +205,7 @@ func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, b
 }
 
 func (c *Client) genRatesPkgAggregatedApps(ratesType string, values [][]float64, basePath string) error {
-	expLabels := []string{"Optimal-Hybrid", "Heuristic-Hybrid", "ML-Masked", "ML-NonMasked"}
+	expLabels := []string{"Optimal", "Heuristic", "EAR-Heuristic", "ML-Masked", "ML-NonMasked"}
 
 	iterFile := ratesType + ".dat"
 
