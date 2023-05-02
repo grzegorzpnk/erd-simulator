@@ -129,6 +129,16 @@ func (h *apiHandler) MLGetRANs(w http.ResponseWriter, r *http.Request) {
 func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	cell := model.CellId("")
+	err := json.NewDecoder(r.Body).Decode(&cell)
+	if err != nil || cell == "" {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	cellINT, _ := strconv.Atoi(string(cell))
+
 	fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
 	response := make([][]int, len(h.graphClient.MecHosts))
 	for i := 0; i < len(response); i++ {
@@ -142,6 +152,7 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
 		response[i][3] = int(v.GetMemoryUtilization() * 100)
 		response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
+		response[i][5] = int(v.LatencyVector[cellINT-1] + 1)
 	}
 
 	fmt.Printf("State of MECs before returning to Simu:\n ")
