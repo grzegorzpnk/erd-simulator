@@ -9,6 +9,7 @@ import (
 )
 
 type MecInfo string
+type CellId string
 type MecType int
 
 type MecHost struct {

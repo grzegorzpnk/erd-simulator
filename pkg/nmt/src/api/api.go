@@ -51,7 +51,7 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/ml/rans", handler.MLGetRANs).Methods("GET")
 
 	//interaction with Simulator in order to preapre ML smart placement intent  for current state of MECs
-	r.HandleFunc(baseUrl+"/topology/ml/get-state", handler.GetCurrentState).Methods("GET")
+	r.HandleFunc(baseUrl+"/topology/ml/get-state", handler.GetCurrentState).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/ml/get-mask", handler.GetCurrentMask).Methods("POST")
 
 	return r

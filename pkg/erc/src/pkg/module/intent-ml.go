@@ -149,7 +149,7 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	url := buildNMTCurrentStateEndpoint()
 	//log.Infof("Asking for MECs config url:, %v     |", url)
 
-	mecState, err := GetMECsStateFromNMT(url)
+	mecState, err := GetMECsStateFromNMT(url, intent.Spec.SmartPlacementIntentData.TargetCell)
 	if err != nil {
 		return spIntent, err
 	}
@@ -284,19 +284,13 @@ func buildNMTCurrentStateEndpoint() string {
 	return url
 }
 
-func GetMECsStateFromNMT(endpoint string) ([][]int, error) {
+func GetMECsStateFromNMT(endpoint string, cell model.CellId) ([][]int, error) {
 
-	resp, err := http.Get(endpoint)
+	resp, err := postHttpRespBody(endpoint, cell)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln(err)
-		return nil, err
-	}
+	//defer resp.Body.Close()
 
 	//Convert the body to type [][]int
 	stateOfMECs := make([][]int, 22)
@@ -304,7 +298,7 @@ func GetMECsStateFromNMT(endpoint string) ([][]int, error) {
 		stateOfMECs[i] = make([]int, 5)
 	}
 
-	json.Unmarshal(body, &stateOfMECs)
+	json.Unmarshal(resp, &stateOfMECs)
 	return stateOfMECs, nil
 
 }
