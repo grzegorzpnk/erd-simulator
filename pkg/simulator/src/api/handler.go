@@ -372,7 +372,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		}
 
 		//loop for each sub-experiment defined in method declareExperiments()
-		for i := 1; i < len(trajectory); i++ {
+		for i := 0; i < len(trajectory); i++ {
 			status := h.executeGlobcomExperiment(experiment, z, i, trajectory[i][0], trajectory[i][1])
 			if status != true {
 				log.Error("Experiment cannot be coninued due to error in one of the iterations, skip this and let's go to next experiment")
