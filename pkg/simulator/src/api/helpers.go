@@ -433,17 +433,17 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		},
 	}
 
-	experiment2 := model.ExperimentIntent{
-		ExperimentType:     model.ExpHeuristic,
-		ExperimentStrategy: model.StrHybrid,
-		ExperimentDetails:  details,
-		Weights: model.Weights{
-			LatencyWeight:        0.5,
-			ResourcesWeight:      0.5,
-			CpuUtilizationWeight: 0.5,
-			MemUtilizationWeight: 0.5,
-		},
-	}
+	//experiment2 := model.ExperimentIntent{
+	//	ExperimentType:     model.ExpHeuristic,
+	//	ExperimentStrategy: model.StrHybrid,
+	//	ExperimentDetails:  details,
+	//	Weights: model.Weights{
+	//		LatencyWeight:        0.5,
+	//		ResourcesWeight:      0.5,
+	//		CpuUtilizationWeight: 0.5,
+	//		MemUtilizationWeight: 0.5,
+	//	},
+	//}
 
 	experiment3 := model.ExperimentIntent{
 		ExperimentType:     model.ExpEarHeuristic,
@@ -463,18 +463,18 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		ExperimentDetails:  details,
 	}
 
-	experiment5 := model.ExperimentIntent{
-		ExperimentType:     model.ExpMLNonMasked,
-		ExperimentStrategy: model.StrML,
-		ExperimentDetails:  details,
-	}
+	//experiment5 := model.ExperimentIntent{
+	//	ExperimentType:     model.ExpMLNonMasked,
+	//	ExperimentStrategy: model.StrML,
+	//	ExperimentDetails:  details,
+	//}
 
-	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
+	experiments = append(experiments, experiment1, experiment3, experiment4)
 
 	return experiments
 }
 
-func createTrajectory(movements int, h *apiHandler) ([][]int, error) {
+func (h *apiHandler) createTrajectory(movements int) ([][]int, error) {
 
 	trajectory := make([][]int, movements)
 
