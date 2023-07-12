@@ -359,6 +359,59 @@ func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expInd
 	return true
 }
 
+//copy of executeGlobcomExperiment()
+func (h *apiHandler) executePhDExperiment(exp model.ExperimentIntent, expIndex, subExpIndex int, userID, userPosition int) bool {
+
+	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
+
+	app := h.SimuClient.GetApps(strconv.Itoa(userID))
+	app.UserLocation = strconv.Itoa(userPosition)
+
+	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-1], app.UserLocation)
+
+	var spi model.SmartPlacementIntent
+	var err error
+
+	if exp.ExperimentType == model.ExpOptimal || exp.ExperimentType == model.ExpEarHeuristic || exp.ExperimentType == model.ExpHeuristic {
+		spi, err = GenerateSmartPlacementIntent(*app, exp.Weights)
+	} else {
+		spi, err = GenerateSmartPlacementMLIntent(*app)
+	}
+	if err != nil {
+		log.Errorf("Cannot generate SPI: %v", err.Error())
+		return false
+	}
+
+	//send request to ERC to select new position
+	cluster, err := CallPlacementController(spi, exp.ExperimentType)
+
+	if err != nil {
+		log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
+		log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+		return true
+	}
+
+	if cluster.Cluster == app.ClusterId {
+		log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+		return true
+	}
+
+	log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+
+	//generate request to orchestrator
+	err2 := sendRelocationRequest(*app, *cluster)
+	if err2 != nil {
+		log.Errorf("Cannot relocate app! Error: %v", err2.Error())
+	} else {
+		log.Infof(experimentN + "Application has been relocated in nmt")
+
+		//update cluster in internal app list
+		app.ClusterId = cluster.Cluster
+	}
+
+	return true
+}
+
 func declareExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
 
 	experiments := []model.ExperimentIntent{}
@@ -467,6 +520,75 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		ExperimentType:     model.ExpMLNonMasked,
 		ExperimentStrategy: model.StrML,
 		ExperimentDetails:  details,
+	}
+
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
+
+	return experiments
+}
+
+func declarePhDExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
+
+	experiments := []model.ExperimentIntent{}
+
+	experiment1 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment2 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0,
+			ResourcesWeight:      1,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment3 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrLatency,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        1,
+			ResourcesWeight:      0,
+			CpuUtilizationWeight: 0,
+			MemUtilizationWeight: 0,
+		},
+	}
+
+	experiment4 := model.ExperimentIntent{
+		ExperimentType:     model.ExpHeuristic,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment5 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
 	}
 
 	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
