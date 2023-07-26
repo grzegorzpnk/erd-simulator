@@ -1,9 +1,0 @@
-{{- range $i, $deployment := .Deployments }}
-
----
-# Instantiate
-version: emco/v2
-resourceContext:
-  anchor: projects/{{ $.ProjectName }}/composite-apps/{{ $deployment.CaName }}/v1/deployment-intent-groups/{{ $deployment.DigName }}/instantiate
-
-{{- end }}

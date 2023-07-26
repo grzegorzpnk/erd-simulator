@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: pmatysiaq/simu
+  repository: grzegorzpnk/simu
   pullPolicy: Always
   tag: "latest"
 

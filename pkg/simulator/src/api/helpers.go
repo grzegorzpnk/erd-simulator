@@ -253,8 +253,6 @@ func specifyStrategy(weights model.Weights) string {
 
 func (h *apiHandler) executeExperiment(exp model.ExperimentIntent, expIndex, subExpIndex int) bool {
 
-	//log.Infof("Experiment numer: %v", i+1)
-
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
 	//generate number of user to move
 	id := h.generateUserToMove() //USER==APP

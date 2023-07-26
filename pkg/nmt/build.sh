@@ -2,6 +2,6 @@
 
 make all
 
-sudo docker tag nmt pmatysiaq/nmt:latest
+sudo docker tag nmt grzegorzpnk/nmt:latest
 
-sudo docker push pmatysiaq/nmt:latest
+sudo docker push grzegorzpnk/nmt:latest
