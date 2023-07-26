@@ -9,8 +9,8 @@ workingDir: "/simu"
 command: "./simu"
 config:
   servicePort: 8484
-  nmt_endpoint: "http://10.254.185.60:32139"
-  erc_endpoint: "http://10.254.185.60:32147"
+  nmt_endpoint: "http://10.254.185.111:32139"
+  erc_endpoint: "http://10.254.185.111:32147"
   rl_agent_endpoint: "http://10.254.185.60:32444"
 
 podAnnotations: {}

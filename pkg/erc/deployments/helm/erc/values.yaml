@@ -7,7 +7,7 @@ image:
 
 config:
   servicePort: 8686
-  topologyEndpoint: http://10.254.185.60:32139/v1
+  topologyEndpoint: http://10.254.185.111:32139/v1
   rl_agent_endpoint: http://10.254.185.60:32444
 
 workingDir: "/erc"

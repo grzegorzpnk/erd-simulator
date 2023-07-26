@@ -6,7 +6,8 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
-	gitlab.com/project-emco/core/emco-base/src/orchestrator v0.0.0-00010101000000-000000000000
+	gitlab.com/project-emco/core/emco-base/src/orchestrator v0.0.0-20230724092709-bb2f907a1a20
+
 )
 
 replace (
