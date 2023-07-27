@@ -64,6 +64,46 @@ func (c *Client) GenerateChartPkgMecs(chartType ChartType, basePath string) erro
 	return nil
 }
 
+func (c *Client) GenerateChartPkgMecsICC(chartType ChartType, basePath string) error {
+	var resource string
+
+	switch chartType {
+	case ResCpu:
+		resource = "cpu"
+	case ResMemory:
+		resource = "memory"
+	}
+
+	var values = [][]float64{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
+
+	values[0][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecLocal, resource)
+	values[0][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecRegional, resource)
+	values[0][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecCentral, resource)
+
+	values[1][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecLocal, resource)
+	values[1][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecRegional, resource)
+	values[1][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecCentral, resource)
+
+	values[2][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecLocal, resource)
+	values[2][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecRegional, resource)
+	values[2][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecCentral, resource)
+
+	values[3][0] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecLocal, resource)
+	values[3][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
+	values[3][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)
+
+	values[4][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecLocal, resource)
+	values[4][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecRegional, resource)
+	values[4][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecCentral, resource)
+
+	err := c.genRatesPkgAggregatedMecs(resource, values, basePath)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+	}
+
+	return nil
+}
+
 func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) error {
 
 	switch chartType {
@@ -162,6 +202,75 @@ func (c *Client) GenerateChartPkgApps(chartType ChartType, basePath string) erro
 	}
 }
 
+func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) error {
+
+	switch chartType {
+	case RelocationTriggeringRates:
+		values := initializeEmpty2DArray()
+
+		values[0][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.CG)
+		values[0][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.V2X)
+		values[0][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.UAV)
+		values[0][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrHybrid, "triggering")
+
+		values[1][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.CG)
+		values[1][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.V2X)
+		values[1][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.UAV)
+		values[1][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLB, "triggering")
+
+		values[2][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.CG)
+		values[2][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.V2X)
+		values[2][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.UAV)
+		values[2][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLatency, "triggering")
+
+		values[3][0] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[3][1] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[3][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.UAV)
+		values[3][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "triggering")
+
+		values[4][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[4][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[4][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.UAV)
+		values[4][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "triggering")
+
+		err := c.genRatesPkgAggregatedAppsICC("triggering", values, basePath)
+		return err
+	case RelocationRejectionRates:
+		values := initializeEmpty2DArray()
+
+		values[0][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.CG)
+		values[0][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.V2X)
+		values[0][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.UAV)
+		values[0][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrHybrid, "failed")
+
+		values[1][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.CG)
+		values[1][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.V2X)
+		values[1][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.UAV)
+		values[1][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLB, "failed")
+
+		values[2][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.CG)
+		values[2][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.V2X)
+		values[2][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.UAV)
+		values[2][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLatency, "failed")
+
+		values[3][0] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.CG)
+		values[3][1] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[3][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.UAV)
+		values[3][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "failed")
+
+		values[4][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.CG)
+		values[4][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[4][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.UAV)
+		values[4][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "failed")
+
+		err := c.genRatesPkgAggregatedAppsICC("rejection", values, basePath)
+		return err
+
+	default:
+		return errors.New("chartType not found")
+	}
+}
+
 func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, basePath string) error {
 	mecTypeLabels := []string{"City-Level", "Regional-Level", "International-Level"}
 
@@ -206,6 +315,46 @@ func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, b
 
 func (c *Client) genRatesPkgAggregatedApps(ratesType string, values [][]float64, basePath string) error {
 	expLabels := []string{"Optimal", "Heuristic", "EAR-Heuristic", "ML-Masked", "ML-NonMasked"}
+
+	iterFile := ratesType + ".dat"
+
+	pkgPath := ratesType + "-aggregated-rates"
+	scriptName := "_" + ratesType + "-aggregated.sh"
+
+	xLabel := "Time"
+	yLabel := fmt.Sprintf("%s Rate [%c]", strings.ToTitle(ratesType), '%')
+
+	err := os.MkdirAll(basePath+"/"+pkgPath, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	iter, err := os.Create(filepath.Join(basePath+"/"+pkgPath, filepath.Base(iterFile)))
+	defer iter.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = iter.WriteString(createIterFileContentApps(0, expLabels, values))
+	if err != nil {
+		return err
+	}
+
+	script, err := os.Create(filepath.Join(basePath+"/"+pkgPath, filepath.Base(scriptName)))
+	defer script.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = script.WriteString(generateAggregatedRatesScriptApps(ratesType, xLabel, yLabel, iterFile))
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func (c *Client) genRatesPkgAggregatedAppsICC(ratesType string, values [][]float64, basePath string) error {
+	expLabels := []string{"Optimal", "OptimalLB", "OptimalLat", "Heuristic", "EAR-Heuristic"}
 
 	iterFile := ratesType + ".dat"
 

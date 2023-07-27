@@ -87,6 +87,44 @@ func (h *apiHandler) generateChartPkg(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *apiHandler) generateICCHeuristicChart(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	basePath := "results"
+	apps := "apps"
+	mecs := "mecs"
+
+	err := h.ResultClient.GenerateChartPkgAppsICC(results.RelocationTriggeringRates, basePath+"/"+apps)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgAppsICC(results.RelocationRejectionRates, basePath+"/"+apps)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgMecsICC(results.ResCpu, basePath+"/"+mecs)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgMecsICC(results.ResMemory, basePath+"/"+mecs)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *apiHandler) conductSingleExperiment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -394,7 +432,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *apiHandler) conductExperimentPhD(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var experimentDetails model.ExperimentDetails
