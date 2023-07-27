@@ -90,7 +90,7 @@ plot newhistogram "M=1" font 'Helvetica,17' offset 0,4.5, \
 }
 
 func generateAggregatedRatesScriptApps(ratesType, xLabel, yLabel string, iterFile string) (script string) {
-
+	fmt.Println("test")
 	if ratesType == "rejection" {
 		script = fmt.Sprintf(`#!/bin/bash
 
