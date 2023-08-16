@@ -208,60 +208,60 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 	case RelocationTriggeringRates:
 		values := initializeEmpty2DArray()
 
-		values[0][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.CG)
-		values[0][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.V2X)
-		values[0][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.UAV)
-		values[0][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrHybrid, "triggering")
+		values[0][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.CG)
+		values[0][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.V2X)
+		values[0][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.UAV)
+		values[0][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLB, "triggering")
 
-		values[1][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.CG)
-		values[1][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.V2X)
-		values[1][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "triggering", model.UAV)
-		values[1][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLB, "triggering")
+		values[1][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.CG)
+		values[1][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.V2X)
+		values[1][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.UAV)
+		values[1][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLatency, "triggering")
 
-		values[2][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.CG)
-		values[2][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.V2X)
-		values[2][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "triggering", model.UAV)
-		values[2][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLatency, "triggering")
+		values[2][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.CG)
+		values[2][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.V2X)
+		values[2][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "triggering", model.UAV)
+		values[2][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrHybrid, "triggering")
 
-		values[3][0] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.CG)
-		values[3][1] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.V2X)
-		values[3][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.UAV)
-		values[3][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "triggering")
+		values[3][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[3][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[3][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.UAV)
+		values[3][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "triggering")
 
-		values[4][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.CG)
-		values[4][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.V2X)
-		values[4][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.UAV)
-		values[4][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "triggering")
+		values[4][0] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[4][1] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[4][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.UAV)
+		values[4][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "triggering")
 
 		err := c.genRatesPkgAggregatedAppsICC("triggering", values, basePath)
 		return err
 	case RelocationRejectionRates:
 		values := initializeEmpty2DArray()
 
-		values[0][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.CG)
-		values[0][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.V2X)
-		values[0][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.UAV)
-		values[0][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrHybrid, "failed")
+		values[0][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.CG)
+		values[0][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.V2X)
+		values[0][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.UAV)
+		values[0][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLB, "failed")
 
-		values[1][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.CG)
-		values[1][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.V2X)
-		values[1][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLB, "failed", model.UAV)
-		values[1][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLB, "failed")
+		values[1][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.CG)
+		values[1][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.V2X)
+		values[1][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.UAV)
+		values[1][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLatency, "failed")
 
-		values[2][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.CG)
-		values[2][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.V2X)
-		values[2][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrLatency, "failed", model.UAV)
-		values[2][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrLatency, "failed")
+		values[2][0] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.CG)
+		values[2][1] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.V2X)
+		values[2][2] = c.GetRateValueAllIter(model.ExpOptimal, model.StrHybrid, "failed", model.UAV)
+		values[2][3] = c.GetConfidenceValue(model.ExpOptimal, model.StrHybrid, "failed")
 
-		values[3][0] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.CG)
-		values[3][1] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.V2X)
-		values[3][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.UAV)
-		values[3][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "failed")
+		values[3][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.CG)
+		values[3][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[3][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.UAV)
+		values[3][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "failed")
 
-		values[4][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.CG)
-		values[4][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.V2X)
-		values[4][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.UAV)
-		values[4][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "failed")
+		values[4][0] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.CG)
+		values[4][1] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[4][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.UAV)
+		values[4][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "failed")
 
 		err := c.genRatesPkgAggregatedAppsICC("rejection", values, basePath)
 		return err
@@ -354,7 +354,8 @@ func (c *Client) genRatesPkgAggregatedApps(ratesType string, values [][]float64,
 }
 
 func (c *Client) genRatesPkgAggregatedAppsICC(ratesType string, values [][]float64, basePath string) error {
-	expLabels := []string{"Optimal", "OptimalLB", "OptimalLat", "Heuristic", "EAR-Heuristic"}
+
+	expLabels := []string{"O-LoadBalancing", "O-Latency", "O-Hybrid", "EAR-Heuristic", "H-Hybrid"}
 
 	iterFile := ratesType + ".dat"
 
