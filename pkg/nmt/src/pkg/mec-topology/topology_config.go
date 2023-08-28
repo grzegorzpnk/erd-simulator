@@ -133,18 +133,18 @@ func (g *Graph) AssigneCapacityToClusters() {
 		if v.Identity.Location.Level == 0 {
 
 			v.MemoryResources.Capacity = 4000
-			v.MemoryResources.Used = 1200
+			v.MemoryResources.Used = 1112
 			v.MemoryResources.Utilization = v.MemoryResources.Used / v.MemoryResources.Capacity
 
 			v.CpuResources.Capacity = 4000
-			v.CpuResources.Used = 1200
+			v.CpuResources.Used = 1552
 			v.CpuResources.Utilization = v.CpuResources.Used / v.CpuResources.Capacity
 
 		}
 		if v.Identity.Location.Level == 1 {
 
 			v.MemoryResources.Capacity = 8000
-			v.MemoryResources.Used = 1200
+			v.MemoryResources.Used = 1080
 			v.MemoryResources.Utilization = v.MemoryResources.Used / v.MemoryResources.Capacity
 
 			v.CpuResources.Capacity = 8000
@@ -154,11 +154,11 @@ func (g *Graph) AssigneCapacityToClusters() {
 		if v.Identity.Location.Level == 2 {
 
 			v.MemoryResources.Capacity = 12000
-			v.MemoryResources.Used = 1200
+			v.MemoryResources.Used = 1080
 			v.MemoryResources.Utilization = v.MemoryResources.Used / v.MemoryResources.Capacity
 
 			v.CpuResources.Capacity = 12000
-			v.CpuResources.Used = 1200
+			v.CpuResources.Used = 1548
 			v.CpuResources.Utilization = v.CpuResources.Used / v.CpuResources.Capacity
 		}
 
