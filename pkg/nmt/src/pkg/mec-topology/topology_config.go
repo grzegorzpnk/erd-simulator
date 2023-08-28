@@ -98,27 +98,69 @@ func (g *Graph) ReadNetworkTopologyConfigFile(file string) {
 	}
 }
 
+//
+//func (g *Graph) AssigneCapacityToClusters() {
+//
+//	for _, v := range g.MecHosts {
+//
+//		if v.Identity.Location.Level == 0 {
+//			v.MemoryResources.Capacity = 4000
+//			v.CpuResources.Capacity = 4000
+//		}
+//		if v.Identity.Location.Level == 1 {
+//			v.MemoryResources.Capacity = 8000
+//			v.CpuResources.Capacity = 8000
+//		}
+//		if v.Identity.Location.Level == 2 {
+//			v.MemoryResources.Capacity = 12000
+//			v.CpuResources.Capacity = 12000
+//		}
+//
+//		v.CpuResources.Utilization = 0
+//		v.CpuResources.Used = 0
+//		v.MemoryResources.Utilization = 0
+//		v.MemoryResources.Used = 0
+//
+//	}
+//
+//}
+
 func (g *Graph) AssigneCapacityToClusters() {
 
 	for _, v := range g.MecHosts {
 
+		//initial resources at nodes, cause it imitates the overhead of Operating System ( the same as for demonstrator)
 		if v.Identity.Location.Level == 0 {
+
 			v.MemoryResources.Capacity = 4000
+			v.MemoryResources.Used = 1200
+			v.MemoryResources.Utilization = v.MemoryResources.Used / v.MemoryResources.Capacity
+
 			v.CpuResources.Capacity = 4000
+			v.CpuResources.Used = 1200
+			v.CpuResources.Utilization = v.CpuResources.Used / v.CpuResources.Capacity
+
 		}
 		if v.Identity.Location.Level == 1 {
+
 			v.MemoryResources.Capacity = 8000
+			v.MemoryResources.Used = 1200
+			v.MemoryResources.Utilization = v.MemoryResources.Used / v.MemoryResources.Capacity
+
 			v.CpuResources.Capacity = 8000
+			v.CpuResources.Used = 1200
+			v.CpuResources.Utilization = v.CpuResources.Used / v.CpuResources.Capacity
 		}
 		if v.Identity.Location.Level == 2 {
-			v.MemoryResources.Capacity = 12000
-			v.CpuResources.Capacity = 12000
-		}
 
-		v.CpuResources.Utilization = 0
-		v.CpuResources.Used = 0
-		v.MemoryResources.Utilization = 0
-		v.MemoryResources.Used = 0
+			v.MemoryResources.Capacity = 12000
+			v.MemoryResources.Used = 1200
+			v.MemoryResources.Utilization = v.MemoryResources.Used / v.MemoryResources.Capacity
+
+			v.CpuResources.Capacity = 12000
+			v.CpuResources.Used = 1200
+			v.CpuResources.Utilization = v.CpuResources.Used / v.CpuResources.Capacity
+		}
 
 	}
 
