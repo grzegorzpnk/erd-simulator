@@ -445,7 +445,7 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 
 	var experiments []model.ExperimentIntent
 	experiments = declarePhDExperiments(experimentDetails)
-	log.Infof("Started new full PhD experiment with all %v types:", len(experiments))
+	log.Infof("Started new full PhD experiment with all %v types.", len(experiments))
 
 	movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
 	if err != nil {
@@ -462,6 +462,7 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 		return
 	} else {
 		log.Infof("NMT has just randomly deployed %v apps. NMT ready to start experiment", experiments[0].ExperimentDetails.InitialAppsNumber.GetTotalAsString())
+
 	}
 
 	err = h.SimuClient.FetchAppsFromNMT()
@@ -498,7 +499,7 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		log.Infof("Experiment [%v] type: %v", z+1, experiment.ExperimentType)
+		log.Infof("Experiment [%v] type: %v, strategy: %v ", z+1, experiment.ExperimentType, experiment.ExperimentStrategy)
 
 		//at the beggining let's recreate initial app placement at NMT and fetch
 		err = h.SimuClient.RecreateInitialPlacementAtNMT()
