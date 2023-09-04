@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 type MECApp struct {
@@ -19,18 +20,19 @@ type RequestedResources struct {
 }
 
 func (app *MECApp) GeneratreResourceRequirements() {
-	// for ML we introduced possible requirement like 500, 600, 700, 800, 900 or 1000
-	//minRes, _ := strconv.Atoi(config.GetConfiguration().ResMin)
-	//maxRes, _ := strconv.Atoi(config.GetConfiguration().ResMax)
 
-	// Create a slice containing the possible values
-	values := []int{500, 600, 700, 800, 900, 1000}
+	//// Create a slice containing the possible values
+	//values := []int{500, 600, 700, 800, 900, 1000}
+	//
+	//// Select a random value from the slice using rand.Intn()
+	//randomCPUIndex := rand.Intn(len(values))
+	//randomMEMIndex := rand.Intn(len(values))
+	//randomCPU := values[randomCPUIndex]
+	//randomMemory := values[randomMEMIndex]
 
-	// Select a random value from the slice using rand.Intn()
-	randomCPUIndex := rand.Intn(len(values))
-	randomMEMIndex := rand.Intn(len(values))
-	randomCPU := values[randomCPUIndex]
-	randomMemory := values[randomMEMIndex]
+	rand.Seed(time.Now().UnixNano()) // Seed the random number generator with the current time
+	randomCPU := rand.Intn(521) + 530
+	randomMemory := rand.Intn(521) + 530
 
 	app.Requirements.RequestedCPU = float64(randomCPU)
 	app.Requirements.RequestedMEMORY = float64(randomMemory)

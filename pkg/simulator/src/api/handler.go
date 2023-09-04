@@ -473,7 +473,11 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 	} else {
 		log.Infof("Initial app list fetched from NMT")
 		for i := 0; i < len(h.SimuClient.Apps); i++ {
-			log.Infof("1. Apps[%v]: %v, cluster: %v", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+			//log.Infof("1. Apps[%v]: %v, cluster: %v", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+			log.Infof("1. Application ID: %v [Path: %v], app clusterID: %v, Requirements: CPU: %v, Memory: %v, Latency: %v \n",
+				h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId,
+				h.SimuClient.Apps[i].Requirements.RequestedCPU, h.SimuClient.Apps[i].Requirements.RequestedMEMORY,
+				h.SimuClient.Apps[i].Requirements.RequestedLatency)
 		}
 	}
 
