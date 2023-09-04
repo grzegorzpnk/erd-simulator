@@ -168,12 +168,14 @@ func (c *Client) CollectResourcesInfo(mec model.MecHost) (model.MecHost, error) 
 	if err != nil {
 		log.Warnf("[Topology] Could not get cpu utilization: %v", err)
 	}
+	log.Infof("Take CPU from nmt. Utilization %v: ", cpu.Utilization)
 	mec.SetCpuInfo(cpu)
 
 	mem, err := c.GetMecResource(model.MecMem, mec)
 	if err != nil {
 		log.Warnf("[Topology]  Could not get memory utilization: %v", err)
 	}
+	log.Infof("Take MEM from nmt. Utilization %v: ", mem.Utilization)
 
 	mec.SetMemInfo(mem)
 
