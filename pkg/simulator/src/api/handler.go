@@ -363,7 +363,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	} else {
 		log.Infof("Trajectory has been created: %v", trajectory)
 		for i := 0; i < len(h.SimuClient.Apps); i++ {
-			log.Infof("2. Apps[%v]: %v, cluster: %v ", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+			log.Infof("2. Apps[%v] path: %v, cluster: %v ", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
 		}
 	}
 

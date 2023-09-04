@@ -21,7 +21,7 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 	r.HandleFunc(baseUrl+"/simu/single-experiment", handler.conductSingleExperiment).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment", handler.conductExperiment).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment-globcom", handler.conductExperimentGlobcom).Methods("POST")
-	r.HandleFunc(baseUrl+"/simu/experiment-phd", handler.conductExperimentICC).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/experiment-icc", handler.conductExperimentICC).Methods("POST")
 	//test API
 	r.HandleFunc(baseUrl+"/simu/users", handler.getUsers).Methods("GET")
 	//temporary function to check if the list of declared apps fetch from NMT == list updated in simu
