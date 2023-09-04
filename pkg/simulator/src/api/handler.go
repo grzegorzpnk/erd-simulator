@@ -474,6 +474,7 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 		log.Infof("Initial app list fetched from NMT")
 		for i := 0; i < len(h.SimuClient.Apps); i++ {
 			log.Infof("1. Apps[%v]: %v, cluster: %v", h.SimuClient.Apps[i].Id, h.SimuClient.Apps[i].UserPath, h.SimuClient.Apps[i].ClusterId)
+			h.SimuClient.Apps[i].CurrentMove = 0
 		}
 	}
 

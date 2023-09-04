@@ -363,9 +363,8 @@ func (h *apiHandler) executePhDExperiment(exp model.ExperimentIntent, expIndex, 
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
 
 	app := h.SimuClient.GetApps(strconv.Itoa(userID))
+	log.Infof(experimentN+"User(app) with ID: %v (%v ms) [current mec: %v] has moved FROM cell: %v, towards cell: %v", app.Id, app.Requirements.RequestedLatency, app.ClusterId, app.UserLocation, strconv.Itoa(userPosition))
 	app.UserLocation = strconv.Itoa(userPosition)
-
-	log.Infof(experimentN+"User(app) with ID: %v (%v ms) [current mec: %v] has moved FROM cell: %v, towards cell: %v", app.Id, app.Requirements.RequestedLatency, app.ClusterId, app.UserPath[expIndex], app.UserLocation)
 
 	var spi model.SmartPlacementIntent
 	var err error
