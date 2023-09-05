@@ -268,7 +268,7 @@ func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacement
 		}
 
 		if !resourcesOk(i, mec) {
-			//log.Warnf("Resources condition for cluster [%v] not met. Skipping.", mec.BuildClusterEmcoFQDN())
+			log.Warnf("Resources condition for cluster [%v] not met. Skipping. CPU UTIL: %v, MEM util: %v", mec.BuildClusterEmcoFQDN(), mec.Resources.Cpu.Utilization, mec.Resources.Memory.Utilization)
 			continue
 		}
 
@@ -381,6 +381,7 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) floa
 
 	log.Infof("Calculating Objective Function: Lateny weight: %v, [%v] | Res wight: %v [CPU: weights %v [Util: %v], MEM: : weights %v [Util: %v] | Static cost: %v]",
 		pw.LatencyWeight, nLat, pw.ResourcesWeight, pw.CpuUtilizationWeight, nCpu, pw.MemUtilizationWeight, nMem, staticCost)
+
 	return pw.LatencyWeight*nLat + pw.ResourcesWeight*(pw.CpuUtilizationWeight*nCpu+pw.MemUtilizationWeight*nMem)*staticCost
 }
 
