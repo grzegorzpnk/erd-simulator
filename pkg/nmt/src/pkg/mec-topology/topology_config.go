@@ -162,7 +162,7 @@ func (g *Graph) AssigneCapacityToClusters() {
 			v.CpuResources.Utilization = v.CpuResources.Used / v.CpuResources.Capacity
 		}
 
-		log.Infof("Cluster: %v, Initial Mem util: %v %, Initial CPU util:  %v %", v.Identity.Cluster, v.MemoryResources.Utilization, v.CpuResources.Utilization)
+		log.Infof("[Cluster: %v] Initial: Mem util: %v procent, CPU util:  %v procent", v.Identity.Cluster, v.MemoryResources.Utilization, v.CpuResources.Utilization)
 
 	}
 
