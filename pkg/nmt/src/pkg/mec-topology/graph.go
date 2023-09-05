@@ -416,7 +416,7 @@ func (g *Graph) ShortestPath(startCell *model.Cell, destCluster *model.MecHost) 
 			}
 		}
 
-		log.Infof("indirect nodes, latency between cell: %v and mec: [%v], is: %v", startCell.Id, destCluster.Identity.Cluster, min)
+		//log.Infof("indirect nodes, latency between cell: %v and mec: [%v], is: %v", startCell.Id, destCluster.Identity.Cluster, min)
 	}
 	return min, nil
 }
