@@ -125,6 +125,9 @@ func (h *apiHandler) getMECCpu(w http.ResponseWriter, r *http.Request) {
 		if v.Identity.Cluster == params["cluster"] &&
 			v.Identity.Provider == params["provider"] {
 			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].CpuResources)
+			if h.graphClient.MecHosts[i].CpuResources.Utilization == 0 {
+				log.Errorf("CPU Utilzation WRONG: %v ", h.graphClient.MecHosts[i].CpuResources.Utilization)
+			}
 		}
 	}
 }
@@ -138,6 +141,9 @@ func (h *apiHandler) getMECMemory(w http.ResponseWriter, r *http.Request) {
 		if v.Identity.Cluster == params["cluster"] &&
 			v.Identity.Provider == params["provider"] {
 			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].MemoryResources)
+			if h.graphClient.MecHosts[i].MemoryResources.Utilization == 0 {
+				log.Errorf("MEM Utilzation WRONG: %v ", h.graphClient.MecHosts[i].MemoryResources.Utilization)
+			}
 		}
 	}
 }
