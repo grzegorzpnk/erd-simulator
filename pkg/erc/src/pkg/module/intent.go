@@ -379,6 +379,8 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) floa
 
 	nLat, nCpu, nMem := NormalizeMecParameters(mec)
 
+	log.Infof("Calculating Objective Function: Lateny weight: %v, [%v] | Res wight: %v [CPU: weights %v [Util: %v], MEM: : weights %v [Util: %v] | Static cost: %v]",
+		pw.LatencyWeight, nLat, pw.ResourcesWeight, pw.CpuUtilizationWeight, nCpu, pw.MemUtilizationWeight, nMem, staticCost)
 	return pw.LatencyWeight*nLat + pw.ResourcesWeight*(pw.CpuUtilizationWeight*nCpu+pw.MemUtilizationWeight*nMem)*staticCost
 }
 
