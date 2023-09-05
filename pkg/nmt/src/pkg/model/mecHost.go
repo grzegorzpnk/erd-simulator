@@ -170,10 +170,20 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
 
 	if len(mec.MECApps) == 0 {
-		log.Warnf("Warning, no apps, assigning 0 as a used res!!! ")
 		mec.MECApps = nil
-		mec.CpuResources.Used = 0
-		mec.MemoryResources.Used = 0
+
+		if mec.Identity.Location.Level == 0 {
+			mec.CpuResources.Used = 1552
+			mec.MemoryResources.Used = 1112
+		}
+		if mec.Identity.Location.Level == 1 {
+			mec.CpuResources.Used = 1200
+			mec.MemoryResources.Used = 1080
+		}
+		if mec.Identity.Location.Level == 2 {
+			mec.CpuResources.Used = 1548
+			mec.MemoryResources.Used = 1080
+		}
 	}
 
 	//update resources on mec host
@@ -184,10 +194,12 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	//introduced this as a bug fixing
 	if mec.CpuResources.Used < 0 {
 		mec.CpuResources.Used = 0
+		log.Errorf("Check what's going on")
 	}
 
 	if mec.MemoryResources.Used < 0 {
 		mec.MemoryResources.Used = 0
+		log.Errorf("Check what's going on 2")
 	}
 
 	//update utilization
