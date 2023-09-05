@@ -388,5 +388,5 @@ func ComputeObjectiveValue(i model.SmartPlacementIntent, mec model.MecHost) floa
 // TODO: For now consider 30ms as the maximum latency to normalize the value.
 func NormalizeMecParameters(mec model.MecHost) (float64, float64, float64) {
 	log.Infof("Mem utilization before normalization: %v", mec.GetMemUtilization())
-	return mec.GetLatency() / 30, mec.GetCpuUtilization() / 100, mec.GetMemUtilization() / 100
+	return mec.GetLatency() / 30, mec.GetCpuUtilization(), mec.GetMemUtilization()
 }
