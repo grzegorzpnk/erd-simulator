@@ -170,6 +170,7 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
 
 	if len(mec.MECApps) == 0 {
+		log.Warnf("Warning, no apps, assigning 0 as a used res!!! ")
 		mec.MECApps = nil
 		mec.CpuResources.Used = 0
 		mec.MemoryResources.Used = 0
