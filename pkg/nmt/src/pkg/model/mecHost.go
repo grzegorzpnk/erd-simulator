@@ -185,22 +185,22 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 		log.Errorf("Check what's going on 2")
 	}
 
-	//if len(mec.MECApps) == 0 {
-	//	mec.MECApps = nil
-	//
-	//	if mec.Identity.Location.Level == 0 {
-	//		mec.CpuResources.Used = 1552
-	//		mec.MemoryResources.Used = 1112
-	//	}
-	//	if mec.Identity.Location.Level == 1 {
-	//		mec.CpuResources.Used = 1200
-	//		mec.MemoryResources.Used = 1080
-	//	}
-	//	if mec.Identity.Location.Level == 2 {
-	//		mec.CpuResources.Used = 1548
-	//		mec.MemoryResources.Used = 1080
-	//	}
-	//}
+	if len(mec.MECApps) == 0 {
+		mec.MECApps = nil
+
+		if mec.Identity.Location.Level == 0 {
+			mec.CpuResources.Used = 1552
+			mec.MemoryResources.Used = 1112
+		}
+		if mec.Identity.Location.Level == 1 {
+			mec.CpuResources.Used = 1200
+			mec.MemoryResources.Used = 1080
+		}
+		if mec.Identity.Location.Level == 2 {
+			mec.CpuResources.Used = 1548
+			mec.MemoryResources.Used = 1080
+		}
+	}
 
 	//update utilization
 	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
