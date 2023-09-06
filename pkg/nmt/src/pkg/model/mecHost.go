@@ -169,6 +169,22 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	mec.MECApps[initialID] = mec.MECApps[len(mec.MECApps)-1]
 	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
 
+	//update resources on mec host
+	//update used resources
+	mec.CpuResources.Used -= app.Requirements.RequestedCPU
+	mec.MemoryResources.Used -= app.Requirements.RequestedMEMORY
+
+	//introduced this as a bug fixing
+	if mec.CpuResources.Used < 0 {
+		mec.CpuResources.Used = 0
+		log.Errorf("Check what's going on")
+	}
+
+	if mec.MemoryResources.Used < 0 {
+		mec.MemoryResources.Used = 0
+		log.Errorf("Check what's going on 2")
+	}
+
 	if len(mec.MECApps) == 0 {
 		mec.MECApps = nil
 
@@ -184,22 +200,6 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 			mec.CpuResources.Used = 1548
 			mec.MemoryResources.Used = 1080
 		}
-	}
-
-	//update resources on mec host
-	//update used resources
-	mec.CpuResources.Used -= app.Requirements.RequestedCPU
-	mec.MemoryResources.Used -= app.Requirements.RequestedMEMORY
-
-	//introduced this as a bug fixing
-	if mec.CpuResources.Used < 0 {
-		mec.CpuResources.Used = 0
-		log.Errorf("Check what's going on")
-	}
-
-	if mec.MemoryResources.Used < 0 {
-		mec.MemoryResources.Used = 0
-		log.Errorf("Check what's going on 2")
 	}
 
 	//update utilization
