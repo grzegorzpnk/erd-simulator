@@ -259,6 +259,7 @@ func (h *apiHandler) Recreate(w http.ResponseWriter, r *http.Request) {
 	//declare
 	w.Header().Set("Content-Type", "application/json")
 
+	log.Infof("Received request to recreate initial app placement")
 	//first let's remove all apps from clusters
 	h.graphClient.UninstallAllApps()
 	h.graphClient.Application = nil

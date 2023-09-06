@@ -299,6 +299,11 @@ func (g *Graph) UninstallAllApps() {
 			}
 		}
 	}
+	log.Infof("Deleted all apps, Resources at clusters:")
+	for _, v := range g.MecHosts {
+		log.Infof("Cluster: %v, CPU Util: %v, MEM Util: %v", v.Identity.Cluster, v.CpuResources.Utilization, v.MemoryResources.Utilization)
+	}
+
 }
 
 func (g *Graph) DeleteAllDeclaredApps() {
