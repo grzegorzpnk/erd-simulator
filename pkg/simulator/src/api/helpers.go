@@ -524,7 +524,7 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 	return experiments
 }
 
-func declarePhDExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
+func declareICCExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
 
 	experiments := []model.ExperimentIntent{}
 

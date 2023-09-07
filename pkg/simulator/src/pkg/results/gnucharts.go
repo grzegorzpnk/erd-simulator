@@ -76,25 +76,25 @@ func (c *Client) GenerateChartPkgMecsICC(chartType ChartType, basePath string) e
 
 	var values = [][]float64{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
 
-	values[0][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecLocal, resource)
-	values[0][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecRegional, resource)
-	values[0][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecCentral, resource)
+	values[0][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecLocal, resource)
+	values[0][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecRegional, resource)
+	values[0][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecCentral, resource)
 
-	values[1][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecLocal, resource)
-	values[1][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecRegional, resource)
-	values[1][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecCentral, resource)
+	values[1][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecLocal, resource)
+	values[1][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecRegional, resource)
+	values[1][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecCentral, resource)
 
-	values[2][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecLocal, resource)
-	values[2][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecRegional, resource)
-	values[2][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLatency, MecCentral, resource)
+	values[2][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecLocal, resource)
+	values[2][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecRegional, resource)
+	values[2][2] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrHybrid, MecCentral, resource)
 
-	values[3][0] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecLocal, resource)
-	values[3][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
-	values[3][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)
+	values[3][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecLocal, resource)
+	values[3][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecRegional, resource)
+	values[3][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecCentral, resource)
 
-	values[4][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecLocal, resource)
-	values[4][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecRegional, resource)
-	values[4][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecCentral, resource)
+	values[4][0] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecLocal, resource)
+	values[4][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
+	values[4][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)
 
 	err := c.genRatesPkgAggregatedMecs(resource, values, basePath)
 	if err != nil {

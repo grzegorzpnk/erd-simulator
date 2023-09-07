@@ -446,7 +446,7 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 	for f := 0; f < 100; f++ {
 
 		var experiments []model.ExperimentIntent
-		experiments = declarePhDExperiments(experimentDetails)
+		experiments = declareICCExperiments(experimentDetails)
 		log.Infof("Started new full PhD experiment with all %v types.", len(experiments))
 
 		movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
