@@ -614,7 +614,7 @@ func (h *apiHandler) conductExperimentICCTunning(w http.ResponseWriter, r *http.
 		return
 	}
 
-	for f := 0; f < 20; f++ {
+	for f := 0; f < 100; f++ {
 
 		var experiments []model.ExperimentIntent
 		experiments = declareICCTunningExperiments(experimentDetails)
