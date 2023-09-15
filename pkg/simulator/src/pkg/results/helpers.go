@@ -174,7 +174,7 @@ func generateAggregatedRatesScriptMecs(resType, title, yLabel string, iterFiles 
 
 reset
 
-set terminal svg font 'Helvetica,14' size 1200,g
+set terminal svg font 'Helvetica,14' size 1200,800
 
 set title "%s" font 'Helvetica,40' offset 0,-2
 
