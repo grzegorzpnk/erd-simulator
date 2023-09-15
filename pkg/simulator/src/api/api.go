@@ -22,6 +22,7 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 	r.HandleFunc(baseUrl+"/simu/experiment", handler.conductExperiment).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment-globcom", handler.conductExperimentGlobcom).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment-icc", handler.conductExperimentICC).Methods("POST")
+	r.HandleFunc(baseUrl+"/simu/experiment-icc-tunning", handler.conductExperimentICCTunning).Methods("POST")
 	//test API
 	r.HandleFunc(baseUrl+"/simu/users", handler.getUsers).Methods("GET")
 	//temporary function to check if the list of declared apps fetch from NMT == list updated in simu
@@ -29,6 +30,7 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 
 	r.HandleFunc(baseUrl+"/results/all", handler.getAllResults).Methods("GET")
 	r.HandleFunc(baseUrl+"/results/charts/icc-heuristic", handler.generateICCHeuristicChart).Methods("GET")
+	r.HandleFunc(baseUrl+"/results/charts/icc-heuristic-tunning", handler.generateICCTunningHeuristicChart).Methods("GET")
 	r.HandleFunc(baseUrl+"/results/charts", handler.generateChartPkg).Methods("GET")
 
 	return r

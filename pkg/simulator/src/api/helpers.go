@@ -594,6 +594,76 @@ func declareICCExperiments(details model.ExperimentDetails) []model.ExperimentIn
 	return experiments
 }
 
+func declareICCTunningExperiments(details model.ExperimentDetails) []model.ExperimentIntent {
+
+	experiments := []model.ExperimentIntent{}
+
+	experiment1 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment2 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0,
+			ResourcesWeight:      1,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment3 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrLatency,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        1,
+			ResourcesWeight:      0,
+			CpuUtilizationWeight: 0,
+			MemUtilizationWeight: 0,
+		},
+	}
+
+	experiment4 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.Str7L3R,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.7,
+			ResourcesWeight:      0.3,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment5 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.Str3L7R,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.3,
+			ResourcesWeight:      0.7,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
+	//experiments = append(experiments, experiment3)
+
+	return experiments
+}
+
 func createTrajectory(movements int, h *apiHandler) ([][]int, error) {
 
 	trajectory := make([][]int, movements)

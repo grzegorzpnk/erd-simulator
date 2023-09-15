@@ -30,6 +30,8 @@ const (
 	StrLB      ExperimentStrategy = "load-balancing"
 	StrHybrid  ExperimentStrategy = "hybrid"
 	StrML      ExperimentStrategy = "ml"
+	Str7L3R    ExperimentStrategy = "7l3r"
+	Str3L7R    ExperimentStrategy = "3l7r"
 )
 
 type AppType string

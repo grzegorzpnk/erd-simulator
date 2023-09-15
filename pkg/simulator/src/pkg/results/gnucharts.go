@@ -56,7 +56,7 @@ func (c *Client) GenerateChartPkgMecs(chartType ChartType, basePath string) erro
 	values[4][1] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecRegional, resource)
 	values[4][2] = c.GetMecUtilizationAggregated(model.ExpMLNonMasked, model.StrML, MecCentral, resource)
 
-	err := c.genRatesPkgAggregatedMecs(resource, values, basePath)
+	err := c.genRatesPkgAggregatedMecs(resource, values, basePath, false)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
@@ -96,7 +96,47 @@ func (c *Client) GenerateChartPkgMecsICC(chartType ChartType, basePath string) e
 	values[4][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
 	values[4][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)
 
-	err := c.genRatesPkgAggregatedMecs(resource, values, basePath)
+	err := c.genRatesPkgAggregatedMecs(resource, values, basePath, false)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+	}
+
+	return nil
+}
+
+func (c *Client) GenerateChartPkgMecsICCTunning(chartType ChartType, basePath string) error {
+	var resource string
+
+	switch chartType {
+	case ResCpu:
+		resource = "cpu"
+	case ResMemory:
+		resource = "memory"
+	}
+
+	var values = [][]float64{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
+
+	values[0][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecLocal, resource)
+	values[0][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecRegional, resource)
+	values[0][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrHybrid, MecCentral, resource)
+
+	values[1][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecLocal, resource)
+	values[1][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecRegional, resource)
+	values[1][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecCentral, resource)
+
+	values[2][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLatency, MecLocal, resource)
+	values[2][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLatency, MecRegional, resource)
+	values[2][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLatency, MecCentral, resource)
+
+	values[3][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.Str7L3R, MecLocal, resource)
+	values[3][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.Str7L3R, MecRegional, resource)
+	values[3][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.Str7L3R, MecCentral, resource)
+
+	values[4][0] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.Str3L7R, MecLocal, resource)
+	values[4][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.Str3L7R, MecRegional, resource)
+	values[4][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.Str3L7R, MecCentral, resource)
+
+	err := c.genRatesPkgAggregatedMecs(resource, values, basePath, true)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
@@ -233,7 +273,7 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 		values[4][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "triggering", model.UAV)
 		values[4][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "triggering")
 
-		err := c.genRatesPkgAggregatedAppsICC("triggering", values, basePath)
+		err := c.genRatesPkgAggregatedAppsICC("triggering", values, basePath, false)
 		return err
 	case RelocationRejectionRates:
 		values := initializeEmpty2DArray()
@@ -263,7 +303,7 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 		values[4][2] = c.GetRateValueAllIter(model.ExpHeuristic, model.StrHybrid, "failed", model.UAV)
 		values[4][3] = c.GetConfidenceValue(model.ExpHeuristic, model.StrHybrid, "failed")
 
-		err := c.genRatesPkgAggregatedAppsICC("rejection", values, basePath)
+		err := c.genRatesPkgAggregatedAppsICC("rejection", values, basePath, false)
 		return err
 
 	default:
@@ -271,7 +311,76 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 	}
 }
 
-func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, basePath string) error {
+func (c *Client) GenerateChartPkgAppsICCTunning(chartType ChartType, basePath string) error {
+
+	switch chartType {
+	case RelocationTriggeringRates:
+		values := initializeEmpty2DArray()
+
+		values[0][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.CG)
+		values[0][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.V2X)
+		values[0][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "triggering", model.UAV)
+		values[0][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "triggering")
+
+		values[1][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLB, "triggering", model.CG)
+		values[1][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLB, "triggering", model.V2X)
+		values[1][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLB, "triggering", model.UAV)
+		values[1][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrLB, "triggering")
+
+		values[2][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLatency, "triggering", model.CG)
+		values[2][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLatency, "triggering", model.V2X)
+		values[2][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLatency, "triggering", model.UAV)
+		values[2][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrLatency, "triggering")
+
+		values[3][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str7L3R, "triggering", model.CG)
+		values[3][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str7L3R, "triggering", model.V2X)
+		values[3][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str7L3R, "triggering", model.UAV)
+		values[3][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.Str7L3R, "triggering")
+
+		values[4][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str3L7R, "triggering", model.CG)
+		values[4][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str3L7R, "triggering", model.V2X)
+		values[4][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str3L7R, "triggering", model.UAV)
+		values[4][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.Str3L7R, "triggering")
+
+		err := c.genRatesPkgAggregatedAppsICC("triggering", values, basePath, true)
+		return err
+	case RelocationRejectionRates:
+		values := initializeEmpty2DArray()
+
+		values[0][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.CG)
+		values[0][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.V2X)
+		values[0][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrHybrid, "failed", model.UAV)
+		values[0][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrHybrid, "failed")
+
+		values[1][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLB, "failed", model.CG)
+		values[1][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLB, "failed", model.V2X)
+		values[1][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLB, "failed", model.UAV)
+		values[1][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrLB, "failed")
+
+		values[2][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLatency, "failed", model.CG)
+		values[2][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLatency, "failed", model.V2X)
+		values[2][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.StrLatency, "failed", model.UAV)
+		values[2][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.StrLatency, "failed")
+
+		values[3][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str7L3R, "failed", model.CG)
+		values[3][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str7L3R, "failed", model.V2X)
+		values[3][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str7L3R, "failed", model.UAV)
+		values[3][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.Str7L3R, "failed")
+
+		values[4][0] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str3L7R, "failed", model.CG)
+		values[4][1] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str3L7R, "failed", model.V2X)
+		values[4][2] = c.GetRateValueAllIter(model.ExpEarHeuristic, model.Str3L7R, "failed", model.UAV)
+		values[4][3] = c.GetConfidenceValue(model.ExpEarHeuristic, model.Str3L7R, "failed")
+
+		err := c.genRatesPkgAggregatedAppsICC("rejection", values, basePath, true)
+		return err
+
+	default:
+		return errors.New("chartType not found")
+	}
+}
+
+func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, basePath string, tuning bool) error {
 	mecTypeLabels := []string{"City-Level", "Regional-Level", "International-Level"}
 
 	iterFiles := []string{"algorithm1.dat", "algorithm2.dat", "algorithm3.dat", "algorithm4.dat", "algorithm5.dat"}
@@ -306,11 +415,20 @@ func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, b
 		return err
 	}
 
-	_, err = script.WriteString(generateAggregatedRatesScriptMecs(resType, title, yLabel, iterFiles))
-	if err != nil {
+	if tuning == true {
+		_, err = script.WriteString(generateAggregatedRatesScriptMecsTuning(resType, title, yLabel, iterFiles))
+		if err != nil {
+			return err
+		}
+		return err
+	} else {
+		_, err = script.WriteString(generateAggregatedRatesScriptMecs(resType, title, yLabel, iterFiles))
+		if err != nil {
+			return err
+		}
 		return err
 	}
-	return err
+
 }
 
 func (c *Client) genRatesPkgAggregatedApps(ratesType string, values [][]float64, basePath string) error {
@@ -353,9 +471,14 @@ func (c *Client) genRatesPkgAggregatedApps(ratesType string, values [][]float64,
 	return err
 }
 
-func (c *Client) genRatesPkgAggregatedAppsICC(ratesType string, values [][]float64, basePath string) error {
+func (c *Client) genRatesPkgAggregatedAppsICC(ratesType string, values [][]float64, basePath string, tunning bool) error {
 
-	expLabels := []string{"O-LoadBalancing", "O-Latency", "O-Hybrid", "EAR-Heuristic", "H-Hybrid"}
+	var expLabels []string
+	if tunning == true {
+		expLabels = []string{"L5R5", "L1R0", "L0R1", "L7R3", "L3R7"}
+	} else {
+		expLabels = []string{"O-LoadBalancing", "O-Latency", "O-Hybrid", "EAR-Heuristic", "H-Hybrid"}
+	}
 
 	iterFile := ratesType + ".dat"
 
