@@ -588,7 +588,19 @@ func declareICCExperiments(details model.ExperimentDetails) []model.ExperimentIn
 		},
 	}
 
-	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5)
+	experiment6 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0,
+			ResourcesWeight:      1,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5, experiment6)
 	//experiments = append(experiments, experiment3)
 
 	return experiments
