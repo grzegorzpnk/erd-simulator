@@ -136,7 +136,7 @@ plot newhistogram "" font 'Helvetica,17' offset 0,4.5, \
 
 reset
 
-set terminal svg font 'Helvetica,19' size 1200,800
+set terminal svg font 'Helvetica,19' size 1400,800
 
 set style line 2 lc rgb 'black' lt 1 lw 1
 
@@ -205,15 +205,17 @@ set bmargin 7
 set ylabel "%s" font 'Helvetica,20'
 set key inside top left horizontal font "Helvetica, 25" width 1.0
 
-plot newhistogram "Optimal-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+plot newhistogram "Optimal-LB" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "City-Level" linecolor rgb "black", \
-     newhistogram "Heuristic-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "Optimal-Latency" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "dark-gray", \
-     newhistogram "Heuristic-EAR" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "Optimal-Hybrid" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "dark-gray", \
-     newhistogram "ML-Masked" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "EAR-Hybrid" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey", \
-     newhistogram "ML-NonMasked" font 'Helvetica,17' offset 0,0.7, \
+     newhistogram "EAR-LB" font 'Helvetica,17' offset 0,0.7, \
+       '%s' using 2:xticlabels(1) title "" linecolor rgb "black", \
+	 newhistogram "Heuristic-Hybrid" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "" linecolor rgb "black"
 
 exit
