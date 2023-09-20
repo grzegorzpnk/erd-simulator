@@ -96,6 +96,8 @@ func (c *Client) GenerateChartPkgMecsICC(chartType ChartType, basePath string) e
 	values[4][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecRegional, resource)
 	values[4][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecCentral, resource)
 
+	log.Infof("values length: %v, size: %v", len(values), len(values[0]))
+
 	values[5][0] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecLocal, resource)
 	values[5][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
 	values[5][2] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecCentral, resource)

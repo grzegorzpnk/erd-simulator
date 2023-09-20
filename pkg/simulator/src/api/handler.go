@@ -153,7 +153,7 @@ func (h *apiHandler) generateICCTunningHeuristicChart(w http.ResponseWriter, r *
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgMecsICC(results.ResMemory, basePath+"/"+mecs)
+	err = h.ResultClient.GenerateChartPkgMecsICCTunning(results.ResMemory, basePath+"/"+mecs)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
