@@ -331,7 +331,7 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 	for search {
 		fmt.Println("[DEBUG] Starting search.")
 		cnt++
-		if cnt > 5 {
+		if cnt > 20 {
 			//if you failed more than 5 time let's break the function and return false
 			fmt.Printf("Cannot identify initial clusters!\n")
 			return false, nil
