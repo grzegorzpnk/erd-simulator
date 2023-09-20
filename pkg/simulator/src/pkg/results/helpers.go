@@ -14,7 +14,7 @@ func (pc *percentageCounter) getPercentage() float64 {
 }
 
 func initializeEmpty2DArray() [][]float64 {
-	a := make([][]float64, 5)
+	a := make([][]float64, 6)
 	for i := range a {
 		a[i] = make([]float64, 4)
 	}
