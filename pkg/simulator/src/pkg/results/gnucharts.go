@@ -74,7 +74,7 @@ func (c *Client) GenerateChartPkgMecsICC(chartType ChartType, basePath string) e
 		resource = "memory"
 	}
 
-	var values = [][]float64{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
+	var values = [][]float64{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}
 
 	values[0][0] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecLocal, resource)
 	values[0][1] = c.GetMecUtilizationAggregated(model.ExpOptimal, model.StrLB, MecRegional, resource)
