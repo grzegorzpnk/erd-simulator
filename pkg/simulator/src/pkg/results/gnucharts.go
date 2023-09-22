@@ -311,6 +311,54 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 	}
 }
 
+func (c *Client) GenerateSummaryOfConvergenceTimes() []float64 {
+
+	var values []float64
+
+	values[0] = c.GetAverageConvTimeAllIter(model.ExpOptimal, model.StrLB)
+	values[1] = c.GetAverageConvTimeAllIter(model.ExpOptimal, model.StrLatency)
+	values[2] = c.GetAverageConvTimeAllIter(model.ExpOptimal, model.StrHybrid)
+	values[3] = c.GetAverageConvTimeAllIter(model.ExpEarHeuristic, model.StrHybrid)
+	values[4] = c.GetAverageConvTimeAllIter(model.ExpEarHeuristic, model.StrLB)
+	values[5] = c.GetAverageConvTimeAllIter(model.ExpHeuristic, model.StrHybrid)
+
+	var expLabels []string
+
+	expLabels = []string{"O-LoadBalancing", "O-Latency", "O-Hybrid", "EAR-Heuristic", "EAR-LB", "H-Hybrid"}
+
+	iterFile := "times.dat"
+
+	err := os.MkdirAll("times/", os.ModePerm)
+	if err != nil {
+		return 0
+	}
+
+	iter, err := os.Create(filepath.Join("times/", filepath.Base(iterFile)))
+	defer iter.Close()
+	if err != nil {
+		return 0
+	}
+
+	_, err = iter.WriteString(createIterFileContentApps(0, expLabels, values))
+	if err != nil {
+		return err
+	}
+
+	script, err := os.Create(filepath.Join(basePath+"/"+pkgPath, filepath.Base(scriptName)))
+	defer script.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = script.WriteString(generateAggregatedRatesScriptApps(ratesType, xLabel, yLabel, iterFile))
+	if err != nil {
+		return err
+	}
+	return err
+
+	return values
+}
+
 func (c *Client) GenerateChartPkgAppsICCTunning(chartType ChartType, basePath string) error {
 
 	switch chartType {

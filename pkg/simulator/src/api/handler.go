@@ -122,6 +122,13 @@ func (h *apiHandler) generateICCHeuristicChart(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	err = h.ResultClient.GenerateSummaryOfConvergenceTimes()
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 }
 

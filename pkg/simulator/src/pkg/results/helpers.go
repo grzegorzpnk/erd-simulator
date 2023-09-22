@@ -13,6 +13,10 @@ func (pc *percentageCounter) getPercentage() float64 {
 	return pc.total / pc.divisor * 100
 }
 
+func (pc *percentageCounter) getAverage() float64 {
+	return pc.total / pc.divisor
+}
+
 func initializeEmpty2DArray() [][]float64 {
 	a := make([][]float64, 5)
 	for i := range a {

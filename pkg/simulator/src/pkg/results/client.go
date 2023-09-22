@@ -266,6 +266,40 @@ func (c *Client) GetRateValueAllIter(et model.ExperimentType, strategy model.Exp
 	return pc.getPercentage()
 }
 
+func (c *Client) GetAverageConvTimeAllIter(et model.ExperimentType, strategy model.ExperimentStrategy) float64 {
+	var okResults []ExpResult
+
+	for _, result := range c.GetResults() {
+		if result.Metadata.Type == et && result.Metadata.Strategy == strategy {
+			okResults = append(okResults, result)
+		}
+	}
+
+	var pc percentageCounter
+
+	for _, result := range okResults {
+		for i := 0; i < len(result.Data.Erd.EvalTimes.Failed); i++ {
+			pc.total += float64(result.Data.Erd.EvalTimes.Failed[i])
+			pc.divisor += 1
+		}
+		for i := 0; i < len(result.Data.Erd.EvalTimes.Skipped); i++ {
+			pc.total += float64(result.Data.Erd.EvalTimes.Skipped[i])
+			pc.divisor += 1
+		}
+		for i := 0; i < len(result.Data.Erd.EvalTimes.Redundant); i++ {
+			pc.total += float64(result.Data.Erd.EvalTimes.Redundant[i])
+			pc.divisor += 1
+		}
+		for i := 0; i < len(result.Data.Erd.EvalTimes.Successful); i++ {
+			pc.total += float64(result.Data.Erd.EvalTimes.Successful[i])
+			pc.divisor += 1
+		}
+
+	}
+
+	return pc.getAverage()
+}
+
 func (c *Client) GetConfidenceValue(et model.ExperimentType, es model.ExperimentStrategy, evt string) (confidence float64) {
 
 	var okResults []ExpResult
