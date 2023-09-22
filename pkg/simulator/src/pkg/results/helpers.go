@@ -219,7 +219,7 @@ plot newhistogram "Optimal-LB" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "" linecolor rgb "black"
 
 exit
-`, title, resType, yLabel, iterFiles[0], iterFiles[1], iterFiles[2], iterFiles[3], iterFiles[4])
+`, title, resType, yLabel, iterFiles[0], iterFiles[1], iterFiles[2], iterFiles[3], iterFiles[4], iterFiles[5])
 
 	return script
 }
