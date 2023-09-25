@@ -347,6 +347,7 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 
 	err := os.MkdirAll(basePath+"/times/", os.ModePerm)
 	if err != nil {
+		log.Infof("Dir Not created  %v", basePath+"/times/")
 		return err
 	}
 	log.Infof("Dir createdL %v", basePath+"/times/")

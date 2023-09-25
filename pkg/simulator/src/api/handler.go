@@ -497,7 +497,7 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	for f := 0; f < 2; f++ {
+	for f := 0; f < 1; f++ {
 
 		var experiments []model.ExperimentIntent
 		experiments = declareICCExperiments(experimentDetails)
