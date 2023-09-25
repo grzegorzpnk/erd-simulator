@@ -269,6 +269,7 @@ func (c *Client) GetRateValueAllIter(et model.ExperimentType, strategy model.Exp
 func (c *Client) GetAverageConvTimeAllIter(et model.ExperimentType, strategy model.ExperimentStrategy) float64 {
 	var okResults []ExpResult
 
+	log.Infof("Calculating mean time of convergence time for Experiment Type: %v: , strategy: %v", et, strategy)
 	for _, result := range c.GetResults() {
 		if result.Metadata.Type == et && result.Metadata.Strategy == strategy {
 			okResults = append(okResults, result)
@@ -295,6 +296,9 @@ func (c *Client) GetAverageConvTimeAllIter(et model.ExperimentType, strategy mod
 			pc.divisor += 1
 		}
 
+		log.Infof("Total number of operations: %v \nTotal number of operation Failed: %v\nTotal number of operation Skipped: %v\n "+
+			"Total number of operation Redundant: %v\nTotal number of operation Success: %v\n", pc.divisor, len(result.Data.Erd.EvalTimes.Failed),
+			len(result.Data.Erd.EvalTimes.Skipped), len(result.Data.Erd.EvalTimes.Redundant), len(result.Data.Erd.EvalTimes.Successful), )
 	}
 
 	return pc.getAverage()

@@ -311,7 +311,7 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 	}
 }
 
-func (c *Client) GenerateSummaryOfConvergenceTimes() []float64 {
+func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 
 	var values []float64
 
@@ -330,33 +330,26 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() []float64 {
 
 	err := os.MkdirAll("times/", os.ModePerm)
 	if err != nil {
-		return 0
+		return err
 	}
 
 	iter, err := os.Create(filepath.Join("times/", filepath.Base(iterFile)))
 	defer iter.Close()
 	if err != nil {
-		return 0
+		return err
 	}
 
-	_, err = iter.WriteString(createIterFileContentApps(0, expLabels, values))
+	_, err = iter.WriteString(createConvergenceTimeFileContent(expLabels, values))
 	if err != nil {
 		return err
 	}
 
-	script, err := os.Create(filepath.Join(basePath+"/"+pkgPath, filepath.Base(scriptName)))
+	script, err := os.Create(filepath.Join("times/", filepath.Base(iterFile)))
 	defer script.Close()
 	if err != nil {
 		return err
 	}
 
-	_, err = script.WriteString(generateAggregatedRatesScriptApps(ratesType, xLabel, yLabel, iterFile))
-	if err != nil {
-		return err
-	}
-	return err
-
-	return values
 }
 
 func (c *Client) GenerateChartPkgAppsICCTunning(chartType ChartType, basePath string) error {
@@ -624,6 +617,31 @@ func createIterFileContentMecs(labels []string, val []float64) string {
 	}
 
 	return fileContent
+}
+
+func createConvergenceTimeFileContent(labels []string, val []float64) string {
+
+	fileContent := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", labels[0], labels[1], labels[2], labels[3], labels[4], labels[5])
+
+	line := fmt.Sprintf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", val[0], val[1], val[2], val[3], val[4], val[5])
+	fileContent += line
+
+	return fileContent
+
+	//var startIndex int
+	//switch iterFileNo {
+	//case 0:
+	//	startIndex = 0
+	//case 1:
+	//	startIndex = 6
+	//case 2:
+	//	startIndex = 12
+	//case 3:
+	//	startIndex = 18
+	//case 4:
+	//	startIndex = 24
+	//}
+
 }
 
 func createIterFileContentApps(iterFileNo int, labels []string, val [][]float64) string {
