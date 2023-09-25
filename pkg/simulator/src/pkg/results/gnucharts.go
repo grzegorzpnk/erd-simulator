@@ -345,19 +345,19 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 
 	basePath := "results"
 
-	err := os.MkdirAll(basePath+"/times/", os.ModePerm)
+	err := os.MkdirAll("results/times/", os.ModePerm)
 	if err != nil {
 		log.Infof("Dir Not created  %v", basePath+"/times/")
 		return err
 	}
-	log.Infof("Dir createdL %v", basePath+"/times/")
+	log.Infof("Dir created: %v", basePath+"/times/")
 
-	iter, err := os.Create(filepath.Join("/times/", filepath.Base(iterFile)))
+	iter, err := os.Create(filepath.Join("results/times/", filepath.Base(iterFile)))
 	defer iter.Close()
 	if err != nil {
 		return err
 	}
-	log.Infof("File %v created: ", filepath.Join("/times/", filepath.Base(iterFile)))
+	log.Infof("File %v created: ", filepath.Join("results/times/", filepath.Base(iterFile)))
 
 	_, err = iter.WriteString(createConvergenceTimeFileContent(expLabels, values))
 	if err != nil {
