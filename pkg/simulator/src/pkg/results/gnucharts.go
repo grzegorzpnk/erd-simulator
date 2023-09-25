@@ -328,7 +328,8 @@ func (c *Client) GenerateChartPkgAppsICC(chartType ChartType, basePath string) e
 
 func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 
-	values := []float64{}
+	g
+	values := make([]float64, 6)
 
 	values[0] = c.GetAverageConvTimeAllIter(model.ExpOptimal, model.StrLB)
 	values[1] = c.GetAverageConvTimeAllIter(model.ExpOptimal, model.StrLatency)
