@@ -364,12 +364,6 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 		return err
 	}
 
-	script, err := os.Create(filepath.Join("/times/", filepath.Base(iterFile)))
-	defer script.Close()
-	if err != nil {
-		return err
-	}
-
 	log.Infof("content saved  in %v : ", filepath.Join("/times/", filepath.Base(iterFile)))
 	return err
 
