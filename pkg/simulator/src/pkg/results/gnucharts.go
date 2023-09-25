@@ -328,7 +328,9 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 
 	iterFile := "times.dat"
 
-	err := os.MkdirAll("times/", os.ModePerm)
+	basePath := "results"
+
+	err := os.MkdirAll(basePath+"times/", os.ModePerm)
 	if err != nil {
 		return err
 	}
@@ -349,6 +351,8 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 	if err != nil {
 		return err
 	}
+
+	return err
 
 }
 
