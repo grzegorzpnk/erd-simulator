@@ -638,7 +638,7 @@ func createIterFileContentMecs(labels []string, val []float64) string {
 
 func createConvergenceTimeFileContent(labels []string, val []float64) string {
 
-	fileContent := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\n", labels[0], labels[1], labels[2], labels[3], labels[4], labels[5])
+	fileContent := fmt.Sprintf("%v\t%v\t%v\t%v\t%v\t%v\n", labels[0], labels[1], labels[2], labels[3], labels[4], labels[5])
 
 	line := fmt.Sprintf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", val[0], val[1], val[2], val[3], val[4], val[5])
 	fileContent += line
