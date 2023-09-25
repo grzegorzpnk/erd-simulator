@@ -54,8 +54,7 @@ func (c *Client) GetMecUtilizationAggregated(et model.ExperimentType, strategy m
 		}
 	}
 
-	log.Infof("[GenerateCharts][GetMecUtilAggr] Found %v results for [Exp:%v][Str:%v][Mec:%v][Res:%v]",
-		len(okResults), et, strategy, mt, resType)
+	//log.Infof("[GenerateCharts][GetMecUtilAggr] Found %v results for [Exp:%v][Str:%v][Mec:%v][Res:%v]", len(okResults), et, strategy, mt, resType)
 
 	var pc percentageCounter
 
@@ -298,7 +297,7 @@ func (c *Client) GetAverageConvTimeAllIter(et model.ExperimentType, strategy mod
 
 		log.Infof("Total number of operations: %v \nTotal number of operation Failed: %v\nTotal number of operation Skipped: %v\n "+
 			"Total number of operation Redundant: %v\nTotal number of operation Success: %v\n", pc.divisor, len(result.Data.Erd.EvalTimes.Failed),
-			len(result.Data.Erd.EvalTimes.Skipped), len(result.Data.Erd.EvalTimes.Redundant), len(result.Data.Erd.EvalTimes.Successful), )
+			len(result.Data.Erd.EvalTimes.Skipped), len(result.Data.Erd.EvalTimes.Redundant), len(result.Data.Erd.EvalTimes.Successful))
 	}
 
 	return pc.getAverage()

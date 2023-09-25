@@ -96,7 +96,7 @@ func (c *Client) GenerateChartPkgMecsICC(chartType ChartType, basePath string) e
 	values[4][1] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecRegional, resource)
 	values[4][2] = c.GetMecUtilizationAggregated(model.ExpEarHeuristic, model.StrLB, MecCentral, resource)
 
-	log.Infof("values length: %v, size: %v", len(values), len(values[0]))
+	//	log.Infof("values length: %v, size: %v", len(values), len(values[0]))
 
 	values[5][0] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecLocal, resource)
 	values[5][1] = c.GetMecUtilizationAggregated(model.ExpHeuristic, model.StrHybrid, MecRegional, resource)
@@ -345,12 +345,12 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 
 	basePath := "results"
 
-	err := os.MkdirAll(basePath+"times/", os.ModePerm)
+	err := os.MkdirAll(basePath+"/times/", os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	iter, err := os.Create(filepath.Join("times/", filepath.Base(iterFile)))
+	iter, err := os.Create(filepath.Join("/times/", filepath.Base(iterFile)))
 	defer iter.Close()
 	if err != nil {
 		return err
@@ -361,7 +361,7 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 		return err
 	}
 
-	script, err := os.Create(filepath.Join("times/", filepath.Base(iterFile)))
+	script, err := os.Create(filepath.Join("/times/", filepath.Base(iterFile)))
 	defer script.Close()
 	if err != nil {
 		return err
@@ -645,10 +645,11 @@ func createConvergenceTimeFileContent(labels []string, val []float64) string {
 	line := fmt.Sprintf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", val[0], val[1], val[2], val[3], val[4], val[5])
 	fileContent += line
 
+	log.Infof("File content: %v", fileContent)
 	return fileContent
 
 	//var startIndex int
-	//switch iterFileNo {
+	g //switch iterFileNo {
 	//case 0:
 	//	startIndex = 0
 	//case 1:

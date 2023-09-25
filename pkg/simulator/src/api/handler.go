@@ -101,12 +101,16 @@ func (h *apiHandler) generateICCHeuristicChart(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	log.Infof("Triggering rate chart generated")
+
 	err = h.ResultClient.GenerateChartPkgAppsICC(results.RelocationRejectionRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	log.Infof("Rejection rate chart generated")
 
 	err = h.ResultClient.GenerateChartPkgMecsICC(results.ResCpu, basePath+"/"+mecs)
 	if err != nil {
@@ -115,12 +119,15 @@ func (h *apiHandler) generateICCHeuristicChart(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	log.Infof("MEM util chart generated")
+
 	err = h.ResultClient.GenerateChartPkgMecsICC(results.ResMemory, basePath+"/"+mecs)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	log.Infof("CPU util chart generated")
 
 	err = h.ResultClient.GenerateSummaryOfConvergenceTimes()
 	if err != nil {
@@ -128,6 +135,8 @@ func (h *apiHandler) generateICCHeuristicChart(w http.ResponseWriter, r *http.Re
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	log.Infof("Conv times results generated")
 
 	w.WriteHeader(http.StatusOK)
 }
