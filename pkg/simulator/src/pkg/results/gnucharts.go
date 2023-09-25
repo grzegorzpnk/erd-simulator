@@ -349,12 +349,14 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 	if err != nil {
 		return err
 	}
+	log.Infof("Dir createdL %v", basePath+"/times/")
 
 	iter, err := os.Create(filepath.Join("/times/", filepath.Base(iterFile)))
 	defer iter.Close()
 	if err != nil {
 		return err
 	}
+	log.Infof("File %v created: ", filepath.Join("/times/", filepath.Base(iterFile)))
 
 	_, err = iter.WriteString(createConvergenceTimeFileContent(expLabels, values))
 	if err != nil {
@@ -367,6 +369,7 @@ func (c *Client) GenerateSummaryOfConvergenceTimes() error {
 		return err
 	}
 
+	log.Infof("content saved  in %v : ", filepath.Join("/times/", filepath.Base(iterFile)))
 	return err
 
 }
