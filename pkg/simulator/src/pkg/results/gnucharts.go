@@ -649,7 +649,7 @@ func createConvergenceTimeFileContent(labels []string, val []float64) string {
 	return fileContent
 
 	//var startIndex int
-	g //switch iterFileNo {
+	//switch iterFileNo {
 	//case 0:
 	//	startIndex = 0
 	//case 1:
