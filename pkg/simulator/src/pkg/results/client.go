@@ -299,6 +299,7 @@ func (c *Client) GetAverageConvTimeAllIter(et model.ExperimentType, strategy mod
 			"Total number of operation Redundant: %v\nTotal number of operation Success: %v\n", pc.divisor, len(result.Data.Erd.EvalTimes.Failed),
 			len(result.Data.Erd.EvalTimes.Skipped), len(result.Data.Erd.EvalTimes.Redundant), len(result.Data.Erd.EvalTimes.Successful))
 	}
+	log.Infof("im here")
 
 	return pc.getAverage()
 }
