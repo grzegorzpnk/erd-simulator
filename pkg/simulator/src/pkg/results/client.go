@@ -33,6 +33,7 @@ func (c *Client) AppendResult(result ExpResult) {
 
 func (c *Client) ResetResultsAtSimu() {
 	c.expResults = nil
+	experimentId = 1
 }
 
 func (c *Client) IncExpId() {
