@@ -497,6 +497,9 @@ func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	//clear results of previous iteration ( FULL experiment)
+	h.ResultClient.ResetResultsAtSimu()
+
 	for f := 0; f < 20; f++ {
 
 		var experiments []model.ExperimentIntent
