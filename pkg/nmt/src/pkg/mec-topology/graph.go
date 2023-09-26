@@ -241,25 +241,26 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 
 func (g *Graph) DeclareApplications(ac AppCounter) {
 
-	v2x, drones, video := ac.V2x, ac.Uav, ac.Cg
+	//v2x, drones, cg := ac.V2x, ac.Uav, ac.Cg
+	cg, v2x, drones := ac.Cg, ac.V2x, ac.Uav
 
-	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", ac.GetTotal(), v2x, drones, video)
+	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", ac.GetTotal(), v2x, drones, cg)
 	//todo: values should be parametrized, not hardcoded!
-	for i := 0; i < v2x; i++ {
+	for i := 0; i < cg; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 10
 		app.GeneratreResourceRequirements()
 		g.Application = append(g.Application, &app)
 	}
-	for i := v2x; i < v2x+drones; i++ {
+	for i := cg; i < cg+v2x; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 15
 		app.GeneratreResourceRequirements()
 		g.Application = append(g.Application, &app)
 	}
-	for i := v2x + drones; i < v2x+drones+video; i++ {
+	for i := cg + v2x; i < cg+v2x+drones; i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 30
