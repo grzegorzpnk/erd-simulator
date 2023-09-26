@@ -253,14 +253,14 @@ func (g *Graph) DeclareApplications(ac AppCounter) {
 		app.GeneratreResourceRequirements()
 		g.Application = append(g.Application, &app)
 	}
-	for i := cg; i < cg+v2x; i++ {
+	for i := cg; i < (cg + v2x); i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 15
 		app.GeneratreResourceRequirements()
 		g.Application = append(g.Application, &app)
 	}
-	for i := cg + v2x; i < cg+v2x+drones; i++ {
+	for i := (cg + v2x); i < (cg + v2x + drones); i++ {
 		var app model.MECApp
 		app.Id = strconv.Itoa(i + 1)
 		app.Requirements.RequestedLatency = 30
