@@ -639,6 +639,7 @@ func (h *apiHandler) conductExperimentICCTunningIter(w http.ResponseWriter, r *h
 
 		h.ResultClient.ResetResultsAtSimu()
 		movements := b * 20
+		experimentDetails.MovementsInExperiment = strconv.Itoa(movements)
 
 		for f := 0; f < 20; f++ {
 
