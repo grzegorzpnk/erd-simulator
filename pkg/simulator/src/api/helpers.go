@@ -363,7 +363,8 @@ func (h *apiHandler) executePhDExperiment(exp model.ExperimentIntent, expIndex, 
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
 
 	app := h.SimuClient.GetApps(strconv.Itoa(userID))
-	log.Infof(experimentN+"User(app) with ID: %v (%v ms) [current mec: %v] has moved FROM cell: %v, towards cell: %v", app.Id, app.Requirements.RequestedLatency, app.ClusterId, app.UserLocation, strconv.Itoa(userPosition))
+	//log.Infof(experimentN+"User(app) with ID: %v (%v ms) [current mec: %v] has moved FROM cell: %v, towards cell: %v", app.Id, app.Requirements.RequestedLatency, app.ClusterId, app.UserLocation, strconv.Itoa(userPosition))
+	log.Infof(experimentN)
 	app.UserLocation = strconv.Itoa(userPosition)
 
 	var spi model.SmartPlacementIntent
@@ -383,24 +384,24 @@ func (h *apiHandler) executePhDExperiment(exp model.ExperimentIntent, expIndex, 
 	cluster, err := CallPlacementController(spi, exp.ExperimentType)
 
 	if err != nil {
-		log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
-		log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+		//log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
+		//log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
 		return true
 	}
 
 	if cluster.Cluster == app.ClusterId {
-		log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+		//log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
 		return true
 	}
 
-	log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+	//log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
 
 	//generate request to orchestrator
 	err2 := sendRelocationRequest(*app, *cluster)
 	if err2 != nil {
-		log.Errorf("Cannot relocate app! Error: %v", err2.Error())
+		//	log.Errorf("Cannot relocate app! Error: %v", err2.Error())
 	} else {
-		log.Infof(experimentN + "Application has been relocated in nmt")
+		//	log.Infof(experimentN + "Application has been relocated in nmt")
 
 		//update cluster in internal app list
 		app.ClusterId = cluster.Cluster
