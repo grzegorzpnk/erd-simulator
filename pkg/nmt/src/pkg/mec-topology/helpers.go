@@ -44,8 +44,8 @@ func (g *Graph) CheckAlreadExistLink(k model.Edge) bool {
 func FindCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, graph *Graph) (model.MecHost, error) {
 	candidates := []model.MecHost{}
 
-	fmt.Printf("Looking for MEC Candidates for:    ")
-	app.PrintApplication()
+	//fmt.Printf("Looking for MEC Candidates for:    ")
+	//app.PrintApplication()
 
 	for index, mh := range mhs {
 		latency, err := graph.ShortestPath(cell, &mh)

@@ -328,13 +328,18 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 	var mecHostsSourcesTmp = make([]model.MecHost, len(mecHostSource))
 
 	var cnt = 0
+	var successullyFound = 0
 	search := true
 	for search {
+		if cnt != 0 {
+			fmt.Printf("In previous iteration, found place for %v apps", successullyFound)
+		}
+		successullyFound = 0
 		fmt.Println("[DEBUG] Starting search.")
 		cnt++
 		if cnt > 20 {
-			//if you failed more than 5 time let's break the function and return false
-			fmt.Printf("Cannot identify initial clusters!\n")
+			//if you failed more than 20 time let's break the function and return false
+			fmt.Printf("Cannot identify initial clusters after %v trials!\n", cnt)
 			return false, nil
 		}
 		copy(mecHostsSourcesTmp, mecHostSource)
@@ -352,7 +357,10 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 			mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
 			edgeApp.ClusterId = cmh.Identity.Cluster
 			edgeApp.UserLocation = startCell.Id
+			successullyFound += 1
 		}
+		fmt.Printf("Found placement for all %v  apps!", len(g.Application))
+
 	}
 
 	fmt.Printf("Found after %v iterations", cnt)

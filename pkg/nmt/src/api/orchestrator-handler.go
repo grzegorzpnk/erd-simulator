@@ -254,6 +254,47 @@ func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request) {
+
+	var ac mec_topology.AppCounter
+	h.graphClient.DeleteAllDeclaredApps()
+	h.graphClient.UninstallAllApps()
+
+	//declare
+	w.Header().Set("Content-Type", "application/json")
+
+	err := json.NewDecoder(r.Body).Decode(&ac)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+	}
+	h.graphClient.DeclareApplications(ac)
+
+	//find candidates mec and assign
+	status, _ := h.graphClient.FindInitialClusters()
+	if status == true {
+		fmt.Printf("Found initial placement\n")
+		for i := 0; i < len(h.graphClient.Application); i++ {
+			var app model.MECApp
+			app = *h.graphClient.Application[i]
+			h.graphClient.ImmutableApplicationList = append(h.graphClient.ImmutableApplicationList, app)
+			h.graphClient.ImmutableApplicationList[i].PrintApplication()
+		}
+	} else {
+		w.WriteHeader(http.StatusConflict)
+		log.Errorf("Cannot find cluster for declared apps\n")
+		return
+	}
+
+	err = h.graphClient.InstantiateAllDefinedApps()
+	if err != nil {
+		log.Errorf("Error has been raised: ", err)
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+
+}
+
 func (h *apiHandler) Recreate(w http.ResponseWriter, r *http.Request) {
 
 	//declare
