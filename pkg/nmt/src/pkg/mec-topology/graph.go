@@ -295,7 +295,7 @@ func (g *Graph) UninstallAllApps() {
 	//uninstall on MEC Hosts
 	for _, v := range g.MecHosts {
 		if len(v.MECApps) != 0 {
-			log.Infof("Cluster: %v", v.Identity.Cluster)
+			//log.Infof("Cluster: %v", v.Identity.Cluster)
 			for _, x := range v.MECApps {
 				v.UninstallApp(x)
 			}

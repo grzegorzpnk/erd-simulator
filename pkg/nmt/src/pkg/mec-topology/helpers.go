@@ -76,9 +76,9 @@ func FindCanidateMec(app model.MECApp, cell *model.Cell, mhs []model.MecHost, gr
 		return model.MecHost{}, errors.New("no candidates found")
 	}
 	fmt.Printf("Total number of candidates: %v\n", len(candidates))
-	for i, _ := range candidates {
-		fmt.Println(candidates[i].Identity.Cluster)
-	}
+	//for i, _ := range candidates {
+	//	fmt.Println(candidates[i].Identity.Cluster)
+	//}
 	return candidates[rand.Intn(len(candidates))], nil
 }
 
