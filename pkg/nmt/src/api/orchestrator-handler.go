@@ -277,7 +277,7 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 			var app model.MECApp
 			app = *h.graphClient.Application[i]
 			h.graphClient.ImmutableApplicationList = append(h.graphClient.ImmutableApplicationList, app)
-			h.graphClient.ImmutableApplicationList[i].PrintApplication()
+			//h.graphClient.ImmutableApplicationList[i].PrintApplication()
 		}
 	} else {
 		w.WriteHeader(http.StatusConflict)
