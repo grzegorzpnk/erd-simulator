@@ -268,10 +268,10 @@ func (g *Graph) DeclareApplications(ac AppCounter) {
 		g.Application = append(g.Application, &app)
 	}
 
-	fmt.Printf("Apps without clusters:\n")
-	for i := 0; i < len(g.Application); i++ {
-		g.Application[i].PrintApplication()
-	}
+	//fmt.Printf("Apps without clusters:\n")
+	//for i := 0; i < len(g.Application); i++ {
+	//	g.Application[i].PrintApplication()
+	//}
 
 }
 
