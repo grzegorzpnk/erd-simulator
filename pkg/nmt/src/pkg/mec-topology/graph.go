@@ -332,7 +332,7 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 	search := true
 	for search {
 		if cnt != 0 {
-			fmt.Printf("In previous iteration, found place for %v apps", successullyFound)
+			fmt.Printf("\nIn previous iteration, found place for %v apps", successullyFound)
 		}
 		successullyFound = 0
 		fmt.Println("[DEBUG] Starting search.")
@@ -359,7 +359,6 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 			edgeApp.UserLocation = startCell.Id
 			successullyFound += 1
 		}
-		fmt.Printf("Found placement for all %v  apps!", len(g.Application))
 
 	}
 
