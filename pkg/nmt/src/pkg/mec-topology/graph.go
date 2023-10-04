@@ -208,6 +208,7 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					latency += 6 // DPI time for level N+1
 				}
 			case -1:
+				log.Errorf("CASE -1")
 				if source.Identity.Location.Level == 1 {
 					if source.Identity.Cluster == "mec6" || source.Identity.Cluster == "mec7" {
 						latency = 3
