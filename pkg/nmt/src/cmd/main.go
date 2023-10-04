@@ -36,9 +36,9 @@ func main() {
 
 func readMECNetworkTopologyConfig() {
 
-	graph.ReadTopologyConfigFile("mecTopologyforOneCZ.json")
-	graph.ReadMECConnectionFile("mecLinksforOneCZ.json")
-	graph.ReadNetworkTopologyConfigFile("networkTopologyforOneCZ.json")
+	graph.ReadTopologyConfigFile("mecTopologyforTwoCZ.json")
+	graph.ReadMECConnectionFile("mecLinksforTwoCZ.json")
+	graph.ReadNetworkTopologyConfigFile("networkTopologyforTwoCZ.json")
 
 }
 
