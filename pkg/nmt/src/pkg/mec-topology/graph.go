@@ -169,7 +169,9 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 						latency = 1.0 // Latency between clusters at N-level in the same LocalZone
 					} else {
 						if (source.Identity.Cluster == "mec13" || source.Identity.Cluster == "mec14") && (target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16") ||
-							(target.Identity.Cluster == "mec13" || target.Identity.Cluster == "mec14") && (source.Identity.Cluster == "mec15" || source.Identity.Cluster == "mec16") {
+							(target.Identity.Cluster == "mec13" || target.Identity.Cluster == "mec14") && (source.Identity.Cluster == "mec15" || source.Identity.Cluster == "mec16") ||
+							(source.Identity.Cluster == "mec21" || source.Identity.Cluster == "mec22") && (target.Identity.Cluster == "mec27" || target.Identity.Cluster == "mec28") ||
+							(target.Identity.Cluster == "mec21" || target.Identity.Cluster == "mec22") && (source.Identity.Cluster == "mec27" || source.Identity.Cluster == "mec28") {
 							latency = 5.0 // 2.8
 						} else {
 							latency = 5.0 // 4.0
@@ -185,7 +187,7 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					if source.Identity.Location.Region == target.Identity.Location.Region {
 						latency = 1 // Latency between clusters at N+2-level in the same Region
 					} else {
-						latency = 10 // TODO: Not included on the model, but not relevant
+						latency = 10
 					}
 				}
 			case 1:
