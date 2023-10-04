@@ -6,9 +6,9 @@ USER root
 
 COPY --chown=root ./bin/nmt ./nmt
 COPY --chown=root ./src/cmd/config.json ./
-COPY --chown=root ./src/cmd/mecTopologyforOneCZ.json ./
-COPY --chown=root ./src/cmd/networkTopologyforOneCZ.json ./
-COPY --chown=root ./src/cmd/mecLinksforOneCZ.json ./
+COPY --chown=root ./src/cmd/mecTopologyforTwoCZ.json ./
+COPY --chown=root ./src/cmd/networkTopologyforTwoCZ.json ./
+COPY --chown=root ./src/cmd/mecLinksforTwoCZ.json ./
 
 RUN chmod +x ./nmt
 
