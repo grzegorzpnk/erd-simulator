@@ -4,5 +4,5 @@
   "tau" : "0.8",
   "res-min" : "500",
   "res-max": "1000",
-  "max-cell-number" : "42"
+  "max-cell-number" : "64"
 }
