@@ -202,7 +202,9 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					if ((source.Identity.Cluster == "mec2" || source.Identity.Cluster == "mec3" || source.Identity.Cluster == "mec4") &&
 						(target.Identity.Cluster == "mec11" || target.Identity.Cluster == "mec12" || target.Identity.Cluster == "mec13" || target.Identity.Cluster == "mec14")) ||
 						((source.Identity.Cluster == "mec5" || source.Identity.Cluster == "mec6") &&
-							(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) {
+							(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) ||
+						((source.Identity.Cluster == "mec24" || source.Identity.Cluster == "mec25" || source.Identity.Cluster == "mec26") &&
+							(target.Identity.Cluster == "mec27" || target.Identity.Cluster == "mec28" || target.Identity.Cluster == "mec29" || target.Identity.Cluster == "mec30")) {
 						latency = 3
 					} else {
 						latency = 4
@@ -210,24 +212,8 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					latency += 6 // DPI time for level N+1
 				}
 			case -1:
-				if source.Identity.Location.Level == 1 {
-					if source.Identity.Cluster == "mec6" || source.Identity.Cluster == "mec7" {
-						latency = 3
-					} else {
-						latency = 4
-					}
-					latency += 4 // DPI time for level N+2
-				} else if source.Identity.Location.Level == 0 {
-					if ((target.Identity.Cluster == "mec2" || target.Identity.Cluster == "mec3" || target.Identity.Cluster == "mec4") &&
-						(source.Identity.Cluster == "mec11" || source.Identity.Cluster == "mec12" || source.Identity.Cluster == "mec13" || source.Identity.Cluster == "mec14")) ||
-						((target.Identity.Cluster == "mec5" || target.Identity.Cluster == "mec6") &&
-							(source.Identity.Cluster == "mec15" || source.Identity.Cluster == "mec16" || source.Identity.Cluster == "mec17" || source.Identity.Cluster == "mec18")) {
-						latency = 3
-					} else {
-						latency = 4
-					}
-					latency += 6 // DPI time for level N+1
-				}
+				log.Errorf("Not supported option")
+				latency = -403
 			case 2, -2:
 				// unsupported, no direct links
 				latency = -404
