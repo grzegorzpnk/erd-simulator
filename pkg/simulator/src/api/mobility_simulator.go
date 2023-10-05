@@ -21,6 +21,7 @@ func (h *apiHandler) generateTargetCellId(app *model.MECApp) int {
 	user := app
 	possibleStates := cellStateMachine[user.UserLocation]
 	for {
+		log.Infof("Possible states: %v, len: %v", possibleStates, len(possibleStates))
 		nextState = possibleStates[rand.Intn(len(possibleStates))]
 		if len(user.UserPath) < 2 {
 			break
