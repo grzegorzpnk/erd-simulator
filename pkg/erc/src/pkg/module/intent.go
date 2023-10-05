@@ -239,7 +239,7 @@ func checkCoverageZone(sMec, tMec model.MecHost) bool {
 }
 
 // FindCandidates based on SmartPlacementIntent and current SearchParams, iterates over MEC Hosts and checks the constraints
-// If latency constraint for gicen MEC Host is met, it's appended to the SearchParams.evalNeighMECs for further search
+// If latency constraint for given MEC Host is met, it's appended to the SearchParams.evalNeighMECs for further search
 // If all constraints for given MEC Host are met, it's appended to the SearchParams.candidateMECs list
 // Returns (updated SearchParams struct, error)
 func FindCandidates(tc *topology.Client, sp SearchParams, i model.SmartPlacementIntent) (SearchParams, error) {
