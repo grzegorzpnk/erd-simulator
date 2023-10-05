@@ -192,7 +192,7 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 				}
 			case 1:
 				if source.Identity.Location.Level == 2 {
-					if target.Identity.Cluster == "mec5" || target.Identity.Cluster == "mec6" {
+					if target.Identity.Cluster == "mec5" || target.Identity.Cluster == "mec6" || target.Identity.Cluster == "mec35" || target.Identity.Cluster == "mec36" {
 						latency = 3
 					} else {
 						latency = 2.8
@@ -204,7 +204,9 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 						((source.Identity.Cluster == "mec5" || source.Identity.Cluster == "mec6") &&
 							(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) ||
 						((source.Identity.Cluster == "mec24" || source.Identity.Cluster == "mec25" || source.Identity.Cluster == "mec26") &&
-							(target.Identity.Cluster == "mec27" || target.Identity.Cluster == "mec28" || target.Identity.Cluster == "mec29" || target.Identity.Cluster == "mec30")) {
+							(target.Identity.Cluster == "mec27" || target.Identity.Cluster == "mec28" || target.Identity.Cluster == "mec29" || target.Identity.Cluster == "mec30")) ||
+						((source.Identity.Cluster == "mec35" || source.Identity.Cluster == "mec36") &&
+							(target.Identity.Cluster == "mec41" || target.Identity.Cluster == "mec42" || target.Identity.Cluster == "mec43" || target.Identity.Cluster == "mec44")) {
 						latency = 3
 					} else {
 						latency = 4
