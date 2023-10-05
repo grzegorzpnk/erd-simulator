@@ -165,10 +165,8 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 	log.Infof("Searching Type: Optimal")
 	log.Infof("Smart Placement Intent: %+v", intent)
 
-	// Evaluate what coverage zone we are considering (based on region)
-	firstMEC, err := tc.GetMecHostsByCellId(tc.CurrentCell)
-
-	sp.currentMECs, err = tc.GetMecHostsByRegion(firstMEC[0].Identity.Location.Region)
+	//sp.currentMECs, err = tc.GetMecHostsByRegion(firstMEC[0].Identity.Location.Region)
+	sp.currentMECs, err = tc.GetMecHosts()
 
 	// Check if any cluster is a valid candidate, if yes -> try to find optimal cluster
 	sp, err = FindCandidates(tc, sp, intent)

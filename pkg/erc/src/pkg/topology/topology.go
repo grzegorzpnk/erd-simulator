@@ -131,6 +131,31 @@ func (c *Client) GetMecHostsByRegion(region string) ([]model.MecHost, error) {
 	return mhs, nil
 }
 
+func (c *Client) GetMecHosts() ([]model.MecHost, error) {
+	var mhs []model.MecHost
+	var mhsIdentity []model.MecIdentity
+
+	url := c.buildGetAllMecHostsUrl()
+	respBody, err := getHTTPRespBody(url)
+
+	if err := json.Unmarshal(respBody, &mhsIdentity); err != nil {
+		log.Errorf("[Topology] Couldn't unmarshal response body: %v", err)
+		return []model.MecHost{}, err
+	}
+
+	if len(mhsIdentity) <= 0 {
+		err = errors.New(fmt.Sprintf("no mec hosts found"))
+		return []model.MecHost{}, err
+	}
+
+	for _, mhi := range mhsIdentity {
+		mh := model.MecHost{Identity: mhi}
+		mhs = append(mhs, mh)
+	}
+
+	return mhs, nil
+}
+
 // GetMecNeighbours gets a neighbours list for given Mec Host (mec)
 func (c *Client) GetMecNeighbours(mec model.MecHost) (model.MecHost, error) {
 	var mhsIdentity []model.MecIdentity
