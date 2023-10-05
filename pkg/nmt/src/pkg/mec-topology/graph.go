@@ -202,7 +202,9 @@ func generateLatency(sNode, tNode interface{}) (float64, error) {
 					if ((source.Identity.Cluster == "mec2" || source.Identity.Cluster == "mec3" || source.Identity.Cluster == "mec4") &&
 						(target.Identity.Cluster == "mec11" || target.Identity.Cluster == "mec12" || target.Identity.Cluster == "mec13" || target.Identity.Cluster == "mec14")) ||
 						((source.Identity.Cluster == "mec5" || source.Identity.Cluster == "mec6") &&
-							(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) {
+							(target.Identity.Cluster == "mec15" || target.Identity.Cluster == "mec16" || target.Identity.Cluster == "mec17" || target.Identity.Cluster == "mec18")) ||
+						((source.Identity.Cluster == "mec24" || source.Identity.Cluster == "mec25" || source.Identity.Cluster == "mec26") &&
+							(target.Identity.Cluster == "mec27" || target.Identity.Cluster == "mec28" || target.Identity.Cluster == "mec29" || target.Identity.Cluster == "mec30")) {
 						latency = 3
 					} else {
 						latency = 4
