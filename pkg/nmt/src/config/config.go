@@ -58,7 +58,7 @@ func defaultConfiguration() *Configuration {
 		Tau:           "0.8",
 		ResMin:        "500",
 		ResMax:        "1000",
-		MaxCellNumber: "64",
+		MaxCellNumber: "84",
 	}
 
 }

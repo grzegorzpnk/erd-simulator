@@ -412,10 +412,118 @@
     "provider": "orange",
     "cluster": "mec35",
     "location": {
+      "type": 1,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec36",
+    "location": {
+      "type": 1,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": ""
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec37",
+    "location": {
       "type": 0,
       "region": "poland 2",
-      "zone": "east",
-      "local-zone": "city6"
+      "zone": "east2",
+      "local-zone": "city7"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec38",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city7"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec39",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city7"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec40",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city7"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec41",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city8"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec42",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city8"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec43",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city8"
+    }
+  }
+  },
+  { "identity":
+  {
+    "provider": "orange",
+    "cluster": "mec44",
+    "location": {
+      "type": 0,
+      "region": "poland 2",
+      "zone": "east2",
+      "local-zone": "city8"
     }
   }
   }

@@ -13,7 +13,7 @@ config:
   tau: 0.8
   res_min: 500
   res_max: 1000
-  max_cell_number: 64
+  max_cell_number: 84
 
 podAnnotations: {}
 podSecurityContext: {}
