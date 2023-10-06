@@ -245,7 +245,7 @@ func (g *Graph) DeclareApplications(ac AppCounter) {
 	//v2x, drones, cg := ac.V2x, ac.Uav, ac.Cg
 	cg, v2x, drones := ac.Cg, ac.V2x, ac.Uav
 
-	fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", ac.GetTotal(), v2x, drones, cg)
+	//fmt.Printf("Number of declared apps: %v, where: %v of v2x, %v of drones and %v of video\n", ac.GetTotal(), v2x, drones, cg)
 	//todo: values should be parametrized, not hardcoded!
 	for i := 0; i < cg; i++ {
 		var app model.MECApp
@@ -302,7 +302,7 @@ func (g *Graph) UninstallAllApps() {
 			}
 		}
 	}
-	log.Infof("Deleted all apps, Resources at clusters:")
+	//	log.Infof("gDeleted all apps, Resources at clusters:")
 	//for _, v := range g.MecHosts {
 	//	log.Infof("Cluster: %v, CPU Util: %v, MEM Util: %v", v.Identity.Cluster, v.CpuResources.Utilization, v.MemoryResources.Utilization)
 	//}
@@ -388,7 +388,7 @@ func (g *Graph) FindInitialClustersTunning() bool {
 		startCell := g.GetCell(strconv.Itoa(cells[index+1]))
 		cmh, err := FindCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, g)
 		if err != nil {
-			fmt.Printf("Could not find candidate mec for App[%v] due to: %v\n", edgeApp.Id, err.Error())
+			//fmt.Printf("Could not find candidate mec for App[%v] due to: %v\n", edgeApp.Id, err.Error())
 			return false
 		}
 		mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
