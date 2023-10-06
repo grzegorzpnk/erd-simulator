@@ -139,8 +139,8 @@ func resourcesOk(app model.MECApp, mec model.MecHost) bool {
 	}
 }
 
-func GenerateRandomCellsForUsers(usersNumber int, graph Graph) map[int]int {
-	var cells map[int]int = map[int]int{}
+func GenerateRandomCellsForUsers(usersNumber int) map[int]int {
+	var cells = map[int]int{}
 	//todo: GP: MaxCellNumber has been introduced artificailly, cause initially, at networkTopology.json file we have defined 60 network cells, but in experiment we explored only one coverage zone, so we limitated cells only to this one coverage zone
 	max, _ := strconv.Atoi(config.GetConfiguration().MaxCellNumber)
 	for i := 1; i <= usersNumber; i++ {

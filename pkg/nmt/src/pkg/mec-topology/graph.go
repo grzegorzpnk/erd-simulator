@@ -344,7 +344,7 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 			return false, nil
 		}
 		copy(mecHostsSourcesTmp, mecHostSource)
-		cells = GenerateRandomCellsForUsers(len(g.Application), *g)
+		cells = GenerateRandomCellsForUsers(len(g.Application))
 
 		search = false
 		for index, edgeApp := range g.Application {
@@ -365,6 +365,38 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 
 	fmt.Printf("Found after %v iterations", cnt)
 	return true, mecHostsSourcesTmp
+
+}
+
+func (g *Graph) FindInitialClustersTunning() bool {
+
+	var mecHostSource []model.MecHost
+	var cells = map[int]int{}
+
+	//PREREQUESTIES
+	//in order to work on copied list of clusters ( cause we need to update resources in process of initial finidng placement)
+	for _, v := range g.MecHosts {
+		mecHostSource = append(mecHostSource, *v)
+	}
+	//another copy for each serach iteration ( if one search will fail, wee need to repeat on still fresh data)
+	var mecHostsSourcesTmp = make([]model.MecHost, len(mecHostSource))
+	copy(mecHostsSourcesTmp, mecHostSource)
+
+	cells = GenerateRandomCellsForUsers(len(g.Application))
+
+	for index, edgeApp := range g.Application {
+		startCell := g.GetCell(strconv.Itoa(cells[index+1]))
+		cmh, err := FindCanidateMec(*edgeApp, startCell, mecHostsSourcesTmp, g)
+		if err != nil {
+			fmt.Printf("Could not find candidate mec for App[%v] due to: %v\n", edgeApp.Id, err.Error())
+			return false
+		}
+		mecHostsSourcesTmp = updateMecResourcesInfo(mecHostsSourcesTmp, cmh, *edgeApp)
+		edgeApp.ClusterId = cmh.Identity.Cluster
+		edgeApp.UserLocation = startCell.Id
+	}
+
+	return true
 
 }
 
