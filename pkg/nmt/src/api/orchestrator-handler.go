@@ -261,6 +261,7 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 	//declare
 	w.Header().Set("Content-Type", "application/json")
 
+	log.Infof("Started tunning max number of deployable applications.")
 	for appNumber := 45; appNumber < 1000; appNumber++ {
 
 		if appNumber%3 == 0 {
@@ -271,8 +272,8 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 			ac = mec_topology.AppCounter{V2x: int(appNumber/3) + 1, Cg: int(appNumber/3) + 1, Uav: int(appNumber / 3)}
 		}
 
-		//log.Infof("Started testing placement of %v applications", appNumber)
-		//log.Infof("V2X: %v, CG: %v, UAV: %v", ac.V2x, ac.Cg, ac.Uav)
+		log.Infof("Started testing placement of %v applications", appNumber)
+		log.Infof("V2X: %v, CG: %v, UAV: %v", ac.V2x, ac.Cg, ac.Uav)
 
 		alreadyFirstSuccess := false
 		succCnt := 0
