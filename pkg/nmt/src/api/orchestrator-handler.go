@@ -215,6 +215,7 @@ func (h *apiHandler) InstantiateAllDefinedApps(w http.ResponseWriter, r *http.Re
 
 func (h *apiHandler) Prerequisites(w http.ResponseWriter, r *http.Request) {
 
+	log.Infof("Prerequesties method")
 	var ac mec_topology.AppCounter
 	h.graphClient.DeleteAllDeclaredApps()
 	h.graphClient.UninstallAllApps()
