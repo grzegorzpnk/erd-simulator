@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 )
 
 func (h *apiHandler) InstantiateApplication(w http.ResponseWriter, r *http.Request) {
@@ -259,31 +260,46 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 
 	var ac mec_topology.AppCounter
 
-	//declare
 	w.Header().Set("Content-Type", "application/json")
-
 	log.Infof("Started tunning max number of deployable applications.")
-	for appNumber := 45; appNumber < 100; appNumber++ {
 
-		if appNumber%3 == 0 {
-			ac = mec_topology.AppCounter{V2x: int(appNumber / 3), Cg: int(appNumber / 3), Uav: int(appNumber / 3)}
-		} else if appNumber%3 == 1 {
-			ac = mec_topology.AppCounter{V2x: int(appNumber/3) + 1, Cg: int(appNumber / 3), Uav: int(appNumber / 3)}
-		} else if appNumber%3 == 2 {
-			ac = mec_topology.AppCounter{V2x: int(appNumber/3) + 1, Cg: int(appNumber/3) + 1, Uav: int(appNumber / 3)}
-		}
+	appNumber := 44
 
+	ac = mec_topology.AppCounter{Cg: 15, V2x: 15, Uav: 14}
+	h.graphClient.DeclareApplications(ac)
+
+	for x := 0; x < 50; x++ {
+
+		appNumber += 1
 		log.Infof("Started testing placement of %v applications", appNumber)
-		log.Infof("V2X: %v, CG: %v, UAV: %v", ac.V2x, ac.Cg, ac.Uav)
+		//log.Infof("V2X: %v, CG: %v, UAV: %v", ac.V2x, ac.Cg, ac.Uav)
 
+		//supportive flags
 		alreadyFirstSuccess := false
 		succCnt := 0
 		firstSuccessCnt := 0
 
 		for i := 0; i < 100; i++ {
-			h.graphClient.DeleteAllDeclaredApps()
+
 			h.graphClient.UninstallAllApps()
-			h.graphClient.DeclareApplications(ac)
+			for i := 0; i < len(h.graphClient.Application); i++ {
+				h.graphClient.Application[i].ClusterId = ""
+				h.graphClient.Application[i].UserLocation = ""
+			}
+
+			//add additional app
+			var app model.MECApp
+			if appNumber%3 == 0 {
+				app.Requirements.RequestedLatency = 10
+			} else if appNumber%3 == 1 {
+				app.Requirements.RequestedLatency = 15
+			} else if appNumber%3 == 2 {
+				app.Requirements.RequestedLatency = 30
+			}
+
+			app.Id = strconv.Itoa(len(h.graphClient.Application) + 1)
+			app.GeneratreResourceRequirements()
+			h.graphClient.Application = append(h.graphClient.Application, &app)
 
 			status := h.graphClient.FindInitialClustersTunning()
 			if status == true {
@@ -295,7 +311,7 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 			}
 		}
 
-		log.Infof("%v. Placement of %v apps, has been identified %v / 100 times!. First sucessfull search at: %v attempts!", appNumber-44, appNumber, succCnt, firstSuccessCnt)
+		log.Infof("%v. Placement of %v apps, has been identified %v / 100 times!. First sucessfull search at: %v attempts!", x, appNumber, succCnt, firstSuccessCnt)
 		if succCnt == 0 {
 			w.WriteHeader(http.StatusOK)
 			return
