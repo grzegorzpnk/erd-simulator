@@ -43,7 +43,7 @@ func NewRouter(graphClient *mec_topology.Graph) *mux.Router {
 	r.HandleFunc(baseUrl+"/topology/instantiate-all", handler.InstantiateAllDefinedApps).Methods("POST")
 	//this API defines one-click (DefineApplications & GenerateInitialClusters & InstantiateAllDefinedApps)
 	r.HandleFunc(baseUrl+"/topology/prerequesties/{applications}", handler.Prerequisites).Methods("POST")
-	r.HandleFunc(baseUrl+"/topology/prerequesties/max-app-tuning", handler.PrerequisitesTunning).Methods("POST")
+	r.HandleFunc(baseUrl+"/topology/prerequesties/tunning/max-app-tuning", handler.PrerequisitesTunning).Methods("POST")
 	r.HandleFunc(baseUrl+"/topology/recreate-initial", handler.Recreate).Methods("POST")
 
 	// interaction with ML training app (currently not used). Used only to create first config input in order to train on
