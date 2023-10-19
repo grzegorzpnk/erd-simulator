@@ -263,14 +263,27 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 	w.Header().Set("Content-Type", "application/json")
 	log.Infof("Started tunning max number of deployable applications.")
 
-	appNumber := 44
-
 	ac = mec_topology.AppCounter{Cg: 15, V2x: 15, Uav: 14}
 	h.graphClient.DeclareApplications(ac)
+	appNumber := 44
 
 	for x := 0; x < 50; x++ {
 
+		//add additional app
+		var app model.MECApp
+		if appNumber%3 == 0 {
+			app.Requirements.RequestedLatency = 10
+		} else if appNumber%3 == 1 {
+			app.Requirements.RequestedLatency = 15
+		} else if appNumber%3 == 2 {
+			app.Requirements.RequestedLatency = 30
+		}
+
+		app.Id = strconv.Itoa(len(h.graphClient.Application) + 1)
+		app.GeneratreResourceRequirements()
+		h.graphClient.Application = append(h.graphClient.Application, &app)
 		appNumber += 1
+
 		log.Infof("Started testing placement of %v applications", appNumber)
 		//log.Infof("V2X: %v, CG: %v, UAV: %v", ac.V2x, ac.Cg, ac.Uav)
 
@@ -286,20 +299,6 @@ func (h *apiHandler) PrerequisitesTunning(w http.ResponseWriter, r *http.Request
 				h.graphClient.Application[i].ClusterId = ""
 				h.graphClient.Application[i].UserLocation = ""
 			}
-
-			//add additional app
-			var app model.MECApp
-			if appNumber%3 == 0 {
-				app.Requirements.RequestedLatency = 10
-			} else if appNumber%3 == 1 {
-				app.Requirements.RequestedLatency = 15
-			} else if appNumber%3 == 2 {
-				app.Requirements.RequestedLatency = 30
-			}
-
-			app.Id = strconv.Itoa(len(h.graphClient.Application) + 1)
-			app.GeneratreResourceRequirements()
-			h.graphClient.Application = append(h.graphClient.Application, &app)
 
 			status := h.graphClient.FindInitialClustersTunning()
 			if status == true {
