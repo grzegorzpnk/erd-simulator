@@ -496,10 +496,47 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 			log.Infof("Finished Experiment [%v] type: %v", z+1, experiment.ExperimentType)
 		}
 		log.Infof("Finished all Experiments (%v), each %v iterations", len(experiments), experiments[0].ExperimentDetails.MovementsInExperiment)
-		w.WriteHeader(http.StatusOK)
+		//w.WriteHeader(http.StatusOK)
 		log.Infof("Finished Iteration %v.", (f + 1))
 	}
 	log.Infof("Finished all iterations.")
+
+
+	basePath := "results"
+	apps := "apps"
+	mecs := "mecs"
+
+	err g= h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationRejectionRates, basePath+"/"+apps)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.ResultClient.GenerateChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+
 }
 
 func (h *apiHandler) conductExperimentICC(w http.ResponseWriter, r *http.Request) {
