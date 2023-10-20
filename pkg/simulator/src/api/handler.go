@@ -384,7 +384,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
 
 	//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
-	err := GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
+	err = GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
