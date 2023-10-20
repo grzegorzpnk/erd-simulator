@@ -501,12 +501,11 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	}
 	log.Infof("Finished all iterations.")
 
-
 	basePath := "results"
 	apps := "apps"
 	mecs := "mecs"
 
-	err g= h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
+	err = h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -535,7 +534,6 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	}
 
 	w.WriteHeader(http.StatusOK)
-
 
 }
 
