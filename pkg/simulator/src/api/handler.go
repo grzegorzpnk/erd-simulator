@@ -42,6 +42,22 @@ func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *apiHandler) test(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	respBody := "I was here. G."
+
+	err := json.NewEncoder(w).Encode(respBody)
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *apiHandler) generateMLChart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
