@@ -380,15 +380,10 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	experiments = declareGlobcomExperiments(experimentDetails)
 	log.Infof("Started new full GLOBECOM experiment with all 4 types: Optimal, EAR, RL-masked, RL-no-masked")
 
-	movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
-	if err != nil {
-		log.Errorf("Could not proceed with experiment. Reason: [movements-in-experiment] %v", err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	movements := 250
 
 	//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
-	err = GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
+	err := GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
 	if err != nil {
 		log.Errorf("Cannot make initial placement of app at NMT. Error: %v", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
