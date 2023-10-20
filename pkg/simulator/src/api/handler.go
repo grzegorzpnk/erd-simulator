@@ -381,6 +381,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	log.Infof("Started new full GLOBECOM experiment with all 4 types: Optimal, EAR, RL-masked, RL-no-masked")
 
 	movements := 250
+	movements, err := strconv.Atoi(experiments[0].ExperimentDetails.MovementsInExperiment)
 
 	//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
 	err := GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
