@@ -312,7 +312,7 @@ func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expInd
 	app := h.SimuClient.GetApps(strconv.Itoa(userID))
 	app.UserLocation = strconv.Itoa(userPosition)
 
-	log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-1], app.UserLocation)
+	//log.Infof(experimentN+"User(app) with ID: %v [current mec: %v] moved FROM cell: %v, towards cell: %v", app.Id, app.ClusterId, app.UserPath[len(app.UserPath)-1], app.UserLocation)
 
 	var spi model.SmartPlacementIntent
 	var err error
@@ -337,18 +337,18 @@ func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expInd
 	}
 
 	if cluster.Cluster == app.ClusterId {
-		log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+		//log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
 		return true
 	}
 
-	log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+	//log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
 
 	//generate request to orchestrator
 	err2 := sendRelocationRequest(*app, *cluster)
 	if err2 != nil {
 		log.Errorf("Cannot relocate app! Error: %v", err2.Error())
 	} else {
-		log.Infof(experimentN + "Application has been relocated in nmt")
+		//log.Infof(experimentN + "Application has been relocated in nmt")
 
 		//update cluster in internal app list
 		app.ClusterId = cluster.Cluster
