@@ -42,7 +42,7 @@ func (h *apiHandler) getAllResults(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *apiHandler) generateChartPkg(w http.ResponseWriter, r *http.Request) {
+func (h *apiHandler) generateMLChart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	basePath := "results"
@@ -50,13 +50,6 @@ func (h *apiHandler) generateChartPkg(w http.ResponseWriter, r *http.Request) {
 	mecs := "mecs"
 
 	err := h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationSuccessfulSearchRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
