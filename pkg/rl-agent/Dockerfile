@@ -13,7 +13,7 @@ COPY get-prediction-schema.json ./json-schemas/
 COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
-COPY model_masked_20231023-154205.zip model-masked.zip
+COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
 COPY model-non-masked-1trajectory_ent006_variableload.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
