@@ -503,7 +503,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 
 	basePath := "results"
 	apps := "apps"
-	mecs := "mecs"
+	//mecs := "mecs"
 
 	err = h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
 	if err != nil {
