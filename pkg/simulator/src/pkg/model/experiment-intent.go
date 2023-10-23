@@ -30,6 +30,9 @@ const (
 	StrLB      ExperimentStrategy = "load-balancing"
 	StrHybrid  ExperimentStrategy = "hybrid"
 	StrML      ExperimentStrategy = "ml"
+	StrML2     ExperimentStrategy = "ml2"
+	StrML3     ExperimentStrategy = "ml3"
+	StrML4     ExperimentStrategy = "ml4"
 	Str7L3R    ExperimentStrategy = "7l3r"
 	Str3L7R    ExperimentStrategy = "3l7r"
 )
