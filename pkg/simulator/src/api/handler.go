@@ -400,7 +400,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	//clear results of previous iteration ( FULL experiment)
 	h.ResultClient.ResetResultsAtSimu()
 
-	for f := 0; f < 1; f++ {
+	for f := 0; f < 5; f++ {
 
 		//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
 		err = GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
@@ -519,19 +519,19 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	//err = h.ResultClient.GenerateChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
+	//if err != nil {
+	//	log.Errorf("Error: %v", err)
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
+	//
+	//err = h.ResultClient.GenerateChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
+	//if err != nil {
+	//	log.Errorf("Error: %v", err)
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
 
 	w.WriteHeader(http.StatusOK)
 
