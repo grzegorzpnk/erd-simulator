@@ -217,18 +217,20 @@ func GenerateMLMask(app model.MECApp) ([]int, error) {
 }
 
 func determineReqRes(reqRes int) int {
-	resMap := map[int]int{
-		500:  1,
-		600:  2,
-		700:  3,
-		800:  4,
-		900:  5,
-		1000: 6,
-	}
-	if val, ok := resMap[reqRes]; ok {
-		return val
-	}
-	return 0
+	//resMap := map[int]int{
+	//	500:  1,
+	//	600:  2,
+	//	700:  3,
+	//	800:  4,
+	//	900:  5,
+	//	1000: 6,
+	//}
+	//if val, ok := resMap[reqRes]; ok {
+	//	return val
+	//}
+	//return 0
+
+	return (reqRes - 500)
 }
 
 func reverseDetermineReqResFloat64(reqRes int) float64 {

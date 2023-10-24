@@ -31,6 +31,11 @@ func (g *Graph) ReadTopologyConfigFile(file string) {
 		}
 
 		g.MecHosts = mec
+
+	}
+
+	for i, v := range g.MecHosts {
+		log.Infof("%v. MEC ID: %v", i, v.Identity.Cluster)
 	}
 }
 
