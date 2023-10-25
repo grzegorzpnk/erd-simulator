@@ -514,13 +514,13 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		ExperimentDetails:  details,
 	}
 
-	//experiment5 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpMLNonMasked,
-	//	ExperimentStrategy: model.StrML,
-	//	ExperimentDetails:  details,
-	//}
+	experiment4 := model.ExperimentIntent{
+		ExperimentType:     model.ExpMLNonMasked,
+		ExperimentStrategy: model.StrML,
+		ExperimentDetails:  details,
+	}
 
-	experiments = append(experiments, experiment1, experiment2, experiment3)
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
 
 	return experiments
 }
