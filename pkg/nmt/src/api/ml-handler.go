@@ -153,24 +153,24 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//added, cause due to training of non-masked it turned out that changes of obserability space was needed
-	if cell != "masked" {
-		cellINT, _ := strconv.Atoi(string(cell))
-		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
-		response = make([][]int, len(h.graphClient.MecHosts))
-		for i := 0; i < len(response); i++ {
-			response[i] = make([]int, 6)
-		}
-
-		// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
-		for i, v := range h.graphClient.MecHosts {
-			response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
-			response[i][1] = int(v.GetCpuUtilization() * 100)
-			response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
-			response[i][3] = int(v.GetMemoryUtilization() * 100)
-			response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
-			response[i][5] = int(v.LatencyVector[cellINT-1] + 1)
-		}
-	}
+	//if cell != "masked" {
+	//	cellINT, _ := strconv.Atoi(string(cell))
+	//	fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
+	//	response = make([][]int, len(h.graphClient.MecHosts))
+	//	for i := 0; i < len(response); i++ {
+	//		response[i] = make([]int, 6)
+	//	}
+	//
+	//	// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
+	//	for i, v := range h.graphClient.MecHosts {
+	//		response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
+	//		response[i][1] = int(v.GetCpuUtilization() * 100)
+	//		response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
+	//		response[i][3] = int(v.GetMemoryUtilization() * 100)
+	//		response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
+	//		response[i][5] = int(v.LatencyVector[cellINT-1] + 1)
+	//	}
+	//}
 
 	fmt.Printf("State of MECs before returning to Simu:\n ")
 	printSlice(response)
