@@ -14,7 +14,7 @@ COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
 COPY masked-reward3-_20231025-190030.zip model-masked.zip
-COPY model-non-maskedTest_Non-Mask_20231025-215123.zip model-basic.zip
+COPY model-non-maskedTest_Non-Mask_20231027-010923.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
 
