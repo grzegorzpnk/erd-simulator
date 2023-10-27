@@ -55,6 +55,20 @@ func (h *apiHandler) getMecHostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *apiHandler) getMecHostCapacity(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	for i, v := range h.graphClient.MecHosts {
+		if v.Identity.Cluster == params["cluster"] &&
+			v.Identity.Provider == params["provider"] {
+			json.NewEncoder(w).Encode(h.graphClient.MecHosts[i].CpuResources.Capacity)
+			break
+		}
+	}
+}
+
 func (h *apiHandler) getCellAssociatedMecHostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")

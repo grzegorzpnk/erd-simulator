@@ -139,10 +139,17 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	clusterID, _ := convertMECNameToID(intent.CurrentPlacement.Cluster)
 	userLocation, _ := strconv.Atoi(string(intent.Spec.SmartPlacementIntentData.TargetCell))
 
+	//appState := [1][5]int{{
+	//	determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
+	//	determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
+	//	determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
+	//	clusterID,
+	//	userLocation}}
+
 	appState := [1][5]int{{
-		determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
-		determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
-		determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
+		determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
+		determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
+		int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
 		clusterID,
 		userLocation}}
 
@@ -216,6 +223,20 @@ func GenerateMLMask(app model.MECApp) ([]int, error) {
 	return mask, nil
 }
 
+func CheckMecCapacity(mecID string) (int, error) {
+
+	url := buildNMTEndpointGetClusterCapacity(mecID)
+
+	capacity, err := GetCapacityCLusterFromNMT(url)
+	if err != nil {
+		return capacity, err
+	}
+
+	log.Infof("Checked Capacity of MEC: %v ", capacity)
+
+	return capacity, nil
+}
+
 func determineReqRes(reqRes int) int {
 	//resMap := map[int]int{
 	//	500:  1,
@@ -231,6 +252,17 @@ func determineReqRes(reqRes int) int {
 	//return 0
 
 	return (reqRes - 500)
+}
+
+func determineReqResInEdgeContext(reqRes int, cluster string) int {
+
+	clusterCapacity, err := CheckMecCapacity(cluster)
+	if err != nil {
+		log.Errorf("CANNOT CREATE CURRENT STATE FOR NONMAKSED RL :(")
+		return 0
+	}
+	return reqRes / clusterCapacity
+
 }
 
 func reverseDetermineReqResFloat64(reqRes int) float64 {
@@ -279,6 +311,14 @@ func buildNMTMaskEndpoint() string {
 	return url
 }
 
+func buildNMTEndpointGetClusterCapacity(clusterID string) string {
+	url := config.GetConfiguration().NMTEndpoint
+	url += "/topology/mecHosts/provider/orange/cluster/" +
+		clusterID + "/capacity"
+
+	return url
+}
+
 func buildNMTCurrentStateEndpoint() string {
 	///topology/ml/get-state
 	url := config.GetConfiguration().NMTEndpoint
@@ -301,7 +341,7 @@ func GetMECsStateFromNMT(endpoint string, cell model.CellId, isMasked bool) ([][
 	//Convert the body to type [][]int
 	stateOfMECs := make([][]int, 22)
 	for i := 0; i < len(stateOfMECs); i++ {
-		stateOfMECs[i] = make([]int, 5)
+		stateOfMECs[i] = make([]int, 4)
 	}
 
 	json.Unmarshal(resp, &stateOfMECs)
@@ -326,6 +366,23 @@ func GetMaskFromNMT(endpoint string, app model.MECApp) ([]int, error) {
 	return mask, nil
 }
 
+func GetCapacityCLusterFromNMT(endpoint string) (int, error) {
+
+	var capacity int
+
+	responseBody, err := getHTTPRespBody(endpoint)
+	if err != nil {
+		return 0, fmt.Errorf("cannot fetch mask from nmt: %v", err)
+	}
+
+	err = json.Unmarshal(responseBody, &capacity)
+	if err != nil {
+		return 0, fmt.Errorf("cannot unmarshall mask: %v", err)
+	}
+
+	return capacity, nil
+}
+
 func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	body, err := json.Marshal(data)
 	if err != nil {
@@ -343,6 +400,31 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	}
 
 	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return b, nil
+}
+
+// func getHTTPRespBody(url string) (io.ReadCloser, error) {
+func getHTTPRespBody(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		err := fmt.Errorf("HTTP GET failed for URL %s.\nError: %s\n", url, err)
+		log.Errorf("%v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		err := fmt.Errorf("HTTP GET returned status code %s for URL %s.\n", resp.Status, url)
+		log.Errorf("%v", err)
+		return nil, err
+	}
+
+	b, err := ioutil.ReadAll(resp.Body)
+
 	if err != nil {
 		log.Fatalln(err)
 	}

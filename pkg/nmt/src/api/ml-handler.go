@@ -137,19 +137,37 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Received request from simu to preapre current state of MECs for input to ML client")
+	fmt.Printf("Received request from simu to preapre current state of MECs for input to ML NONMASKED client")
 	response := make([][]int, len(h.graphClient.MecHosts))
 	for i := 0; i < len(response); i++ {
-		response[i] = make([]int, 5)
+		response[i] = make([]int, 4)
 	}
 
-	// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
-	for i, v := range h.graphClient.MecHosts {
-		response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
-		response[i][1] = int(v.GetCpuUtilization() * 100)
-		response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
-		response[i][3] = int(v.GetMemoryUtilization() * 100)
-		response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
+	if cell != "masked" {
+		cellINT, _ := strconv.Atoi(string(cell))
+
+		// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
+		for i, v := range h.graphClient.MecHosts {
+			response[i][0] = int(v.GetCpuUtilization() * 100)
+			response[i][1] = int(v.GetMemoryUtilization() * 100)
+			response[i][2] = determineStateofCost(int(v.Identity.Location.Level))
+			response[i][3] = int(v.LatencyVector[cellINT-1] + 1)
+		}
+	} else {
+		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML MASKED client")
+		response := make([][]int, len(h.graphClient.MecHosts))
+		for i := 0; i < len(response); i++ {
+			response[i] = make([]int, 5)
+		}
+
+		// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
+		for i, v := range h.graphClient.MecHosts {
+			response[i][0] = determineStateOfCapacity(int(v.GetCpuCapacity()))
+			response[i][1] = int(v.GetCpuUtilization() * 100)
+			response[i][2] = determineStateOfCapacity(int(v.GetMemoryCapacity()))
+			response[i][3] = int(v.GetMemoryUtilization() * 100)
+			response[i][4] = determineStateofCost(int(v.Identity.Location.Level))
+		}
 	}
 
 	//added, cause due to training of non-masked it turned out that changes of obserability space was needed

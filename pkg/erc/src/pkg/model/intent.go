@@ -4,8 +4,9 @@ type CellId string
 
 // CurrentPlacement represents where the application is currently instantiated
 type CurrentPlacement struct {
-	Provider string `json:"provider"`
-	Cluster  string `json:"cluster"`
+	Provider        string `json:"provider"`
+	Cluster         string `json:"cluster"`
+	ClusterCapacity int    `json:"omitempty,clusterCapacity"`
 }
 
 // SmartPlacementIntent defines the Intent to perform Smart Placement for giver application

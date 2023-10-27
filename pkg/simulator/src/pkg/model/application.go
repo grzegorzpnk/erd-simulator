@@ -33,6 +33,20 @@ func (app *MECApp) PrintApplication() {
 
 }
 
+func (simuCl *SimuClient) GetMecHost() error {
+
+	url := buildNMTendpoint()
+
+	apps, err := GetAppsFromNMT(url)
+	if err != nil {
+		return err
+	}
+
+	simuCl.SetApps(apps)
+	simuCl.setPath()
+	return nil
+}
+
 func (simuCl *SimuClient) FetchAppsFromNMT() error {
 
 	url := buildNMTendpoint()
@@ -99,6 +113,13 @@ func (simuCl *SimuClient) setPath() {
 }
 
 func buildNMTendpoint() string {
+	url := config.GetConfiguration().NMTEndpoint
+	url += "/v1/topology/application"
+
+	return url
+}
+
+func buildNMTGetMECendpoint() string {
 	url := config.GetConfiguration().NMTEndpoint
 	url += "/v1/topology/application"
 
