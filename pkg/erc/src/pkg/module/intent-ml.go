@@ -70,20 +70,17 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	}
 
 	// Check if ok
-	cpuUtilAfterRel := 100 * ((bestMec.GetCpuUsed() + reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][0])) / bestMec.GetCpuCapacity())
-	//log.Warnf("CPU used: [%v], CPU req: [%v]", bestMec.GetCpuUsed(), reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][0]))
+	cpuUtilAfterRel := 100 * (bestMec.GetCpuUsed() + intent.Spec.SmartPlacementIntentData.AppCpuReq/bestMec.GetCpuCapacity())
+	memUtilAfterRel := 100 * (bestMec.GetMemUsed() + intent.Spec.SmartPlacementIntentData.AppMemReq/bestMec.GetMemCapacity())
 
-	memUtilAfterRel := 100 * ((bestMec.GetMemUsed() + reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][1])) / bestMec.GetMemCapacity())
-	//log.Warnf("MEM used: [%v], MEM req: [%v]", bestMec.GetMemUsed(), reverseDetermineReqResFloat64(MLspi.State.SpaceAPP[0][1]))
-
-	reqLatency := reverseDetermineAppLatReqFloat64(MLspi.State.SpaceAPP[0][2])
+	reqLatency := intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax
 
 	threshold := 80.0
 
 	log.Warnf("[%v] CPU Util [%v], Mem Util [%v], threshold [%v]", bestMec.Identity.Cluster, cpuUtilAfterRel, memUtilAfterRel, threshold)
 
 	if bestMec.GetLatency() > reqLatency {
-		err = errors.New(fmt.Sprintf("mec latency [%v] is higher than required [%v]", bestMec.GetLatency(), reqLatency))
+		err = errors.New(fmt.Sprintf("mec latency offered [%v] is unfortunately higher than required [%v]", bestMec.GetLatency(), reqLatency))
 		return model.MecHost{}, err
 	} else if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
 		err = errors.New(fmt.Sprintf("mec resource utilization [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
@@ -261,7 +258,9 @@ func determineReqResInEdgeContext(reqRes int, cluster string) int {
 		log.Errorf("CANNOT CREATE CURRENT STATE FOR NONMAKSED RL :(")
 		return 0
 	}
-	return reqRes / clusterCapacity
+
+	log.Infof("APP req res: %v, while cluster capacity is %", reqRes, clusterCapacity)
+	return int(reqRes / clusterCapacity)
 
 }
 
