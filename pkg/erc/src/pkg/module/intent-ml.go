@@ -150,6 +150,8 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 		clusterID,
 		userLocation}}
 
+	log.Infof("Here the determinedreqres: %v", determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster))
+
 	url := buildNMTCurrentStateEndpoint()
 	//log.Infof("Asking for MECs config url:, %v     |", url)
 
@@ -259,7 +261,7 @@ func determineReqResInEdgeContext(reqRes int, cluster string) int {
 		return 0
 	}
 
-	log.Infof("APP req res: %v, while cluster capacity is %", reqRes, clusterCapacity)
+	log.Infof("APP req res: %v, while cluster capacity is %v", reqRes, clusterCapacity)
 	return int(reqRes / clusterCapacity)
 
 }
