@@ -70,23 +70,27 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	}
 
 	// Check if ok
+
 	cpuUtilAfterRel := 100 * (bestMec.GetCpuUsed() + intent.Spec.SmartPlacementIntentData.AppCpuReq/bestMec.GetCpuCapacity())
 	memUtilAfterRel := 100 * (bestMec.GetMemUsed() + intent.Spec.SmartPlacementIntentData.AppMemReq/bestMec.GetMemCapacity())
 
 	reqLatency := intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax
 
 	threshold := 80.0
-
-	log.Warnf("[%v] CPU Util [%v], Mem Util [%v], threshold [%v]", bestMec.Identity.Cluster, cpuUtilAfterRel, memUtilAfterRel, threshold)
+	log.Infof("[DEBUG], bestMec.GetCpuUsed: %v. AppCpuReq: %v, bestMec.getCpuCapacity: %v.", bestMec.GetCpuUsed(), intent.Spec.SmartPlacementIntentData.AppCpuReq, bestMec.GetCpuCapacity())
 
 	if bestMec.GetLatency() > reqLatency {
+		log.Warnf("Bad Lat cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec latency offered [%v] is unfortunately higher than required [%v]", bestMec.GetLatency(), reqLatency))
 		return model.MecHost{}, err
 	} else if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
-		err = errors.New(fmt.Sprintf("mec resource utilization [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
+		log.Warnf("Bad Res cluster was selected by ML model: ")
+		err = errors.New(fmt.Sprintf("mec resource utilization after relocation [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
 		return model.MecHost{}, err
 	}
 
+	log.Infof("Seems good cluster was identified, after relocation: ")
+	log.Infof("[%v] CPU Util [%v], Mem Util [%v], threshold [%v]", bestMec.Identity.Cluster, cpuUtilAfterRel, memUtilAfterRel, threshold)
 	log.Infof("ML CLient has found cluster[%v] for given APP[%v]", bestMec.Identity.Cluster, intent.Spec.AppName)
 	return bestMec, nil
 
