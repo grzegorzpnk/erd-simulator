@@ -47,7 +47,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	// check if relocation redundant
 	if bestMec.Identity.Provider == intent.CurrentPlacement.Provider &&
 		bestMec.Identity.Cluster == intent.CurrentPlacement.Cluster {
-		log.Warnf("[DEBUG-INFO] Relocation redundant skipping...")
+		log.Infof("[POSITIVE] Relocation redundant. Selected the same mec host.")
 		return bestMec, nil
 	}
 	// Collect info from topology
@@ -77,14 +77,14 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	reqLatency := intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax
 
 	threshold := 80.0
-	log.Infof("[DEBUG], bestMec.GetCpuUsed: %v. AppCpuReq: %v, bestMec.getCpuCapacity: %v.", bestMec.GetCpuUsed(), intent.Spec.SmartPlacementIntentData.AppCpuReq, bestMec.GetCpuCapacity())
+	//log.Infof("[DEBUG], bestMec.GetCpuUsed: %v. AppCpuReq: %v, bestMec.getCpuCapacity: %v.", bestMec.GetCpuUsed(), intent.Spec.SmartPlacementIntentData.AppCpuReq, bestMec.GetCpuCapacity())
 
 	if bestMec.GetLatency() > reqLatency {
-		log.Warnf("Bad Lat cluster was selected by ML model: ")
+		log.Errorf("Bad Lat cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec latency offered [%v] is unfortunately higher than required [%v]", bestMec.GetLatency(), reqLatency))
 		return model.MecHost{}, err
 	} else if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
-		log.Warnf("Bad Res cluster was selected by ML model: ")
+		log.Errorf("Bad Res cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec resource utilization after relocation [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
 		return model.MecHost{}, err
 	}

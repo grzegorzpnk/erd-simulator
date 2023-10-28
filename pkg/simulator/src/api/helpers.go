@@ -89,7 +89,7 @@ func GenerateSmartPlacementMLIntent(app model.MECApp) (model.SmartPlacementInten
 //	}
 
 func CallPlacementController(intent model.SmartPlacementIntent, experimentType model.ExperimentType) (*model.Cluster, error) {
-	//	log.Printf("CallPlacementController: function start\n")
+
 	var resp model.Cluster
 
 	plcCtrlUrl := buildPlcCtrlURL(string(experimentType))
@@ -97,12 +97,12 @@ func CallPlacementController(intent model.SmartPlacementIntent, experimentType m
 
 	responseBody, err := postHttpRespBody(plcCtrlUrl, data)
 	if err != nil {
-		return nil, fmt.Errorf("relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
+		return nil, fmt.Errorf("1. relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
 	}
 
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		return nil, fmt.Errorf("relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
+		return nil, fmt.Errorf("2. relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
 	}
 
 	var cluster model.Cluster
@@ -134,7 +134,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
-		return nil, fmt.Errorf("response code [%s] for URL [%s]", resp.Status, url)
+		return nil, fmt.Errorf("response code [%s][%s]", resp.Status, resp.Body)
 	}
 
 	b, err := ioutil.ReadAll(resp.Body)
@@ -308,6 +308,7 @@ func (h *apiHandler) executeExperiment(exp model.ExperimentIntent, expIndex, sub
 func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expIndex, subExpIndex int, userID, userPosition int) bool {
 
 	experimentN := "[EXPERIMENT " + strconv.Itoa(expIndex) + "." + strconv.Itoa(subExpIndex+1) + "] "
+	log.Infof(experimentN)
 
 	app := h.SimuClient.GetApps(strconv.Itoa(userID))
 	app.UserLocation = strconv.Itoa(userPosition)
@@ -331,25 +332,24 @@ func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expInd
 	cluster, err := CallPlacementController(spi, exp.ExperimentType)
 
 	if err != nil {
-		log.Warnf("Call Placement ctrl has returned status : %v", err.Error())
-		log.Warnf(experimentN + "stopped, NO RELOCATION, going to next iteration")
+		log.Warnf(experimentN + "NO RELOCATION, bad cluster selected, or other error")
+		log.Warnf("ERC returned: %v", err.Error())
 		return true
 	}
 
 	if cluster.Cluster == app.ClusterId {
-		//log.Infof(experimentN+"Selected redundant cluster: %v -> missing relocation", cluster.Cluster)
+		log.Infof("Selected redundant cluster: %v -> OK.", cluster.Cluster)
 		return true
 	}
 
-	//log.Infof(experimentN+"Selected new cluster: %v", cluster.Cluster)
+	log.Infof("Selected new and good cluster: %v", cluster.Cluster)
 
 	//generate request to orchestrator
 	err2 := sendRelocationRequest(*app, *cluster)
 	if err2 != nil {
 		log.Errorf("Cannot relocate app! Error: %v", err2.Error())
 	} else {
-		//log.Infof(experimentN + "Application has been relocated in nmt")
-
+		log.Infof("Confirmation, that application has been relocated in NMT.\n")
 		//update cluster in internal app list
 		app.ClusterId = cluster.Cluster
 	}
