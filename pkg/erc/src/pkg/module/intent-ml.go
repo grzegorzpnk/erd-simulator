@@ -71,8 +71,8 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 
 	// Check if ok
 
-	cpuUtilAfterRel := 100 * (bestMec.GetCpuUsed() + intent.Spec.SmartPlacementIntentData.AppCpuReq/bestMec.GetCpuCapacity())
-	memUtilAfterRel := 100 * (bestMec.GetMemUsed() + intent.Spec.SmartPlacementIntentData.AppMemReq/bestMec.GetMemCapacity())
+	cpuUtilAfterRel := 100 * (bestMec.GetCpuUsed() + intent.Spec.SmartPlacementIntentData.AppCpuReq) / bestMec.GetCpuCapacity()
+	memUtilAfterRel := 100 * (bestMec.GetMemUsed() + intent.Spec.SmartPlacementIntentData.AppMemReq) / bestMec.GetMemCapacity()
 
 	reqLatency := intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax
 
