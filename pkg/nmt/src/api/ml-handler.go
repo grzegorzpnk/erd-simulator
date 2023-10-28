@@ -137,14 +137,16 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Received request from simu to preapre current state of MECs for input to ML NONMASKED client")
-	response := make([][]int, len(h.graphClient.MecHosts))
-	for i := 0; i < len(response); i++ {
-		response[i] = make([]int, 4)
-	}
+	response := [][]int{}
 
 	if cell != "masked" {
+		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML NONMASKED client")
 		cellINT, _ := strconv.Atoi(string(cell))
+
+		response := make([][]int, len(h.graphClient.MecHosts))
+		for i := 0; i < len(response); i++ {
+			response[i] = make([]int, 4)
+		}
 
 		// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
 		for i, v := range h.graphClient.MecHosts {
@@ -170,6 +172,12 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fmt.Printf("State of MECs before returning to Simu:\n ")
+	printSlice(response)
+
+	json.NewEncoder(w).Encode(response)
+	w.WriteHeader(http.StatusOK)
+
 	//added, cause due to training of non-masked it turned out that changes of obserability space was needed
 	//if cell != "masked" {
 	//	cellINT, _ := strconv.Atoi(string(cell))
@@ -189,12 +197,6 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 	//		response[i][5] = int(v.LatencyVector[cellINT-1] + 1)
 	//	}
 	//}
-
-	fmt.Printf("State of MECs before returning to Simu:\n ")
-	printSlice(response)
-
-	json.NewEncoder(w).Encode(response)
-	w.WriteHeader(http.StatusOK)
 
 }
 

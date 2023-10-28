@@ -140,25 +140,25 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	clusterID, _ := convertMECNameToID(intent.CurrentPlacement.Cluster)
 	userLocation, _ := strconv.Atoi(string(intent.Spec.SmartPlacementIntentData.TargetCell))
 
-	//appState := [1][5]int{{
-	//	determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
-	//	determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
-	//	determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
-	//	clusterID,
-	//	userLocation}}
+	var appState [1][5]int
 
-	appState := [1][5]int{{
-		determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
-		determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
-		int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
-		clusterID,
-		userLocation}}
-
-	//log.Infof("Here the determinedreqres: %v", determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster))
+	if checkIfMasked {
+		appState = [1][5]int{{
+			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
+			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
+			determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
+			clusterID,
+			userLocation}}
+	} else {
+		appState = [1][5]int{{
+			determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
+			determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
+			int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
+			clusterID,
+			userLocation}}
+	}
 
 	url := buildNMTCurrentStateEndpoint()
-	//log.Infof("Asking for MECs config url:, %v     |", url)
-
 	mecState, err := GetMECsStateFromNMT(url, intent.Spec.SmartPlacementIntentData.TargetCell, checkIfMasked)
 	if err != nil {
 		return spIntent, err

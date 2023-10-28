@@ -328,12 +328,11 @@ func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expInd
 		return false
 	}
 
-	//send request to ERC to select new position
 	cluster, err := CallPlacementController(spi, exp.ExperimentType)
 
 	if err != nil {
-		log.Warnf(experimentN + "NO RELOCATION, bad cluster selected, or other error")
-		log.Warnf("ERC returned: %v", err.Error())
+		log.Warnf("NO RELOCATION, bad cluster selected, or other error")
+		log.Warnf("ERC returned: %v\n", err.Error())
 		return true
 	}
 
