@@ -134,7 +134,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
-		return nil, fmt.Errorf("response code [%s][%s]", resp.Status, resp.Body)
+		return nil, fmt.Errorf("response code [%s]", resp.Status)
 	}
 
 	b, err := ioutil.ReadAll(resp.Body)
@@ -338,7 +338,7 @@ func (h *apiHandler) executeGlobcomExperiment(exp model.ExperimentIntent, expInd
 	}
 
 	if cluster.Cluster == app.ClusterId {
-		log.Infof("Selected redundant cluster: %v -> OK.", cluster.Cluster)
+		log.Infof("Selected redundant cluster: %v -> OK.\n", cluster.Cluster)
 		return true
 	}
 
