@@ -84,14 +84,14 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 		err = errors.New(fmt.Sprintf("mec latency offered [%v] is unfortunately higher than required [%v]", bestMec.GetLatency(), reqLatency))
 		return model.MecHost{}, err
 	} else if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
-		log.Errorf("Bad Res cluster was selected by ML model: ")
+		log.Errorf("Bad RES cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec resource utilization after relocation [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
 		return model.MecHost{}, err
 	}
 
 	log.Infof("Seems good cluster was identified, after relocation: ")
 	log.Infof("[%v] CPU Util [%v], Mem Util [%v], threshold [%v]", bestMec.Identity.Cluster, cpuUtilAfterRel, memUtilAfterRel, threshold)
-	log.Infof("ML CLient has found cluster[%v] for given APP[%v]", bestMec.Identity.Cluster, intent.Spec.AppName)
+	log.Infof("ML CLient has found cluster[%v] for given APP[%v]\n", bestMec.Identity.Cluster, intent.Spec.AppName)
 	return bestMec, nil
 
 }

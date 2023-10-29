@@ -133,7 +133,7 @@ func postHttpRespBody(url string, data interface{}) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted && resp.StatusCode != http.StatusNoContent {
 		return nil, fmt.Errorf("response code [%s]", resp.Status)
 	}
 
