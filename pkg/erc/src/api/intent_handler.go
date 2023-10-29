@@ -97,9 +97,15 @@ func (h *intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWr
 	if err != nil {
 		// EXPERIMENTS: remove later
 		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
+
+			body := ResponseBody{
+				Provider: mec.Identity.Provider,
+				Cluster:  mec.Identity.Cluster,
+			}
+
 			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
-			sendResponse(w, err.Error(), http.StatusNoContent)
+			sendResponse(w, body, http.StatusNoContent)
 			return
 		}
 		// EXPERIMENTS: remove later
