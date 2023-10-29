@@ -95,16 +95,16 @@ func (h *intentHandler) handleSmartPlacementIntentEarHeuristic(w http.ResponseWr
 	elapsedTime := time.Since(startTime)
 
 	if err != nil {
-		// EXPERIMENTS: remove later
 		if err.Error() == errs.ERR_CLUSTER_OK.Error() {
-
 			body := ResponseBody{
 				Provider: mec.Identity.Provider,
 				Cluster:  mec.Identity.Cluster,
 			}
 
+			log.Infof("selected redundant MEC: %v", mec.Identity.Cluster, mec.Identity.Provider)
 			h.resultClient.Results.IncSkipped(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 			h.resultClient.Results.AddSkippedTime(int(elapsedTime.Milliseconds()))
+			log.Infof("sending to simu redundant cluster: %v", body)
 			sendResponse(w, body, http.StatusNoContent)
 			return
 		}

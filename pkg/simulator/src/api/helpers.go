@@ -99,6 +99,7 @@ func CallPlacementController(intent model.SmartPlacementIntent, experimentType m
 	if err != nil {
 		return nil, fmt.Errorf("1. relocation for APP[%v] not done: %v", intent.Metadata.Name, err)
 	}
+	log.Infof("received body: %v", responseBody)
 
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
