@@ -58,13 +58,13 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentHeuristic(checkIfC
 	log.Infof("Smart Placement Intent: %+v", intent)
 
 	if checkIfClause {
-		skip, err := checkIfCurrentClusterOk(*tc, intent)
+		skip, mec, err := checkIfCurrentClusterOk(*tc, intent)
 		if err != nil {
 			log.Warnf("Can't skip current cluster. Reason: %v", err)
 		}
 
 		if skip {
-			return model.MecHost{}, errs.ERR_CLUSTER_OK
+			return mec, errs.ERR_CLUSTER_OK
 		}
 	}
 
@@ -189,31 +189,31 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentOptimal(intent mod
 
 // checkIfCurrentClusterOk checks if current MEC Host meets all requirements specified in the SmartPlacementIntent.
 // Returns `true` if current MEC Host meets all the requirements, `false` otherwise.
-func checkIfCurrentClusterOk(tc topology.Client, i model.SmartPlacementIntent) (bool, error) {
+func checkIfCurrentClusterOk(tc topology.Client, i model.SmartPlacementIntent) (bool, model.MecHost, error) {
 
 	//todo: currently old cluster is taken from intent, that means it should be properly updated at simu part ( hanlder.go), but it was not tested, so maybe more safe would be to take this data from NMT since, NMT already knows cluster per app
 	mec, err := tc.GetMecHost(i.CurrentPlacement.Provider, i.CurrentPlacement.Cluster)
 	if err != nil {
-		return false, err
+		return false, model.MecHost{}, err
 	}
 
 	mec, err = tc.CollectResourcesInfo(mec)
 	if err != nil {
-		return false, err
+		return false, model.MecHost{}, err
 	}
 
 	latency, err := tc.GetShortestPath(i.Spec.SmartPlacementIntentData.TargetCell, mec)
 	if err != nil {
-		return false, err
+		return false, model.MecHost{}, err
 	}
 	mec.SetLatency(latency)
 
 	if resourcesOk(i, mec) && latencyOk(i, mec) {
 		log.Infof("Current MEC[%v+%v] is OK. Skipping", i.CurrentPlacement.Provider, i.CurrentPlacement.Cluster)
-		return true, nil
+		return true, mec, nil
 	}
 
-	return false, err
+	return false, model.MecHost{}, err
 }
 
 // checkIfSkip checks if mec in already present in mecList (based on provider+cluster identifier)
