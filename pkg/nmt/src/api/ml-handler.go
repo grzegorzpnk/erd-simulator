@@ -157,7 +157,7 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML MASKED client")
-		response g= make([][]int, len(h.graphClient.MecHosts))
+		response = make([][]int, len(h.graphClient.MecHosts))
 		for i := 0; i < len(response); i++ {
 			response[i] = make([]int, 5)
 		}
