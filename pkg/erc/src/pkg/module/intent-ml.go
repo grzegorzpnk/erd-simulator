@@ -140,22 +140,21 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	clusterID, _ := convertMECNameToID(intent.CurrentPlacement.Cluster)
 	userLocation, _ := strconv.Atoi(string(intent.Spec.SmartPlacementIntentData.TargetCell))
 
-	var appState [1][5]int
+	var appState [][]int
 
 	if checkIfMasked {
-		appState = [1][5]int{{
+		appState = append(appState, []int{
 			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
 			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
 			determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
 			clusterID,
-			userLocation}}
+			userLocation})
 	} else {
-		appState = [1][5]int{{
+		appState = append(appState, []int{
 			determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
 			determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
 			int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
-			clusterID,
-			userLocation}}
+			clusterID})
 	}
 
 	url := buildNMTCurrentStateEndpoint()

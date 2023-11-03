@@ -13,7 +13,7 @@ COPY get-prediction-schema.json ./json-schemas/
 COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
-COPY masked-reward3-_20231025-190030.zip model-masked.zip
+COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
 COPY model-non-maskedTest_Non-Mask_20231103-005951.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh

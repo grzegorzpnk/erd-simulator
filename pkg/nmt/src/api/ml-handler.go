@@ -153,7 +153,7 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 			response[i][0] = int(v.GetCpuUtilization() * 100)
 			response[i][1] = int(v.GetMemoryUtilization() * 100)
 			response[i][2] = determineStateofCost(int(v.Identity.Location.Level))
-			response[i][3] = int(v.LatencyVector[cellINT-1] + 1)
+			response[i][3] = int(v.LatencyVector[cellINT-1])
 		}
 	} else {
 		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML MASKED client")
