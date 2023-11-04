@@ -159,14 +159,9 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	}
 
 	url := buildNMTCurrentStateEndpoint()
-	mecState, err := GetMECsStateFromNMT(url, intent.Spec.SmartPlacementIntentData.TargetCell, checkIfMasked)
+	mecState, err := GetMECsStateFromNMT(url, intent, checkIfMasked)
 	if err != nil {
 		return spIntent, err
-	}
-
-	for i := 0; i < len(mecState); i++ {
-		mecState[i][0] = int(int(intent.Spec.SmartPlacementIntentData.AppCpuReq) * 100 / mecState[i][0])
-		mecState[i][2] = int(int(intent.Spec.SmartPlacementIntentData.AppMemReq) * 100 / mecState[i][2])
 	}
 
 	state = model.State{
@@ -336,13 +331,13 @@ func buildNMTCurrentStateEndpoint() string {
 	return url
 }
 
-func GetMECsStateFromNMT(endpoint string, cell model.CellId, isMasked bool) ([][]int, error) {
+func GetMECsStateFromNMT(endpoint string, intent model.SmartPlacementIntent, isMasked bool) ([][]int, error) {
 
 	if isMasked {
-		cell = "masked"
+		intent.Spec.SmartPlacementIntentData.Masked = "masked"
 	}
 
-	resp, err := postHttpRespBody(endpoint, cell)
+	resp, err := postHttpRespBody(endpoint, intent)
 	if err != nil {
 		return nil, err
 	}

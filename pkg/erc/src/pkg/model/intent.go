@@ -34,6 +34,7 @@ type SmartPlacementIntentStruct struct {
 	AppMemReq         float64     `json:"appMemReq"`
 	ConstraintsList   Constraints `json:"constraintsList"`
 	ParametersWeights Weights     `json:"parametersWeights,omitempty"`
+	Masked            string      `json:"masked,omitempty"`
 }
 
 type Constraints struct {
