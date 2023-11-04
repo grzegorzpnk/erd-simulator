@@ -150,17 +150,23 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 			clusterID,
 			userLocation})
 	} else {
-		appState = append(appState, []int{
-			determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
-			determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
-			int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
-			clusterID})
+		//appState = append(appState, []int{
+		//	determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
+		//	determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
+		//	int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
+		//	clusterID})
+		appState = append(appState, []int{int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)})
 	}
 
 	url := buildNMTCurrentStateEndpoint()
 	mecState, err := GetMECsStateFromNMT(url, intent.Spec.SmartPlacementIntentData.TargetCell, checkIfMasked)
 	if err != nil {
 		return spIntent, err
+	}
+
+	for i := 0; i < len(mecState); i++ {
+		mecState[i][0] = int(int(intent.Spec.SmartPlacementIntentData.AppCpuReq) * 100 / mecState[i][0])
+		mecState[i][2] = int(int(intent.Spec.SmartPlacementIntentData.AppMemReq) * 100 / mecState[i][2])
 	}
 
 	state = model.State{
