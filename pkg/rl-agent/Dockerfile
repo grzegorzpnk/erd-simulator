@@ -14,7 +14,7 @@ COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
 COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
-COPY model-non-maskedTest_Non-Mask_20231104-144259.zip model-basic.zip
+COPY model-non-maskedTest_Non-Mask_20231105-021711.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
 

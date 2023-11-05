@@ -83,7 +83,8 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 		log.Errorf("Bad Lat cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec latency offered [%v] is unfortunately higher than required [%v]", bestMec.GetLatency(), reqLatency))
 		return model.MecHost{}, err
-	} else if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
+	}
+	if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
 		log.Errorf("Bad RES cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec resource utilization after relocation [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
 		return model.MecHost{}, err
