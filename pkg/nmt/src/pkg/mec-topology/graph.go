@@ -360,7 +360,6 @@ func (g *Graph) FindInitialClusters() (bool, []model.MecHost) {
 			edgeApp.UserLocation = startCell.Id
 			successullyFound += 1
 		}
-
 	}
 
 	fmt.Printf("Found after %v iterations", cnt)

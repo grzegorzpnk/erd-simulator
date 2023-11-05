@@ -90,8 +90,20 @@ func (h *apiHandler) MLInitialConfig(w http.ResponseWriter, r *http.Request) {
 		mec_node.ID = v.Identity.Cluster
 		mec_node.CPUCapacity = int(v.CpuResources.Capacity)
 		mec_node.MemoryCapacity = int(v.MemoryResources.Capacity)
-		mec_node.CPUUtilization = 0
-		mec_node.MemoryUtilization = 0
+
+		if v.Identity.Location.Level == 0 {
+			mec_node.CPUUtilization = 1552 / mec_node.CPUCapacity * 100
+			mec_node.MemoryUtilization = 1112 / mec_node.MemoryCapacity * 100
+		}
+		if v.Identity.Location.Level == 1 {
+			mec_node.CPUUtilization = 1200 / mec_node.CPUCapacity * 100
+			mec_node.MemoryUtilization = 1080 / mec_node.MemoryCapacity * 100
+		}
+		if v.Identity.Location.Level == 2 {
+			mec_node.CPUUtilization = 1548 / mec_node.CPUCapacity * 100
+			mec_node.MemoryUtilization = 1080 / mec_node.MemoryCapacity * 100
+		}
+
 		switch v.Identity.Location.Level {
 		case 0:
 			mec_node.PlacementCost = 1.0
