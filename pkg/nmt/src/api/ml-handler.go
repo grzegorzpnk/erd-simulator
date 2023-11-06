@@ -92,16 +92,16 @@ func (h *apiHandler) MLInitialConfig(w http.ResponseWriter, r *http.Request) {
 		mec_node.MemoryCapacity = int(v.MemoryResources.Capacity)
 
 		if v.Identity.Location.Level == 0 {
-			mec_node.CPUUtilization = 1552 / mec_node.CPUCapacity * 100
-			mec_node.MemoryUtilization = 1112 / mec_node.MemoryCapacity * 100
+			mec_node.CPUUtilization = 1552 * 100 / mec_node.CPUCapacity
+			mec_node.MemoryUtilization = 1112 * 100 / mec_node.MemoryCapacity
 		}
 		if v.Identity.Location.Level == 1 {
-			mec_node.CPUUtilization = 1200 / mec_node.CPUCapacity * 100
-			mec_node.MemoryUtilization = 1080 / mec_node.MemoryCapacity * 100
+			mec_node.CPUUtilization = 1200 * 100 / mec_node.CPUCapacity
+			mec_node.MemoryUtilization = 1080 * 100 / mec_node.MemoryCapacity
 		}
 		if v.Identity.Location.Level == 2 {
-			mec_node.CPUUtilization = 1548 / mec_node.CPUCapacity * 100
-			mec_node.MemoryUtilization = 1080 / mec_node.MemoryCapacity * 100
+			mec_node.CPUUtilization = 1548 * 100 / mec_node.CPUCapacity
+			mec_node.MemoryUtilization = 1080 * 100 / mec_node.MemoryCapacity
 		}
 
 		switch v.Identity.Location.Level {
@@ -110,7 +110,7 @@ func (h *apiHandler) MLInitialConfig(w http.ResponseWriter, r *http.Request) {
 		case 1:
 			mec_node.PlacementCost = 0.66667
 		case 2:
-			mec_node.PlacementCost = 0.33333
+			mec_node.PlacementCost = 0.33334
 		}
 
 		for i := 1; i <= len(h.graphClient.NetworkCells); i++ {
