@@ -184,7 +184,7 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
-		for i, v := range h.graphClient.MecHosts {
+		for i, v := range mecHostsCopy {
 			response[i][0] = int(v.GetCpuCapacity() - v.GetCpuUsed())
 			response[i][1] = int(v.GetCpuCapacity())
 			response[i][2] = int(intent.Spec.SmartPlacementIntentData.AppCpuReq)

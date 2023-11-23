@@ -179,9 +179,12 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 		}
 		spIntent = model.MLSmartPlacementIntent{State: state, CurrentMask: mask}
 	} else if !checkIfMasked {
+		log.Infof("Generating State NON-masked: ")
 		state = model.State{
 			SpaceMECs: mecState,
+			SpaceAPP:  nil,
 		}
+		fmt.Println(state)
 		spIntent = model.MLSmartPlacementIntent{State: state}
 	} else {
 		log.Errorf("Invalid type of experiment: %v", err.Error())
