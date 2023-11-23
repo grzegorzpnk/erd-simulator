@@ -52,6 +52,7 @@ def get_prediction(request: HttpRequest):
         # Actions are counter from 0, but we consider mec names in a format (mecN, mecN+1, ...), where N=1
         action += 1
 
+        log.info("[DECISION] Returned MEC:", action)
         return HttpResponse(f'{action}')
     else:
         log.error({'error': f'Method [{request.method}] Not Allowed'})
