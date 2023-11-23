@@ -254,7 +254,7 @@ func (h *intentHandler) handleSmartPlacementIntentMLNonMasked(w http.ResponseWri
 	if err != nil {
 		h.resultClient.Results.IncFailed(strconv.FormatFloat(i.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax, 'f', -1, 64))
 		h.resultClient.Results.AddFailedTime(int(elapsedTime.Milliseconds()))
-		log.Errorf("Failed! Returned cluster do not met requrements. Reason: %v", err.Error())
+		log.Errorf("Failed! Returned cluster %v do not met requrements. Reason: %v", mec.Identity.Cluster, err.Error())
 		sendResponse(w, err.Error(), http.StatusInternalServerError)
 		return
 

@@ -85,8 +85,10 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 		return model.MecHost{}, err
 	}
 	if cpuUtilAfterRel > threshold || memUtilAfterRel > threshold {
-		log.Errorf("Bad RES cluster was selected by ML model: ")
+		log.Errorf("Bad RES cluster was selected by ML model: %v", bestMec.Identity.Cluster)
 		err = errors.New(fmt.Sprintf("mec resource utilization after relocation [cpu: %v, memory: %v] would be higher than allowed threshold [%v]", cpuUtilAfterRel, memUtilAfterRel, threshold))
+		log.Infof("[%v] CPU Util before [%v], Mem Util before [%v], threshold [%v]", bestMec.Identity.Cluster, cpuUtilAfterRel, memUtilAfterRel, threshold)
+		log.Infof("[%v] CPU Available Before[%v], Mem Available Before [%v]", bestMec.GetCpuCapacity()-bestMec.GetCpuUsed(), bestMec.GetMemCapacity()-bestMec.GetMemUsed())
 		return model.MecHost{}, err
 	}
 
