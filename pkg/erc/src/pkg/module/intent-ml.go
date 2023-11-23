@@ -150,24 +150,12 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 			determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
 			clusterID,
 			userLocation})
-	} else {
-		//appState = append(appState, []int{
-		//	determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppCpuReq), intent.CurrentPlacement.Cluster),
-		//	determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
-		//	int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
-		//	clusterID})
-		//appState = append(appState, []int{int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)})
 	}
 
 	url := buildNMTCurrentStateEndpoint()
 	mecState, err := GetMECsStateFromNMT(url, intent, checkIfMasked)
 	if err != nil {
 		return spIntent, err
-	}
-
-	state = model.State{
-		//SpaceAPP:  appState,
-		SpaceMECs: mecState,
 	}
 
 	app := model.MECApp{Id: intent.Spec.AppName,
@@ -181,12 +169,19 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	}
 
 	if checkIfMasked {
+		state = model.State{
+			SpaceAPP:  appState,
+			SpaceMECs: mecState,
+		}
 		mask, err := GenerateMLMask(app)
 		if err != nil {
 			log.Errorf("Cannot generate Mask: %v", err.Error())
 		}
 		spIntent = model.MLSmartPlacementIntent{State: state, CurrentMask: mask}
 	} else if !checkIfMasked {
+		state = model.State{
+			SpaceMECs: mecState,
+		}
 		spIntent = model.MLSmartPlacementIntent{State: state}
 	} else {
 		log.Errorf("Invalid type of experiment: %v", err.Error())

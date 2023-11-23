@@ -6,22 +6,22 @@ from sb3_contrib import MaskablePPO
 
 
 def validate_body(data: dict):
-    log = logging.getLogger('ermodel')
-
-    schema_path = os.environ.get("GET_PREDICTION_SCHEMA_PATH")
-
-    with open(schema_path) as file:
-        schema_json = file.read()
-
-    schema = json.loads(schema_json)
-
-    try:
-        jsonschema.validate(data, schema)
+#     log = logging.getLogger('ermodel')
+#
+#     schema_path = os.environ.get("GET_PREDICTION_SCHEMA_PATH")
+#
+#     with open(schema_path) as file:
+#         schema_json = file.read()
+#
+#     schema = json.loads(schema_json)
+#
+#     try:
+#         jsonschema.validate(data, schema)
         return True
-    except jsonschema.exceptions.ValidationError as e:
-        log.error("Body schema validation error:", e.message)
-
-        return False
+#     except jsonschema.exceptions.ValidationError as e:
+#         log.error("Body schema validation error:", e.message)
+#
+#         return False
 
 
 def make_prediction(models: dict, state_t0, mask, use_mask: bool):
