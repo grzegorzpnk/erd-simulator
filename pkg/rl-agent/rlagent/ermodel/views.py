@@ -27,6 +27,7 @@ def get_prediction(request: HttpRequest):
             return JsonResponse({'error': 'Body schema validation error'}, status=400)
 
         state = data['state']
+        print(data['state'])
         if "mask" in data:
             use_mask = True
             mask = data['mask']

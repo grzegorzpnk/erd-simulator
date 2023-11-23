@@ -155,23 +155,53 @@ func (h *apiHandler) GetCurrentState(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML NONMASKED client")
 		cellINT, _ := strconv.Atoi(string(intent.Spec.SmartPlacementIntentData.TargetCell))
 
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//let's work on a sorted copy
+		var mecHostsCopy []model.MecHost
+
+		for _, mec := range h.graphClient.MecHosts {
+			mecHostsCopy = append(mecHostsCopy, *mec)
+		}
+
+		sort.Slice(mecHostsCopy, func(i, j int) bool {
+			id1 := mecHostsCopy[i].Identity.Cluster
+			id2 := mecHostsCopy[j].Identity.Cluster
+
+			// Extract the number from the id attribute
+			num1, _ := strconv.Atoi(strings.TrimPrefix(id1, "mec"))
+			num2, _ := strconv.Atoi(strings.TrimPrefix(id2, "mec"))
+
+			// Compare the numbers extracted from the id attribute
+			return num1 < num2
+		})
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		response = make([][]int, len(h.graphClient.MecHosts))
 		for i := 0; i < len(response); i++ {
-			response[i] = make([]int, 5)
+			response[i] = make([]int, 13)
 		}
 
 		// MEC(for MEC each)    : 1) CPU Capacity 2) CPU Utilization [%] 3) Memory Capacity 4) Memory Utilization [%] 5) Unit Cost
 		for i, v := range h.graphClient.MecHosts {
-			response[i][0] = int(v.GetCpuUtilization() * 100)
-			response[i][1] = int(intent.Spec.SmartPlacementIntentData.AppCpuReq * 100 / v.GetCpuCapacity())
-			response[i][2] = int(v.GetMemoryUtilization() * 100)
-			response[i][3] = int(intent.Spec.SmartPlacementIntentData.AppMemReq * 100 / v.GetMemoryCapacity())
-			response[i][4] = int(v.LatencyVector[cellINT-1])
+			response[i][0] = int(v.GetCpuCapacity() - v.GetCpuUsed())
+			response[i][1] = int(v.GetCpuCapacity())
+			response[i][2] = int(intent.Spec.SmartPlacementIntentData.AppCpuReq)
+			response[i][4] = int(v.GetMemoryCapacity() - v.GetMemoryUsed())
+			response[i][5] = int(v.GetMemoryCapacity())
+			response[i][6] = int(intent.Spec.SmartPlacementIntentData.AppMemReq)
+			response[i][7] = (int(v.LatencyVector[cellINT-1]) + 1) * 100
+			response[i][8] = int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax * 100)
+			response[i][9] = (int(v.LatencyVector[cellINT-1]) + 1) * 100
+			response[i][10] = int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax * 100)
+			response[i][11] = (int(v.LatencyVector[cellINT-1]) + 1) * 100
+			response[i][12] = int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax * 100)
 			if v.Identity.Cluster == intent.CurrentPlacement.Cluster {
-				response[i][0] = int(v.GetCpuUtilization()*100) - int(intent.Spec.SmartPlacementIntentData.AppCpuReq*100/v.GetCpuCapacity())
-				response[i][2] = int(v.GetMemoryUtilization()*100) - int(intent.Spec.SmartPlacementIntentData.AppMemReq*100/v.GetMemoryCapacity())
+				response[i][3] = 1
+			} else {
+				response[i][3] = 0
 			}
-
 		}
 	} else {
 		fmt.Printf("Received request from simu to preapre current state of MECs for input to ML MASKED client")

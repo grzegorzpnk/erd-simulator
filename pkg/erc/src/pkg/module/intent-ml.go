@@ -156,7 +156,7 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 		//	determineReqResInEdgeContext(int(intent.Spec.SmartPlacementIntentData.AppMemReq), intent.CurrentPlacement.Cluster),
 		//	int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax),
 		//	clusterID})
-		appState = append(appState, []int{int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)})
+		//appState = append(appState, []int{int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)})
 	}
 
 	url := buildNMTCurrentStateEndpoint()
@@ -166,7 +166,7 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	}
 
 	state = model.State{
-		SpaceAPP:  appState,
+		//SpaceAPP:  appState,
 		SpaceMECs: mecState,
 	}
 
