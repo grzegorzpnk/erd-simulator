@@ -14,7 +14,7 @@ COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
 COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
-COPY model-non-CPU-MEM-LAT-ENTH-Latency-Learning_two_version_50mln.zip model-basic.zip
+COPY model-non-CPU-MEM-LAT-ENTH-Latency-Learning_two_version_1model-non-CPU-MEM-LAT-ENTH-Latency-Learning_two_version_10mln_5mln.zip5mln.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
 
