@@ -18,7 +18,7 @@
           "minItems": 1,
           "maxItems": 1
         },
-        "space_MEC": {
+        "space_MEC_RES": {
           "type": "array",
           "items": {
             "type": "array",
@@ -28,7 +28,7 @@
           }
         }
       },
-      "required": ["space_App", "space_MEC"]
+      "required": ["space_MEC_RES"]
     },
     "mask": {
       "type": "array",
