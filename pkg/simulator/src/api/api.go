@@ -23,7 +23,6 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 	r.HandleFunc(baseUrl+"/simu/experiment-icc", handler.conductExperimentICC).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment-icc-tunning", handler.conductExperimentICCTunning).Methods("POST")
 	r.HandleFunc(baseUrl+"/simu/experiment-icc-tunning-iter", handler.conductExperimentICCTunningIter).Methods("POST")
-
 	//ML
 	r.HandleFunc(baseUrl+"/simu/experiment-globcom", handler.conductExperimentGlobcom).Methods("POST")
 	//r.HandleFunc(baseUrl+"/simu/experiment-ml-compare", handler.conductExperimentMLCompare).Methods("POST")

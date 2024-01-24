@@ -472,55 +472,43 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 
 	experiments := []model.ExperimentIntent{}
 
-	//experiment1 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpOptimal,
-	//	ExperimentStrategy: model.StrHybrid,
-	//	ExperimentDetails:  details,
-	//	Weights: model.Weights{
-	//		LatencyWeight:        0.5,
-	//		ResourcesWeight:      0.5,
-	//		CpuUtilizationWeight: 0.5,
-	//		MemUtilizationWeight: 0.5,
-	//	},
-	//}
+	experiment1 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
 
-	//experiment2 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpHeuristic,
-	//	ExperimentStrategy: model.StrHybrid,
-	//	ExperimentDetails:  details,
-	//	Weights: model.Weights{
-	//		LatencyWeight:        0.5,
-	//		ResourcesWeight:      0.5,
-	//		CpuUtilizationWeight: 0.5,
-	//		MemUtilizationWeight: 0.5,
-	//	},
-	//}
+	experiment2 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
 
-	//experiment2 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpEarHeuristic,
-	//	ExperimentStrategy: model.StrHybrid,
-	//	ExperimentDetails:  details,
-	//	Weights: model.Weights{
-	//		LatencyWeight:        0.5,
-	//		ResourcesWeight:      0.5,
-	//		CpuUtilizationWeight: 0.5,
-	//		MemUtilizationWeight: 0.5,
-	//	},
-	//}
-	//
-	//experiment3 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpMLMasked,
-	//	ExperimentStrategy: model.StrML,
-	//	ExperimentDetails:  details,
-	//}
-
-	experiment4 := model.ExperimentIntent{
+	experiment3 := model.ExperimentIntent{
 		ExperimentType:     model.ExpMLNonMasked,
 		ExperimentStrategy: model.StrML,
 		ExperimentDetails:  details,
 	}
 
-	experiments = append(experiments, experiment4)
+	experiment4 := model.ExperimentIntent{
+		ExperimentType:     model.ExpMLMasked,
+		ExperimentStrategy: model.StrML,
+		ExperimentDetails:  details,
+	}
+
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
 
 	return experiments
 }
