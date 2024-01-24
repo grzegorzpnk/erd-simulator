@@ -65,33 +65,42 @@ func (h *apiHandler) generateMLChart(w http.ResponseWriter, r *http.Request) {
 	apps := "apps"
 	mecs := "mecs"
 
-	err := h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
+	err := h.ResultClient.GenerateGlobecomChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationRejectionRates, basePath+"/"+apps)
+	err = h.ResultClient.GenerateGlobecomChartPkgApps(results.RelocationRejectionRates, basePath+"/"+apps)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
+	err = h.ResultClient.GenerateGlobecomChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = h.ResultClient.GenerateChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
+	err = h.ResultClient.GenerateGlobecomChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	err = h.ResultClient.GenerateSummaryOfGlobeComConvergenceTimes()
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	log.Infof("Conv times results generated")
 
 	w.WriteHeader(http.StatusOK)
 }
@@ -138,7 +147,7 @@ func (h *apiHandler) generateICCHeuristicChart(w http.ResponseWriter, r *http.Re
 	}
 	log.Infof("CPU util chart generated")
 
-	err = h.ResultClient.GenerateSummaryOfConvergenceTimes()
+	err = h.ResultClient.GenerateSummaryOfICCConvergenceTimes()
 	if err != nil {
 		log.Errorf("Error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -501,32 +510,32 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	}
 	log.Infof("Finished all iterations.")
 
-	basePath := "results"
-	apps := "apps"
-	//mecs := "mecs"
-
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = h.ResultClient.GenerateChartPkgApps(results.RelocationRejectionRates, basePath+"/"+apps)
-	if err != nil {
-		log.Errorf("Error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	//err = h.ResultClient.GenerateChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
+	//basePath := "results"
+	//apps := "apps"
+	////mecs := "mecs"
+	//
+	//err = h.ResultClient.GenerateGlobecomChartPkgApps(results.RelocationTriggeringRates, basePath+"/"+apps)
 	//if err != nil {
 	//	log.Errorf("Error: %v", err)
 	//	w.WriteHeader(http.StatusInternalServerError)
 	//	return
 	//}
 	//
-	//err = h.ResultClient.GenerateChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
+	//err = h.ResultClient.GenerateGlobecomChartPkgApps(results.RelocationRejectionRates, basePath+"/"+apps)
+	//if err != nil {
+	//	log.Errorf("Error: %v", err)
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
+
+	//err = h.ResultClient.GenerateGlobecomChartPkgMecs(results.ResCpu, basePath+"/"+mecs)
+	//if err != nil {
+	//	log.Errorf("Error: %v", err)
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
+	//
+	//err = h.ResultClient.GenerateGlobecomChartPkgMecs(results.ResMemory, basePath+"/"+mecs)
 	//if err != nil {
 	//	log.Errorf("Error: %v", err)
 	//	w.WriteHeader(http.StatusInternalServerError)

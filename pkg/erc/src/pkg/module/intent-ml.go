@@ -141,37 +141,35 @@ func GenerateMLSmartPlacementIntent(intent model.SmartPlacementIntent, checkIfMa
 	var spIntent model.MLSmartPlacementIntent
 	var state model.State
 
-	clusterID, _ := convertMECNameToID(intent.CurrentPlacement.Cluster)
-	userLocation, _ := strconv.Atoi(string(intent.Spec.SmartPlacementIntentData.TargetCell))
-
-	var appState [][]int
-
-	if checkIfMasked {
-		appState = append(appState, []int{
-			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
-			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
-			determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
-			clusterID,
-			userLocation})
-	}
-
 	url := buildNMTCurrentStateEndpoint()
 	mecState, err := GetMECsStateFromNMT(url, intent, checkIfMasked)
 	if err != nil {
 		return spIntent, err
 	}
 
-	app := model.MECApp{Id: intent.Spec.AppName,
-		ClusterId:    intent.CurrentPlacement.Cluster,
-		UserLocation: string(intent.Spec.SmartPlacementIntentData.TargetCell),
-		Requirements: model.RequestedResources{
-			RequestedCPU:     intent.Spec.SmartPlacementIntentData.AppCpuReq,
-			RequestedMEMORY:  intent.Spec.SmartPlacementIntentData.AppMemReq,
-			RequestedLatency: intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax,
-		},
-	}
-
 	if checkIfMasked {
+
+		var appState [][]int
+		clusterID, _ := convertMECNameToID(intent.CurrentPlacement.Cluster)
+		userLocation, _ := strconv.Atoi(string(intent.Spec.SmartPlacementIntentData.TargetCell))
+
+		appState = append(appState, []int{
+			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppCpuReq)),
+			determineReqRes(int(intent.Spec.SmartPlacementIntentData.AppMemReq)),
+			determineStateofAppLatReq(int(intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax)),
+			clusterID,
+			userLocation})
+
+		app := model.MECApp{Id: intent.Spec.AppName,
+			ClusterId:    intent.CurrentPlacement.Cluster,
+			UserLocation: string(intent.Spec.SmartPlacementIntentData.TargetCell),
+			Requirements: model.RequestedResources{
+				RequestedCPU:     intent.Spec.SmartPlacementIntentData.AppCpuReq,
+				RequestedMEMORY:  intent.Spec.SmartPlacementIntentData.AppMemReq,
+				RequestedLatency: intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax,
+			},
+		}
+
 		state = model.State{
 			SpaceAPP:  appState,
 			SpaceMECs: mecState,
@@ -348,7 +346,8 @@ func GetMECsStateFromNMT(endpoint string, intent model.SmartPlacementIntent, isM
 	//Convert the body to type [][]int
 	stateOfMECs := make([][]int, 22)
 	for i := 0; i < len(stateOfMECs); i++ {
-		stateOfMECs[i] = make([]int, 4)
+		//stateOfMECs[i] = make([]int, 4)
+		stateOfMECs[i] = make([]int, 0, 13)
 	}
 
 	json.Unmarshal(resp, &stateOfMECs)
