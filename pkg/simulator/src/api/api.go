@@ -33,7 +33,7 @@ func NewRouter(sClient *model.SimuClient, rClient *results.Client) *mux.Router {
 	r.HandleFunc(baseUrl+"/results/all", handler.getAllResults).Methods("GET")
 	r.HandleFunc(baseUrl+"/results/charts/icc-heuristic", handler.generateICCHeuristicChart).Methods("GET")
 	r.HandleFunc(baseUrl+"/results/charts/icc-heuristic-tunning", handler.generateICCTunningHeuristicChart).Methods("GET")
-	r.HandleFunc(baseUrl+"/results/chartsml", handler.generateMLChart).Methods("GET")
+	r.HandleFunc(baseUrl+"/results/charts/globecom", handler.generateMLChart).Methods("GET")
 	r.HandleFunc(baseUrl+"/results/test", handler.test).Methods("GET")
 
 	//test API
