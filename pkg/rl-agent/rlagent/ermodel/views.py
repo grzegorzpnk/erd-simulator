@@ -13,8 +13,9 @@ sys.path.append("../config")
 
 # Create your views here.
 def get_prediction(request: HttpRequest):
-    log.info(f"\n\nReceived request about Relocation prediction")
+
     log = logging.getLogger('ermodel')
+    log.info(f"\n\nReceived request about Relocation prediction")
     if request.method == "GET" or request.method == "POST":
         body = request.body
         try:
