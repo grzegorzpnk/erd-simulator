@@ -508,7 +508,7 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		ExperimentDetails:  details,
 	}
 
-	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
+	experiments = append(experiments, experiment3, experiment4)
 
 	return experiments
 }
