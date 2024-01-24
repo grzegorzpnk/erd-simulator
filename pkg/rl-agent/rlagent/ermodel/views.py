@@ -13,6 +13,7 @@ sys.path.append("../config")
 
 # Create your views here.
 def get_prediction(request: HttpRequest):
+    log.info(f"\n\nReceived request about Relocation prediction")
     log = logging.getLogger('ermodel')
     if request.method == "GET" or request.method == "POST":
         body = request.body
@@ -27,7 +28,7 @@ def get_prediction(request: HttpRequest):
             return JsonResponse({'error': 'Body schema validation error'}, status=400)
 
         state = data['state']
-        print("\n\n DATA:\n", data['state'])
+        print("\n\n DATA here:\n", data['state'])
         if "mask" in data:
             use_mask = True
             mask = data['mask']
@@ -35,7 +36,9 @@ def get_prediction(request: HttpRequest):
             use_mask = False
             mask = []
 
+#         log.info("\n\n DATA:\n", data['state'])
         log.info(f"Mask present: {use_mask}")
+        log.info(f"Mask: {mask}")
 
         cfg = config.Config(os.environ.get('CONFIG_PATH'))
         models = {

@@ -27,6 +27,8 @@ def validate_body(data: dict):
 def make_prediction(models: dict, state_t0, mask, use_mask: bool):
     log = logging.getLogger('ermodel')
 
+    log.info(f"\nMake prediction Function:\n")
+
     if use_mask:
         action, state_t1 = models["masked"].predict(state_t0, action_masks=mask)
     else:
