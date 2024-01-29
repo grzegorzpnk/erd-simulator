@@ -39,7 +39,8 @@ def get_prediction(request: HttpRequest):
 
 #         log.info("\n\n DATA:\n", data['state'])
         log.info(f"Mask present: {use_mask}")
-        log.info(f"Mask: {mask}")
+        if use_mask == true
+            log.info(f"Mask: {mask}")
 
         cfg = config.Config(os.environ.get('CONFIG_PATH'))
         models = {
