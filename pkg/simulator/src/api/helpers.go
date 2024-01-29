@@ -472,29 +472,29 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 
 	experiments := []model.ExperimentIntent{}
 
-	//experiment1 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpOptimal,
-	//	ExperimentStrategy: model.StrHybrid,
-	//	ExperimentDetails:  details,
-	//	Weights: model.Weights{
-	//		LatencyWeight:        0.5,
-	//		ResourcesWeight:      0.5,
-	//		CpuUtilizationWeight: 0.5,
-	//		MemUtilizationWeight: 0.5,
-	//	},
-	//}
-	//
-	//experiment2 := model.ExperimentIntent{
-	//	ExperimentType:     model.ExpEarHeuristic,
-	//	ExperimentStrategy: model.StrLB,
-	//	ExperimentDetails:  details,
-	//	Weights: model.Weights{
-	//		LatencyWeight:        0.5,
-	//		ResourcesWeight:      0.5,
-	//		CpuUtilizationWeight: 0.5,
-	//		MemUtilizationWeight: 0.5,
-	//	},
-	//}
+	experiment1 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrHybrid,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment2 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0.5,
+			ResourcesWeight:      0.5,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
 
 	experiment3 := model.ExperimentIntent{
 		ExperimentType:     model.ExpMLNonMasked,
@@ -508,7 +508,7 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		ExperimentDetails:  details,
 	}
 
-	experiments = append(experiments, experiment3, experiment4)
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
 
 	return experiments
 }
