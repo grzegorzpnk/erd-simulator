@@ -468,7 +468,7 @@ func (c *Client) GenerateChartPkgAppsICCTunning(chartType ChartType, basePath st
 func (c *Client) genRatesPkgAggregatedMecs(resType string, values [][]float64, basePath string, tuning bool, isML bool) error {
 	mecTypeLabels := []string{"City-Level", "Regional-Level", "International-Level"}
 
-	iterFiles := []string{"algorithm1.dat", "algorithm2.dat", "algorithm3.dat", "algorithm4.dat", "algorithm5.dat", "algorithm6.dat"}
+	iterFiles := []string{"algorithm1.dat", "algorithm2.dat", "algorithm3.dat", "algorithm4.dat"}
 
 	pkgPath := resType + "-aggregated-rates"
 	scriptName := "_" + resType + "-aggregated.sh"
