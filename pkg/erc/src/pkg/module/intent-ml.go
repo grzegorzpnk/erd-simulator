@@ -77,10 +77,10 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	log.Infof("Check if MEM OK: MEM USed [%v], APP REQ MEM:[%v], Capacity MEM [%v]", bestMec.GetMemUsed(), intent.Spec.SmartPlacementIntentData.AppMemReq, bestMec.GetMemCapacity())
 	reqLatency := intent.Spec.SmartPlacementIntentData.ConstraintsList.LatencyMax
 
-	threshold := 90.0
+	threshold := 100.0
 	//log.Infof("[DEBUG], bestMec.GetCpuUsed: %v. AppCpuReq: %v, bestMec.getCpuCapacity: %v.", bestMec.GetCpuUsed(), intent.Spec.SmartPlacementIntentData.AppCpuReq, bestMec.GetCpuCapacity())
 
-	if bestMec.GetLatency() > reqLatency {
+	if (bestMec.GetLatency() - 1) > reqLatency {
 		log.Errorf("Bad Lat cluster was selected by ML model: ")
 		err = errors.New(fmt.Sprintf("mec latency offered [%v] is unfortunately higher than required [%v]", bestMec.GetLatency(), reqLatency))
 		return model.MecHost{}, err
