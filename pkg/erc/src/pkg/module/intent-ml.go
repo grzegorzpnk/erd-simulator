@@ -80,7 +80,7 @@ func (i *SmartPlacementIntentClient) ServeSmartPlacementIntentML(checkIfMasked b
 	var threshold float64
 	threshold = 80.0
 	if !checkIfMasked {
-		threshold = 100.0
+		threshold = 95.0
 	}
 	//log.Infof("[DEBUG], bestMec.GetCpuUsed: %v. AppCpuReq: %v, bestMec.getCpuCapacity: %v.", bestMec.GetCpuUsed(), intent.Spec.SmartPlacementIntentData.AppCpuReq, bestMec.GetCpuCapacity())
 
