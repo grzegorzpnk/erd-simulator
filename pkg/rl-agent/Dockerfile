@@ -13,6 +13,7 @@ COPY get-prediction-schema.json ./json-schemas/
 COPY config.json ./config/
 COPY rlagent/ .
 COPY start-server.sh .
+#COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
 COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
 COPY model-non-CPU-final-2024-11-Var-in-load8.zip model-basic.zip
 
