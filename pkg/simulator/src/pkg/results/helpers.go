@@ -180,7 +180,7 @@ func generateAggregatedRatesScriptMecs(resType, title, yLabel string, iterFiles 
 
 reset
 
-set terminal svg font 'Helvetica,14' size 1400,800
+set terminal svg font 'Helvetica,14' size 1800,800
 
 set title "%s" font 'Helvetica,40' offset 0,-2
 
@@ -218,7 +218,7 @@ plot newhistogram "Optimal-LB" font 'Helvetica,17' offset 0,0.7, \
      newhistogram "EAR-LB" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "" linecolor rgb "black", \
 	newhistogram "EAR-RL" font 'Helvetica,17' offset 0,0.7, \
-       '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey"
+       '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey", \
 	newhistogram "EAR-RL-Masked" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey"
 

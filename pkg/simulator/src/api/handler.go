@@ -409,7 +409,7 @@ func (h *apiHandler) conductExperimentGlobcom(w http.ResponseWriter, r *http.Req
 	//clear results of previous iteration ( FULL experiment)
 	h.ResultClient.ResetResultsAtSimu()
 
-	for f := 0; f < 5; f++ {
+	for f := 0; f < 20; f++ {
 
 		//in order to keep the same settings for each of experiment, let's generate common trajectory, that each of experiment will be invoked on
 		err = GenerateInitialAppPlacementAtNMT(experiments[0].ExperimentDetails.InitialAppsNumber)
