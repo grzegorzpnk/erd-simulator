@@ -18,7 +18,7 @@ func (pc *percentageCounter) getAverage() float64 {
 }
 
 func initializeEmpty2DArray() [][]float64 {
-	a := make([][]float64, 4)
+	a := make([][]float64, 7)
 	for i := range a {
 		a[i] = make([]float64, 4)
 	}
@@ -207,17 +207,23 @@ set bmargin 7
 set ylabel "%s" font 'Helvetica,20'
 set key inside top left horizontal font "Helvetica, 25" width 1.0
 
-plot newhistogram "Optimal-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+plot newhistogram "Optimal-LB" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "City-Level" linecolor rgb "black", \
+     newhistogram "Optimal-Latency" font 'Helvetica,17' offset 0,0.7, \
+       '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "dark-gray", \
+     newhistogram "Optimal-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+       '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "gray", \
+     newhistogram "EAR-Hybrid" font 'Helvetica,17' offset 0,0.7, \
+       '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey", \
      newhistogram "EAR-LB" font 'Helvetica,17' offset 0,0.7, \
-       '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "dark-gray", \
-     newhistogram "EAR-RL" font 'Helvetica,17' offset 0,0.7, \
-       '%s' using 2:xticlabels(1) title "Regional-Level" linecolor rgb "dark-gray", \
-     newhistogram "EAR-RL-Masked" font 'Helvetica,17' offset 0,0.7, \
+       '%s' using 2:xticlabels(1) title "" linecolor rgb "black", \
+	newhistogram "EAR-RL" font 'Helvetica,17' offset 0,0.7, \
+       '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey"
+	newhistogram "EAR-RL-Masked" font 'Helvetica,17' offset 0,0.7, \
        '%s' using 2:xticlabels(1) title "International-Level" linecolor rgb "light-grey"
 
 exit
-`, title, resType, yLabel, iterFiles[0], iterFiles[1], iterFiles[2], iterFiles[3])
+`, title, resType, yLabel, iterFiles[0], iterFiles[1], iterFiles[2], iterFiles[3], iterFiles[4], iterFiles[5], iterFiles[6])
 
 		return script
 

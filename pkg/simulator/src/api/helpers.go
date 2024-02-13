@@ -485,8 +485,32 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 	}
 
 	experiment2 := model.ExperimentIntent{
-		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentType:     model.ExpOptimal,
 		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0,
+			ResourcesWeight:      1,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment3 := model.ExperimentIntent{
+		ExperimentType:     model.ExpOptimal,
+		ExperimentStrategy: model.StrLatency,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        1,
+			ResourcesWeight:      0,
+			CpuUtilizationWeight: 0,
+			MemUtilizationWeight: 0,
+		},
+	}
+
+	experiment4 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrHybrid,
 		ExperimentDetails:  details,
 		Weights: model.Weights{
 			LatencyWeight:        0.5,
@@ -496,19 +520,31 @@ func declareGlobcomExperiments(details model.ExperimentDetails) []model.Experime
 		},
 	}
 
-	experiment3 := model.ExperimentIntent{
+	experiment5 := model.ExperimentIntent{
+		ExperimentType:     model.ExpEarHeuristic,
+		ExperimentStrategy: model.StrLB,
+		ExperimentDetails:  details,
+		Weights: model.Weights{
+			LatencyWeight:        0,
+			ResourcesWeight:      1,
+			CpuUtilizationWeight: 0.5,
+			MemUtilizationWeight: 0.5,
+		},
+	}
+
+	experiment6 := model.ExperimentIntent{
 		ExperimentType:     model.ExpMLNonMasked,
 		ExperimentStrategy: model.StrML,
 		ExperimentDetails:  details,
 	}
 
-	experiment4 := model.ExperimentIntent{
+	experiment7 := model.ExperimentIntent{
 		ExperimentType:     model.ExpMLMasked,
 		ExperimentStrategy: model.StrML,
 		ExperimentDetails:  details,
 	}
 
-	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4)
+	experiments = append(experiments, experiment1, experiment2, experiment3, experiment4, experiment5, experiment6, experiment7)
 
 	return experiments
 }
