@@ -15,7 +15,9 @@ COPY rlagent/ .
 COPY start-server.sh .
 
 #COPY masked-propoer-ResourcesOK-_20231023-174106.zip model-masked.zip
-COPY masked_model_trajectory250_steps500k_variableload_newReward.zip model-masked.zip
+#COPY masked_model_trajectory250_steps500k_variableload_newReward.zip model-masked.zip
+COPY masked-reward3-_20240213-185035.zip model-masked.zip
+
 COPY model-non-CPU-final-2024-11-Var-in-load8.zip model-basic.zip
 
 RUN chmod +x ./start-server.sh
