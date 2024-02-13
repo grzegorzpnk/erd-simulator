@@ -1,0 +1,5 @@
+#	cg	v2x	uav	conf	x
+Optimal	13.68	30.88	28.24	1.47	0
+EAR-Heuristic	7.36	7.36	0.08	2.36	1
+ML-NonMasked	1.12	5.92	2.32	2.38	2
+ML-Masked	12.64	18.96	21.44	2.44	3
