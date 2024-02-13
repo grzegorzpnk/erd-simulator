@@ -173,6 +173,7 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 		mec.MECApps = nil
 		mec.CpuResources.Used = 0
 		mec.MemoryResources.Used = 0
+
 	}
 
 	//update resources on mec host
