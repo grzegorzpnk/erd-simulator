@@ -153,51 +153,6 @@ func (mec *MecHost) CheckAppExists(app MECApp) bool {
 }
 
 //TOBE tested
-//func (mec *MecHost) UninstallApp(app MECApp) {
-//
-//	//delete app to list
-//	var initialID int
-//
-//	//check id where the app is in slice
-//	for i, v := range mec.MECApps {
-//		if v.Id == app.Id {
-//			initialID = i
-//		}
-//	}
-//
-//	//delete given app
-//	mec.MECApps[initialID] = mec.MECApps[len(mec.MECApps)-1]
-//	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
-//
-//	if len(mec.MECApps) == 0 {
-//		mec.MECApps = nil
-//		mec.CpuResources.Used = 0
-//		mec.MemoryResources.Used = 0
-//
-//	}
-//
-//	//update resources on mec host
-//	//update used resources
-//	mec.CpuResources.Used -= app.Requirements.RequestedCPU
-//	mec.MemoryResources.Used -= app.Requirements.RequestedMEMORY
-//
-//	//introduced this as a bug fixing
-//	if mec.CpuResources.Used < 0 {
-//		mec.CpuResources.Used = 0
-//	}
-//
-//	if mec.MemoryResources.Used < 0 {
-//		mec.MemoryResources.Used = 0
-//	}
-//
-//	//update utilization
-//	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
-//	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
-//
-//	log.Infof("App: %v UNinstalled from cluster: %v", app.Id, app.ClusterId)
-//
-//}
-
 func (mec *MecHost) UninstallApp(app MECApp) {
 
 	//delete app to list
@@ -214,6 +169,13 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	mec.MECApps[initialID] = mec.MECApps[len(mec.MECApps)-1]
 	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
 
+	if len(mec.MECApps) == 0 {
+		mec.MECApps = nil
+		mec.CpuResources.Used = 0
+		mec.MemoryResources.Used = 0
+
+	}
+
 	//update resources on mec host
 	//update used resources
 	mec.CpuResources.Used -= app.Requirements.RequestedCPU
@@ -222,29 +184,10 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	//introduced this as a bug fixing
 	if mec.CpuResources.Used < 0 {
 		mec.CpuResources.Used = 0
-		log.Errorf("Check what's going on")
 	}
 
 	if mec.MemoryResources.Used < 0 {
 		mec.MemoryResources.Used = 0
-		log.Errorf("Check what's going on 2")
-	}
-
-	if len(mec.MECApps) == 0 {
-		mec.MECApps = nil
-
-		if mec.Identity.Location.Level == 0 {
-			mec.CpuResources.Used = 1552
-			mec.MemoryResources.Used = 1112
-		}
-		if mec.Identity.Location.Level == 1 {
-			mec.CpuResources.Used = 1200
-			mec.MemoryResources.Used = 1080
-		}
-		if mec.Identity.Location.Level == 2 {
-			mec.CpuResources.Used = 1548
-			mec.MemoryResources.Used = 1080
-		}
 	}
 
 	//update utilization
@@ -254,6 +197,64 @@ func (mec *MecHost) UninstallApp(app MECApp) {
 	log.Infof("App: %v UNinstalled from cluster: %v", app.Id, app.ClusterId)
 
 }
+
+//
+//func (mec *MecHost) UninstallApp(app MECApp) {
+//
+//	//delete app to list
+//	var initialID int
+//
+//	//check id where the app is in slice
+//	for i, v := range mec.MECApps {
+//		if v.Id == app.Id {
+//			initialID = i
+//		}
+//	}
+//
+//	//delete given app
+//	mec.MECApps[initialID] = mec.MECApps[len(mec.MECApps)-1]
+//	mec.MECApps = mec.MECApps[:len(mec.MECApps)-1]
+//
+//	//update resources on mec host
+//	//update used resources
+//	mec.CpuResources.Used -= app.Requirements.RequestedCPU
+//	mec.MemoryResources.Used -= app.Requirements.RequestedMEMORY
+//
+//	//introduced this as a bug fixing
+//	if mec.CpuResources.Used < 0 {
+//		mec.CpuResources.Used = 0
+//		log.Errorf("Check what's going on")
+//	}
+//
+//	if mec.MemoryResources.Used < 0 {
+//		mec.MemoryResources.Used = 0
+//		log.Errorf("Check what's going on 2")
+//	}
+//
+//	if len(mec.MECApps) == 0 {
+//		mec.MECApps = nil
+//
+//		if mec.Identity.Location.Level == 0 {
+//			mec.CpuResources.Used = 1552
+//			mec.MemoryResources.Used = 1112
+//		}
+//		if mec.Identity.Location.Level == 1 {
+//			mec.CpuResources.Used = 1200
+//			mec.MemoryResources.Used = 1080
+//		}
+//		if mec.Identity.Location.Level == 2 {
+//			mec.CpuResources.Used = 1548
+//			mec.MemoryResources.Used = 1080
+//		}
+//	}
+//
+//	//update utilization
+//	mec.CpuResources.Utilization = mec.CpuResources.Used / mec.CpuResources.Capacity
+//	mec.MemoryResources.Utilization = mec.MemoryResources.Used / mec.MemoryResources.Capacity
+//
+//	log.Infof("App: %v UNinstalled from cluster: %v", app.Id, app.ClusterId)
+//
+//}
 
 func (mec *MecHost) GetCpuUsed() float64 {
 	return mec.CpuResources.Used
